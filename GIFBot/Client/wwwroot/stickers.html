@@ -1,0 +1,36 @@
+﻿<html>
+<head>
+   <meta http-equiv="Access-Control-Allow-Origin" content="*">
+   <header name="Access-Control-Allow-Origin" value="*" />
+   <script src="js/jquery-3.3.1.min.js"></script>
+   <script src="js/CORSRequest.js"></script>
+   <script>
+
+      $(document).ready(function () {
+         var updaterId = setInterval(updateDisplay, 1000);
+         function updateDisplay() {
+            var xhr = createCORSRequest('GET', "http://localhost:5000/ping/pong");
+            if (!xhr) {
+               console.log('CORS not supported!');
+               throw new Error('CORS not supported!');
+            }
+
+            xhr.onload = function () {
+               console.log('Rerouting...');
+               window.location.href = "http://localhost:5000/stickers?" + Math.round(new Date().getTime() / 1000);
+            };
+
+            xhr.onerror = function () {
+               console.log('GIFBot Web Service is not running!');
+               document.getElementById('page-content').innerHTML = '';
+            };
+
+            xhr.send();
+         }
+      });
+   </script>
+</head>
+<body style="background: transparent">
+   <div id="page-content"></div>
+</body>
+</html>

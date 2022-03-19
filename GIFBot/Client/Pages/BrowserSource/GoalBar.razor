@@ -1,0 +1,173 @@
+﻿@page "/goalbar"
+@using Microsoft.AspNetCore.SignalR.Client
+@using GIFBot.Shared
+@using GIFBot.Client.Components
+@using GIFBot.Shared.Models.Features
+@using GIFBot.Shared.Models.Visualization
+@using Microsoft.AspNetCore.Http.Connections
+@using Newtonsoft.Json
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+@inject HttpClient Http
+@implements IAsyncDisposable
+
+@layout BasicLayout
+
+@if (mGoalBarData.Settings.Enabled && mHasActiveGoal)
+{
+   <center>
+      <ProgressBarComponent Width="@mGoalBarData.Settings.Width" TitleCaptionData="@mGoalBarData.Settings.Caption" PercentageCaptionData="@mPercentageCaption" TotalCaptionData="@mTotalCaption" CurrentPercentage="@mCurrentPercentage" BackColor="@mGoalBarData.Settings.BarBackcolor" ProgressColor="@mGoalBarData.Settings.BarForecolor" />
+   </center>
+}
+
+@code
+{
+   /// <summary>
+   /// Override for handling the initialized event. Will establish the connection to the hub
+   /// and create lambda methods for specific messages.
+   /// </summary>
+   protected override async Task OnInitializedAsync()
+   {
+      // Build the connection to the main bot hub.
+      mHubConnection = new HubConnectionBuilder()
+         .WithUrl(NavigationManager.ToAbsoluteUri("/gifbothub"), HttpTransportType.LongPolling) 
+         .Build();
+
+      // Detect a disconnection and immediately reconnect. This will fix if a user
+      // has a PC that went to sleep or if someone stopped/restarted the bot and OBS
+      // didn't pick up the change.
+      mHubConnection.Closed += async (e) =>
+      {
+         Console.WriteLine("Disconnected from the animations hub!");
+         await ConnectToHub();
+      };
+
+      mHubConnection.On<double, double, string>("UpdateGoal", (currentAmount, goalAmount, title) =>
+      {
+         UpdateGoalText(currentAmount, goalAmount, title);
+      });
+
+      mHubConnection.On<string>("GoalBarDataUpdated", (data) =>
+      {
+         mGoalBarData = JsonConvert.DeserializeObject<GoalBarData>(data);
+         UpdateGoalText(mGoalBarData.Goals.FirstOrDefault(g => g.IsActive == true));
+         StateHasChanged();
+      });
+
+      // Start the connection.
+      await mHubConnection.StartAsync();
+
+      string rawData = await mHubConnection.InvokeAsync<string>("GetGoalBarData");
+      mGoalBarData = JsonConvert.DeserializeObject<GoalBarData>(rawData);
+      UpdateGoalText(mGoalBarData.Goals.FirstOrDefault(g => g.IsActive == true));
+      StateHasChanged();
+   }
+
+   /// <summary>
+   /// IAsyncDisposable Implementation
+   /// </summary>
+   public async ValueTask DisposeAsync()
+   {
+      await mHubConnection.DisposeAsync();
+   }
+
+   /// <summary>
+   /// Handles connection to the hub.
+   /// </summary>
+   private async Task ConnectToHub()
+   {
+      while (!IsConnected)
+      {
+         Console.WriteLine("Connecting...");
+         await Task.Delay(1000);
+
+         try
+         {
+            HttpResponseMessage results = await Http.GetAsync("http://localhost:5000/ping/pong");
+            if (results.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+               // Start the connection.
+               await mHubConnection.StartAsync();
+            }
+         }
+         catch (Exception /*ex*/)
+         {
+            Console.WriteLine("Server is still down. Reconnection attempt in 1 second.");
+         }
+      }
+
+      Console.WriteLine("Connection established!");
+   }
+
+   private void UpdateGoalText(GoalData goal)
+   {
+      if (goal != null)
+      {
+         UpdateGoalText(goal.CurrentAmount, goal.GoalAmount, goal.Title);
+      }
+      else
+      {
+         mHasActiveGoal = false;
+         StateHasChanged();
+      }
+   }
+
+   private void UpdateGoalText(double currentAmount, double goalAmount, string title)
+   {
+      if (mGoalBarData.Goals.FirstOrDefault(g => g.IsActive == true) != null)
+      {
+         mHasActiveGoal = true;
+
+         mTotalCaption = (CaptionData)mGoalBarData.Settings.Caption.Clone();
+         mTotalCaption.Text = $"{goalAmount}";
+
+         mGoalBarData.Settings.Caption.Text = String.Empty;
+         if (!mGoalBarData.Settings.HideGoalText)
+         {
+            mGoalBarData.Settings.Caption.Text = title;
+         }
+
+         mPercentageCaption = (CaptionData)mGoalBarData.Settings.Caption.Clone();
+         double percentage = Math.Floor((currentAmount / goalAmount) * 100);
+         mCurrentPercentage = (int)percentage;
+
+         if (mGoalBarData.Settings.ShowAmountAsPercentage)
+         {
+            mPercentageCaption.Text = $"{mCurrentPercentage}%";
+         }
+         else
+         {
+            mPercentageCaption.Text = $"{mGoalBarData.Settings.CurrencySymbol}{String.Format("{0:N2}", currentAmount)}";
+         }
+      }
+      else
+      {
+         mHasActiveGoal = false;
+      }
+
+      StateHasChanged();
+   }
+
+   /// <summary>
+   /// Denotes if the hub has properly connected or not.
+   /// </summary>
+   public bool IsConnected => mHubConnection.State == HubConnectionState.Connected;
+
+   #region Private Members
+
+   private HubConnection mHubConnection;
+
+   public GoalBarData mGoalBarData = new GoalBarData();
+
+   public CaptionData mPercentageCaption = new CaptionData();
+
+   public CaptionData mTotalCaption = new CaptionData();
+
+   public string mGoalBarText = String.Empty;
+
+   public int mCurrentPercentage = 0;
+
+   public bool mHasActiveGoal = false;
+
+   #endregion
+}

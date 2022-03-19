@@ -1,0 +1,96 @@
+﻿@page "/about"
+@inject NavigationManager NavigationManager
+
+<div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+   <h1><span class="oi oi-tag" aria-hidden="true"></span> About GIFBot-R</h1>
+</div>
+
+<div class="container-fluid p-2 mb-2 rounded" style="background-color: #211126">
+   <TelerikTabStrip>
+      <TabStripTab Title="General">
+         <div class="container text-white-50 mb-4" style="width: 700px">
+            GIFBot-R is the next evolution of GIFBot. The application originally started out as a really crappy Java app. Then I wrote it in C# with WinForms. Then it just
+            kept piling on highly customized features for specific streamers, becoming very difficult to distribute and maintain. As such, this is the new evolution.
+            GIFBot-R is written as an ASP.NET service with a Blazor Web Assembly front-end. It's entirely self-hosted on your machine and doesn't have to be deployed anywhere
+            else.
+         </div>
+         <div class="container text-white-50 mb-4" style="width: 700px">
+            This new version of the bot is also a lot faster. You don't have to keep the dashboard open at all times and you can simply run the console application, which
+            will just run the basics of the bot.
+         </div>
+         <div class="container text-white-50 mb-4" style="width: 700px">
+            GIFBot-R is developed and maintained solely by twitch.tv/fiercekittenz. She does this for free in her spare time while raising a family and working a full-time job.
+         </div>
+      </TabStripTab>
+      <TabStripTab Title="Version History">
+
+         <RadzenFieldset Text="Version 1.0d" Collapsed="false">
+            <div class="container text-white-50 mb-4" style="width: 700px">
+               <ul>
+                  <li>Feature: Countdown Timer - Have your community contribute bits, tips, charitable donations and more to add or remove time!</li>
+                  <li>Feature: Snapper - Viewers can contribute to potentially snapping away a percentage of your chat! GREAT for charity drives!</li>
+                  <li>The goal bar now has the option to display an amount, not just a percentage.</li>
+                  <li>Temporary removal of the Hype Train alert feature. Twitch disabled API access and unfortunately, we can no longer use it.</li>
+               </ul>
+            </div>
+         </RadzenFieldset>
+
+         <RadzenFieldset Text="Version 1.0c" Collapsed="false">
+            <div class="container text-white-50 mb-4" style="width: 700px">
+               <ul>
+                  <li>Feature: Animations Editor Redesign!</li>
+                  <li>Feature: Animations Bulk Recategorization Options!</li>
+                  <li>Variations can be flagged to not repeat until all have played at least once.</li>
+                  <li>Gift subs may now place as many stickers as subs are gifted.</li>
+                  <li>Animations now have the option to trigger for any cheer and behave as an alert.</li>
+                  <li>The channel owner may now execute animations from chat regardless of the command's requirements.</li>
+                  <li>Added the ability to attach the user's name to the before/after chat output of an animation.</li>
+                  <li>Captions now support $amount.</li>
+                  <li>The Goal Bar now has the option to hide text on the bar.</li>
+                  <li>The Goal Bar now has the option to reset a single goal when it hits 100%.</li>
+                  <li>Fixed a bug where the enable/disable all on stickers didn't work.</li>
+                  <li>Fixed a bug where stickers set to 0 bit requirements were firing for every chat message.</li>
+                  <li>Fixed a bug where !animations would crash the bot.</li>
+                  <li>Fixed a bug where cheers could trigger cheer animations twice in a row.</li>
+                  <li>Fixed a bug where global cooldown was being ignored.</li>
+               </ul>
+            </div>
+         </RadzenFieldset>
+
+         <RadzenFieldset Text="Version 1.0b-1" Collapsed="false">
+            <div class="container text-white-50 mb-4" style="width: 700px">
+               <ul>
+                  <li>Fixed a bug with the new kpop tags breaking cheering from chat.</li>
+               </ul>
+            </div>
+         </RadzenFieldset>
+
+         <RadzenFieldset Text="Version 1.0b" Collapsed="false">
+            <div class="container text-white-50 mb-4" style="width: 700px">
+               <ul>
+                  <li>Feature: Stickers!</li>
+                  <li>Feature: Azure Cognitive services support for TTS on The Regurgitator</li>
+                  <li>Feature: Added support for follower, raid, and host alerts.</li>
+                  <li>Added a Charity page to thank all of those who have donated to charitable causes on my streams.</li>
+                  <li>Reworked large portions of the placement component. Users may now be able to view placement of animations and stickers as they move the widget around.</li>
+                  <li>Reworked the visual appearance and filtering features of the user groups panel.</li>
+                  <li>Added the ability to provide a position override in global bot settings.</li>
+                  <li>Added a full stop animations button to the quick bar on the dashboard.</li>
+                  <li>Replaced the slider controls with better ones. These should be less wonky!</li>
+                  <li>Fixed a bug where !animations would not work.</li>
+                  <li>Fixed a bug where channel point animations would redeem even if disabled.</li>
+                  <li>Fixed a bug where mod-only animations were being triggered by !animationroulette.</li>
+               </ul>
+            </div>
+         </RadzenFieldset>
+
+         <RadzenFieldset Text="Version 1.0a" Collapsed="false">
+            <div class="container text-white-50 mb-4" style="width: 700px">
+               <ul>
+                  <li>Initial Release!</li>
+               </ul>
+            </div>
+         </RadzenFieldset>
+      </TabStripTab>
+   </TelerikTabStrip>
+</div>

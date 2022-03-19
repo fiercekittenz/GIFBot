@@ -1,0 +1,202 @@
+﻿@using GIFBot.Shared.Models.Visualization
+
+<style>
+   @@-webkit-keyframes pulse {
+      0% {
+         color: #e00000;
+      }
+
+      50% {
+         color: #FFF;
+      }
+
+      100% {
+         color: #e00000;
+      }
+   }
+
+   @@-moz-keyframes pulse {
+      0% {
+         color: #e00000;
+      }
+
+      50% {
+         color: #FFF;
+      }
+
+      100% {
+         color: #e00000;
+      }
+   }
+
+   @@-o-keyframes pulse {
+      0% {
+         color: #e00000;
+      }
+
+      50% {
+         color: #FFF;
+      }
+
+      100% {
+         color: #e00000;
+      }
+   }
+
+   @@keyframes pulse {
+      0% {
+         color: #e00000;
+      }
+
+      50% {
+         color: #FFF;
+      }
+
+      100% {
+         color: #e00000;
+      }
+   }
+
+   .progress-text-static {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 28px;
+      color: #FFFFFF;
+      font-weight: bold;
+      border: none;
+      background: transparent;
+      position: relative;
+      top: -55px;
+      left: 20px;
+      text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+   }
+
+   .progress-text-animated {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 28px;
+      color: #FFFFFF;
+      font-weight: bold;
+      border: none;
+      background: transparent;
+      position: relative;
+      top: -87px;
+      left: 20px;
+      text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+      -webkit-animation: pulse 2s 300; /* Safari 4+ */
+      -moz-animation: pulse 2s 300; /* Fx 5+ */
+      -o-animation: pulse 2s 300; /* Opera 12+ */
+      animation: pulse 2s 300; /* IE 10+, Fx 29+ */
+   }
+
+   progress[value] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: @($"{@mWidth}px");
+      height: @($"{mTitleCaptionData.FontSize + 30}px");
+   }
+
+   progress[value]::-webkit-progress-bar {
+      background-color: @(mBackColor);
+   }
+
+   progress[value]::-webkit-progress-value {
+      background-size: 35px 20px, 100% 100%, 100% 100%;
+      background: @(mProgressColor);
+   }
+</style>
+
+<div style="position: relative; text-align: center; top: 0px; left: 0px; width: @($"{@mWidth}px"); height: @($"{mTitleCaptionData.FontSize + 30}px")">
+   <div id="container" style="position: absolute" height="@($"{mTitleCaptionData.FontSize + 30}px")">
+      <progress id="goal-progress" max="100" value="@mCurrentPercentage" />
+   </div>
+   <CaptionComponent CaptionData="@mTitleCaptionData" PositionAbsolutely="true" TextAlignStyle="left" Width="@mWidth" />
+   <CaptionComponent CaptionData="@mPercentageCaptionData" PositionAbsolutely="true" TextAlignStyle="center" Width="@mWidth" />
+   <CaptionComponent CaptionData="@mTotalCaptionData" PositionAbsolutely="true" TextAlignStyle="right" Width="@mWidth" />
+</div>
+
+@code {
+
+   [Parameter]
+   public string BackColor
+   {
+      get { return mBackColor; }
+      set
+      {
+         mBackColor = value;
+         StateHasChanged();
+      }
+   }
+
+   [Parameter]
+   public string ProgressColor
+   {
+      get { return mProgressColor; }
+      set
+      {
+         mProgressColor = value;
+         StateHasChanged();
+      }
+   }
+
+   [Parameter]
+   public CaptionData TitleCaptionData
+   {
+      get { return mTitleCaptionData; }
+      set
+      {
+         mTitleCaptionData = value;
+         StateHasChanged();
+      }
+   }
+
+   [Parameter]
+   public CaptionData PercentageCaptionData
+   {
+      get { return mPercentageCaptionData; }
+      set
+      {
+         mPercentageCaptionData = value;
+         StateHasChanged();
+      }
+   }
+
+   [Parameter]
+   public CaptionData TotalCaptionData
+   {
+      get { return mTotalCaptionData; }
+      set
+      {
+         mTotalCaptionData = value;
+         StateHasChanged();
+      }
+   }
+
+   [Parameter]
+   public int CurrentPercentage
+   {
+      get { return mCurrentPercentage; }
+      set
+      {
+         mCurrentPercentage = value;
+         StateHasChanged();
+      }
+   }
+
+   [Parameter]
+   public int Width
+   {
+      get { return mWidth; }
+      set
+      {
+         mWidth = value;
+         StateHasChanged();
+      }
+   }
+
+   private CaptionData mTitleCaptionData = new CaptionData();
+   private CaptionData mPercentageCaptionData = new CaptionData();
+   private CaptionData mTotalCaptionData = new CaptionData();
+   private string mBackColor = "#333333";
+   private string mProgressColor = "#FFFFFF";
+   private int mCurrentPercentage = 0;
+   private int mWidth = 1080;
+}

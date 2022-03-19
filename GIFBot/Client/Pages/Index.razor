@@ -1,0 +1,364 @@
+﻿@page "/"
+@using Microsoft.AspNetCore.SignalR.Client
+@using GIFBot.Shared
+@using GIFBot.Client.Components
+@using GIFBot.Client.Utility
+@using GIFBot.Shared.Models.Animation
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Http.Connections
+@using System.Collections.Generic
+@using System.Collections.ObjectModel
+@inject NavigationManager NavigationManager
+@inject NotificationService NotificationService
+@inject IJSRuntime JSRuntime
+@inject HttpClient Http
+@implements IAsyncDisposable
+
+<div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+   <h1>Dashboard</h1>
+</div>
+
+@if (!IsConnected)
+{
+   <div class="jumbotron jumbotron-fluid text-warning" style="background-color: #230000">
+      <h1>WARNING: Disconnected from the bot! Are you running the GIFBot-R service?</h1>
+   </div>
+}
+
+<!-- Bot Reauthentication Warning Dialog -->
+<TelerikWindow Class="gifbot-modal-window" Width="500px" Height="250px" Centered="true" Visible="@mIsReauthWarningVisible" Modal="true">
+   <WindowTitle>
+      <strong>Reauthentication Required</strong>
+   </WindowTitle>
+   <WindowContent>
+      <div class="container-fluid p-2">
+         There are scope changes with the Twitch API that require you to reauthenticate to gain access
+         to new features!
+      </div>
+      <div class="container-fluid p-2">
+         <p>
+            <center>
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@NavigateToReauthenticate">
+                  Go Reauthenticate
+               </button>
+            </center>
+         </p>
+      </div>
+   </WindowContent>
+</TelerikWindow>
+
+<style type="text/css">
+   .gifbot-modal-window {
+      z-index: 44444;
+   }
+</style>
+
+<nav class="navbar navbar-expand-sm" style="background-color:#1f0c24">
+   <span class="navbar-text mr-3">
+      <b>Quick Actions:</b>
+   </span>
+   <ul class="navbar-nav">
+      <li class="nav-item">
+         <button class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@ToggleStreamerOnlyMode">@mStreamerOnlyModeState Streamer-Only Mode</button>
+      </li>
+      <li class="nav-item">
+         <button class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@StopAllAnimations">Stop Animations</button>
+      </li>
+      <li class="nav-item">
+         <button class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@ToggleBonkersMode">@mBonkersModeState Bonkers Mode</button>
+      </li>
+      <li class="nav-item">
+         <button class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@ClearAllStickers">Clear All Stickers</button>
+      </li>
+   </ul>
+</nav>
+
+<div class="container-fluid p-3">
+   <div class="row">
+
+      <!-- Log -->
+      <div class="col-sm">
+         <div class="container-fluid text-light p-1" style="background-color:#1d161f"><b>Output Log</b></div>
+         <div class="overflow-auto" id="uiLogContainer" style="height: 500px; background-color:#1e1e1e">
+            <div class="p-2">
+               @foreach (var logMessage in mLogMessages)
+               {
+                  <samp class="text-success">@logMessage</samp><br />
+               }
+            </div>
+         </div>
+      </div>
+
+      <!-- Animations -->
+      <div class="col-sm">
+         <div class="container-fluid text-light p-1" style="background-color:#1d161f"><b>Animations Control Panel</b></div>
+         <div class="overflow-auto">
+
+            <div class="container-fluid">
+               @*<div class="form-group" style="width: 100%">
+                  <RadzenTextBox id="uiFilterText" class="form-control" Placeholder="Filter..." Style="color: #232323" @bind-Value="@mFilterText" Change="@(args => OnFilterTextChanged(args))" />
+               </div>*@
+               <div class="container-fluid">
+                  <RadzenTree id="uiTree" Data="@mFilteredData" Style="width: 100%; height: 100%; margin-top: -5px">
+                     @foreach (var category in mFilteredData.Where(c => c.Tier == AnimationTreeTier.Category).OrderBy(c => c.Title))
+                     {
+                        <table>
+                           <tr>
+                              <td valign="middle" align="left">
+                                 <RadzenTreeItem Expanded="false" Value="@category" Text="@category.Title">
+
+                                    @foreach (var animation in category.Animations.OrderBy(a => a.Title))
+                                    {
+                                       <table>
+                                          <tr>
+                                             <td width="25" valign="middle" align="center">
+                                                <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="@(() => HandlePlayAnimation(animation))"><span class="oi oi-media-play"></span></button>
+                                             </td>
+                                             <td valign="middle" align="left">
+                                                <RadzenTreeItem Value="@animation" Text="@animation.Title" />
+                                             </td>
+                                          </tr>
+                                       </table>
+                                    }
+
+                                 </RadzenTreeItem>
+                              </td>
+                           </tr>
+                        </table>
+                     }
+                  </RadzenTree>
+               </div>
+            </div>
+         </div>
+      </div>
+
+   </div>
+</div>
+
+@code
+{
+   protected override async Task OnInitializedAsync()
+   {
+      // Build the connection to the main bot hub.
+      mHubConnection = new HubConnectionBuilder()
+         .WithUrl(NavigationManager.ToAbsoluteUri("/gifbothub"), HttpTransportType.LongPolling) 
+         .WithAutomaticReconnect()
+         .Build();
+
+      // Handle a Log Message Event to display the one updated message
+      // instead of requesting all new logs every time something is done.
+      mHubConnection.On<string>("LogMessage", async (logMessage) =>
+      {
+         mLogMessages.Add(logMessage);
+
+         // We have to truncate on our end as well.
+         if (mLogMessages.Count > kMaxLogLines)
+         {
+            mLogMessages.RemoveAt(0);
+         }
+
+         StateHasChanged();
+
+         await JSRuntime.InvokeVoidAsync("UpdateScroll");
+      });
+
+      // Handle an update to bonkers mode.
+      mHubConnection.On<bool>("UpdateBonkersModeState", (enabled) =>
+      {
+         mBonkersModeState = kEnable;
+         if (enabled)
+         {
+            mBonkersModeState = kDisable;
+         }
+
+         StateHasChanged();
+      });
+
+      // Handle an update to the streamer only mode.
+      mHubConnection.On<bool>("UpdateStreamerOnlyModeState", (enabled) =>
+      {
+         mStreamerOnlyModeState = kEnable;
+         if (enabled)
+         {
+            mStreamerOnlyModeState = kDisable;
+         }
+
+         StateHasChanged();
+      });
+
+      // Start the connection.
+      await mHubConnection.StartAsync();
+
+      // Verify that bot settings have been loaded. If not, redirect to the setup wizard.
+      string botSettingsJson = await mHubConnection.InvokeAsync<string>("GetBotSettings");
+      if (!String.IsNullOrEmpty(botSettingsJson))
+      {
+         mBotSettings = Newtonsoft.Json.JsonConvert.DeserializeObject<BotSettings>(botSettingsJson);
+         if (mBotSettings != null)
+         {
+            if (mBotSettings.CurrentSetupStep != SetupStep.Finished)
+            {
+               NavigationManager.NavigateTo("/setup/");
+            }
+            else if (mBotSettings.BotAuthenticationVersion != BotSettings.skCurrentAuthenticationVersion)
+            {
+               mIsReauthWarningVisible = true;
+               StateHasChanged();
+            }
+         }
+      }
+
+      // Get a simplified version of the animations tree data for display only.
+      // There is no good reason to request the full animations data unless requested.
+      string treeDataJson = await mHubConnection.InvokeAsync<string>("GetAnimationTreeData");
+      if (!String.IsNullOrEmpty(treeDataJson))
+      {
+         mAnimationTreeData = Newtonsoft.Json.JsonConvert.DeserializeObject<List<AnimationTreeItem>>(treeDataJson);
+         foreach (var anim in mAnimationTreeData)
+         {
+            mFilteredData.Add(anim);
+         }
+
+         StateHasChanged();
+      }
+   }
+
+   /// <summary>
+   /// Handles the filtered text changing.
+   /// </summary>
+   private void OnFilterTextChanged(string value)
+   {
+      List<AnimationTreeItem> filteredData = new List<AnimationTreeItem>();
+
+      string lowercaseFilter = mFilterText.ToLower();
+
+      foreach (var item in mAnimationTreeData)
+      {
+         if (item.Tier == AnimationTreeTier.Category)
+         {
+            AnimationTreeItem filteredCategory = new AnimationTreeItem(item.Id, item.Title, null, AnimationTreeTier.Category);
+            List<AnimationTreeItem> qualifiedAnimations = new List<AnimationTreeItem>();
+            foreach (var animation in filteredCategory.Animations)
+            {
+               bool passesFilter = true;
+               if (!String.IsNullOrEmpty(mFilterText) && !animation.Title.ToLower().Contains(lowercaseFilter))
+               {
+                  passesFilter = false;
+               }
+
+               if (passesFilter)
+               {
+                  qualifiedAnimations.Add(animation);
+               }
+            }
+
+            qualifiedAnimations.Sort((x, y) => string.Compare(x.Title, y.Title));
+
+            if (!String.IsNullOrEmpty(mFilterText) && !item.Title.ToLower().Contains(lowercaseFilter) && !qualifiedAnimations.Any())
+            {
+               // The category doesn't fit the filter, and it also doesn't have any animations that match. Skip!
+               continue;
+            }
+
+            filteredCategory.Animations.Clear();
+            foreach (var qualified in qualifiedAnimations)
+            {
+               filteredCategory.Animations.Add(qualified);
+            }
+
+            filteredData.Add(filteredCategory);
+         }
+      }
+
+      filteredData.Sort((x, y) => string.Compare(x.Title, y.Title));
+      mFilteredData.Clear();
+      foreach (var item in filteredData)
+      {
+         mFilteredData.Add(item);
+      }
+
+      StateHasChanged();
+   }
+
+   /// <summary>
+   /// IAsyncDisposable Implementation
+   /// </summary>
+   public async ValueTask DisposeAsync()
+   {
+      await mHubConnection.DisposeAsync();
+   }
+
+   private async Task ToggleRegurgitator()
+   {
+      await mHubConnection.InvokeAsync("ToggleRegurgitatorEnabledState");
+   }
+
+   private async Task ToggleBonkersMode()
+   {
+      await mHubConnection.InvokeAsync("ToggleBonkersMode");
+   }
+
+   private async Task ToggleStreamerOnlyMode()
+   {
+      await mHubConnection.InvokeAsync("ToggleStreamerOnlyMode");
+   }
+
+   private async Task StopAllAnimations()
+   {
+      await mHubConnection.InvokeAsync("StopAllAnimations");
+   }
+
+   private async Task ClearAllStickers()
+   {
+      await mHubConnection.InvokeAsync("ClearAllStickers");
+   }
+
+   private async Task NavigateToReauthenticate()
+   {
+      mBotSettings.CurrentSetupStep = SetupStep.Welcome;
+      await mHubConnection.InvokeAsync("UpdateBotSettings", Newtonsoft.Json.JsonConvert.SerializeObject(mBotSettings), false);
+      NavigationManager.NavigateTo("/setup/");
+   }
+
+   private void HandleAddAnimationToCategory(AnimationTreeItem category)
+   {
+      NavigationManager.NavigateTo($"/animationseditor/addanimation/{category.Id.ToString()}");
+   }
+
+   private async Task HandlePlayAnimation(AnimationTreeItem animation)
+   {
+      if (animation != null && animation.Tier == AnimationTreeTier.Animation)
+      {
+         await mHubConnection.InvokeAsync("PlayAnimation", animation.Title);
+         NotificationService.Notify(NotificationSeverity.Info, "Info", $"{animation.Title} has been queued.", 5000);
+         await InvokeAsync(() => { StateHasChanged(); });
+      }
+   }
+
+
+   /// <summary>
+   /// Denotes if the hub has properly connected or not.
+   /// </summary>
+   public bool IsConnected => mHubConnection.State == HubConnectionState.Connected;
+
+   #region Private Members
+
+   private HubConnection mHubConnection;
+
+   private List<string> mLogMessages = new List<string>();
+   private BotSettings mBotSettings = new BotSettings();
+   private List<AnimationTreeItem> mAnimationTreeData = new List<AnimationTreeItem>();
+   private string mRegurgitatorState = kEnable;
+   private string mBonkersModeState = kEnable;
+   private string mStreamerOnlyModeState = kEnable;
+   private bool mIsReauthWarningVisible = false;
+
+   private const int kMaxLogLines = 100;
+   private const string kEnable = "Enable";
+   private const string kDisable = "Disable";
+
+   private ObservableCollection<AnimationTreeItem> mFilteredData = new ObservableCollection<AnimationTreeItem>();
+   private string mFilterText = String.Empty;
+
+   #endregion
+}

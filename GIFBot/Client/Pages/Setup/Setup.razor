@@ -1,0 +1,267 @@
+﻿@page "/setup/"
+@using Microsoft.AspNetCore.SignalR.Client
+@using GIFBot.Client.Pages.Models
+@using GIFBot.Client.Utility
+@using GIFBot.Shared
+@using Microsoft.AspNetCore.Http.Connections
+@inject NavigationManager NavigationManager
+@inject GIFBot.Client.Utility.ClientAppData ClientAppData
+@inject HttpClient Http
+@implements IAsyncDisposable
+
+@layout NoNavMenuLayout
+
+@if (mBotSettings != null && mBotSettings.CurrentSetupStep == SetupStep.Welcome)
+{
+   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+      <h1><span class="oi oi-cog" aria-hidden="true"></span> Bot Setup (Step 1 of 4): Welcome!</h1>
+   </div>
+
+   <div class="container text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+      <p>
+         Welcome to GIFBot! This wizard will guide you through the setup process in authenticating your bot and streamer accounts with Twitch.
+         It is recommended that you setup a second Twitch account to use as your bot. If you already have a chat bot account, you may use that
+         account for GIFBot as well.
+      </p>
+      <p>
+         <b>Disclaimer:</b> This bot is developed by fiercekittenz as a side-project. She is a full-time engineer with a family and a part-time streaming
+         career. Please be understanding if there are issues on which you need to seek support.
+      </p>
+      <div class="container text-left p-3" style="width: 600px">
+         <div class="container">
+            <div class="col-sm text-right p-3">
+               <button type="button" class="btn btn-secondary p-2" style="background-color: #5c4872" @onclick="@HandleStartSetup">Let's Go!</button>
+            </div>
+         </div>
+      </div>
+   </div>
+}
+else if (mBotSettings != null && mBotSettings.CurrentSetupStep == SetupStep.BotOauth)
+{
+   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+      <h1><span class="oi oi-cog" aria-hidden="true"></span> Bot Setup (Step 2 of 4): Bot Account Authentication!</h1>
+   </div>
+
+   <center>
+      <div class="container text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+         <p class="text-left">
+            Let's get you authenticated with Twitch! The authentication button below will take you to Twitch for authentication and bring you
+            right back here! When you are on the Twitch site, please make sure to log into the <b><i>bot's account</i></b>.
+         </p>
+         <p class="text-left">
+            Please know that this bot stores your authentication token to your computer. It will not be shared elsewhere
+            and is private for your eyes only. Click on the button below to authenticate when you are ready:
+         </p>
+         @if (!String.IsNullOrEmpty(mErrValue) && mErrValue.Equals("BotInvalid"))
+         {
+            <p class="text-left">
+               <font class="text-error">
+                  <b>The bot account did not authenticate with Twitch. Please try again with a valid account.</b>
+               </font>
+            </p>
+         }
+         <div class="container text-left p-3" style="width: 600px">
+            <div class="container">
+               <div class="p-3 text-center">
+                  <center><button type="submit" class="btn btn-primary" style="background-color: #5c4872" @onclick="@HandleSubmitTwitchBotAuth">Authenticate BOT Account</button></center>
+               </div>
+            </div>
+         </div>
+      </div>
+   </center>
+}
+else if (mBotSettings != null && mBotSettings.CurrentSetupStep == SetupStep.StreamerOauth)
+{
+   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+      <h1><span class="oi oi-cog" aria-hidden="true"></span> Bot Setup (Step 3 of 4): Streamer Account Authentication</h1>
+   </div>
+
+   <center>
+      <div class="container text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+         <p class="text-left">
+            To have your bot join the correct channel as well as receive <font class="text-success">host alerts</font>, <font class="text-success">raid alerts</font>, <font class="text-success">channel point redemption</font>, and <font class="text-success">hype train progression</font> notices,
+            you will need to authenticate with Twitch as the streamer as well.
+         </p>
+         @if (!String.IsNullOrEmpty(mErrValue) && mErrValue.Equals("StreamerInvalid"))
+         {
+            <p class="text-left">
+               <font class="text-error">
+                  <b>The streamer's account did not authenticate with Twitch. Please try again with a valid account.</b>
+               </font>
+            </p>
+         }
+         <div class="container-fluid p-3" style="width: 600px">
+            <div class="container-fluid text-right">
+               <button type="submit" class="btn btn-primary p-2" style="background-color: #5c4872" @onclick="@HandleSubmitTwitchStreamerAuth">Authenticate Streamer's Account</button>
+            </div>
+         </div>
+      </div>
+   </center>
+}
+else if (mBotSettings != null && mBotSettings.CurrentSetupStep == SetupStep.Finished)
+{
+   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+      <h1><span class="oi oi-cog" aria-hidden="true"></span> Bot Setup (Step 4 of 4): Complete!</h1>
+   </div>
+
+   <div class="container text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+      <p>
+         <font class="text-success"><b>You have successfully completed the initial bot setup!</b></font>
+      </p>
+      <ul>
+         <li><b>Bot Name:</b> @(mBotSettings.BotName)</li>
+         <li><b>Channel Name:</b> @(mBotSettings.ChannelName)</li>
+      </ul>
+      <p>
+         Now you can continue to the <b>Bot Settings</b> to configure additional preferences <i>or</i> you can hop right into adding your first animation!
+         Choose your destiny and enjoy the bot!
+      </p>
+      <div class="container text-left p-3" style="width: 600px">
+         <div class="container">
+            <div class="container-fluid text-center">
+               <button type="submit" class="btn btn-primary p-2" style="background-color: #5c4872" @onclick="@HandleFinishSettings">Go to Settings</button>
+               <button type="submit" class="btn btn-primary p-2" style="background-color: #5c4872" @onclick="@HandleAddAnimations">Add Animations!</button>
+               <button type="submit" class="btn btn-primary p-2" style="background-color: #5c4872" @onclick="@HandleFinishDashboard">Go to Dashboard</button>
+            </div>
+         </div>
+      </div>
+   </div>
+}
+else
+{
+   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+      <h1><span class="oi oi-cog" aria-hidden="true"></span> Bot Setup: Error</h1>
+   </div>
+
+   <div class="container" style="width: 700px">
+      <p>
+         This isn't where I expected you to show up. Are you lost?
+      </p>
+   </div>
+}
+
+@code {
+
+   protected override async Task OnInitializedAsync()
+   {
+      // Get any error strings.
+      NavigationManager.TryGetQueryString<string>("err", out string mErrValue);
+
+      // Build the connection to the main bot hub.
+      mHubConnection = new HubConnectionBuilder()
+         .WithUrl(NavigationManager.ToAbsoluteUri("/gifbothub"), HttpTransportType.LongPolling) 
+         .WithAutomaticReconnect()
+         .Build();
+
+      // Start the connection.
+      await mHubConnection.StartAsync();
+
+      // Get the latest settings from the server.
+      string botSettingsJson = await mHubConnection.InvokeAsync<string>("GetBotSettings");
+      if (!String.IsNullOrEmpty(botSettingsJson))
+      {
+         mBotSettings = Newtonsoft.Json.JsonConvert.DeserializeObject<BotSettings>(botSettingsJson);
+         if (mBotSettings != null)
+         {
+            BotNameModel.Value = mBotSettings.BotName.Trim();
+            ChannelNameModel.Value = mBotSettings.ChannelName.Trim();
+         }
+      }
+
+      // Render.
+      StateHasChanged();
+   }
+
+   /// <summary>
+   /// IAsyncDisposable Implementation
+   /// </summary>
+   public async ValueTask DisposeAsync()
+   {
+      await mHubConnection.DisposeAsync();
+   }
+
+   #region Form Submission Handlers
+
+   private async Task HandleStartSetup()
+   {
+      mBotSettings.CurrentSetupStep = SetupStep.BotOauth;
+      await mHubConnection.InvokeAsync("UpdateBotSettings", Newtonsoft.Json.JsonConvert.SerializeObject(mBotSettings), false);
+      StateHasChanged();
+   }
+
+   private async Task HandleSubmitTwitchBotAuth()
+   {
+      // This next step will take us off site, which means we need to persist any form information collected so far and retrieve it
+      // from the server when we circle back.
+      await mHubConnection.InvokeAsync("UpdateBotSettings", Newtonsoft.Json.JsonConvert.SerializeObject(mBotSettings), false);
+
+      // Forcibly forward the user to the correct URL for authentication. This is necessary,
+      // because Twitch will redirect them and it will be a CORS error otherwise.
+      string botAuthUrl = $"https://id.twitch.tv/oauth2/authorize?client_id={Common.skTwitchClientId}&redirect_uri=https://gifbot.azurewebsites.net/twitchoauth&response_type=code&force_verify=true&scope=chat_login chat:edit chat:read whispers:read whispers:edit channel_subscriptions channel:read:redemptions channel:read:hype_train channel:manage:redemptions";      
+      NavigationManager.NavigateTo(botAuthUrl);
+   }
+
+   private async Task HandleSkipTwitchStreamerAuth()
+   {
+      mBotSettings.CurrentSetupStep = SetupStep.Finished;
+      await mHubConnection.InvokeAsync("UpdateBotSettings", Newtonsoft.Json.JsonConvert.SerializeObject(mBotSettings), false);
+      StateHasChanged();
+   }
+
+   private async Task HandleSubmitTwitchStreamerAuth()
+   {
+      // This next step will take us off site, which means we need to persist any form information collected so far and retrieve it
+      // from the server when we circle back.
+      await mHubConnection.InvokeAsync("UpdateBotSettings", Newtonsoft.Json.JsonConvert.SerializeObject(mBotSettings), false);
+
+      // Forcibly forward the user to the correct URL for authentication. This is necessary,
+      // because Twitch will redirect them and it will be a CORS error otherwise.
+      string streamerAuthUrl = $"https://id.twitch.tv/oauth2/authorize?client_id={Common.skTwitchClientId}&redirect_uri=https://gifbot.azurewebsites.net/twitchoauth&response_type=code&force_verify=true&scope=chat_login chat:edit chat:read whispers:read whispers:edit channel_subscriptions channel:read:redemptions channel:read:hype_train channel:manage:redemptions";
+      NavigationManager.NavigateTo(streamerAuthUrl);
+   }
+
+   private async Task HandleSkipStreamlabsAuth()
+   {
+      mBotSettings.CurrentSetupStep = SetupStep.Finished;
+      await mHubConnection.InvokeAsync("UpdateBotSettings", Newtonsoft.Json.JsonConvert.SerializeObject(mBotSettings), true);
+      StateHasChanged();
+   }
+
+   private async Task HandleFinishSettings()
+   {
+      await SetReauthenticationVersion();
+      NavigationManager.NavigateTo("/settings/");
+   }
+
+   private async Task HandleAddAnimations()
+   {
+      await SetReauthenticationVersion();
+      NavigationManager.NavigateTo("/animationseditor/");
+   }
+
+   private async Task HandleFinishDashboard()
+   {
+      await SetReauthenticationVersion();
+      NavigationManager.NavigateTo("/");
+   }
+
+   private async Task SetReauthenticationVersion()
+   {
+      mBotSettings.BotAuthenticationVersion = BotSettings.skCurrentAuthenticationVersion;
+      await mHubConnection.InvokeAsync("UpdateBotSettings", Newtonsoft.Json.JsonConvert.SerializeObject(mBotSettings), true);
+      StateHasChanged();
+   }
+
+   #endregion
+
+   #region Properties and Private Members
+
+   private HubConnection mHubConnection;
+
+   private BotSettings mBotSettings;
+   private StringFormModel BotNameModel = new StringFormModel();
+   private StringFormModel ChannelNameModel = new StringFormModel();
+   private string mErrValue = String.Empty;
+
+   #endregion
+}

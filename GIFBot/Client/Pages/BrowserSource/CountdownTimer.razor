@@ -1,0 +1,117 @@
+﻿@page "/countdowntimer"
+@using Microsoft.AspNetCore.SignalR.Client
+@using GIFBot.Shared
+@using GIFBot.Shared.Models.Base
+@using GIFBot.Shared.Models.Visualization
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Http.Connections
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+@inject HttpClient Http
+@implements IAsyncDisposable
+
+@layout BasicLayout
+<!-- Special Thanks to exegete46 and jairs_corner for the css help! -->
+
+@if (mCountdownTimerVisible)
+{
+   <div>
+      <GIFBot.Client.Components.CaptionComponent CaptionData="@mCaptionData" TextAlignStyle="left" Width="600"  />
+   </div>
+}
+
+@code
+{
+      /// <summary>
+      /// Override for handling the initialized event. Will establish the connection to the hub
+      /// and create lambda methods for specific messages.
+      /// </summary>
+   protected override async Task OnInitializedAsync()
+   {
+      // Build the connection to the main bot hub.
+      mHubConnection = new HubConnectionBuilder()
+         .WithUrl(NavigationManager.ToAbsoluteUri("/gifbothub"), HttpTransportType.LongPolling) 
+         .Build();
+
+      // Detect a disconnection and immediately reconnect. This will fix if a user
+      // has a PC that went to sleep or if someone stopped/restarted the bot and OBS
+      // didn't pick up the change.
+      mHubConnection.Closed += async (e) =>
+      {
+         Console.WriteLine("Disconnected from the gifbot hub!");
+         await ConnectToHub();
+      };
+
+      mHubConnection.On<string>("UpdateTime", (data) =>
+      {
+         mCountdownTimerVisible = true;
+         mCaptionData = JsonConvert.DeserializeObject<CaptionData>(data);
+         Console.WriteLine($"Caption: {mCaptionData.Text}");
+         StateHasChanged();
+      });
+
+      mHubConnection.On("HideTimer", () =>
+      {
+         Console.WriteLine("Hide the timer");
+         mCountdownTimerVisible = false;
+         StateHasChanged();
+      });
+
+      await ConnectToHub();
+   }
+
+   /// <summary>
+   /// IAsyncDisposable Implementation
+   /// </summary>
+   public async ValueTask DisposeAsync()
+   {
+      await mHubConnection.DisposeAsync();
+   }
+
+   /// <summary>
+   /// Handles connection to the hub.
+   /// </summary>
+   private async Task ConnectToHub()
+   {
+      while (!IsConnected)
+      {
+         Console.WriteLine("Connecting...");
+         await Task.Delay(1000);
+
+         try
+         {
+            HttpResponseMessage results = await Http.GetAsync("http://localhost:5000/ping/pong");
+            if (results.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+               // Start the connection.
+               await mHubConnection.StartAsync();
+            }
+         }
+         catch (Exception /*ex*/)
+         {
+            Console.WriteLine("Server is still down. Reconnection attempt in 1 second.");
+         }
+      }
+
+      Console.WriteLine("Connection established!");
+   }
+
+   /// <summary>
+   /// Denotes if the hub has properly connected or not.
+   /// </summary>
+   public bool IsConnected => mHubConnection.State == HubConnectionState.Connected;
+
+   #region Private Members
+
+   private HubConnection mHubConnection;
+
+   private TimeSpan mCurrentTime = TimeSpan.Zero; 
+
+   private CaptionData mCaptionData = new CaptionData();
+
+   private bool mCountdownTimerVisible = false;
+
+   public const string mDisconnectedWarning = "DISCONNECTED! You have to run the bot, then refresh your browser source cache in your broadcaster software.";
+
+   #endregion
+}

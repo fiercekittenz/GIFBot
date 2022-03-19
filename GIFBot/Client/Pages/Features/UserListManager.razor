@@ -1,0 +1,91 @@
+﻿@page "/userlistmanager/"
+@using GIFBot.Shared.Models.Twitch;
+@inject NavigationManager NavigationManager
+@inject NotificationService NotificationService
+
+<div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+   <h1><span class="oi oi-people" aria-hidden="true"></span> User List Manager</h1>
+</div>
+
+<!-- Ban Users Confirmation Window -->
+<TelerikWindow Class="gifbot-modal-window" Width="600px" Height="250px" Centered="true" Visible="@mIsBanSelectedConfirmationVisible" Modal="true">
+   <WindowTitle>
+      <strong>Ban Selected Users?</strong>
+   </WindowTitle>
+   <WindowContent>
+      <div class="form-group">
+         <font class="text-white">Are you sure you want to ban all of the selected users?</font>
+      </div>
+      <div class="container-fluid p-2">
+         <p>
+            <center>
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelBanSelected">
+                  Cancel
+               </button>
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmBanSelected">
+                  Yes, Ban!
+               </button>
+            </center>
+         </p>
+      </div>
+   </WindowContent>
+</TelerikWindow>
+   
+<!-- Timeout Users Confirmation Window -->
+<TelerikWindow Class="gifbot-modal-window" Width="600px" Height="250px" Centered="true" Visible="@mIsTimeoutSelectedConfirmationVisible" Modal="true">
+   <WindowTitle>
+      <strong>Timeout Selected Users?</strong>
+   </WindowTitle>
+   <WindowContent>
+      <div class="form-group">
+         <font class="text-white">Are you sure you want to timeout all of the selected users?</font>
+      </div>
+      <div class="container-fluid p-2">
+         <p>
+            <center>
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelTimeoutSelected">
+                  Cancel
+               </button>
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmTimeoutSelected">
+                  Yes, Time Them Out!
+               </button>
+            </center>
+         </p>
+      </div>
+   </WindowContent>
+</TelerikWindow>
+
+<div class="container-fluid" style="width: 100%">
+   <center><font class="text-white"><b>This list does not automatically refresh! To get latest, just refresh your browser.</b></font></center>
+</div>
+
+<div class="container-fluid" style="width: 100%">
+   <TelerikTooltip TargetSelector="button[title]" Position="@Telerik.Blazor.TooltipPosition.Top" ShowOn="@TooltipShowEvent.Hover" Id="position-tooltip">
+   </TelerikTooltip>
+   <TelerikTreeList Data="@Users"
+                    SelectedItems="@SelectedUsers"
+                    Pageable="true"
+                    PageSize="25"
+                    Sortable="true"
+                    SelectionMode="@TreeListSelectionMode.Multiple"
+                    SelectedItemsChanged="@( (IEnumerable<TwitchUserViewModel> users) => UserSelectionChanged(users) )"
+                    FilterMode="@TreeListFilterMode.FilterRow">
+      <TreeListToolBar>
+         <TreeListCommandButton Command="BanSelected" OnClick="@HandleBanSelected" Icon="cancel">Ban Selected</TreeListCommandButton>
+         <TreeListCommandButton Command="TimeoutSelected" OnClick="@HandleTimeoutSelected" Icon="clock">Timeout Selected</TreeListCommandButton>
+      </TreeListToolBar>
+      <TreeListColumns>
+         <TreeListCheckboxColumn SelectChildren="true" SelectAll="true" SelectAllMode="TreeListSelectAllMode.All"></TreeListCheckboxColumn>
+         <TreeListColumn Field="Name"></TreeListColumn>
+         <TreeListColumn Width="220px">
+            <Template Context="usercontext">
+               @{
+               var user = usercontext as TwitchUserViewModel;
+               }
+               <button type="button" title="Ban User" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" aria-describedby="position-tooltip" @onclick="(() => OnBanUser(user))"><span class="oi oi-ban"></span></button>
+               <button type="button" title="Timeout (10m)" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" aria-describedby="position-tooltip" @onclick="(() => OnTimeoutUser(user))"><span class="oi oi-clock"></span></button>
+            </Template>
+         </TreeListColumn>
+      </TreeListColumns>
+   </TelerikTreeList>
+</div>

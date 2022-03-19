@@ -1,0 +1,205 @@
+﻿@page "/secondarystickers"
+@using Microsoft.AspNetCore.SignalR.Client
+@using GIFBot.Shared
+@using GIFBot.Shared.Models.Features
+@using GIFBot.Shared.Models.Visualization
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Http.Connections
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+@inject HttpClient Http
+@implements IAsyncDisposable
+
+@layout BasicLayout
+
+@if (IsTestDisplayOn)
+{
+   <img id="animation" src="@TestDisplaySticker.Visual" style="position: absolute; top: @TestDisplaySticker.Top; left: @TestDisplaySticker.Left; width: @TestDisplaySticker.Width; height: @TestDisplaySticker.Height" width="@TestDisplaySticker.IntWidth" height="@TestDisplaySticker.IntHeight" />
+}
+
+@foreach (var placedSticker in PlacedStickers)
+{
+   <img id="animation" src="@placedSticker.Visual" style="position: absolute; top: @placedSticker.Top; left: @placedSticker.Left; width: @placedSticker.Width; height: @placedSticker.Height" width="@placedSticker.IntWidth" height="@placedSticker.IntHeight" />
+}
+
+@code
+{
+   /// <summary>
+   /// Override for handling the initialized event. Will establish the connection to the hub
+   /// and create lambda methods for specific messages.
+   /// </summary>
+   protected override async Task OnInitializedAsync()
+   {
+      // Build the connection to the main bot hub.
+      mHubConnection = new HubConnectionBuilder()
+         .WithUrl(NavigationManager.ToAbsoluteUri("/gifbothub"), HttpTransportType.LongPolling) 
+         .Build();
+
+      // Detect a disconnection and immediately reconnect. This will fix if a user
+      // has a PC that went to sleep or if someone stopped/restarted the bot and OBS
+      // didn't pick up the change.
+      mHubConnection.Closed += async (e) =>
+      {
+         Console.WriteLine("Disconnected from the animations hub!");
+         await ConnectToHub();
+      };
+
+      mHubConnection.On<string>("UpdateTestVisual", async (data) =>
+      {
+         TestVisualRequest testVisualRequest = JsonConvert.DeserializeObject<TestVisualRequest>(data);
+         await UpdateTestVisual(testVisualRequest);
+      });
+
+      mHubConnection.On("StopTestVisual", () =>
+      {
+         IsTestDisplayOn = false;
+         StateHasChanged();
+      });
+
+      mHubConnection.On<string>("SendAllPlacedStickers", async (data) =>
+      {
+         List<PlacedSticker> placedStickers = JsonConvert.DeserializeObject<List<PlacedSticker>>(data);
+         PlacedStickers = new List<PlacedSticker>(placedStickers);
+         StateHasChanged();
+         await Task.CompletedTask;
+      });
+
+      mHubConnection.On<string>("PlaceSticker", async (data) =>
+      {
+         PlacedSticker sticker = JsonConvert.DeserializeObject<PlacedSticker>(data);
+         await PlaceSticker(sticker);
+      });
+
+      mHubConnection.On<string, double>("UpdateStickerAudioSettings", (audioFile, volume) =>
+      {
+         mAudio = audioFile;
+         mVolume = volume;
+      });
+
+      mHubConnection.On<Guid>("RemoveSticker", (stickerId) =>
+      {
+         PlacedSticker placedSticker = PlacedStickers.FirstOrDefault(s => s.Data != null && s.Data.Id == stickerId);
+         if (placedSticker != null)
+         {
+            PlacedStickers.Remove(placedSticker);
+            StateHasChanged();
+         }
+      });
+
+      mHubConnection.On("ClearAllStickers", () =>
+      {
+         PlacedStickers.Clear();
+         StateHasChanged();
+      });
+
+      await ConnectToHub();
+   }
+
+   /// <summary>
+   /// IAsyncDisposable Implementation
+   /// </summary>
+   public async ValueTask DisposeAsync()
+   {
+      await mHubConnection.DisposeAsync();
+   }
+
+   /// <summary>
+   /// Handles connection to the hub.
+   /// </summary>
+   private async Task ConnectToHub()
+   {
+      while (!IsConnected)
+      {
+         Console.WriteLine("Connecting...");
+         await Task.Delay(1000);
+
+         try
+         {
+            HttpResponseMessage results = await Http.GetAsync("http://localhost:5000/ping/pong");
+            if (results.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+               // Start the connection.
+               await mHubConnection.StartAsync();
+            }
+         }
+         catch (Exception /*ex*/)
+         {
+            Console.WriteLine("Server is still down. Reconnection attempt in 1 second.");
+         }
+      }
+
+      Console.WriteLine("Connection established!");
+   }
+
+   /// <summary>
+   /// Handles placing a sticker onto the overlay.
+   /// </summary>
+   private async Task PlaceSticker(PlacedSticker sticker)
+   {
+      if (sticker != null && sticker.Data.Layer == AnimationEnums.AnimationLayer.Secondary)
+      {
+         PlacedStickers.Add(sticker);
+         StateHasChanged();
+
+         // Play any associated sound.
+         if (!String.IsNullOrEmpty(mAudio))
+         {
+            string audio = $"media/{mAudio}?{System.DateTimeOffset.UtcNow.ToUnixTimeSeconds()}";
+            await JSRuntime.InvokeVoidAsync("PlaySound", audio, mVolume, 0);
+         }
+      }
+   }
+
+   /// <summary>
+   /// Handles placing the test visual.
+   /// </summary>
+   private async Task UpdateTestVisual(TestVisualRequest testVisualRequest)
+   {
+      if (testVisualRequest != null && testVisualRequest.Layer == AnimationEnums.AnimationLayer.Secondary)
+      {
+         TestDisplaySticker = new PlacedSticker()
+         {
+            Visual = $"media/{testVisualRequest.Visual}?{System.DateTimeOffset.UtcNow.ToUnixTimeSeconds()}",
+            Top = ($"{testVisualRequest.Placement.Top}px").Replace(",", "."),
+            Left = ($"{testVisualRequest.Placement.Left}px").Replace(",", "."),
+            Width = ($"{testVisualRequest.Placement.Width}px").Replace(",", "."),
+            Height = ($"{testVisualRequest.Placement.Height}px").Replace(",", "."),
+            IntWidth = testVisualRequest.Placement.Width,
+            IntHeight = testVisualRequest.Placement.Height
+         };
+
+         // Make the test visible.
+         IsTestDisplayOn = true;
+      }
+      else
+      {
+         IsTestDisplayOn = false;
+      }
+
+      // Notify the state has changed so that updated properties are applied.
+      StateHasChanged();
+
+      await Task.CompletedTask;
+   }
+
+   /// <summary>
+   /// Denotes if the hub has properly connected or not.
+   /// </summary>
+   public bool IsConnected => mHubConnection.State == HubConnectionState.Connected;
+
+   #region Private Members
+
+   private HubConnection mHubConnection;
+
+   public string mAudio = String.Empty;
+   public double mVolume = 0.5f;
+
+   public List<PlacedSticker> PlacedStickers = new List<PlacedSticker>();
+
+   public PlacedSticker TestDisplaySticker = new PlacedSticker();
+   public bool IsTestDisplayOn { get; set; } = false;
+
+   public const string mDisconnectedWarning = "DISCONNECTED! You have to run the bot, then refresh your browser source cache in your broadcaster software.";
+
+   #endregion
+}

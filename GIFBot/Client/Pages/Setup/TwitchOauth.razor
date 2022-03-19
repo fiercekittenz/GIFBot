@@ -1,0 +1,113 @@
+﻿@page "/setup/twitchoauth"
+@using Microsoft.AspNetCore.SignalR.Client
+@using Microsoft.AspNetCore.WebUtilities
+@using GIFBot.Shared
+@using GIFBot.Shared.Utility
+@using GIFBot.Shared.Models.Twitch
+@using Microsoft.AspNetCore.Http.Connections
+@inject NavigationManager NavigationManager
+@inject GIFBot.Client.Utility.ClientAppData ClientAppData
+@inject HttpClient Http
+@implements IAsyncDisposable
+
+@code {
+   protected override async Task OnInitializedAsync()
+   {
+      // Build the connection to the main bot hub.
+      mHubConnection = new HubConnectionBuilder()
+         .WithUrl(NavigationManager.ToAbsoluteUri("/gifbothub"), HttpTransportType.LongPolling) 
+         .WithAutomaticReconnect()
+         .Build();
+
+      // Start the connection.
+      await mHubConnection.StartAsync();
+
+      // Verify that bot settings have been loaded. If not, redirect to the setup wizard.
+      BotSettings botSettings = null;
+      string botSettingsJson = await mHubConnection.InvokeAsync<string>("GetBotSettings");
+      if (!String.IsNullOrEmpty(botSettingsJson))
+      {
+         botSettings = Newtonsoft.Json.JsonConvert.DeserializeObject<BotSettings>(botSettingsJson);
+      }
+
+      if (botSettings == null)
+      {
+         NavigationManager.NavigateTo("error");
+      }
+
+      string errorCode = String.Empty;
+
+      // Fetch the information from Twitch now that we have an authorization code.
+      Uri uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+      if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("oauthtoken", out var oauthToken) && 
+          QueryHelpers.ParseQuery(uri.Query).TryGetValue("refreshtoken", out var refreshToken))
+      {
+         string oauthTokenValue = oauthToken.ToString();
+         string refreshTokenValue = refreshToken.ToString();
+
+         if (botSettings.CurrentSetupStep == SetupStep.BotOauth)
+         {
+            botSettings.BotOauthToken = oauthTokenValue;
+            botSettings.BotRefreshToken = refreshTokenValue;
+            botSettings.CurrentSetupStep = SetupStep.StreamerOauth;
+
+            TwitchUserData user = await mHubConnection.InvokeAsync<TwitchUserData>("GetCurrentUser", oauthTokenValue);
+            if (user != null)
+            {
+               botSettings.BotName = user.login;
+            }
+            else
+            {
+               // The user was not properly found or validated.
+               botSettings.CurrentSetupStep = SetupStep.BotOauth;
+               errorCode = "BotInvalid";
+            }
+
+            await mHubConnection.InvokeAsync("UpdateBotSettings", Newtonsoft.Json.JsonConvert.SerializeObject(botSettings), false);
+         }
+         else if (botSettings.CurrentSetupStep == SetupStep.StreamerOauth)
+         {
+            botSettings.StreamerOauthToken = oauthTokenValue;
+            botSettings.StreamerRefreshToken = refreshTokenValue;
+            botSettings.CurrentSetupStep = SetupStep.Finished;
+
+            TwitchUserData user = await mHubConnection.InvokeAsync<TwitchUserData>("GetCurrentUser", oauthTokenValue);
+            if (user != null)
+            {
+               botSettings.ChannelName = user.login;
+            }
+            else
+            {
+               // The user was not properly found or validated.
+               botSettings.CurrentSetupStep = SetupStep.StreamerOauth;
+               errorCode = "StreamerInvalid";
+            }
+
+            await mHubConnection.InvokeAsync("UpdateBotSettings", Newtonsoft.Json.JsonConvert.SerializeObject(botSettings), true);
+         }
+         else
+         {
+            Console.WriteLine($"Unknown status for this page: {botSettings.CurrentSetupStep}");
+         }
+      }
+
+      if (!String.IsNullOrEmpty(errorCode))
+      {
+         NavigationManager.NavigateTo($"/setup/?{errorCode}");
+      }
+      else
+      {
+         NavigationManager.NavigateTo("/setup/");
+      }
+   }
+
+   /// <summary>
+   /// IAsyncDisposable Implementation
+   /// </summary>
+   public async ValueTask DisposeAsync()
+   {
+      await mHubConnection.DisposeAsync();
+   }
+
+   private HubConnection mHubConnection;
+}

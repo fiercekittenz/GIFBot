@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no" />
+   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+   <meta http-equiv="Pragma" content="no-cache" />
+   <meta http-equiv="Expires" content="0" />
+   <title>GIFBot</title>
+   <base href="/" />
+   <link href="css/app.css" rel="stylesheet" />
+   <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+   <link rel="stylesheet" href="_content/Radzen.Blazor/css/dark-base.css">
+   <link rel="stylesheet" href="css/GIFBotPurple.css" />
+   <link href="manifest.json" rel="manifest" />
+   <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png" />
+
+   <!-- Google Fonts -->
+   <link rel="preconnect" href="https://fonts.gstatic.com">
+   <link href='https://fonts.googleapis.com/css?family=Aldrich' rel='stylesheet'>
+   <link href='https://fonts.googleapis.com/css?family=Anton' rel='stylesheet'>
+   <link href='https://fonts.googleapis.com/css?family=Barrio' rel='stylesheet'>
+   <link href='https://fonts.googleapis.com/css?family=Creepster' rel='stylesheet'>
+   <link href='https://fonts.googleapis.com/css?family=Eater' rel='stylesheet'>
+   <link href='https://fonts.googleapis.com/css?family=Galada' rel='stylesheet'>
+   <link href='https://fonts.googleapis.com/css?family=Ranchers' rel='stylesheet'>
+   <link href='https://fonts.googleapis.com/css?family=Lobster' rel='stylesheet'>
+   <link href='https://fonts.googleapis.com/css?family=Righteous' rel='stylesheet'>
+   <link href='https://fonts.googleapis.com/css?family=BenchNine' rel='stylesheet'>
+   <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
+   <link href='https://fonts.googleapis.com/css?family=Ultra' rel='stylesheet'>
+   <link href='https://fonts.googleapis.com/css?family=Frijole' rel='stylesheet'>
+   <link href='https://fonts.googleapis.com/css?family=Viga' rel='stylesheet'>
+   <link href='https://fonts.googleapis.com/css?family=Quantico' rel='stylesheet'>
+   <link href='https://fonts.googleapis.com/css?family=Bungee' rel='stylesheet'>
+   <link href='https://fonts.googleapis.com/css?family=Molle' rel='stylesheet'>
+   <link href='https://fonts.googleapis.com/css?family=Sriracha' rel='stylesheet'>
+   <link href='https://fonts.googleapis.com/css?family=Arsenal' rel='stylesheet'>
+   <link href='https://fonts.googleapis.com/css?family=Gaegu' rel='stylesheet'>
+   <link href='https://fonts.googleapis.com/css?family=VT323' rel='stylesheet'>
+
+   <script src="_content/Telerik.UI.for.Blazor/js/telerik-blazor.js" defer></script>
+   <script src="_content/Radzen.Blazor/Radzen.Blazor.js"></script>
+
+   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js" type="text/javascript"></script>
+   <script src="js/CORSRequest.js?v=1"></script>
+   <script src="js/AnimationHelpers.js?v=1"></script>
+   <script src="js/Streamlabs.js?v=1"></script>
+   <script src="js/ElementDrag.js?v=1"></script>
+   <script src="js/jquery-3.3.1.min.js"></script>
+   <script src="js/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+
+   <style>
+      body {
+         background-color: transparent;
+      }
+
+      .slidecontainer {
+         width: 100%;
+      }
+
+      .slider {
+         -webkit-appearance: none;
+         width: 100%;
+         height: 25px;
+         background: #95869d;
+         outline: none;
+         opacity: 0.7;
+         -webkit-transition: .2s;
+         transition: opacity .2s;
+      }
+
+         .slider:hover {
+            opacity: 1;
+         }
+
+         .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            background: #651298;
+            cursor: pointer;
+         }
+
+         .slider::-moz-range-thumb {
+            width: 25px;
+            height: 25px;
+            background: #651298;
+            cursor: pointer;
+         }
+   </style>
+</head>
+
+<!-- BootStrap Tutorial: https://www.w3schools.com/bootstrap4/default.asp -->
+
+<body style="background-color: transparent">
+   <app>Loading...</app>
+
+   <div id="blazor-error-ui">
+      An unhandled error has occurred.
+      <a href="" class="reload">Reload</a>
+      <a class="dismiss">🗙</a>
+   </div>
+   <script src="_framework/blazor.webassembly.js"></script>
+   <script>navigator.serviceWorker.register('service-worker.js');</script>
+</body>
+
+</html>

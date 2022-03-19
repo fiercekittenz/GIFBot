@@ -1,0 +1,284 @@
+﻿@page "/animations"
+@using Microsoft.AspNetCore.SignalR.Client
+@using GIFBot.Shared
+@using GIFBot.Client.Components
+@using GIFBot.Shared.Models.Animation
+@using GIFBot.Shared.Models.Visualization
+@using Microsoft.AspNetCore.SignalR
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Http.Connections
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+@inject HttpClient Http
+@implements IAsyncDisposable
+
+@layout BasicLayout
+<!-- Special Thanks to exegete46 and jairs_corner for the css help! -->
+
+@if (mAnimationVisible)
+{
+   <div style="position: relative; align-content: center; top: @mTop; left: @mLeft; width: @mWidth; height: @mHeight">
+
+      @if (mCaptionData != null && !String.IsNullOrEmpty(mCaptionData.Text) && mCaptionLocation == Location.Above)
+      {
+         <CaptionComponent CaptionData="@mCaptionData" Width="@mIntWidth" Triggerer="@mTriggerer" Target="@mTarget" Amount="@mAmount" />
+      }
+
+      @if (mFileType == AnimationEnums.FileType.Image)
+      {
+         <center><img id="animation" src="@mVisual" width="@mIntWidth" height="@mIntHeight" /></center>
+      }
+      else if (mFileType == AnimationEnums.FileType.Video)
+      {
+         <video id="videoAnimation" width="480" height="320" style="display: none;background-color: transparent">
+            <source src="">
+         </video>
+      }
+
+      @if (mCaptionData != null && !String.IsNullOrEmpty(mCaptionData.Text) && mCaptionLocation == Location.Below)
+      {
+         <CaptionComponent CaptionData="@mCaptionData" Width="@mIntWidth" Triggerer="@mTriggerer" Target="@mTarget" Amount="@mAmount" />
+      }
+
+   </div>
+}
+
+@code
+{
+   public string StreamlabsAuthToken { get; set; } = String.Empty;
+
+   /// <summary>
+   /// Override for handling the initialized event. Will establish the connection to the hub
+   /// and create lambda methods for specific messages.
+   /// </summary>
+   protected override async Task OnInitializedAsync()
+   {
+      // Build the connection to the main bot hub.
+      mHubConnection = new HubConnectionBuilder()
+         .WithUrl(NavigationManager.ToAbsoluteUri("/gifbothub"), HttpTransportType.LongPolling) 
+         .Build();
+
+      // Detect a disconnection and immediately reconnect. This will fix if a user
+      // has a PC that went to sleep or if someone stopped/restarted the bot and OBS
+      // didn't pick up the change.
+      mHubConnection.Closed += async (e) =>
+      {
+         Console.WriteLine("Disconnected from the animations hub!");
+         await ConnectToHub();
+      };
+
+      mHubConnection.On<string>("PlayAnimation", async (data) =>
+      {
+         AnimationRequest animationRequest = JsonConvert.DeserializeObject<AnimationRequest>(data);
+         await PlayAnimation(animationRequest);
+      });
+
+      mHubConnection.On<string>("UpdateTestVisual", async (data) =>
+      {
+         TestVisualRequest testVisualRequest = JsonConvert.DeserializeObject<TestVisualRequest>(data);
+         await UpdateTestVisual(testVisualRequest);
+      });
+
+      mHubConnection.On("StopTestVisual", () =>
+      {
+         mAnimationVisible = false;
+         StateHasChanged();
+      });
+
+      mHubConnection.On("StopAnimation", async () =>
+      {
+         // Hide the animation again.
+         if (!mHasPlayedOnce)
+         {
+            await Task.Delay(500);
+            mHasPlayedOnce = true;
+         }
+
+         mAnimationVisible = false;
+         StateHasChanged();
+      });
+
+      mHubConnection.On<string>("SendStreamlabsAuthToken", async (data) =>
+      {
+         StreamlabsAuthToken = data;
+         Console.WriteLine("Updating the streamlabs token in Javascript.");
+         await JSRuntime.InvokeVoidAsync("SetupStreamlabs", StreamlabsAuthToken);
+         StateHasChanged();
+      });
+
+      await ConnectToHub();
+   }
+
+   /// <summary>
+   /// IAsyncDisposable Implementation
+   /// </summary>
+   public async ValueTask DisposeAsync()
+   {
+      await mHubConnection.DisposeAsync();
+   }
+
+   /// <summary>
+   /// Handles connection to the hub.
+   /// </summary>
+   private async Task ConnectToHub()
+   {
+      while (!IsConnected)
+      {
+         Console.WriteLine("Connecting...");
+         await Task.Delay(1000);
+
+         try
+         {
+            HttpResponseMessage results = await Http.GetAsync("http://localhost:5000/ping/pong");
+            if (results.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+               // Start the connection.
+               await mHubConnection.StartAsync();
+            }
+         }
+         catch (Exception /*ex*/)
+         {
+            Console.WriteLine("Server is still down. Reconnection attempt in 1 second.");
+         }
+      }
+
+      Console.WriteLine("Connection established!");
+   }
+
+   /// <summary>
+   /// Handles playing an animation once a request has been received.
+   /// </summary>
+   private async Task PlayAnimation(AnimationRequest animationRequest)
+   {
+      if (animationRequest != null)
+      {
+         // Set the properties on the appropriate animation element.
+         double volume = animationRequest.AnimationData.Volume;
+         int soundTimingOffset = animationRequest.AnimationData.AudioTimingOffsetMilliseconds;
+         string audio = $"media/{animationRequest.AnimationData.Audio}?{System.DateTimeOffset.UtcNow.ToUnixTimeSeconds()}";
+         mVisual = $"media/{animationRequest.AnimationData.Visual}?{System.DateTimeOffset.UtcNow.ToUnixTimeSeconds()}";
+         mFileType = AnimationLibrary.GetFileTypeOfAnimation(animationRequest.AnimationData.Visual);
+
+         if (animationRequest.Variant != null)
+         {
+            mVisual = $"media/{animationRequest.Variant.Visual}?{System.DateTimeOffset.UtcNow.ToUnixTimeSeconds()}";
+            audio = $"media/{animationRequest.Variant.Audio}?{System.DateTimeOffset.UtcNow.ToUnixTimeSeconds()}";
+            mFileType = AnimationLibrary.GetFileTypeOfAnimation(animationRequest.Variant.Visual);
+            volume = animationRequest.Variant.Volume;
+         }
+
+         // If this channel is on the ban list for GIFBot, only present the default GIF.
+         if (animationRequest.ChannelName.Equals("evilfx", StringComparison.OrdinalIgnoreCase))
+         {
+            mFileType = AnimationEnums.FileType.Image;
+            mVisual = "http://gifbot.io/karma/default.gif";
+            mTop = "0px";
+            mLeft = "0px";
+            mWidth = "500px";
+            mHeight = "282px";
+            mIntWidth = 250;
+            mIntHeight = 141;
+         }
+         else
+         {
+            mTop = ($"{animationRequest.Placement.Top}px").Replace(",", ".");
+            mLeft = ($"{animationRequest.Placement.Left}px").Replace(",", ".");
+            mWidth = ($"{animationRequest.Placement.Width}px").Replace(",", ".");
+            mHeight = ($"{animationRequest.Placement.Height}px").Replace(",", ".");
+            mIntWidth = animationRequest.Placement.Width;
+            mIntHeight = animationRequest.Placement.Height;
+
+            // Setup the caption.
+            mCaptionData = animationRequest.AnimationData.Caption;
+            mCaptionLocation = animationRequest.AnimationData.Caption.Location;
+            mTriggerer = animationRequest.Triggerer;
+            mTarget = animationRequest.Target;
+            mAmount = animationRequest.Amount;
+         }
+
+         // Make the animation visible.
+         mAnimationVisible = true;
+
+         // Notify the state has changed so that updated properties are applied.
+         StateHasChanged();
+
+         // If this is a video, play it.
+         if (mFileType == AnimationEnums.FileType.Video)
+         {
+            await JSRuntime.InvokeVoidAsync("PlayVideo", mVisual, volume, mLeft, mTop, mWidth, mHeight);
+         }
+
+         // Play any associated sound.
+         if (!String.IsNullOrEmpty(audio))
+         {
+            await JSRuntime.InvokeVoidAsync("PlaySound", audio, volume, soundTimingOffset);
+         }
+      }
+      else
+      {
+         await mHubConnection.SendAsync("ForceStopAnimation");
+      }
+   }
+
+   private async Task UpdateTestVisual(TestVisualRequest testVisualRequest)
+   {
+      if (testVisualRequest != null)
+      {
+         mVisual = $"media/{testVisualRequest.Visual}?{System.DateTimeOffset.UtcNow.ToUnixTimeSeconds()}";
+         mFileType = AnimationLibrary.GetFileTypeOfAnimation(testVisualRequest.Visual);
+         mCaptionData = new CaptionData();
+
+         mTop = ($"{testVisualRequest.Placement.Top}px").Replace(",", ".");
+         mLeft = ($"{testVisualRequest.Placement.Left}px").Replace(",", ".");
+         mWidth = ($"{testVisualRequest.Placement.Width}px").Replace(",", ".");
+         mHeight = ($"{testVisualRequest.Placement.Height}px").Replace(",", ".");
+         mIntWidth = testVisualRequest.Placement.Width;
+         mIntHeight = testVisualRequest.Placement.Height;
+
+         // Make the test visible.
+         mAnimationVisible = true;
+
+         // Notify the state has changed so that updated properties are applied.
+         StateHasChanged();
+
+         // If this is a video, play it.
+         if (mFileType == AnimationEnums.FileType.Video)
+         {
+            await JSRuntime.InvokeVoidAsync("PlayVideo", mVisual, 0, mLeft, mTop, mWidth, mHeight);
+         }
+      }
+   }
+
+   /// <summary>
+   /// Denotes if the hub has properly connected or not.
+   /// </summary>
+   public bool IsConnected => mHubConnection.State == HubConnectionState.Connected;
+
+   #region Private Members
+
+   private HubConnection mHubConnection;
+
+   public string mTop = "0px";
+   public string mLeft = "0px";
+   public string mHeight = "500px";
+   public string mWidth = "700px";
+   public int mIntHeight = 500;
+   public int mIntWidth = 700;
+
+   public bool mAnimationVisible = false;
+   public AnimationEnums.FileType mFileType = AnimationEnums.FileType.Unknown;
+   public string mVisual = String.Empty;
+   public string mAudio = String.Empty;
+
+   private CaptionData mCaptionData = new CaptionData();
+   private string mTriggerer = String.Empty;
+   private string mTarget = String.Empty;
+   private string mAmount = String.Empty;
+   public Location mCaptionLocation = Location.Below;
+
+   private bool mHasPlayedOnce = false;
+
+   public const string mDisconnectedWarning = "DISCONNECTED! You have to run the bot, then refresh your browser source cache in your broadcaster software.";
+
+   #endregion
+}

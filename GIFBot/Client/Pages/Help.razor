@@ -1,0 +1,76 @@
+﻿@page "/help"
+@inject NavigationManager NavigationManager
+
+<div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+   <h1><span class="oi oi-question-mark" aria-hidden="true"></span> Help</h1>
+</div>
+
+<div class="container-fluid p-2 mb-2 rounded" style="background-color: #211126">
+   <div class="container-fluid text-left" style="width: 100%">
+      <RadzenFieldset AllowCollapse="true" Collapsed="false" Style="width: 100%; margin-bottom: 20px">
+         <HeaderTemplate>
+            <RadzenLabel Text="Helpful Videos" Style="color: #FFFFFF; font-weight: bold" />
+         </HeaderTemplate>
+         <ChildContent>
+            <div class="container-fluid mb-4">
+               <div class="row">
+                  <div class="col">
+                     <label><b>I have no idea what I'm doing.</b></label>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col text-white-50">
+                     Join the club! The website actually has a lot of helpful videos listed that may be of use: <a href="http://www.gifbot.io/#setup" target="_blank">gifbot.io</a>
+                  </div>
+               </div>
+            </div>
+         </ChildContent>
+      </RadzenFieldset>
+
+      <RadzenFieldset AllowCollapse="true" Collapsed="false" Style="width: 100%; margin-bottom: 20px">
+         <HeaderTemplate>
+            <RadzenLabel Text="Basic Troubleshooting" Style="color: #FFFFFF; font-weight: bold" />
+         </HeaderTemplate>
+         <ChildContent>
+            <div class="container-fluid mb-4">
+               <div class="row">
+                  <div class="col">
+                     <label><b>Everything is running, but my broadcaster software isn't playing the animations.</b></label>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col text-white-50">
+                     Sometimes the broadcaster software won't pick up on the updates to a website and you need to refresh the cache. Right-click on your browser
+                     source item for GIFBot-R and go into the Properties. There should be a button to refresh the cache. Please click that and try again.
+                  </div>
+               </div>
+            </div>
+            <div class="container-fluid mb-4">
+               <div class="row">
+                  <div class="col">
+                     <label><b>Broadcaster playback is hitchy, slow, or wonky.</b></label>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col text-white-50">
+                     Your browser source needs to have the custom FPS set to 60.
+                  </div>
+               </div>
+            </div>
+            <div class="container-fluid mb-4">
+               <div class="row">
+                  <div class="col">
+                     <label><b>Streamlabs integration isn't working!</b></label>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col text-white-50">
+                     Did you remember to authenticate with Streamlabs? This isn't part of the general setup steps for the bot as it's an advanced feature.
+                     Go into the <a href="/settings/">Settings</a> and click on the Streamlabs Integration tab. Follow the steps there to get authenticated.
+                  </div>
+               </div>
+            </div>
+         </ChildContent>
+      </RadzenFieldset>
+   </div>
+</div>

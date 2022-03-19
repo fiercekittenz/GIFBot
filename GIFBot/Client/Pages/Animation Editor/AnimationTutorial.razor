@@ -1,0 +1,585 @@
+﻿@page "/animationtutorial/"
+@using Microsoft.AspNetCore.SignalR.Client
+@using GIFBot.Shared
+@using GIFBot.Shared.Utility
+@using GIFBot.Client.Pages.Models
+@using GIFBot.Client.Components
+@using GIFBot.Shared.Models.Animation
+@using Microsoft.AspNetCore.Http.Connections
+@inject NavigationManager NavigationManager
+@inject NotificationService NotificationService
+@inject IJSRuntime JSRuntime
+@inject HttpClient Http
+@implements IAsyncDisposable
+
+@if (mCurrentState == State.CategoryCreation)
+{
+   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+      <h1><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial (Step 1 of ?): Categories</h1>
+   </div>
+
+   <div class="container text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+      <p>
+         Woah! You don't have any data! That must mean you're new here. Welcome! Let's get you up and running with your first animation. Animations are organized
+         by categories so it's easier for you to find what you need, <i>and</i> so you don't end up with a giant list of incoherent, yet meme-worthy terms for commands.
+         You first need to create a category for storing your commands.
+      </p>
+      <p>
+         What would you like to name this category?
+      </p>
+      <div class="container text-left p-3" style="width: 600px">
+         <EditForm Model="@mCategoryTitleModel" OnValidSubmit="HandleSubmitNewCategoryName">
+            <div class="container">
+               <h5 class="text-light">Category Name</h5>
+               <p class="text-white-50">Please enter the name of your category below:</p>
+               <DataAnnotationsValidator />
+               <ValidationSummary />
+               <RadzenTextBox id="uiCategoryName" @bind-Value="@mCategoryTitleModel.Value" />
+               <div class="col-sm text-right p-3">
+                  <button type="submit" class="btn btn-primary" style="background-color: #5c4872">Next Step</button>
+               </div>
+            </div>
+         </EditForm>
+      </div>
+   </div>
+}
+else if (mCurrentState == State.AnimationCommand)
+{
+   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+      <h1><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial (Step 2 of ?): Animation Command (a.k.a. "Name")</h1>
+   </div>
+
+   <div class="container text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+      <p>
+         Animations are typically triggered by your viewers in chat. They can also be triggered by actions such as a subscription or Streamlabs tip.
+         You do not have to have '!' in front of the commands, though it is recommended if you intend for your viewers to be able to execute the
+         command themselves. An animation can be triggered by the command appearing anywhere in the chat message. This also acts as the name for your command.
+      </p>
+      <p>
+         What would you like your animation's command to be?
+      </p>
+      <div class="container text-left p-3" style="width: 600px">
+         <EditForm Model="@mAnimationCommandModel" OnValidSubmit="HandleSubmitNewAnimationCommand">
+            <div class="container-fluid">
+               <h5 class="text-light">Animation Command</h5>
+               <p class="text-white-50">Please enter the command or name of your animation below (no spaces!):</p>
+               <DataAnnotationsValidator />
+               <ValidationSummary />
+               <RadzenTextBox id="uiCommand" @bind-Value="@mAnimationCommandModel.Value" />
+               <div class="col-sm text-right p-3">
+                  <button type="submit" class="btn btn-primary" style="background-color: #5c4872">Next Step</button>
+               </div>
+            </div>
+         </EditForm>
+      </div>
+   </div>
+}
+else if (mCurrentState == State.AnimationVisual)
+{
+   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+      <h1><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial (Step 3 of ?): Animation Visual</h1>
+   </div>
+
+   <div class="container text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+      <p>
+         Your command will trigger the display of a visual. You can use traditional GIF, PNG, JPG files or you can
+         supply movie files in MP4 and WEBM formats! If you're using a traditional image format, you'll most likely
+         want to pair it with an audio file. That's for another step.
+      </p>
+      <p>
+         Use the form below to browse for your visual file:
+      </p>
+
+      <div class="form-group">
+         <RadzenUpload Style="width: 100%; background-color: #1e1e1e" Url="upload/animation" Accept="image/gif,image/jpeg,image/png,video/mp4,video/webm,video/mov" Error="@(args => OnImportVisualFileError(args))" Progress="@(args => OnImportVisualFileProgress(args))" Complete="@(args => OnImportVisualFileComplete(args))" />
+         <RadzenProgressBar Value="@mUploadVisualProgress" Visible="@(mUploadVisualProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
+         @if (!String.IsNullOrEmpty(mUploadVisualErrorMessage))
+         {
+            <label class="text-danger">@mUploadVisualErrorMessage</label>
+         }
+      </div>
+
+      @if (mUploadVisualComplete)
+      {
+         <div class="container-fluid">
+            <label class="text-success"><b>You have successfully uploaded:</b> @mAnimationFormModel.Visual</label>
+         </div>
+         <div class="container-fluid text-left p-3" style="width: 600px">
+            <div class="col-sm text-right p-3">
+               <button type="submit" class="btn btn-primary" style="background-color: #5c4872" @onclick="@HandleSubmitVisual">Next Step</button>
+            </div>
+         </div>
+      }
+   </div>
+}
+else if (mCurrentState == State.AnimationPlacement)
+{
+   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+      <h1><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial (Step 4 of ?): Placement</h1>
+   </div>
+
+   <div class="container text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+      <p>
+         An animation doesn't just appear at a random location on the screen. You can actually determine where it shows up as well as its width and height, so when you put it in your broadcaster
+         software, it'll appear where you want it to. Use the canvas below to set your animation's position.
+      </p>
+      <p class="text-muted">
+         <i>
+            Please note that if you have selected a video as your visual, the width and height are not known. You will have to provide that information
+            yourself. #BlameCodecs
+         </i>
+      </p>
+      <PlacementComponent Width="@mAnimationFormModel.AnimationPlacement.Width"
+                          Height="@mAnimationFormModel.AnimationPlacement.Height"
+                          Top="@mAnimationFormModel.AnimationPlacement.Top"
+                          Left="@mAnimationFormModel.AnimationPlacement.Left"
+                          OnCommitCallback="@HandleSubmitPlacement" />
+   </div>
+}
+else if (mCurrentState == State.AnimationAudio)
+{
+   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+      <h1><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial (Step 5 of ?): Animation Audio</h1>
+   </div>
+
+   <div class="container text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+      <p>
+         You can pair an audio file with your visual! If you've selected a movie file (MP4, MOV, or WEBM) then you may not want to pair
+         it with a secondary audio unless your movie doesn't have any of its own. This is not required, so if you like, you may
+         skip this step and move on to the next.
+      </p>
+      <p>
+         Use the form below to browse for your audio file:
+      </p>
+
+      <div class="form-group">
+         <RadzenUpload Style="width: 100%; background-color: #1e1e1e" Url="upload/animation" Accept="audio/*" Error="@(args => OnImportAudioFileError(args))" Progress="@(args => OnImportAudioFileProgress(args))" Complete="@(args => OnImportAudioFileComplete(args))" />
+         <RadzenProgressBar Value="@mUploadAudioProgress" Visible="@(mUploadAudioProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
+         @if (!String.IsNullOrEmpty(mUploadAudioErrorMessage))
+         {
+            <label class="text-danger">@mUploadAudioErrorMessage</label>
+         }
+      </div>
+
+      @if (mUploadAudioComplete)
+      {
+         <div class="container-fluid">
+            <label class="text-success"><b>You have successfully uploaded:</b> @mAnimationFormModel.Audio</label>
+         </div>
+      }
+
+      <div class="container-fluid text-left p-3" style="width: 600px">
+         <div class="col-sm text-right p-3">
+            <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnSkipAudio">Skip Step</button>
+            <button type="submit" class="btn btn-primary" style="background-color: #5c4872" @onclick="@HandleSubmitAudio" disabled="@(!mUploadAudioComplete)">Next Step</button>
+         </div>
+      </div>
+   </div>
+}
+else if (mCurrentState == State.AnimationVolume)
+{
+   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+      <h1><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial (Step 6 of ?): Volume</h1>
+   </div>
+
+   <div class="container text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+      <p>
+         It looks like you either have a video file selected as your visual, or decided to upload a sound file. You should probably set the volume of that now, otherwise it's going
+         to slay your headphone users.
+      </p>
+
+      <div class="form-group mt-3">
+         <label for="uiVolumeSlider"><b>Volume:</b></label>
+         <center><input type="range" class="slider" min="0" max="100" value="@mFormVolume" id="uiVolumeSlider" @onchange="@(args => OnVolumeChanged(args))"></center>
+         <p align="right">
+            <button type="button" class="btn btn-primary p-2 text-center" style="background-color: #5c4872; width: 100px"
+                    @onclick="@HandleTestAudioVolume"
+                    disabled="@(AnimationLibrary.GetFileTypeOfAnimation(mAnimationFormModel.Visual) == AnimationEnums.FileType.Video)">
+               Play
+            </button>
+         </p>
+      </div>
+
+      <div class="container-fluid text-left p-3" style="width: 600px">
+         <div class="col-sm text-right p-3">
+            <button type="submit" class="btn btn-primary" style="background-color: #5c4872" @onclick="@HandleSubmitVolume">Next Step</button>
+         </div>
+      </div>
+   </div>
+}
+else if (mCurrentState == State.AnimationBaseSettings)
+{
+   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+      <h1><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial (Step 7 of ?): Basic Settings</h1>
+   </div>
+
+   <div class="container text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+      <p>
+         Now that you have your files selected, it's time to get some of the very basic settings tuned. There's a LOT of other settings, but the ones
+         listed below are the main ones you should care about when first setting up an animation command.
+      </p>
+      <div class="container-fluid text-left p-3" style="width: 600px">
+         <div class="form-group">
+            <label for="uiDuration"><b>Duration (in milliseconds):</b></label>
+            <small id="uiDuration" class="form-text text-white-50">The number of milliseconds this animation should play for (<i>Math Reminder: 1 second = 1000ms</i>).</small>
+            <RadzenNumeric id="uiDuration" class="form-control" Style="color: #232323" Min="1000" Max="600000" @bind-Value="mAnimationFormModel.DurationMilliseconds" />
+         </div>
+         <div class="form-group">
+            <label for="uiCooldown"><b>Main Cooldown (in minutes):</b></label>
+            <small id="uiCooldown" class="form-text text-white-50">The number of minutes this command must wait before triggered again.</small>
+            <RadzenNumeric id="uiCooldown" class="form-control" Style="color: #232323" Min="0" Max="300" @bind-Value="mAnimationFormModel.MainCooldownMinutes" />
+         </div>
+         <div class="form-group">
+            <label for="uiAccess"><b>Access Type:</b></label>
+            <small id="uiAccess" class="form-text text-white-50">
+               You can limit what kind of viewer has access to use this animation. The buttons below have some of the more basic options.
+               Advanced options will be available when you edit through the big animations editor!
+            </small>
+            <RadzenRadioButtonList @bind-Value="mAccessSelection" TValue="int" Change="@(args => OnAccessLevelChange(args))">
+               <Items>
+                  <RadzenRadioButtonListItem Text="Anyone" Value="0" />
+                  <RadzenRadioButtonListItem Text="Follower" Value="1" />
+                  <RadzenRadioButtonListItem Text="Subscriber" Value="2" />
+                  <RadzenRadioButtonListItem Text="VIP" Value="3" />
+                  <RadzenRadioButtonListItem Text="Moderator" Value="4" />
+               </Items>
+            </RadzenRadioButtonList>
+         </div>
+
+         <div class="container-fluid text-left p-3" style="width: 600px">
+            <div class="col-sm text-right p-3">
+               <button type="submit" class="btn btn-primary" style="background-color: #5c4872" @onclick="@HandleCompleteTutorial">Finish!</button>
+            </div>
+         </div>
+      </div>
+   </div>
+}
+else if (mCurrentState == State.TutorialComplete)
+{
+   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+      <h1><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial Complete!</h1>
+   </div>
+
+   <div class="container text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+      <p>
+         Congratulations! You setup your first animation command! Your viewers can now use it in chat by sending <font class="text-success"><b>@mAnimationFormModel.Command</b></font> in a chat message.
+      </p>
+      <p>
+         Now to setup your broadcaster software! You will need to add a new Browser source to your scene. The URL is in the textbox below. Copy this and use it as the URL source of your Browser source
+         element. Set the canvas size to be 1920x1080. Note: You may resize it, but your animations will render smaller. Set the framerate to 60fps and flag it to refresh when the scene is activated. Enjoy!
+      </p>
+      <div class="container-fluid">
+         <table width="100%">
+            <tr>
+               <td width="600">
+                  <RadzenTextBox id="uiAnimsUrl" class="form-control" Style="background-color: #2c2241; color: #FFFFFF; width: 100%" ReadOnly="true" @bind-Value="mPrimaryAnimationsURL" />
+               </td>
+               <td align="left">
+                  <button type="button" class="btn btn-secondary p-1 ml-2" style="background-color: #6c4872" @onclick='(() => HandleCopyUrl("uiAnimsUrl"))'>Copy to Clipboard</button>
+               </td>
+            </tr>
+         </table>
+      </div>
+      <div class="container-fluid text-left p-3" style="width: 600px">
+         <div class="col-sm text-right p-3">
+            <button type="submit" class="btn btn-primary" style="background-color: #5c4872" @onclick="@HandleDashboardReturn">Go Back to the Dashboard</button>
+         </div>
+      </div>
+   </div>
+}
+
+@code {
+
+   protected override async Task OnInitializedAsync()
+   {
+      // Build the connection to the main bot hub.
+      mHubConnection = new HubConnectionBuilder()
+         .WithUrl(NavigationManager.ToAbsoluteUri("/gifbothub"), HttpTransportType.LongPolling) 
+         .WithAutomaticReconnect()
+         .Build();
+
+      // Start the connection.
+      await mHubConnection.StartAsync();
+
+      // Build the URL to the animations HTML file that users will use as their browser source.
+      mPrimaryAnimationsURL = await mHubConnection.InvokeAsync<string>("GetAnimationsPath", AnimationEnums.AnimationLayer.Primary);
+
+      // Get a simplified version of the animations tree data for display only.
+      // There is no good reason to request the full animations data unless requested for a specific
+      // category or animation command.
+      string treeDataJson = await mHubConnection.InvokeAsync<string>("GetAnimationTreeData");
+      if (!String.IsNullOrEmpty(treeDataJson))
+      {
+         mAnimationTreeData = Newtonsoft.Json.JsonConvert.DeserializeObject<List<AnimationTreeItem>>(treeDataJson);
+         StateHasChanged();
+      }
+   }
+
+   /// <summary>
+   /// IAsyncDisposable Implementation
+   /// </summary>
+   public async ValueTask DisposeAsync()
+   {
+      await mHubConnection.DisposeAsync();
+   }
+
+   #region Step Handling
+
+   private async Task HandleSubmitNewCategoryName()
+   {
+      mAnimationFormModel.CategoryTitle = mCategoryTitleModel.Value;
+
+      bool result = await mHubConnection.InvokeAsync<bool>("AddAnimationCategory", mAnimationFormModel.CategoryTitle);
+      if (result)
+      {
+         mCurrentState = State.AnimationCommand;
+         StateHasChanged();
+      }
+      else
+      {
+         NotificationService.Notify(NotificationSeverity.Error, "Error", "That category already exists!", 5000);
+         await InvokeAsync(() => { StateHasChanged(); });
+      }
+   }
+
+   private async Task HandleSubmitNewAnimationCommand()
+   {
+      // Get rid of all spaces.
+      mAnimationFormModel.Command = mAnimationCommandModel.Value.Replace(" ", String.Empty);
+
+      bool result = await mHubConnection.InvokeAsync<bool>("AddAnimationToCategory", mAnimationFormModel.CategoryTitle, mAnimationFormModel.Command);
+      if (result)
+      {
+         mCurrentState = State.AnimationVisual;
+         StateHasChanged();
+      }
+      else
+      {
+         NotificationService.Notify(NotificationSeverity.Error, "Error", "Either the category doesn't exist or an animation already exists by that command!", 5000);
+         await InvokeAsync(() => { StateHasChanged(); });
+      }
+   }
+
+   private async Task HandleSubmitVisual()
+   {
+      bool result = await mHubConnection.InvokeAsync<bool>("SetAnimationVisual", mAnimationFormModel.Command, mAnimationFormModel.Visual);
+      if (result)
+      {
+         // Get the animation's placement data and set it locally.
+         mAnimationFormModel.AnimationPlacement = await mHubConnection.InvokeAsync<AnimationPlacement>("GetAnimationVisualPlacement", mAnimationFormModel.Command);
+         mCurrentState = State.AnimationPlacement;
+         StateHasChanged();
+      }
+      else
+      {
+         NotificationService.Notify(NotificationSeverity.Error, "Error", "We were unable to set the visual data on the new animation.", 5000);
+         await InvokeAsync(() => { StateHasChanged(); });
+      }
+   }
+
+   private async Task HandleSubmitPlacement(PlacementData e)
+   {
+      mAnimationFormModel.AnimationPlacement.Width = e.Width;
+      mAnimationFormModel.AnimationPlacement.Height = e.Height;
+      mAnimationFormModel.AnimationPlacement.Top = e.Top;
+      mAnimationFormModel.AnimationPlacement.Left = e.Left;
+
+      bool result = await mHubConnection.InvokeAsync<bool>("SetAnimationPosition", mAnimationFormModel.Command, mAnimationFormModel.AnimationPlacement);
+      if (result)
+      {
+         mCurrentState = State.AnimationAudio;
+         StateHasChanged();
+      }
+      else
+      {
+         NotificationService.Notify(NotificationSeverity.Error, "Error", "We were unable to set the position on the new animation.", 5000);
+         await InvokeAsync(() => { StateHasChanged(); });
+      }
+   }
+
+   private void OnSkipAudio()
+   {
+      if (AnimationLibrary.GetFileTypeOfAnimation(mAnimationFormModel.Visual) == AnimationEnums.FileType.Video)
+      {
+         // They skipped the audio file, but the visual is a video, so ask them to set the volume.
+         mCurrentState = State.AnimationVolume;
+      }
+      else
+      {
+         mCurrentState = State.AnimationBaseSettings;
+      }
+
+      StateHasChanged();
+   }
+
+   private async Task HandleTestAudioVolume()
+   {
+      await JSRuntime.InvokeVoidAsync("PlaySound", $"media/{mAnimationFormModel.Audio}", mAnimationFormModel.Volume, 0);
+   }
+
+   private async Task HandleSubmitAudio()
+   {
+      bool result = await mHubConnection.InvokeAsync<bool>("SetAnimationAudio", mAnimationFormModel.Command, mAnimationFormModel.Audio);
+      if (result)
+      {
+         mCurrentState = State.AnimationVolume;
+         StateHasChanged();
+      }
+      else
+      {
+         NotificationService.Notify(NotificationSeverity.Error, "Error", "We were unable to set the audio data on the new animation.", 5000);
+         await InvokeAsync(() => { StateHasChanged(); });
+      }
+   }
+
+   private async Task HandleSubmitVolume()
+   {
+      bool result = await mHubConnection.InvokeAsync<bool>("SetAnimationVolume", mAnimationFormModel.Command, mAnimationFormModel.Volume);
+      if (result)
+      {
+         mCurrentState = State.AnimationBaseSettings;
+         StateHasChanged();
+      }
+      else
+      {
+         NotificationService.Notify(NotificationSeverity.Error, "Error", "We were unable to set the volume of the new animation.", 5000);
+         await InvokeAsync(() => { StateHasChanged(); });
+      }
+   }
+
+   private async Task HandleCompleteTutorial()
+   {
+      bool result = await mHubConnection.InvokeAsync<bool>("SetAnimationBasicSettings",
+         mAnimationFormModel.Command,
+         mAnimationFormModel.DurationMilliseconds,
+         mAnimationFormModel.MainCooldownMinutes,
+         mAnimationFormModel.Access);
+      if (result)
+      {
+         mCurrentState = State.TutorialComplete;
+         StateHasChanged();
+      }
+      else
+      {
+         NotificationService.Notify(NotificationSeverity.Error, "Error", "We were unable to set the settings of the new animation.", 5000);
+         await InvokeAsync(() => { StateHasChanged(); });
+      }
+   }
+
+   private void HandleDashboardReturn()
+   {
+      NavigationManager.NavigateTo("/");
+   }
+
+   #endregion
+
+   #region Form Handling
+
+   private async Task HandleCopyUrl(string elementName)
+   {
+      await JSRuntime.InvokeVoidAsync("CopyToClipboard", elementName);
+      NotificationService.Notify(NotificationSeverity.Success, "Success", "The URL was copied to your clipboard!", 5000);
+      await InvokeAsync(() => { StateHasChanged(); });
+   }
+
+   private void OnImportVisualFileProgress(UploadProgressArgs e)
+   {
+      mUploadVisualProgress = e.Progress;
+   }
+
+   private void OnImportVisualFileComplete(UploadCompleteEventArgs e)
+   {
+      // Upload completed.
+      mAnimationFormModel.Visual = e.RawResponse;
+      mUploadVisualComplete = true;
+   }
+
+   private void OnImportVisualFileError(Radzen.UploadErrorEventArgs e)
+   {
+      mUploadVisualErrorMessage = $"There was an error uploading the file.";
+      StateHasChanged();
+   }
+
+   private void OnImportAudioFileProgress(UploadProgressArgs e)
+   {
+      mUploadAudioProgress = e.Progress;
+   }
+
+   private void OnImportAudioFileComplete(UploadCompleteEventArgs e)
+   {
+      // Upload completed.
+      mAnimationFormModel.Audio = e.RawResponse;
+      mUploadAudioComplete = true;
+   }
+
+   private void OnImportAudioFileError(Radzen.UploadErrorEventArgs e)
+   {
+      mUploadAudioErrorMessage = $"There was an error uploading the file.";
+      StateHasChanged();
+   }
+
+   private void OnVolumeChanged(dynamic value)
+   {
+      if (value is ChangeEventArgs changeEventArgs)
+      {
+         mAnimationFormModel.Volume = (double)((double)(Int32.Parse(changeEventArgs.Value.ToString())) / 100);
+         StateHasChanged();
+      }
+   }
+
+   private void OnAccessLevelChange(int? value)
+   {
+      if (value.HasValue)
+      {
+         mAnimationFormModel.Access = (AnimationEnums.AccessType)value.Value;
+      }
+   }
+
+   #endregion
+
+   #region Data Members
+
+   private HubConnection mHubConnection;
+
+   private List<AnimationTreeItem> mAnimationTreeData = new List<AnimationTreeItem>();
+   private State mCurrentState = State.CategoryCreation;
+   private string mPrimaryAnimationsURL = String.Empty;
+
+   // Store all of the data here. We will need smaller form models though, given the setup wizard style of this razor page.
+   private AnimationFormModel mAnimationFormModel = new AnimationFormModel();
+
+   // Individual form models for each of the steps of the tutorial.
+   private StringFormModel mCategoryTitleModel = new StringFormModel();
+   private StringFormModel mAnimationCommandModel = new StringFormModel();
+
+   // Visual Upload Variables
+   private bool mUploadVisualComplete = false;
+   private string mUploadVisualErrorMessage = String.Empty;
+   private int mUploadVisualProgress = 0;
+
+   // Audio Upload Variables
+   private bool mUploadAudioComplete = false;
+   private string mUploadAudioErrorMessage = String.Empty;
+   private int mUploadAudioProgress = 0;
+   private int mFormVolume = 50;
+
+   // Basic Settings Form Variables
+   private int mAccessSelection = 0;
+
+   /// <summary>
+   /// Page State Enum
+   /// </summary>
+   public enum State
+   {
+      CategoryCreation,
+      AnimationCommand,
+      AnimationVisual,
+      AnimationPlacement,
+      AnimationAudio,
+      AnimationVolume,
+      AnimationBaseSettings,
+      TutorialComplete
+   }
+
+   #endregion
+}

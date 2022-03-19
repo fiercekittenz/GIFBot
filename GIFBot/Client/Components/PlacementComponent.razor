@@ -1,0 +1,574 @@
+﻿@inject IJSRuntime JSRuntime
+@inject HttpClient Http
+
+   <div class="border border-dark">
+      <center>
+         <nav class="navbar navbar-expand-sm mb-3" style="background-color:#1f0c24">
+            <ul class="navbar-nav">
+               <li class="nav-item">
+                  <button class="btn btn-secondary nav-item p-1 mr-3" @onclick="@SetFullScreen" style="background-color: #5c4872">Set Full Screen</button>
+               </li>
+               <li class="nav-item">
+                  <button class="btn btn-secondary nav-item p-1 mr-3" @onclick="@ResetPosition" style="background-color: #5c4872">Move to Top/Left</button>
+               </li>
+               <li class="nav-item">
+                  <button class="btn btn-secondary nav-item p-1 mr-3" @onclick="@ResetDimensions" style="background-color: #5c4872">Reset Size</button>
+               </li>
+            </ul>
+         </nav>
+         <div id="animationCanvas" style="width: @mCanvasWidth; height: @mCanvasHeight; background-color: #dedede; top: 0px; left: 0px; position: relative; background-size: 24px 24px; background-image: linear-gradient(to right, lightgrey 1px, transparent 1px), linear-gradient(to bottom, lightgrey 1px, transparent 1px)">
+            <div id="animationVisual" style="width: @mWidthString; height: @mHeightString; top: @mTopString; left: @mLeftString; background-color: #45356f; position: absolute; cursor: move"></div>
+         </div>
+         <center>
+            <div class="container text-right p-3" style="width: 700px">
+               <div class="row">
+                  <EditForm Model="@this">
+                     <div class="col-sm text-left" style="width: 400px">
+                        <div class="row">
+                           <div class="col">
+                              <div class="form-group">
+                                 <div class="slidecontainer">
+                                    <label for="uiWidthInput">Width:</label>
+                                    <input type="range" class="slider" min="1" max="@CanvasWidth" value="@mFormWidth" id="uiWidthInputA" @onchange="@(args => OnWidthChanged(args))">
+                                    <DataAnnotationsValidator />
+                                    <ValidationSummary />
+                                    <TelerikNumericTextBox Id="uiWidthInput" Width="100%" Min="1" Max="@CanvasWidth" @bind-Value="mFormWidth" OnChange="@(args => OnWidthChanged(args))" />
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="col">
+                              <div class="form-group">
+                                 <div class="slidecontainer">
+                                    <label for="uiHeightInput">Height:</label>
+                                    <input type="range" class="slider" min="1" max="@CanvasHeight" value="@mFormHeight" id="uiHeightInputA" @onchange="@(args => OnHeightChanged(args))">
+                                    <DataAnnotationsValidator />
+                                    <ValidationSummary />
+                                    <TelerikNumericTextBox Id="uiHeightInput" Width="100%" Min="1" Max="@CanvasHeight" @bind-Value="mFormHeight" OnChange="@(args => OnHeightChanged(args))" />
+                                 </div>
+                              </div>
+                              <div class="form-group form-check">
+                                 <label class="form-check-label">
+                                    <TelerikCheckBox Id="uiUniformScale" @bind-Value="mUseUniformScale" /> Use Uniform Scale
+                                 </label>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="row">
+                           <div class="col">
+                              <div class="form-group form-check">
+                                 <label class="form-check-label">
+                                    <TelerikCheckBox Id="uiDragBeyondBounds" @bind-Value="IsOutOfBounds" /> Drag Outside of the Container Bounds (warning: can get funky)
+                                 </label>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </EditForm>
+                  @if (ShowCommitButton)
+                  {
+                     <div class="col-sm" style="width: 300px">
+                        <button class="btn btn-primary p-1 mr-3" @onclick="@CommitChanges" style="background-color: #5c4872; width: auto">@CommitButtonText</button>
+                     </div>
+                  }
+                  <div class="form-group form-check">
+                     <label class="form-check-label">
+                        <TelerikCheckBox Id="uiDisplayTestMode" @bind-Value="IsDisplayTestMode" /> Show Visual in Overlay
+                     </label>
+                  </div>
+               </div>
+            </div>
+         </center>
+      </center>
+   </div>
+
+   @code {
+
+      [Parameter]
+      public int CanvasWidth
+      {
+         get { return mCanvasWidthInt; }
+         set
+         {
+            if (mCanvasWidthInt != value)
+            {
+               mCanvasWidthInt = value;
+               UpdateUI();
+            }
+         }
+      }
+
+      [Parameter]
+      public int CanvasHeight
+      {
+         get { return mCanvasHeightInt; }
+         set
+         {
+            if (mCanvasHeightInt != value)
+            {
+               mCanvasHeightInt = value;
+               UpdateUI();
+            }
+         }
+      }
+
+      [Parameter]
+      public int Width
+      {
+         get { return mWidth; }
+         set
+         {
+            if (mWidth != value)
+            {
+               mWidth = value;
+               if (mOriginalWidth == null)
+               {
+                  mOriginalWidth = mWidth;
+               }
+
+               UpdateUI();
+            }
+         }
+      }
+
+      [Parameter]
+      public int Height
+      {
+         get { return mHeight; }
+         set
+         {
+            if (mHeight != value)
+            {
+               mHeight = value;
+               if (mOriginalHeight == null)
+               {
+                  mOriginalHeight = mHeight;
+               }
+               UpdateUI();
+            }
+         }
+      }
+
+      [Parameter]
+      public int Top
+      {
+         get { return mTop; }
+         set
+         {
+            if (mTop != value)
+            {
+               mTop = value;
+               if (mOriginalTop == null)
+               {
+                  mOriginalTop = mTop;
+                  Console.WriteLine($"Top = {mTop}, OriginalTop = {mOriginalTop}");
+               }
+               UpdateUI();
+            }
+         }
+      }
+
+      [Parameter]
+      public int Left
+      {
+         get { return mLeft; }
+         set
+         {
+            if (mLeft != value)
+            {
+               mLeft = value;
+               if (mOriginalLeft == null)
+               {
+                  mOriginalLeft = mLeft;
+                  Console.WriteLine($"Left = {mLeft}, OriginalLeft = {mOriginalLeft}");
+               }
+               UpdateUI();
+            }
+         }
+      }
+
+      [Parameter]
+      public bool IsDisplayTestMode
+      {
+         get
+         {
+            return mIsDisplayTestMode;
+         }
+
+         set
+         {
+            if (mIsDisplayTestMode != value)
+            {
+               mIsDisplayTestMode = value;
+               _ = ToggleDisplayMode();
+            }
+         }
+      }
+
+      [Parameter]
+      public bool IsOutOfBounds
+      {
+         get { return mIsOutOfBounds; }
+         set
+         {
+            if (mIsOutOfBounds != value)
+            {
+               mIsOutOfBounds = value;
+               _ = DragBeyondBoundsChanged();
+            }
+         }
+      }
+
+      [Parameter]
+      public GIFBot.Shared.AnimationEnums.UpdateVisualType DataEditType { get; set; } = GIFBot.Shared.AnimationEnums.UpdateVisualType.Animation;
+
+      [Parameter]
+      public bool ShowCommitButton { get; set; } = true;
+
+      [Parameter]
+      public string CommitButtonText { get; set; } = "Next Step";
+
+      /// <summary>
+      /// The scaled value. Obviously we cannot display this at 1920x1080, so we will scale it by some percentage.
+      /// </summary>
+      [Parameter]
+      public double Scalar { get; set; } = 0.35;
+
+      /// <summary>
+      /// Event fired when the user presses the commit button.
+      /// </summary>
+      [Parameter]
+      public EventCallback<PlacementData> OnCommitCallback { get; set; }
+
+      /// <summary>
+      /// Event fired when the display test mode is changed.
+      /// </summary>
+      [Parameter]
+      public EventCallback<bool> OnDisplayTestModeChanged { get; set; }
+
+      /// <summary>
+      /// Event fired when the dimensions has changed.
+      /// </summary>
+      [Parameter]
+      public EventCallback<Tuple<int, int>> OnNotifyDimensionsChanged { get; set; }
+
+
+      protected override void OnInitialized()
+      {
+         UpdateUI();
+      }
+
+      protected void UpdateUI()
+      {
+         // Set the canvas size.
+         mCanvasWidth = $"{CanvasWidth * Scalar}px";
+         mCanvasHeight = $"{CanvasHeight * Scalar}px";
+
+         // Set up form values.
+         mFormWidth = Width;
+         mFormHeight = Height;
+
+         // Update the string values for the placement.
+         UpdatePositioningStrings();
+
+         StateHasChanged();
+      }
+
+      /// <summary>
+      /// Handler for after we render components
+      /// </summary>
+      protected override async Task OnAfterRenderAsync(bool firstRender)
+      {
+         await base.OnAfterRenderAsync(firstRender);
+
+         // Toggle on the draggable action on the inner component.
+         if (firstRender)
+         {
+            Console.WriteLine($"OnAfterRenderAsync first render, call SetupElementDrag");
+            await JSRuntime.InvokeVoidAsync("SetupElementDrag", "animationVisual", "animationCanvas", Scalar, (int)DataEditType);
+         }
+      }
+
+      /// <summary>
+      /// Toggles the display mode information on the back-end.
+      /// </summary>
+      public async Task ToggleDisplayMode()
+      {
+         await OnDisplayTestModeChanged.InvokeAsync(mIsDisplayTestMode);
+         await OnNotifyDimensionsChanged.InvokeAsync(new Tuple<int, int>(Width, Height));
+      }
+
+      public async Task OnWidthChanged(dynamic value)
+      {
+         // Get the current position first, otherwise it'll pop around and not be right.
+         Tuple<int, int> currentPosition = await GetVisualPosition();
+         Top = (int)(currentPosition.Item1 / Scalar);
+         mTopString = $"{currentPosition.Item1}px";
+         Left = (int)(currentPosition.Item2 / Scalar);
+         mLeftString = $"{currentPosition.Item2}px";
+
+         // Determine the value difference and if it was additive or not.
+         int valueInt = 0;
+         if (value is ChangeEventArgs changeEventArgs)
+         {
+            valueInt = Int32.Parse(changeEventArgs.Value.ToString());
+         }
+         else
+         {
+            valueInt = (int)value;
+         }
+
+         int difference = Math.Abs(Width - valueInt);
+         double percentChange = (double)difference / (double)Width;
+
+         bool isAdditive = false;
+         if (valueInt > Width)
+         {
+            isAdditive = true;
+         }
+
+         // Update the width.
+         Width = valueInt;
+         mFormWidth = valueInt;
+         mWidthString = $"{Width * Scalar}px";
+
+         // Update the height, but only if uniform scale is on.
+         if (mUseUniformScale)
+         {
+            if (isAdditive)
+            {
+               Height += (int)Math.Ceiling(Height * percentChange);
+            }
+            else
+            {
+               Height -= (int)Math.Ceiling(Height * percentChange);
+            }
+
+            mFormHeight = Height;
+            mHeightString = $"{Height * Scalar}px";
+         }
+
+         await OnNotifyDimensionsChanged.InvokeAsync(new Tuple<int, int>(Width, Height));
+
+         StateHasChanged();
+      }
+
+      public async Task OnHeightChanged(dynamic value)
+      {
+         // Get the current position first, otherwise it'll pop around and not be right.
+         Tuple<int, int> currentPosition = await GetVisualPosition();
+         Top = (int)(currentPosition.Item1 / Scalar);
+         mTopString = $"{currentPosition.Item1}px";
+         Left = (int)(currentPosition.Item2 / Scalar);
+         mLeftString = $"{currentPosition.Item2}px";
+
+         // Determine the value difference and if it was additive or not.
+         int valueInt = 0;
+         if (value is ChangeEventArgs changeEventArgs)
+         {
+            valueInt = Int32.Parse(changeEventArgs.Value.ToString());
+         }
+         else
+         {
+            valueInt = (int)value;
+         }
+
+         int difference = Math.Abs(Height - valueInt);
+         double percentChange = (double)difference / (double)Height;
+
+         bool isAdditive = false;
+         if (valueInt > Height)
+         {
+            isAdditive = true;
+         }
+
+         // Update the height.
+         Height = valueInt;
+         mFormHeight = valueInt;
+         mHeightString = $"{Height * Scalar}px";
+
+         // Update the width, but only if uniform scale is on.
+         if (mUseUniformScale)
+         {
+            if (isAdditive)
+            {
+               Width += (int)Math.Ceiling(Width * percentChange);
+            }
+            else
+            {
+               Width -= (int)Math.Ceiling(Width * percentChange);
+            }
+
+            mFormWidth = Width;
+            mWidthString = $"{Width * Scalar}px";
+         }
+
+         await OnNotifyDimensionsChanged.InvokeAsync(new Tuple<int, int>(Width, Height));
+
+         StateHasChanged();
+      }
+
+      public async Task<Tuple<int, int>> GetVisualPosition()
+      {
+         string top = await JSRuntime.InvokeAsync<string>("GetElementTop", "animationVisual");
+         string left = await JSRuntime.InvokeAsync<string>("GetElementLeft", "animationVisual");
+
+         double topNum = 0;
+         if (!String.IsNullOrEmpty(top))
+         {
+            Double.TryParse(top.Replace("px", String.Empty), out topNum);
+         }
+
+         double leftNum = 0;
+         if (!String.IsNullOrEmpty(left))
+         {
+            Double.TryParse(left.Replace("px", String.Empty), out leftNum);
+         }
+
+         return new Tuple<int, int>((int)topNum, (int)leftNum);
+      }
+
+      /// <summary>
+      /// Sets the visual to be full screen - meaning the full canvas.
+      /// </summary>
+      public async Task SetFullScreen()
+      {
+         Top = 0;
+         Left = 0;
+         Width = CanvasWidth;
+         Height = CanvasHeight;
+
+         mFormWidth = CanvasWidth;
+         mFormHeight = CanvasHeight;
+
+         IsOutOfBounds = false;
+         await DragBeyondBoundsChanged();
+
+         UpdatePositioningStrings();
+
+         await OnNotifyDimensionsChanged.InvokeAsync(new Tuple<int, int>(Width, Height));
+         await JSRuntime.InvokeVoidAsync("ForceUpdateDisplay", "animationVisual", Scalar, (int)DataEditType);
+
+         StateHasChanged();
+      }
+
+      public async Task ResetPosition()
+      {
+         Top = 0;
+         Left = 0;
+
+         try
+         {
+            await Http.GetAsync("http://localhost:5000/utility/updatevisual?visualType=" + (int)DataEditType + "&top=" + Top + "&left=" + Left + "&scalar=" + Scalar + "&updateclient=true");
+         }
+         catch (Exception /*ex*/)
+         {
+            Console.WriteLine("Unable to update position data.");
+         }
+
+         UpdateUI();
+      }
+
+      public async Task ResetDimensions()
+      {
+         Width = mOriginalWidth.Value;
+         Height = mOriginalHeight.Value;
+
+         await OnNotifyDimensionsChanged.InvokeAsync(new Tuple<int, int>(Width, Height));
+
+         UpdateUI();
+      }
+
+      public async Task DragBeyondBoundsChanged()
+      {
+         if (IsOutOfBounds)
+         {
+            Console.WriteLine($"DragBeyondBoundsChanged, call SetupElementDragWithNoContainment");
+            await JSRuntime.InvokeVoidAsync("SetupElementDragWithNoContainment", "animationVisual", "animationCanvas", Scalar, (int)DataEditType);
+         }
+         else
+         {
+            Console.WriteLine($"DragBeyondBoundsChanged, call SetupElementDrag");
+            await JSRuntime.InvokeVoidAsync("SetupElementDrag", "animationVisual", Scalar, (int)DataEditType);
+         }
+      }
+
+      /// <summary>
+      /// Commits the changes and notifies the user.
+      /// </summary>
+      public async Task CommitChanges()
+      {
+         Tuple<int, int> currentPosition = await GetVisualPosition();
+
+         Console.WriteLine($"CommitChanges: Width = {Width}, Height {Height}");
+
+         await OnCommitCallback.InvokeAsync(new PlacementData()
+         {
+            Width = Width,
+            Height = Height,
+            Top = (int)(currentPosition.Item1 / Scalar),
+            Left = (int)(currentPosition.Item2 / Scalar),
+            IsOutOfBounds = IsOutOfBounds
+         });
+      }
+
+      /// <summary>
+      /// Fetches the visual position and sends back the current position data.
+      /// </summary>
+      public async Task<PlacementData> GetCurrentPositionData()
+      {
+         Tuple<int, int> currentPosition = await GetVisualPosition();
+         return new PlacementData()
+         {
+            Width = Width,
+            Height = Height,
+            Top = (int)(currentPosition.Item1 / Scalar),
+            Left = (int)(currentPosition.Item2 / Scalar),
+            IsOutOfBounds = IsOutOfBounds
+         };
+      }
+
+      #region Private Methods
+
+      private void UpdatePositioningStrings()
+      {
+         mWidthString = ($"{Width * Scalar}px").Replace(",", ".");
+         mHeightString = ($"{Height * Scalar}px").Replace(",", ".");
+         mTopString = ($"{Top * Scalar}px").Replace(",", ".");
+         mLeftString = ($"{Left * Scalar}px").Replace(",", ".");
+      }
+
+      #endregion
+
+      /// <summary>
+      /// Determines if we should be scaling uniformly or not.
+      /// </summary>
+      private bool mUseUniformScale = true;
+      private bool mIsDisplayTestMode = false;
+      private bool mIsOutOfBounds = false;
+      private int mWidth = 150;
+      private int mHeight = 75;
+      private int mCanvasWidthInt = 1920;
+      private int mCanvasHeightInt = 1080;
+      private int mTop = 0;
+      private int mLeft = 0;
+      private int mFormWidth = 0;
+      private int mFormHeight = 0;
+
+      /// <summary>
+      /// Original values for the reset.
+      /// </summary>
+      private int? mOriginalWidth = null;
+      private int? mOriginalHeight = null;
+      private int? mOriginalTop = null;
+      private int? mOriginalLeft = null;
+
+      /// <summary>
+      /// Private strings used for the display values in the style tags only.
+      /// </summary>
+      private string mCanvasWidth = String.Empty;
+      private string mCanvasHeight = String.Empty;
+      private string mWidthString = String.Empty;
+      private string mHeightString = String.Empty;
+      private string mTopString = String.Empty;
+      private string mLeftString = String.Empty;
+   }

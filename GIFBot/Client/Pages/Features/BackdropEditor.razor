@@ -1,0 +1,201 @@
+﻿@page "/backdropeditor/"
+@using Microsoft.AspNetCore.SignalR.Client
+@using GIFBot.Shared.Models.Features
+@using GIFBot.Shared.Models.Visualization
+@using GIFBot.Client.Components
+@using Newtonsoft.Json
+@using Telerik.DataSource
+@using Telerik.DataSource.Extensions
+@inject NavigationManager NavigationManager
+@inject NotificationService NotificationService
+@inject IJSRuntime JSRuntime
+@inject HttpClient Http
+
+<div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+   <h1><span class="oi oi-image" aria-hidden="true"></span> Backdrop</h1>
+</div>
+
+<!-- Add New Backdrop Window -->
+<TelerikWindow Class="gifbot-modal-window" Width="550px" Height="400px" Centered="true" Visible="@mIsAddDialogVisible" Modal="true">
+   <WindowTitle>
+      <strong>Add New Backdrop</strong>
+   </WindowTitle>
+   <WindowContent>
+      <div class="form-group">
+         <font class="text-white">What is the name of the backdrop?</font>
+      </div>
+      <div class="form-group">
+         <label for="uiName"><b>Name:</b></label>
+         <TelerikTextBox Id="uiName" @bind-Value="mTempData.Name" />
+      </div>
+      <div class="container-fluid p-2">
+         <p>
+            <center>
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelAddCommand">
+                  Cancel
+               </button>
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmAddCommand">
+                  Add!
+               </button>
+            </center>
+         </p>
+      </div>
+   </WindowContent>
+</TelerikWindow>
+
+<!-- Edit Window -->
+<TelerikWindow Class="gifbot-modal-window" Width="750px" Height="600px" Centered="true" Visible="@mIsEditDialogVisible" Modal="true">
+   <WindowTitle>
+      <strong>Edit Backdrop: @mTempData.Name</strong>
+   </WindowTitle>
+   <WindowContent>
+      <div class="form-group form-check">
+         <label class="form-check-label">
+            <TelerikCheckBox Id="uiTempCommandEnabled" @bind-Value="mTempData.Enabled" /> Enabled
+            <small id="uiTempCommandEnabled" class="form-text text-muted">When enabled, this backdrop is available for use by viewers.</small>
+         </label>
+      </div>
+      <div class="form-group">
+         <label for="uiTempCommand"><b>Name:</b></label>
+         <small id="uiTempCommandLabel" class="form-text text-white-50">The name to identify this backdrop. When executed in chat, users must cheer. If this is in a channel point reward, the backdrop name and Backdrop feature command needs to be in the title of the reward. </small>
+         <TelerikTextBox Id="uiTempCommand" @bind-Value="mTempData.Name" />
+      </div>
+      <div class="form-group">
+         <label for="uiVisual"><b>Backdrop Visual:</b></label>
+         <small id="uiVisual" class="form-text text-white-50">The visual file displayed with this backdrop. Note the backdrop will take the full 1080p resolution. If it isn't that size, it will be stretched to fit!</small>
+         <table>
+            <tr>
+               <td valign="top">
+                  <TelerikTextBox Id="uiVisual" Width="100%" Enabled="false" @bind-Value="mTempData.Visual" />
+                  <RadzenUpload Style="width: 100%; background-color: #1e1e1e" Url="upload/animation" Accept="image/gif,image/jpeg,image/png,video/mp4,video/webm,video/mov" Error="@(args => OnImportVisualFileError(args))" Progress="@(args => OnImportVisualFileProgress(args))" Complete="@(args => OnImportVisualFileComplete(args))" />
+                  <RadzenProgressBar Value="@mUploadVisualProgress" Visible="@(mUploadVisualProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
+                  @if (!String.IsNullOrEmpty(mUploadVisualErrorMessage))
+                  {
+                     <label class="text-danger">@mUploadVisualErrorMessage</label>
+                  }
+               </td>
+            </tr>
+         </table>
+      </div>
+      <div class="container-fluid p-2">
+         <p>
+            <center>
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelEditCommand">
+                  Cancel
+               </button>
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmEditCommand">
+                  Save!
+               </button>
+            </center>
+         </p>
+      </div>
+   </WindowContent>
+</TelerikWindow>
+
+<TelerikTabStrip @bind-ActiveTabIndex="@ActiveTabIndex">
+   <TabStripTab Title="General">
+      <div class="row">
+         <div class="container-fluid text-right p-3">
+            <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnTakeDownBackdrop">Take Down Active Backdrop</button>
+            <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnCancel">Cancel</button>
+            <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e" @onclick="@OnSaveChanges">Save Changes</button>
+         </div>
+      </div>
+
+      <div class="container-fluid p-2">
+         The Backdrop allows your community to control what is behind you or ON you if you're leveraging chroma key features in your content. Provide a
+         variety of backdrops and give your community the tools to change your backdrop via tips, charitable donations, channel points, or cheers! Backdrops need
+         to be 1080p. If not, they will be stretched to that size. Default behavior is to randomly choose one of the backdrops on command execution. The command
+         usage may include the name of a backdrop to specifically choose that one!
+      </div>
+
+      <div class="container-fluid p-2">
+         <div class="form-group form-check">
+            <label class="form-check-label">
+               <TelerikCheckBox Id="uiEnabled" @bind-Value="Data.Enabled" OnChange="@(() => StateHasChanged())" /> Feature Enabled
+               <small id="uiEnabled" class="form-text text-muted">When enabled, this feature is active and available to your users!</small>
+            </label>
+         </div>
+      </div>
+      <div class="form-group">
+         <label for="uiCommandLbl"><b>Title (or Command if used in chat):</b></label>
+         <small id="uiCommandLbl" class="form-text text-white-50">How should the bot look for this feature being activated? You can give it a title and mirror it in your channel points, or a ! command for chat!</small>
+         <TelerikTextBox Id="uiCommand" @bind-Value="Data.Command" />
+      </div>
+      <div class="form-group">
+         <label for="uiCommandRedemption">Redemption Type:</label>
+         <small id="uiCommandRedemption" class="form-text text-muted">Backdrops can be changed from a variety of methods. If using chat, you need to use the command otherwise the system won't recognize it as a deliberate backdrop change. Example chat usage: !backdrop cheer100</small>
+         <RadzenRadioButtonList @bind-Value="@CurrentlyEditedRedemption" TValue="int" Change="@(args => OnRedemptionTypeChange(args))">
+            <Items>
+               <RadzenRadioButtonListItem Text="Cheer" Value="0" />
+               <RadzenRadioButtonListItem Text="Channel Points" Value="1" />
+               <RadzenRadioButtonListItem Text="Tiltify Donation" Value="2" />
+               <RadzenRadioButtonListItem Text="Tip" Value="3" />
+            </Items>
+         </RadzenRadioButtonList>
+      </div>
+      <div class="form-group">
+         <label for="uiCommandCostLbl">Cost:</label>
+         <small id="uiCommandCostLbl" class="form-text text-muted">The number of bits, channel points, etc. required to execute this command.</small>
+         <TelerikNumericTextBox Id="uiCommandCost" Decimals="0" Min="1" Max="999999" @bind-Value="Data.Cost" />
+      </div>
+      <div class="form-group">
+         <label for="uiCommandMinMinutesLbl">Minimum Minutes Active:</label>
+         <small id="uiCommandMinMinutesLbl" class="form-text text-muted">The number of minutes that an active backdrop should remain visible even if there are queued backdrops. Ensures viewers get their "cost's" worth at the very least.</small>
+         <TelerikNumericTextBox Id="uiCommandMinMinutes" Decimals="0" Min="1" Max="999999" @bind-Value="Data.MinimumMinutesActive" />
+      </div>
+
+      <div class="row">
+         <div class="container-fluid text-right p-3">
+            <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnCancel">Cancel</button>
+            <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e" @onclick="@OnSaveChanges">Save Changes</button>
+         </div>
+      </div>
+   </TabStripTab>
+
+   <TabStripTab Title="Backdrops">
+      <div class="container-fluid p-2">
+         <TelerikGrid Sortable="true" FilterMode="Telerik.Blazor.GridFilterMode.FilterRow" Pageable="true" Data="@Data.Backdrops" PageSize="10">
+            <GridToolBar>
+               <GridSearchBox />
+               <GridCommandButton Command="AddCommand" OnClick="@HandleAddRequest" Icon="add">Add Backdrop</GridCommandButton>
+            </GridToolBar>
+            <GridColumns>
+               <GridColumn Width="150px" Field=@nameof(BackdropVideoEntryData.Name) Title="Value" />
+               <GridColumn Width="100px" Title="">
+                  <Template Context="data">
+                     <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleHangRequest((data as BackdropVideoEntryData)))"><span class="oi oi-play-circle"></span></button>
+                     <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleEditRequest((data as BackdropVideoEntryData)))"><span class="oi oi-pencil"></span></button>
+                     <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleDeleteRequest((data as BackdropVideoEntryData)))"><span class="oi oi-trash"></span></button>
+                  </Template>
+               </GridColumn>
+            </GridColumns>
+         </TelerikGrid>
+      </div>
+   </TabStripTab>
+
+   <TabStripTab Title="Browsersource URL">
+      <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+         <div class="container-fluid p-2">
+            <p class="text-white-50">
+               Below is the URL you will need to capture in your broadcaster software in order to see the Backdrops on your scenes.
+            </p>
+            <p class="text-white-50">
+               <u>Note:</u> If you are using XSplit, you will need to add these as Media sources, not Browser sources. These are files installed by GIFBot and not hosted on a web server.
+            </p>
+            <div class="container-fluid">
+               <table width="100%">
+                  <tr>
+                     <td width="600">
+                        <RadzenTextBox id="uiURL" class="form-control" Style="background-color: #2c2241; color: #FFFFFF; width: 100%" ReadOnly="true" @bind-Value="WebPath" />
+                     </td>
+                     <td align="left">
+                        <button type="button" class="btn btn-secondary p-1 ml-2" style="background-color: #6c4872" @onclick='(() => HandleCopyUrl("uiURL"))'>Copy to Clipboard</button>
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+      </div>
+   </TabStripTab>
+</TelerikTabStrip>

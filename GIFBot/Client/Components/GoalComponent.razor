@@ -1,0 +1,121 @@
+﻿@using GIFBot.Shared.Models.Features
+@using Telerik.Blazor.Components
+
+<div class="container-fluid">
+   <div class="form-group">
+      <table width="100%">
+         <tr>
+            <td align="right">
+               @if (!mGoal.IsActive)
+               {
+                  <button type="button" class="btn btn-secondary nav-item p-1 mr-1" style="background-color: #5c4872" @onclick="@HandleSetAsActiveGoal">Set As Active Goal</button>
+               }
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-1" style="background-color: #724859" @onclick="@HandleDeleteGoal">Delete</button>
+            </td>
+         </tr>
+      </table>
+   </div>
+   <div class="form-group">
+      <label for="uiGoalTitleLabel">Title of Goal:</label>
+      <small id="uiGoalTitleLabel" class="form-text text-muted">The purpose of your goal (ex: "New Camera" or "Sweet Mic").</small>
+      <TelerikTextBox Id="uiGoalTitle" @bind-Value="mGoal.Title" />
+   </div>
+   <div class="form-group">
+      <label for="uiGoalAmountLabel">Goal Amount:</label>
+      <small id="uiGoalAmountLabel" class="form-text text-muted">The total amount for the ultimate goal.</small>
+      <DataAnnotationsValidator />
+      <ValidationSummary />
+      <TelerikNumericTextBox Id="uiGoalAmount" Decimals="2" Min="1" Max="1000000" @bind-Value="mGoal.GoalAmount" />
+   </div>
+   <div class="form-group">
+      <label for="uiGoalCurrentAmountLabel">Current Amount:</label>
+      <small id="uiGoalCurrentAmountLabel" class="form-text text-muted">The <i>current</i> amount raised toward the goal.</small>
+      <DataAnnotationsValidator />
+      <ValidationSummary />
+      <TelerikNumericTextBox Id="uiGoalCurrentAmount" Decimals="2" Min="0" Max="1000000" @bind-Value="mGoal.CurrentAmount" />
+   </div>
+   <div class="form-group form-check">
+      <label class="form-check-label">
+         <TelerikCheckBox Id="uiResetWhenComplete" @bind-Value="mGoal.ResetWhenComplete" /> Reset the goal when completed.
+         <small id="uiResetWhenComplete" class="form-text text-muted">When enabled, the goal will reset back to 0 after the goal amount is reached. Note that doing this means that any additional goals in the chain after this one will not be activated.</small>
+      </label>
+   </div>
+
+   <RadzenFieldset Text="Milestones" AllowCollapse="true" Collapsed="false" Style="width: 100%; margin-top: 20px; margin-bottom: 20px">
+      <div class="form-group">
+         <label for="uiGoalsGrid"><b>Milestones:</b></label>
+         <TelerikGrid Sortable="true" Pageable="true" EditMode="@GridEditMode.Popup" Data="@mGoal.Milestones" OnUpdate="@UpdateMilestoneHandler" OnDelete="@DeleteMilestoneHandler" OnCreate="@AddMilestoneHandler" PageSize="10">
+            <GridToolBar>
+               <GridCommandButton Command="Add" Icon="add">Add Milestone</GridCommandButton>
+            </GridToolBar>
+            <GridColumns>
+               <GridColumn Field="@(nameof(GoalMilestone.PercentageTriggerPoint))" Width="200px" Title="Percentage Trigger Point" />
+               <GridColumn Field="@(nameof(GoalMilestone.AnimationCommand))" Width="200px" Title="Animation Command to Fire" />
+               <GridCommandColumn Context="subcontext" Width="55px">
+                  <GridCommandButton Command="Edit" Icon="edit"></GridCommandButton>
+                  <GridCommandButton Command="Delete" Icon="delete" Class="alert-danger"></GridCommandButton>
+               </GridCommandColumn>
+            </GridColumns>
+         </TelerikGrid>
+      </div>
+   </RadzenFieldset>
+</div>
+
+@code {
+
+   [Parameter]
+   public GoalData Goal
+   {
+      get { return mGoal; }
+      set
+      {
+         mGoal = value;
+         StateHasChanged();
+      }
+   }
+
+   /// <summary>
+   /// Event fired when the user tries set a goal as active.
+   /// </summary>
+   [Parameter]
+   public EventCallback<Guid> OnMakeGoalActive { get; set; }
+
+   /// <summary>
+   /// Event fired when the user deletes a goal.
+   /// </summary>
+   [Parameter]
+   public EventCallback<Guid> OnDeleteGoal { get; set; }
+
+   private void HandleSetAsActiveGoal()
+   {
+      OnMakeGoalActive.InvokeAsync(mGoal.Id);
+   }
+
+   private void HandleDeleteGoal()
+   {
+      OnDeleteGoal.InvokeAsync(mGoal.Id);
+   }
+
+   private void UpdateMilestoneHandler(GridCommandEventArgs args)
+   {
+      StateHasChanged();
+   }
+
+   private void DeleteMilestoneHandler(GridCommandEventArgs args)
+   {
+      GoalMilestone milestone = args.Item as GoalMilestone;
+      mGoal.Milestones.Remove(milestone);
+      StateHasChanged();
+   }
+
+   private void AddMilestoneHandler(GridCommandEventArgs args)
+   {
+      GoalMilestone milestone = args.Item as GoalMilestone;
+      mGoal.Milestones.Add(milestone);
+      mGoal.Milestones = mGoal.Milestones.OrderBy(m => m.PercentageTriggerPoint).ToList();
+      StateHasChanged();
+   }
+
+   private GoalData mGoal = new GoalData();
+
+}

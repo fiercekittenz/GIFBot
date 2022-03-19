@@ -1,0 +1,344 @@
+﻿@page "/countdowneditor/"
+@using Microsoft.AspNetCore.SignalR.Client
+@using GIFBot.Shared.Models.Features
+@using GIFBot.Shared.Models.Visualization
+@using GIFBot.Client.Components
+@using Newtonsoft.Json
+@using Telerik.DataSource
+@using Telerik.DataSource.Extensions
+@inject NavigationManager NavigationManager
+@inject NotificationService NotificationService
+@inject IJSRuntime JSRuntime
+@inject HttpClient Http
+
+<div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+   <h1><span class="oi oi-timer" aria-hidden="true"></span> Countdown</h1>
+</div>
+
+<!-- Add New Action Window -->
+<TelerikWindow Class="gifbot-modal-window" Width="550px" Height="400px" Centered="true" Visible="@mIsAddDialogVisible" Modal="true">
+   <WindowTitle>
+      <strong>Add New Action</strong>
+   </WindowTitle>
+   <WindowContent>
+      <div class="form-group">
+         <font class="text-white">What is the name of the action?</font>
+      </div>
+      <div class="form-group">
+         <label for="uiName"><b>Name:</b></label>
+         <TelerikTextBox Id="uiName" @bind-Value="mTempData.Name" />
+      </div>
+      <div class="container-fluid p-2">
+         <p>
+            <center>
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelAddCommand">
+                  Cancel
+               </button>
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmAddCommand">
+                  Add!
+               </button>
+            </center>
+         </p>
+      </div>
+   </WindowContent>
+</TelerikWindow>
+
+<!-- Edit Window -->
+<TelerikWindow Class="gifbot-modal-window" Width="750px" Height="600px" Centered="true" Visible="@mIsEditDialogVisible" Modal="true">
+   <WindowTitle>
+      <strong>Edit Action: @mTempData.Name</strong>
+   </WindowTitle>
+   <WindowContent>
+      <div class="form-group form-check">
+         <label class="form-check-label">
+            <TelerikCheckBox Id="uiTempCommandEnabled" @bind-Value="mTempData.Enabled" /> Enabled
+            <small id="uiTempCommandEnabled" class="form-text text-muted">When enabled, this action is available for use.</small>
+         </label>
+      </div>
+      <div class="form-group">
+         <label for="uiTempCommand"><b>Name:</b></label>
+         <small id="uiTempCommandLabel" class="form-text text-white-50">The name to identify this action.</small>
+         <TelerikTextBox Id="uiTempName" @bind-Value="mTempData.Name" />
+      </div>
+      <div class="form-group">
+         <label for="uiTempAnimationLbl"><b>Animation to Play:</b></label>
+         <small id="uiTempAnimationLbl" class="form-text text-white-50">The animation command to play along with this action.</small>
+         <TelerikTextBox Id="uiTempAnimation" @bind-Value="mTempData.Animation" />
+      </div>
+      <div class="form-group">
+         <label for="uiCommandRedemption">Redemption Type:</label>
+         <small id="uiCommandRedemption" class="form-text text-muted">Actions can be triggered by your viewers using a variety of methods.</small>
+         <RadzenRadioButtonList @bind-Value="@CurrentlyEditedRedemption" TValue="int" Change="@(args => OnRedemptionTypeChange(args))">
+            <Items>
+               <RadzenRadioButtonListItem Text="Cheer" Value="0" />
+               <RadzenRadioButtonListItem Text="Channel Points" Value="1" />
+               <RadzenRadioButtonListItem Text="Tiltify Donation" Value="2" />
+               <RadzenRadioButtonListItem Text="Tip" Value="3" />
+               <RadzenRadioButtonListItem Text="Subscription" Value="4" />
+            </Items>
+         </RadzenRadioButtonList>
+      </div>
+
+      @if (mTempData.RedemptionType == GIFBot.Shared.Utility.Enumerations.CostRedemptionType.Subscription)
+      {
+         <div class="form-group">
+            <label for="uiSubTier"><b>Subscription Tier:</b></label>
+            <small id="uiSubTier" class="form-text text-white-50">What sub tier is this action for?</small>
+            <RadzenRadioButtonList @bind-Value="SubTierSelection" TValue="int" Change="@(args => OnSubTierChange(args))">
+               <Items>
+                  <RadzenRadioButtonListItem Text="All" Value="0" />
+                  <RadzenRadioButtonListItem Text="Prime" Value="1" />
+                  <RadzenRadioButtonListItem Text="Tier 1" Value="2" />
+                  <RadzenRadioButtonListItem Text="Tier 2" Value="3" />
+                  <RadzenRadioButtonListItem Text="Tier 3" Value="4" />
+               </Items>
+            </RadzenRadioButtonList>
+         </div>
+      }
+      else
+      {
+         <div class="form-group">
+            <label for="uiCommandCostLbl">Cost:</label>
+            <small id="uiCommandCostLbl" class="form-text text-muted">The number of bits, channel points, etc. required to trigger this action. Must be an exact value!</small>
+            <TelerikNumericTextBox Id="uiCommandCost" Decimals="2" Min="0.01" Max="999999" @bind-Value="@mTempData.Cost" />
+         </div>
+      }
+
+      <div class="form-group">
+         <label for="uiBehaviorType">Action Behavior:</label>
+         <small id="uiBehaviorType" class="form-text text-muted">How does this action behave? Does it need a spanking? Kappa.</small>
+         <RadzenRadioButtonList @bind-Value="@CurrentlyEditedBehavior" TValue="int" Change="@(args => OnBehaviorTypeChange(args))">
+            <Items>
+               <RadzenRadioButtonListItem Text="Remove Time" Value="0" />
+               <RadzenRadioButtonListItem Text="Add Time" Value="1" />
+               <RadzenRadioButtonListItem Text="Slowdown Time" Value="2" />
+               <RadzenRadioButtonListItem Text="Speed Up Time" Value="3" />
+               <RadzenRadioButtonListItem Text="Pause Time" Value="4" />
+            </Items>
+         </RadzenRadioButtonList>
+      </div>
+      @if (mTempData.Behavior == CountdownTimerActionBehavior.AddTime || mTempData.Behavior == CountdownTimerActionBehavior.RemoveTime)
+      {
+         <div class="form-group">
+            <label for="uiActionValueLbl">Adjustment Value:</label>
+            <small id="uiActionValueLbl" class="form-text text-muted">The number of seconds by which the time is adjusted on Add and Remove time behaviors.</small>
+            <TelerikNumericTextBox Id="uiActionValue" Decimals="0" Min="1" Max="999999" @bind-Value="@mTempData.SecondsValue" />
+         </div>
+      }
+      else if (mTempData.Behavior == CountdownTimerActionBehavior.PauseTime)
+      {
+         <div class="form-group">
+            <label for="uiActionValueLbl">Pause Time:</label>
+            <small id="uiActionValueLbl" class="form-text text-muted">The number of seconds to pause the countdown timer.</small>
+            <TelerikNumericTextBox Id="uiActionValue" Decimals="0" Min="1" Max="999999" @bind-Value="@mTempData.SecondsValue" />
+         </div>
+      }
+      else if (mTempData.Behavior == CountdownTimerActionBehavior.SlowTime || mTempData.Behavior == CountdownTimerActionBehavior.SpeedUpTime)
+      {
+         <div class="form-group">
+            <label for="uiSpeedType">Speed Modification Preset:</label>
+            <small id="uiSpeedType" class="form-text text-muted">How fast or slow do you want the timer to tick?</small>
+            <RadzenRadioButtonList @bind-Value="@CurrentlyEditedSpeedPreset" TValue="int" Change="@(args => OnSpeedPresetTypeChange(args))">
+               <Items>
+                  @if (mTempData.Behavior == CountdownTimerActionBehavior.SlowTime)
+                  {
+                     <RadzenRadioButtonListItem Text="Sloth" Value="0" />
+                     <RadzenRadioButtonListItem Text="Slug" Value="1" />
+                     <RadzenRadioButtonListItem Text="Turtle" Value="2" />
+                  }
+                  else if (mTempData.Behavior == CountdownTimerActionBehavior.SpeedUpTime)
+                  {
+                     <RadzenRadioButtonListItem Text="Rabbit" Value="3" />
+                     <RadzenRadioButtonListItem Text="Ostrich" Value="4" />
+                     <RadzenRadioButtonListItem Text="Sonic" Value="5" />
+                  }
+               </Items>
+            </RadzenRadioButtonList>
+         </div>
+         <div class="form-group">
+            <label for="uiActionValueLbl">Number of Seconds To Modify :</label>
+            <small id="uiActionValueLbl" class="form-text text-muted">The number of seconds by which the speed at which the time ticks down will be modified.</small>
+            <TelerikNumericTextBox Id="uiActionValue" Decimals="0" Min="1" Max="999999" @bind-Value="@mTempData.SecondsValue" />
+         </div>
+      }
+      <div class="container-fluid p-2">
+         <p>
+            <center>
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelEditCommand">
+                  Cancel
+               </button>
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmEditCommand">
+                  Save!
+               </button>
+            </center>
+         </p>
+      </div>
+   </WindowContent>
+</TelerikWindow>
+
+<TelerikTabStrip @bind-ActiveTabIndex="@ActiveTabIndex">
+   <TabStripTab Title="General">
+      <div class="row">
+         <div class="container-fluid text-right p-3">
+            <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnCancel">Cancel</button>
+            <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e" @onclick="@OnSaveChanges">Save Changes</button>
+         </div>
+      </div>
+
+      <div class="container-fluid p-2 mb-2 rounded" style="background-color: #211126">
+         <div class="container-fluid text-left" style="width: 100%">
+            <button type="button" class="btn btn-secondary p-1" style="background-color: #484d72; margin-left: auto; margin-right: 0" @onclick="@OnStartTimer">Start Timer</button>
+            <button type="button" class="btn btn-secondary p-1" style="background-color: #6c4872; margin-left: auto; margin-right: 0" @onclick="@OnPauseTimer">Pause Timer</button>
+            <button type="button" class="btn btn-secondary p-1" style="background-color: #6c4872; margin-left: auto; margin-right: 0" @onclick="@OnResetTimer">Reset Timer</button>
+            <button type="button" class="btn btn-secondary p-1" style="background-color: #6c4872; margin-left: auto; margin-right: 0" @onclick="@OnHideTimer">Hide Timer</button>
+         </div>
+      </div>
+
+      <div class="container-fluid p-2">
+         The countdown timer feature will allow you to have a timer on your broadcast software scene that the viewers may manipulate through actions. Actions are
+         optional, but chaotic fun!
+      </div>
+
+      <div class="container-fluid p-2">
+         <div class="form-group form-check">
+            <label class="form-check-label">
+               <TelerikCheckBox Id="uiEnabled" @bind-Value="Data.Enabled" OnChange="@(() => StateHasChanged())" /> Feature Enabled
+               <small id="uiEnabled" class="form-text text-muted">When enabled, this feature is active and available to your users!</small>
+            </label>
+         </div>
+      </div>
+      <div class="form-group">
+         <label for="uiTimerValueInMinutes">Timer Start Value (in minutes):</label>
+         <small id="uiTimerValueInMinutes" class="form-text text-muted">The number of minutes you want this countdown timer to tick.</small>
+         <TelerikNumericTextBox Id="uiTimerStartValueInMinutesValue" Decimals="0" Min="1" Max="999999" @bind-Value="Data.TimerStartValueInMinutes" />
+      </div>
+      <div class="row">
+         <div class="container-fluid text-right p-3">
+            <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnCancel">Cancel</button>
+            <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e" @onclick="@OnSaveChanges">Save Changes</button>
+         </div>
+      </div>
+   </TabStripTab>
+
+   <TabStripTab Title="Timer Actions">
+      <div class="container-fluid p-2">
+         <TelerikGrid Sortable="true" FilterMode="Telerik.Blazor.GridFilterMode.FilterRow" Pageable="true" Data="@Data.Actions" PageSize="10">
+            <GridToolBar>
+               <GridSearchBox />
+               <GridCommandButton Command="AddCommand" OnClick="@HandleAddRequest" Icon="add">Add Action</GridCommandButton>
+            </GridToolBar>
+            <GridColumns>
+               <GridColumn Width="150px" Field=@nameof(CountdownTimerAction.Name) Title="Value" />
+               <GridColumn Width="100px" Title="">
+                  <Template Context="data">
+                     <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandlePlayActionRequest((data as CountdownTimerAction)))"><span class="oi oi-play-circle"></span></button>
+                     <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleEditRequest((data as CountdownTimerAction)))"><span class="oi oi-pencil"></span></button>
+                     <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleDeleteRequest((data as CountdownTimerAction)))"><span class="oi oi-trash"></span></button>
+                  </Template>
+               </GridColumn>
+            </GridColumns>
+         </TelerikGrid>
+      </div>
+   </TabStripTab>
+
+   <TabStripTab Title="Appearance">
+      <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+         <div class="container-fluid p-2">
+            <div class="form-group mt-2">
+               <label for="uiCaptionFontSize"><b>Font Size:</b></label>
+               <small id="uiCaptionFontSize" class="form-text text-white-50">The size of the font used (bigger = better).</small>
+               <TelerikNumericTextBox Id="uiCaptionFontSize" Min="18" Max="100" @bind-Value="Data.Caption.FontSize" />
+            </div>
+            <div class="form-group mt-2">
+               <label for="uiCaptionFontColor"><b>Font Color:</b></label>
+               <small id="uiCaptionFontColor" class="form-text text-white-50">The forecolor for the text.</small>
+               <input type="color" id="uiCaptionFontColor" @bind="@Data.Caption.FontColor" />
+            </div>
+            <div class="form-group mt-2">
+               <label for="uiCaptionStrokeThickness"><b>Stroke Thickness:</b></label>
+               <small id="uiCaptionStrokeThickness" class="form-text text-white-50">The width of the stroke (outline) on the text.</small>
+               <TelerikNumericTextBox Id="uiCaptionStrokeThickness" Min="0" Max="5" @bind-Value="Data.Caption.StrokeThickness" />
+            </div>
+            <div class="form-group mt-2">
+               <label for="uiCaptionFontStrokeColor"><b>Stroke Color:</b></label>
+               <small id="uiCaptionFontStrokeColor" class="form-text text-white-50">The stroke or outline color for the text.</small>
+               <input type="color" id="uiCaptionFontStrokeColor" @bind="@Data.Caption.FontStrokeColor" />
+            </div>
+            <div class="form-group mt-2">
+               <label for="uiCaptionFont"><b>Font:</b></label>
+               <small id="uiCaptionFont" class="form-text text-white-50">What font should you use?</small>
+               <RadzenRadioButtonList @bind-Value="mCaptionFontSelection" TValue="int" Change="@(args => OnCaptionFontChange(args))" Orientation="Radzen.Orientation.Horizontal">
+                  <Items>
+                     <RadzenRadioButtonListItem Text="Arial" Value="0" />
+                     <RadzenRadioButtonListItem Text="Comic Sans" Value="1" />
+                     <RadzenRadioButtonListItem Text="Impact" Value="2" />
+                     <RadzenRadioButtonListItem Text="Monospace" Value="3" />
+                     <RadzenRadioButtonListItem Text="Aldrich" Value="4" />
+                     <RadzenRadioButtonListItem Text="Anton" Value="5" />
+                     <RadzenRadioButtonListItem Text="Barrio" Value="6" />
+                     <RadzenRadioButtonListItem Text="Creepster" Value="7" />
+                     <RadzenRadioButtonListItem Text="Eater" Value="8" />
+                     <RadzenRadioButtonListItem Text="Galada" Value="9" />
+                     <RadzenRadioButtonListItem Text="Ranchers" Value="10" />
+                     <RadzenRadioButtonListItem Text="Lobster" Value="11" />
+                     <RadzenRadioButtonListItem Text="Righteous" Value="12" />
+                     <RadzenRadioButtonListItem Text="BenchNine" Value="13" />
+                     <RadzenRadioButtonListItem Text="Oswald" Value="14" />
+                     <RadzenRadioButtonListItem Text="Ultra" Value="15" />
+                     <RadzenRadioButtonListItem Text="Frijole" Value="16" />
+                     <RadzenRadioButtonListItem Text="Viga" Value="17" />
+                     <RadzenRadioButtonListItem Text="Quantico" Value="18" />
+                     <RadzenRadioButtonListItem Text="Bungee" Value="19" />
+                     <RadzenRadioButtonListItem Text="Molle" Value="20" />
+                     <RadzenRadioButtonListItem Text="Sriracha" Value="21" />
+                     <RadzenRadioButtonListItem Text="Arsenal" Value="22" />
+                     <RadzenRadioButtonListItem Text="Gaegu" Value="23" />
+                     <RadzenRadioButtonListItem Text="VT323" Value="24" />
+                  </Items>
+               </RadzenRadioButtonList>
+            </div>
+            <div class="form-group mt-2">
+               <label for="uiCaptionIsBold"><b>Font Weight:</b></label>
+               <small id="uiCaptionIsBold" class="form-text text-white-50">Would you like the font to be bold?</small>
+               <TelerikCheckBox Id="uiCaptionIsBold" @bind-Value="Data.Caption.IsBold" />
+               <label for="uiCaptionIsBold">Bolded Text</label>
+            </div>
+            <div class="mt-2">
+               <label for="uiCaptionPreview"><b>Preview:</b></label>
+               <center>
+                  <div class="border-info" style="max-width: 600px; border: inset; border-color: #343434">
+                     <div class="p-2">
+                        <CaptionComponent CaptionData="@Data.Caption" Width="600" Triggerer="Viewer" Target="Target" />
+                     </div>
+                  </div>
+               </center>
+            </div>
+         </div>
+      </div>
+   </TabStripTab>
+
+   <TabStripTab Title="Browsersource URL">
+      <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+         <div class="container-fluid p-2">
+            <p class="text-white-50">
+               Below is the URL you will need to capture in your broadcaster software in order to see the Countdown on your scenes.
+            </p>
+            <p class="text-white-50">
+               <u>Note:</u> If you are using XSplit, you will need to add these as Media sources, not Browser sources. These are files installed by GIFBot and not hosted on a web server.
+            </p>
+            <div class="container-fluid">
+               <table width="100%">
+                  <tr>
+                     <td width="600">
+                        <RadzenTextBox id="uiURL" class="form-control" Style="background-color: #2c2241; color: #FFFFFF; width: 100%" ReadOnly="true" @bind-Value="WebPath" />
+                     </td>
+                     <td align="left">
+                        <button type="button" class="btn btn-secondary p-1 ml-2" style="background-color: #6c4872" @onclick='(() => HandleCopyUrl("uiURL"))'>Copy to Clipboard</button>
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+      </div>
+   </TabStripTab>
+</TelerikTabStrip>

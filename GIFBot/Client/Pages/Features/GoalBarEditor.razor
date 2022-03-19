@@ -1,0 +1,511 @@
+﻿@page "/goalbareditor/"
+@using Microsoft.AspNetCore.SignalR.Client
+@using GIFBot.Shared.Models.Features
+@using GIFBot.Shared.Models.Visualization
+@using GIFBot.Client.Components
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Http.Connections
+@inject NavigationManager NavigationManager
+@inject NotificationService NotificationService
+@inject IJSRuntime JSRuntime
+@inject HttpClient Http
+@implements IAsyncDisposable
+
+<TelerikWindow Class="gifbot-modal-window" Width="500px" Height="300px" Centered="true" Visible="@mIsNewGoalPromptVisible" Modal="true">
+   <WindowTitle>
+      <strong>Add New Goal</strong>
+   </WindowTitle>
+   <WindowContent>
+      <div class="form-group">
+         <label for="uiTitleLabel">Please provide the title for your new goal:</label>
+         <small id="uiTitleLabel" class="form-text text-muted">The purpose of your goal (ex: "New Camera" or "Sweet Mic").</small>
+         <TelerikTextBox Id="uiTitle" @bind-Value="mNewGoalTitle" />
+      </div>
+      <div class="container-fluid p-2">
+         <p>
+            <center>
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleAddNewGoal">
+                  Add
+               </button>
+            </center>
+         </p>
+      </div>
+   </WindowContent>
+</TelerikWindow>
+
+<div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+   <h1><span class="oi oi-target" aria-hidden="true"></span> Goal Bar</h1>
+</div>
+
+<EditForm Model="@mGoalBarData" OnSubmit="@OnSaveChanges">
+   <TelerikTabStrip @bind-ActiveTabIndex="@ActiveTabIndex">
+      <TabStripTab Title="Settings">
+         <div class="container-fluid" style="width: 100%">
+            <div class="container-fluid text-left p-3 rounded" style="width: 100%; background-color:#1e1e1e">
+               <p>
+                  The <b>Goal Bar</b> is a feature of GIFBot where you can have a monetary or point-based goal that
+                  takes into consideration multiple types of Twitch events (cheering, subbing, gift subbing, and tips).
+               </p>
+               <div class="container text-left p-3 rounded" style="background-color: #1d161f">
+
+                  <div class="form-group form-check">
+                     <label class="form-check-label">
+                        <TelerikCheckBox Id="uiEnabled" @bind-Value="mGoalBarData.Settings.Enabled" /> Feature Enabled
+                        <small id="uiEnabled" class="form-text text-muted">When enabled, Twitch events will be computed and have their values applied to the goal.</small>
+                     </label>
+                  </div>
+
+                  <RadzenFieldset Text="Goal Triggers" AllowCollapse="true" Collapsed="false" Style="width: 100%; margin-bottom: 20px">
+                     <div class="form-group form-check">
+                        <label class="form-check-label">
+                           <TelerikCheckBox Id="uiIncludeCheers" @bind-Value="mGoalBarData.Settings.IncludeCheers" /> Include Cheers
+                           <small id="uiIncludeCheers" class="form-text text-muted">When enabled, cheering will count toward the goal.</small>
+                        </label>
+                     </div>
+
+                     @if (mGoalBarData.Settings.IncludeCheers)
+                     {
+                        <div class="form-group">
+                           <label for="uiBitPointsLabel">Bit Point Amount:</label>
+                           <small id="uiBitPointsLabel" class="form-text text-muted">The number of points applied to the goal per bit cheered. If you would like to only count bits, make sure you either set this value to 1 <i>OR</i> make sure the goal is the dollar amount of bits you want to achieve.</small>
+                           <DataAnnotationsValidator />
+                           <ValidationSummary />
+                           <TelerikNumericTextBox Id="uiBitPoints" Decimals="2" Min="0.01" Max="1000" @bind-Value="mGoalBarData.Settings.BitPoints" />
+                        </div>
+                     }
+
+                     <div class="form-group form-check">
+                        <label class="form-check-label">
+                           <TelerikCheckBox Id="uiIncludeTips" @bind-Value="mGoalBarData.Settings.IncludeTips" /> Include Streamlabs Tips
+                           <small id="uiIncludeTips" class="form-text text-muted">When enabled, tipping via Streamlabs will count toward the goal (must authenticate with Streamlabs).</small>
+                        </label>
+                     </div>
+
+                     @if (mGoalBarData.Settings.IncludeTips)
+                     {
+                        <div class="form-group">
+                           <label for="uiTipPointsLabel">Tip Point Amount:</label>
+                           <small id="uiTipPointsLabel" class="form-text text-muted">The number of points applied to the goal per 1 currency tipped (i.e. $1 = 1 point).</small>
+                           <DataAnnotationsValidator />
+                           <ValidationSummary />
+                           <TelerikNumericTextBox Id="uiTipPoints" Decimals="2" Min="0.01" Max="1000" @bind-Value="mGoalBarData.Settings.TipPoints" />
+                        </div>
+                     }
+
+                     <div class="form-group form-check">
+                        <label class="form-check-label">
+                           <TelerikCheckBox Id="uiIncludeSubs" @bind-Value="mGoalBarData.Settings.IncludeSubs" /> Include Subscriptions
+                           <small id="uiIncludeSubs" class="form-text text-muted">When enabled, subscriptions, resubscriptions, and gift subscriptions count toward the goal.</small>
+                        </label>
+                     </div>
+
+                     @if (mGoalBarData.Settings.IncludeSubs)
+                     {
+                        <div class="form-group">
+                           <label for="uiSub1PointsLabel">Tier 1 Point Amount:</label>
+                           <small id="uiSub1PointsLabel" class="form-text text-muted">The number of points applied to the goal tier 1 subscription.</small>
+                           <DataAnnotationsValidator />
+                           <ValidationSummary />
+                           <TelerikNumericTextBox Id="uiSub1Points" Decimals="2" Min="0.01" Max="1000" @bind-Value="mGoalBarData.Settings.SubTier1Points" />
+                        </div>
+                        <div class="form-group">
+                           <label for="uiSub2PointsLabel">Tier 2 Point Amount:</label>
+                           <small id="uiSub2PointsLabel" class="form-text text-muted">The number of points applied to the goal tier 2 subscription.</small>
+                           <DataAnnotationsValidator />
+                           <ValidationSummary />
+                           <TelerikNumericTextBox Id="uiSub2Points" Decimals="2" Min="0.01" Max="1000" @bind-Value="mGoalBarData.Settings.SubTier2Points" />
+                        </div>
+                        <div class="form-group">
+                           <label for="uiSub3PointsLabel">Tier 3 Point Amount:</label>
+                           <small id="uiSub3PointsLabel" class="form-text text-muted">The number of points applied to the goal tier 3 subscription.</small>
+                           <DataAnnotationsValidator />
+                           <ValidationSummary />
+                           <TelerikNumericTextBox Id="uiSub3Points" Decimals="2" Min="0.01" Max="1000" @bind-Value="mGoalBarData.Settings.SubTier3Points" />
+                        </div>
+                     }
+                  </RadzenFieldset>
+               </div>
+            </div>
+         </div>
+      </TabStripTab>
+
+      <TabStripTab Title="Visual Settings">
+         <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+            <div class="container-fluid p-2">
+               <div class="form-group form-check">
+                  <label class="form-check-label">
+                     <TelerikCheckBox Id="uiHideGoalText" @bind-Value="mGoalBarData.Settings.HideGoalText" /> Hide Goal Text
+                     <small id="uiHideGoalText" class="form-text text-muted">When enabled, the text for the goal will not be visible on the bar overlay.</small>
+                  </label>
+               </div>
+               <div class="form-group form-check">
+                  <label class="form-check-label">
+                     <TelerikCheckBox Id="uiPercentage" @bind-Value="mGoalBarData.Settings.ShowAmountAsPercentage" /> Show Current Amount as Percentage
+                     <small id="uiPercentage" class="form-text text-muted">When enabled, the current amount on the bar will be shown as a percentage value.</small>
+                  </label>
+               </div>
+               @if (!mGoalBarData.Settings.ShowAmountAsPercentage)
+               {
+                  <div class="form-group">
+                     <label for="uiCurrencyLabel">The currency symbol to use:</label>
+                     <TelerikTextBox Id="uiCurrencySymbol" @bind-Value="@mGoalBarData.Settings.CurrencySymbol" />
+                  </div>
+               }
+               <div class="form-group mt-2">
+                  <label for="uiWidth"><b>Bar Width:</b></label>
+                  <small id="uiWidth" class="form-text text-white-50">The width of the whole goal bar.</small>
+                  <TelerikNumericTextBox Id="uiWidth" Min="100" Max="9999" @bind-Value="mGoalBarData.Settings.Width" />
+               </div>
+               <div class="form-group mt-2">
+                  <label for="uiBarForeColorLabel"><b>Bar Forecolor:</b></label>
+                  <small id="uiBarForeColorLabel" class="form-text text-white-50">The forecolor for the bar.</small>
+                  <input type="color" id="uiBarForeColor" @bind="@mGoalBarData.Settings.BarForecolor" />
+               </div>
+               <div class="form-group mt-2">
+                  <label for="uiBarBackColorLabel"><b>Bar Backcolor:</b></label>
+                  <small id="uiBarBackColorLabel" class="form-text text-white-50">The backcolor for the bar.</small>
+                  <input type="color" id="uiBarBackColor" @bind="@mGoalBarData.Settings.BarBackcolor" />
+               </div>
+               <div class="form-group mt-2">
+                  <label for="uiFontSize"><b>Font Size:</b></label>
+                  <small id="uiFontSize" class="form-text text-white-50">The size of the font used (bigger = better).</small>
+                  <TelerikNumericTextBox Id="uiFontSize" Min="18" Max="100" @bind-Value="mGoalBarData.Settings.Caption.FontSize" />
+               </div>
+               <div class="form-group mt-2">
+                  <label for="uiFontColor"><b>Font Color:</b></label>
+                  <small id="uiFontColor" class="form-text text-white-50">The forecolor for the caption text.</small>
+                  <input type="color" id="uiFontColor" @bind="@mGoalBarData.Settings.Caption.FontColor" />
+               </div>
+               <div class="form-group mt-2">
+                  <label for="uiStrokeThickness"><b>Stroke Thickness:</b></label>
+                  <small id="uiStrokeThickness" class="form-text text-white-50">The width of the stroke (outline) on the caption text.</small>
+                  <TelerikNumericTextBox Id="uiStrokeThickness" Min="0" Max="5" @bind-Value="mGoalBarData.Settings.Caption.StrokeThickness" />
+               </div>
+               <div class="form-group mt-2">
+                  <label for="uiFontStrokeColor"><b>Stroke Color:</b></label>
+                  <small id="uiFontStrokeColor" class="form-text text-white-50">The stroke or outline color for the caption text.</small>
+                  <input type="color" id="uiFontStrokeColor" @bind="@mGoalBarData.Settings.Caption.FontStrokeColor" />
+               </div>
+               <div class="form-group mt-2">
+                  <label for="uiFont"><b>Font:</b></label>
+                  <small id="uiFont" class="form-text text-white-50">What font should you use?</small>
+                  <RadzenRadioButtonList @bind-Value="mCaptionFontSelection" TValue="int" Change="@(args => OnCaptionFontChange(args))" Orientation="Radzen.Orientation.Horizontal">
+                     <Items>
+                        <RadzenRadioButtonListItem Text="Arial" Value="0" />
+                        <RadzenRadioButtonListItem Text="Comic Sans" Value="1" />
+                        <RadzenRadioButtonListItem Text="Impact" Value="2" />
+                        <RadzenRadioButtonListItem Text="Monospace" Value="3" />
+                        <RadzenRadioButtonListItem Text="Aldrich" Value="4" />
+                        <RadzenRadioButtonListItem Text="Anton" Value="5" />
+                        <RadzenRadioButtonListItem Text="Barrio" Value="6" />
+                        <RadzenRadioButtonListItem Text="Creepster" Value="7" />
+                        <RadzenRadioButtonListItem Text="Eater" Value="8" />
+                        <RadzenRadioButtonListItem Text="Galada" Value="9" />
+                        <RadzenRadioButtonListItem Text="Ranchers" Value="10" />
+                        <RadzenRadioButtonListItem Text="Lobster" Value="11" />
+                        <RadzenRadioButtonListItem Text="Righteous" Value="12" />
+                        <RadzenRadioButtonListItem Text="BenchNine" Value="13" />
+                        <RadzenRadioButtonListItem Text="Oswald" Value="14" />
+                        <RadzenRadioButtonListItem Text="Ultra" Value="15" />
+                        <RadzenRadioButtonListItem Text="Frijole" Value="16" />
+                        <RadzenRadioButtonListItem Text="Viga" Value="17" />
+                        <RadzenRadioButtonListItem Text="Quantico" Value="18" />
+                        <RadzenRadioButtonListItem Text="Bungee" Value="19" />
+                        <RadzenRadioButtonListItem Text="Molle" Value="20" />
+                        <RadzenRadioButtonListItem Text="Sriracha" Value="21" />
+                        <RadzenRadioButtonListItem Text="Arsenal" Value="22" />
+                        <RadzenRadioButtonListItem Text="Gaegu" Value="23" />
+                        <RadzenRadioButtonListItem Text="VT323" Value="24" />
+                     </Items>
+                  </RadzenRadioButtonList>
+               </div>
+               <div class="form-group mt-2">
+                  <label for="uiIsBold"><b>Font Weight:</b></label>
+                  <small id="uiIsBold" class="form-text text-white-50">Would you like the font to be bold?</small>
+                  <TelerikCheckBox Id="uiIsBold" @bind-Value="mGoalBarData.Settings.Caption.IsBold" />
+                  <label for="uiIsBold">Bolded Text</label>
+               </div>
+               <div class="mt-2">
+                  <label for="uiPreview"><b>Text Preview:</b></label>
+                  <center>
+                     <ProgressBarComponent Width="@mGoalBarData.Settings.Width" TitleCaptionData="@mGoalBarData.Settings.Caption" PercentageCaptionData="@mPercentageCaptionData" TotalCaptionData="@mTotalCaptionData" CurrentPercentage="35" BackColor="@mGoalBarData.Settings.BarBackcolor" ProgressColor="@mGoalBarData.Settings.BarForecolor" />
+                  </center>
+               </div>
+            </div>
+         </div>
+      </TabStripTab>
+
+      <TabStripTab Title="Goals">
+         <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+            <div class="container-fluid p-2">
+               <div class="container-fluid text-white-50 p-0">
+                  <p>
+                     You can have more than one goal. When you have satisfied the requirements of one goal, the next goal in the list will
+                     be activated. If there is any rollover amount, it will be applied to the next goal as well.
+                  </p>
+               </div>
+
+               @if (mGoalBarData.Goals.Any() && mGoalBarData.Goals.FirstOrDefault(g => g.IsActive == true) == null)
+               {
+                  <div class="container-fluid text-warning p-0">
+                     <p>
+                        <b>
+                           <i>
+                              You do not currently have an active goal. You must manually set a goal as active once you are ready to begin
+                              raising funds for your sweet, sweet stuff.
+                           </i>
+                        </b>
+                     </p>
+                  </div>
+               }
+
+               <div class="container-fluid">
+                  <p align="right"><button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@ShowAddNewGoalWindow">Add New Goal</button></p>
+               </div>
+               <TelerikTabStrip>
+                  @for (int i = 0; i < mGoalBarData.Goals.Count; ++i)
+                  {
+                     GoalData goal = mGoalBarData.Goals[i];
+                     string title = $"[{i + 1}] {goal.Title}";
+                     if (goal.IsActive)
+                     {
+                        title += " (Active)";
+                     }
+
+                     <TabStripTab Title="@(title)">
+                        <GoalComponent Goal="@goal" OnMakeGoalActive="@HandleMakeGoalActive" OnDeleteGoal="@HandleDeleteGoal" />
+                     </TabStripTab>
+                  }
+               </TelerikTabStrip>
+            </div>
+         </div>
+      </TabStripTab>
+
+      <TabStripTab Title="BrowserSource URL">
+         <div class="container-fluid">
+            <div class="container-fluid text-white-50 p-0">
+               <p>
+                  To display the goal bar in your broadcaster software, copy this URL and use it as the input for a new Browser Source element. Note: If you set
+                  this browser source to refresh when you switch scenes, the goal bar will flicker since it will rebuild as if you had refreshed in Chrome.
+               </p>
+            </div>
+            <table width="100%">
+               <tr>
+                  <td width="600">
+                     <RadzenTextBox id="uiURL" class="form-control" Style="background-color: #2c2241; color: #FFFFFF; width: 100%" ReadOnly="true" @bind-Value="mURL" />
+                  </td>
+                  <td align="left">
+                     <button type="button" class="btn btn-secondary p-1 ml-2" style="background-color: #6c4872" @onclick='(() => HandleCopyUrl("uiURL"))'>Copy to Clipboard</button>
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </TabStripTab>
+   </TelerikTabStrip>
+
+   <div class="row">
+      <div class="container-fluid text-right p-3">
+         <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnCancel">Cancel</button>
+         <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e">Save Changes</button>
+      </div>
+   </div>
+</EditForm>
+
+@code {
+
+   /// <summary>
+   /// Keeps track of which tab is selected.
+   /// </summary>
+   public int ActiveTabIndex { get; set; } = 0;
+
+   protected override async Task OnInitializedAsync()
+   {
+      // Build the connection to the main bot hub.
+      mHubConnection = new HubConnectionBuilder()
+         .WithUrl(NavigationManager.ToAbsoluteUri("/gifbothub"), HttpTransportType.LongPolling) 
+         .WithAutomaticReconnect()
+         .Build();
+
+      mHubConnection.On<string>("GoalBarDataUpdated", (data) =>
+      {
+         mGoalBarData = JsonConvert.DeserializeObject<GoalBarData>(data);
+         StateHasChanged();
+      });
+
+      // Start the connection.
+      await mHubConnection.StartAsync();
+
+      // Get the goal bar data.
+      await GetGoalBarDataFromHub();
+
+      // Get the goal bar url.
+      mURL = await mHubConnection.InvokeAsync<string>("GetGoalBarWebPath");
+
+      // Render.
+      StateHasChanged();
+   }
+
+   /// <summary>
+   /// IAsyncDisposable Implementation
+   /// </summary>
+   public async ValueTask DisposeAsync()
+   {
+      await mHubConnection.DisposeAsync();
+   }
+
+   private async Task GetGoalBarDataFromHub()
+   {
+      string rawData = await mHubConnection.InvokeAsync<string>("GetGoalBarData");
+      mGoalBarData = JsonConvert.DeserializeObject<GoalBarData>(rawData);
+      mCaptionFontSelection = (int)mGoalBarData.Settings.Caption.FontFamily;
+      UpdateCaptionPreview(null);
+   }
+
+   /// <summary>
+   /// Handle a caption font change.
+   /// </summary>
+   private void OnCaptionFontChange(int? value)
+   {
+      if (value.HasValue)
+      {
+         mCaptionFontSelection = value.Value;
+         mGoalBarData.Settings.Caption.FontFamily = (FontFamily)value.Value;
+         UpdateCaptionPreview(null);
+      }
+   }
+
+   /// <summary>
+   /// Handles updating the variables needed for the caption preview.
+   /// </summary>
+   private void UpdateCaptionPreview(object unused)
+   {
+      mGoalBarData.Settings.Caption.Text = String.Empty;
+      if (!mGoalBarData.Settings.HideGoalText)
+      {
+         mGoalBarData.Settings.Caption.Text = "Test Goal";
+      }
+
+      mPercentageCaptionData = (CaptionData)mGoalBarData.Settings.Caption.Clone();
+
+      if (mGoalBarData.Settings.ShowAmountAsPercentage)
+      {
+         mPercentageCaptionData.Text = "35%";
+      }
+      else
+      {
+         mPercentageCaptionData.Text = $"{mGoalBarData.Settings.CurrencySymbol}345.67";
+      }
+
+      mTotalCaptionData = (CaptionData)mGoalBarData.Settings.Caption.Clone();
+      mTotalCaptionData.Text = "100";
+
+      StateHasChanged();
+   }
+
+   private void ShowAddNewGoalWindow()
+   {
+      mIsNewGoalPromptVisible = true;
+      StateHasChanged();
+   }
+
+   private async Task HandleAddNewGoal()
+   {
+      mIsNewGoalPromptVisible = false;
+
+      bool result = await mHubConnection.InvokeAsync<bool>("AddGoal", mNewGoalTitle);
+      if (result)
+      {
+         NotificationService.Notify(NotificationSeverity.Success, "Success", "The new goal was added.", 5000);
+         await GetGoalBarDataFromHub();
+         await InvokeAsync(() => { StateHasChanged(); });
+      }
+      else
+      {
+         NotificationService.Notify(NotificationSeverity.Error, "Error", $"The new goal could not be added. A goal with that title already exists!", 5000);
+         await InvokeAsync(() => { StateHasChanged(); });
+      }
+   }
+
+   private async Task HandleMakeGoalActive(Guid goalId)
+   {
+      bool result = await mHubConnection.InvokeAsync<bool>("MakeGoalActive", goalId);
+      if (result)
+      {
+         NotificationService.Notify(NotificationSeverity.Success, "Success", "The goal is now active!", 5000);
+         await GetGoalBarDataFromHub();
+         await InvokeAsync(() => { StateHasChanged(); });
+      }
+      else
+      {
+         NotificationService.Notify(NotificationSeverity.Error, "Error", $"The goal could not be activated. Does not exist.", 5000);
+         await InvokeAsync(() => { StateHasChanged(); });
+      }
+   }
+
+   private async Task HandleDeleteGoal(Guid goalId)
+   {
+      bool result = await mHubConnection.InvokeAsync<bool>("DeleteGoal", goalId);
+      if (result)
+      {
+         NotificationService.Notify(NotificationSeverity.Success, "Success", "The goal was deleted!", 5000);
+         await GetGoalBarDataFromHub();
+         await InvokeAsync(() => { StateHasChanged(); });
+      }
+      else
+      {
+         NotificationService.Notify(NotificationSeverity.Error, "Error", $"The goal could not be deleted. Does not exist.", 5000);
+         await InvokeAsync(() => { StateHasChanged(); });
+      }
+   }
+
+   private async Task HandleDeleteGoal(GridCommandEventArgs args)
+   {
+      GoalData goal = (GoalData)args.Item;
+      //await OnVariantDeleted.InvokeAsync(variant.Id);
+      await Task.CompletedTask;
+   }
+
+   private async Task UpdateGoalHandler(GridCommandEventArgs args)
+   {
+      GoalData goal = (GoalData)args.Item;
+      await Task.CompletedTask;
+   }
+
+   private void GoalPageChanged(int page)
+   {
+      mGoalPage = page;
+   }
+
+   private async Task HandleCopyUrl(string elementName)
+   {
+      await JSRuntime.InvokeVoidAsync("CopyToClipboard", elementName);
+      NotificationService.Notify(NotificationSeverity.Success, "Success", "The URL was copied to your clipboard!", 5000);
+      await InvokeAsync(() => { StateHasChanged(); });
+   }
+
+   private void OnCancel()
+   {
+      NavigationManager.NavigateTo("/");
+   }
+
+   private async Task OnSaveChanges()
+   {
+      await mHubConnection.InvokeAsync("UpdateGoalBarData", JsonConvert.SerializeObject(mGoalBarData));
+      await GetGoalBarDataFromHub();
+      NotificationService.Notify(NotificationSeverity.Success, "Save Successful", "The goal bar data has been saved.", 5000);
+      await InvokeAsync(() => { StateHasChanged(); });
+   }
+
+   private HubConnection mHubConnection;
+
+   private GoalBarData mGoalBarData = new GoalBarData();
+   private CaptionData mPercentageCaptionData = new CaptionData();
+   private CaptionData mTotalCaptionData = new CaptionData();
+   private int mCaptionFontSelection = 0;
+   private string mURL = String.Empty;
+   private bool mIsNewGoalPromptVisible = false;
+
+   // Adding Goals Variables
+   private string mNewGoalTitle = String.Empty;
+   private int mGoalPage = 1;
+}

@@ -1,0 +1,55 @@
+﻿@using GIFBot.Shared.Models.Animation
+@using Telerik.Blazor.Components
+
+<TelerikDropDownList Data="@Animations"
+                     TextField="DisplayName"
+                     ValueField="Id"
+                     Filterable="true"
+                     FilterOperator="Telerik.Blazor.StringFilterOperator.Contains"
+                     @bind-Value="SelectedAnimation" />
+
+@code
+{
+   #region Properties and Parameters
+
+   [Parameter]
+   public List<AnimationSelectorItem> Animations
+   {
+      get { return mAnimations; }
+      set
+      {
+         if (mAnimations != value)
+         {
+            mAnimations = value;
+            StateHasChanged();
+         }
+      }
+   }
+
+   [Parameter]
+   public Guid SelectedAnimation
+   {
+      get { return mSelectedAnimation; }
+      set
+      {
+         if (mSelectedAnimation != value)
+         {
+            mSelectedAnimation = value;
+            OnSelectedAnimationChanged.InvokeAsync(mSelectedAnimation);
+         }
+      }
+   }
+
+   [Parameter]
+   public EventCallback<Guid> OnSelectedAnimationChanged { get; set; }
+
+   #endregion
+
+   #region Private Members
+
+   private List<AnimationSelectorItem> mAnimations = new List<AnimationSelectorItem>();
+
+   private Guid mSelectedAnimation = Guid.Empty;
+
+   #endregion
+}

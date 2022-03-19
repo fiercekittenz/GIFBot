@@ -1,0 +1,276 @@
+﻿@page "/animationseditor/"
+@page "/animationseditor/{anim}"
+@using Microsoft.AspNetCore.SignalR.Client
+@using GIFBot.Shared
+@using Microsoft.AspNetCore.Components
+@using GIFBot.Client.Components
+@using GIFBot.Shared.Models.Animation
+@using Newtonsoft.Json
+@inject NavigationManager NavigationManager
+@inject NotificationService NotificationService
+@inject IJSRuntime JSRuntime
+@inject HttpClient Http
+
+<div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+    <h1><span class="oi oi-play-circle" aria-hidden="true"></span> Animations</h1>
+</div>
+
+<!-- Delete Category Confirmation Window -->
+<TelerikWindow Class="gifbot-modal-window" Width="600px" Height="250px" Centered="true" Visible="@mIsDeleteCategoryConfirmationVisible" Modal="true">
+    <WindowTitle>
+        <strong>Delete Category?</strong>
+    </WindowTitle>
+    <WindowContent>
+        <div class="form-group">
+            <font class="text-white">Are you sure you want to delete the [@(mTempCategory?.Title)] category? If you have any animations in it, it will not succeed.</font>
+        </div>
+        <div class="container-fluid p-2">
+            <p>
+                <center>
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelCategoryDeletion">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmCategoryDeletion">
+                        Yes, Delete!
+                    </button>
+                </center>
+            </p>
+        </div>
+    </WindowContent>
+</TelerikWindow>
+
+<!-- Delete Animation(s) Confirmation Window -->
+<TelerikWindow Class="gifbot-modal-window" Width="600px" Height="225px" Centered="true" Visible="@mIsDeleteConfirmationVisible" Modal="true">
+    <WindowTitle>
+        <strong>Delete Animation?</strong>
+    </WindowTitle>
+    <WindowContent>
+        <div class="form-group">
+            <font class="text-white">Are you sure you want to delete the selected animation(s)?</font>
+        </div>
+        <div class="container-fluid p-2">
+            <p>
+                <center>
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelDeletion">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmDeletion">
+                        Yes, Delete!
+                    </button>
+                </center>
+            </p>
+        </div>
+    </WindowContent>
+</TelerikWindow>
+
+<!-- Move Categories Window -->
+<TelerikWindow Class="gifbot-modal-window" Width="600px" Height="325px" Centered="true" Visible="@mIsMoveCategoryDialogVisible" Modal="true">
+    <WindowTitle>
+        <strong>Move Animations</strong>
+    </WindowTitle>
+    <WindowContent>
+        <div class="form-group">
+            <font class="text-white">Which category would you like to move the selected animation(s) into?</font>
+        </div>
+        <div class="form-group">
+            <label for="uiTitleLabel">Select the new category from the list below:</label>
+            <small id="uiTitleLabel" class="form-text text-muted">Once moved, the animation's data will be immediately saved.</small>
+            <TelerikDropDownList Data="@(mAnimationTreeData.Where(a => a.Tier == AnimationTreeTier.Category))" TextField="Title" ValueField="Id" DefaultText="Select Category..." @bind-Value="@mSelectedMoveCategory" />
+        </div>
+        <div class="container-fluid p-2">
+            <p>
+                <center>
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelMove">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmMove">
+                        Move!
+                    </button>
+                </center>
+            </p>
+        </div>
+    </WindowContent>
+</TelerikWindow>
+
+<!-- Add New Category Window -->
+<TelerikWindow Class="gifbot-modal-window" Width="550px" Height="400px" Centered="true" Visible="@mIsCreateCategoryDialogVisible" Modal="true">
+    <WindowTitle>
+        <strong>Add New Category</strong>
+    </WindowTitle>
+    <WindowContent>
+        <div class="form-group">
+            <font class="text-white">What is the name of the animation category you would like to create?</font>
+        </div>
+        <div class="form-group">
+            <label for="uiCategoryName"><b>Name:</b></label>
+            <TelerikTextBox Id="uiCategoryName" @bind-Value="mTempCategory.Title" />
+        </div>
+        <div class="container-fluid p-2">
+            <p>
+                <center>
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelAddCategory">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmAddCategory">
+                        Add!
+                    </button>
+                </center>
+            </p>
+        </div>
+    </WindowContent>
+</TelerikWindow>
+
+<!-- Edit Category Window -->
+<TelerikWindow Class="gifbot-modal-window" Width="550px" Height="400px" Centered="true" Visible="@mIsEditCategoryDialogVisible" Modal="true">
+    <WindowTitle>
+        <strong>Edit Category</strong>
+    </WindowTitle>
+    <WindowContent>
+        <div class="form-group">
+            <font class="text-white">You can rename the category below.</font>
+        </div>
+        <div class="form-group">
+            <label for="uiCategoryName"><b>Name:</b></label>
+            <TelerikTextBox Id="uiCategoryName" @bind-Value="mTempCategory.Title" />
+        </div>
+        <div class="container-fluid p-2">
+            <p>
+                <center>
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelEditCategory">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmEditCategory">
+                        Update!
+                    </button>
+                </center>
+            </p>
+        </div>
+    </WindowContent>
+</TelerikWindow>
+
+<!-- Add New Animation to Category Window -->
+<TelerikWindow Class="gifbot-modal-window" Width="550px" Height="400px" Centered="true" Visible="@mIsAddAnimationToCategoryDialogVisible" Modal="true">
+    <WindowTitle>
+        <strong>Add New Animation to Category</strong>
+    </WindowTitle>
+    <WindowContent>
+        <div class="form-group">
+            <font class="text-white">What is the name of the animation you would like to create? If you want this to be a command, make sure to include "!" in front of it.</font>
+        </div>
+        <div class="form-group">
+            <label for="uiName"><b>Name or Command Value:</b></label>
+            <TelerikTextBox Id="uiName" @bind-Value="mTempAnimationCommand" />
+        </div>
+        <div class="container-fluid p-2">
+            <p>
+                <center>
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelAddAnimationToCategory">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmAddAnimationToCategory">
+                        Add!
+                    </button>
+                </center>
+            </p>
+        </div>
+    </WindowContent>
+</TelerikWindow>
+
+<!-- Main Layout for the Animations Editor -->
+<div class="container-fluid p-3">
+
+    <TelerikTooltip TargetSelector="button[title]" Position="@Telerik.Blazor.TooltipPosition.Top" ShowOn="@TooltipShowEvent.Hover" Id="position-tooltip">
+    </TelerikTooltip>
+
+    <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+        <div class="container-fluid p-2">
+            <div class="form-group">
+                <TelerikTabStrip @bind-ActiveTabIndex="@ActiveTabIndex">
+                    <TabStripTab Title="Animations">
+                        <TelerikTreeList Data="@mAnimationTreeData"
+                                         IdField="Id"
+                                         ParentIdField="ParentTreeId"
+                                         Pageable="true"
+                                         Sortable="true"
+                                         SelectedItems="@mSelectedTreeItems"
+                                         FilterMode="@TreeListFilterMode.FilterMenu"
+                                         SelectionMode="@TreeListSelectionMode.Multiple"
+                                         SelectedItemsChanged="@( (IEnumerable<AnimationTreeItem> items) => AnimationListSelectionChanged(items) )"
+                                         Page="@mAnimationPage"
+                                         PageChanged="@AnimationPageChanged"
+                                         OnStateChanged="@((TreeListStateEventArgs<AnimationTreeItem> args) => AnimationTreeStateChanged(args))"
+                                         PageSize="50"
+                                         @ref="@AnimationTreeListRef">
+                            <TreeListToolBar>
+                                <TreeListSearchBox Fields="@SearchableFields" />
+                                <TreeListCommandButton Command="ExpandAll" OnClick="@HandleExpandAllRequest" Icon="download"></TreeListCommandButton>
+                                <TreeListCommandButton Command="CollapseAll" OnClick="@HandleCollapseAllRequest" Icon="upload"></TreeListCommandButton>
+                                <TreeListCommandButton Command="AddCategory" OnClick="@HandleAddCategoryRequest" Icon="add">Add Category</TreeListCommandButton>
+                                @if (mSelectedTreeItems.Where(t => t.Tier == AnimationTreeTier.Animation).Any())
+                                {
+                                    <TreeListCommandButton Command="AddCategory" OnClick="@HandleMoveSelectedRequest" Icon="arrow-double-60-right">Move</TreeListCommandButton>
+                                    <TreeListCommandButton Command="DeleteSelected" OnClick="@HandleDeleteSelectedRequest" Icon="trash">Delete</TreeListCommandButton>
+                                    <TreeListCommandButton Command="EnableSelected" OnClick="@HandleEnableSelectedRequest" Icon="check">Enable</TreeListCommandButton>
+                                    <TreeListCommandButton Command="DisableSelected" OnClick="@HandleDisableSelectedRequest" Icon="cancel-circle">Disable</TreeListCommandButton>
+                                }
+                            </TreeListToolBar>
+                            <TreeListColumns>
+                                <TreeListCheckboxColumn SelectChildren="true" SelectAll="true" SelectAllMode="TreeListSelectAllMode.All"></TreeListCheckboxColumn>
+                                <TreeListColumn Field="Title" Title="Name" Filterable="true" Expandable="true" Width="150px">
+                                    <Template Context="itemcontext">
+                                        @{
+                                            var item = itemcontext as AnimationTreeItem;
+                                        }
+                                        @if (item.Tier == AnimationTreeTier.Category)
+                                        {
+                                            <strong>@item.Title</strong>
+                                        }
+                                        else
+                                        {
+                                            <u><a href="/animationseditor/editanimation/@item.ParentTreeId/@item.Id">@item.Title</a></u>
+                                        }
+                                    </Template>
+                                </TreeListColumn>
+                                <TreeListColumn Field="Disabled" Width="110px" Title="Enabled" Filterable="false">
+                                    <Template Context="itemcontext">
+                                        @{
+                                            string output = "Yes";
+                                            var item = itemcontext as AnimationTreeItem;
+                                            if (item.Disabled)
+                                            {
+                                                output = "No";
+                                            }
+                                        }
+                                        @if (item.Tier == AnimationTreeTier.Animation)
+                                        {
+                                            <center>@output</center>
+                                        }
+                                    </Template>
+                                </TreeListColumn>
+                                <TreeListColumn Width="220px">
+                                    <Template Context="itemcontext">
+                                        @{
+                                            var item = itemcontext as AnimationTreeItem;
+                                        }
+                                        @if (item.Tier == AnimationTreeTier.Category)
+                                        {
+                                            <button type="button" title="Add Animation to Category" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleAddAnimationRequest(item.Id))"><span class="oi oi-plus"></span></button>
+                                            <button type="button" title="Rename Category" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleEditCategoryRequest(item))"><span class="oi oi-pencil"></span></button>
+                                            <button type="button" title="Delete Category" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleDeleteCategory(item))"><span class="oi oi-trash"></span></button>
+                                        }
+                                        else
+                                        {
+                                            <button type="button" title="Edit Animation" class="btn btn-secondary p-0 m-0" style="background-color: #646464; width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleEditAnimationRequest(item))"><span class="oi oi-pencil"></span></button>
+                                            <button type="button" title="Delete Animation" class="btn btn-secondary p-0 m-0" style="background-color: #646464; width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleDeleteAnimation(item))"><span class="oi oi-trash"></span></button>
+                                            <button type="button" title="Play Animation" class="btn btn-secondary p-0 m-0" style="background-color: #646464; width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandlePlayAnimation(item))"><span class="oi oi-media-play"></span></button>
+                                        }
+                                    </Template>
+                                </TreeListColumn>
+                            </TreeListColumns>
+                        </TelerikTreeList>
+                    </TabStripTab>
+                </TelerikTabStrip>
+            </div>
+        </div>
+    </div>
+</div>

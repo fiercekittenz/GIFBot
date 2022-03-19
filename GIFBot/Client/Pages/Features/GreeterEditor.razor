@@ -1,0 +1,220 @@
+﻿@page "/greetereditor/"
+@using Microsoft.AspNetCore.SignalR.Client
+@using GIFBot.Shared.Models.Features
+@using GIFBot.Shared.Models.Visualization
+@using GIFBot.Client.Components
+@using Newtonsoft.Json
+@using Telerik.DataSource
+@using Telerik.DataSource.Extensions
+@inject NavigationManager NavigationManager
+@inject NotificationService NotificationService
+@inject IJSRuntime JSRuntime
+@inject HttpClient Http
+
+<div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+    <h1><span class="oi oi-thumb-up" aria-hidden="true"></span> Greeter</h1>
+</div>
+
+<!-- Add New Entry Window -->
+<TelerikWindow Class="gifbot-modal-window" Width="550px" Height="400px" Centered="true" Visible="@mIsAddDialogVisible" Modal="true">
+    <WindowTitle>
+        <strong>Add New Greeter Entry</strong>
+    </WindowTitle>
+    <WindowContent>
+        <div class="form-group">
+            <font class="text-white">What is the name of this greeter? This is a name only for your reference to describe the greeter.</font>
+        </div>
+        <div class="form-group">
+            <label for="uiName"><b>Name:</b></label>
+            <TelerikTextBox Id="uiName" @bind-Value="mTempGreeterEntry.Name" />
+        </div>
+        <div class="container-fluid p-2">
+            <p>
+                <center>
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelAddCommand">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmAddCommand">
+                        Add!
+                    </button>
+                </center>
+            </p>
+        </div>
+    </WindowContent>
+</TelerikWindow>
+
+<!-- Edit Entry Window -->
+<TelerikWindow Class="gifbot-modal-window" Width="750px" Height="700px" Centered="true" Visible="@mIsEditDialogVisible" Modal="true">
+    <WindowTitle>
+        <strong>Edit Greeter: @mTempGreeterEntry.Name</strong>
+    </WindowTitle>
+    <WindowContent>
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                <TelerikCheckBox Id="uiTempEntryEnabled" @bind-Value="mTempGreeterEntry.Enabled" /> Enabled
+                <small id="uiTempEntryEnabled" class="form-text text-muted">When enabled, this greeter active.</small>
+            </label>
+        </div>
+        <div class="form-group">
+            <label for="uiTempName"><b>Name:</b></label>
+            <small id="uiTempNameLabel" class="form-text text-white-50">The name to identify this greeter</small>
+            <TelerikTextBox Id="uiTempName" @bind-Value="mTempGreeterEntry.Name" />
+        </div>
+        <div class="form-group">
+            <label for="uiTempAnimation"><b>Animation:</b></label>
+            <small id="uiTempAnimationLabel" class="form-text text-white-50">Play an animation when a viewer in this greeter's recipient list speaks in chat. You may want to make sure this animation is BOT ONLY so it can't be triggered by anything but this greeter.</small>
+            <AnimationSelectorComponent Animations="@AnimationOptions" SelectedAnimation="mTempGreeterEntry.AnimationId" OnSelectedAnimationChanged="@HandleAnimationSelectionChanged" />
+        </div>
+        <div class="form-group">
+            <label for="uiTempChatMessage"><b>Phrase Sent to Chat:</b></label>
+            <small id="uiTempChatMessageLabel" class="form-text text-white-50">The bot will send this to chat in addition to any animation. Use $user to display who was greeted! (e.g. "!so $user")</small>
+            <TelerikTextBox Id="uiTempChatMessage" Width="400px" @bind-Value="mTempGreeterEntry.ChatMessage" />
+        </div>
+        <div class="form-group">
+            <TelerikListView Data=@mTempGreeterEntry.Recipients
+                             Pageable="true"
+                             Height="400px"
+                             OnDelete="@DeleteRecipientHandler"
+                             OnCreate="@CreateRecipientHandler">
+                <HeaderTemplate>
+                    <ListViewCommandButton Command="Add">Add</ListViewCommandButton>
+                </HeaderTemplate>
+                <Template>
+                    <div class="k-card k-card-horizontal">
+                        <div class="k-card-body">
+                            <div class="k-hbox k-justify-content-between k-flex-wrap">
+                                <div>
+                                    <h5 class="k-card-subtitle">@context.Name</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-actions">
+                            <ListViewCommandButton Command="Edit">Edit</ListViewCommandButton>
+                            <ListViewCommandButton Command="Delete">Delete</ListViewCommandButton>
+                        </div>
+                    </div>
+                </Template>
+                <EditTemplate>
+                    <div class="k-card k-card-horizontal">
+                        <div class="k-card-body">
+                            <div class="k-hbox k-justify-content-between k-flex-wrap">
+                                <div>
+                                    <label class="editor-label">Name</label>
+                                    <TelerikTextBox @bind-Value="@context.Name" Class="mb-sm"></TelerikTextBox>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-actions">
+                            <ListViewCommandButton Command="Save">Save</ListViewCommandButton>
+                            <ListViewCommandButton Command="Cancel">Cancel</ListViewCommandButton>
+                        </div>
+                    </div>
+                </EditTemplate>
+            </TelerikListView>
+        </div>
+
+         <div class="form-group">
+            <label for="uiImport">Bulk Import Recipients from Text File:</label>
+            <small id="uiImport" class="form-text text-muted">
+               You can import directly from a text file. Each entry should be on its own line in the text file.
+            </small>
+            <RadzenUpload Style="width: 100%; background-color: #1e1e1e" Url="@($"upload/greeter/{mTempGreeterEntry.Id}")" Accept="text/*" Error="@(args => OnImportTextFileError(args))" Progress="@(args => OnImportTextFileProgress(args))" Complete="@(args => OnImportTextFileComplete(args))" />
+            <RadzenProgressBar Value="@mUploadProgress" Visible="@(mUploadProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
+            @if (!String.IsNullOrEmpty(mUploadErrorMessage))
+            {
+               <label class="text-danger">@mUploadErrorMessage</label>
+            }
+         </div>
+
+        <div class="container-fluid p-2">
+            <p>
+                <center>
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelEditCommand">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmEditCommand">
+                        Save!
+                    </button>
+                </center>
+            </p>
+        </div>
+    </WindowContent>
+</TelerikWindow>
+
+<TelerikTabStrip @bind-ActiveTabIndex="@ActiveTabIndex">
+    <TabStripTab Title="Greeters">
+        <div class="container-fluid p-2">
+            <TelerikGrid Sortable="true" FilterMode="Telerik.Blazor.GridFilterMode.FilterRow" Pageable="true" Data="@Data.Entries" PageSize="10">
+                <GridToolBar>
+                    <GridSearchBox />
+                    <GridCommandButton Command="AddCommand" OnClick="@HandleAddRequest" Icon="add">Add New Greeter</GridCommandButton>
+                </GridToolBar>
+                <GridColumns>
+                    <GridColumn Width="200px" Field=@nameof(GreeterEntry.Name) Title="Greeter Name" />
+                    <GridColumn Width="400px" Title="Recipients">
+                        <Template Context="data">
+                            @((data as GreeterEntry).GetRecipientsDisplayList())
+                        </Template>
+                    </GridColumn>
+                    <GridColumn Width="75px">
+                        <Template Context="data">
+                            <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleEditRequest((data as GreeterEntry)))"><span class="oi oi-pencil"></span></button>
+                            <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleDeleteRequest((data as GreeterEntry)))"><span class="oi oi-trash"></span></button>
+                        </Template>
+                    </GridColumn>
+                </GridColumns>
+            </TelerikGrid>
+        </div>
+    </TabStripTab>
+</TelerikTabStrip>
+
+<style>
+    .k-listview-header {
+        padding: 10px 20px;
+    }
+
+    .k-card {
+        padding: 10px 20px;
+        border-width: 0 0 1px 0;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .k-card-body {
+        padding: 0;
+    }
+
+    .k-card:last-child {
+        border-bottom: 0;
+    }
+
+    .k-card .k-card-title {
+        padding: 0;
+        font-size: 1.2em;
+        font-weight: bold;
+        line-height: normal;
+    }
+
+    .k-card-subtitle {
+        font-size: 1em;
+        margin-bottom: 0;
+    }
+
+    .product-name {
+        width: 50%;
+        min-width: 200px;
+        padding: 5px 0;
+    }
+
+    .product-price {
+        width: 50%;
+        min-width: 200px;
+        padding: 5px 0;
+    }
+
+    .editor-label {
+        margin: 0;
+        font-size: .875em;
+        display: block;
+    }
+</style>

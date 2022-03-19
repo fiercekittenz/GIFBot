@@ -1,0 +1,201 @@
+﻿@page "/giveawayeditor/"
+@using Microsoft.AspNetCore.SignalR.Client
+@using GIFBot.Shared.Models.Animation
+@using GIFBot.Shared.Models.Features
+@using GIFBot.Shared.Models.Visualization
+@using GIFBot.Client.Components
+@using Newtonsoft.Json
+@using Telerik.DataSource
+@using Telerik.DataSource.Extensions
+@inject NavigationManager NavigationManager
+@inject NotificationService NotificationService
+@inject IJSRuntime JSRuntime
+@inject HttpClient Http
+
+<div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+    <h1><span class="oi oi-box" aria-hidden="true"></span> Giveaway</h1>
+</div>
+
+<!-- Add New Banned User Window -->
+<TelerikWindow Class="gifbot-modal-window" Width="550px" Height="400px" Centered="true" Visible="@mIsAddBannedUserDialogVisible" Modal="true">
+    <WindowTitle>
+        <strong>Add New Banned User Entry</strong>
+    </WindowTitle>
+    <WindowContent>
+        <div class="form-group">
+            <font class="text-white">What is the name of this banned user?</font>
+        </div>
+        <div class="form-group">
+            <label for="uiName"><b>Name:</b></label>
+            <TelerikTextBox Id="uiName" @bind-Value="mTempBannedUserName" />
+        </div>
+        <div class="container-fluid p-2">
+            <p>
+                <center>
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelAddCommand">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmAddCommand">
+                        Add!
+                    </button>
+                </center>
+            </p>
+        </div>
+    </WindowContent>
+</TelerikWindow>
+
+<TelerikTabStrip @bind-ActiveTabIndex="@ActiveTabIndex">
+    <TabStripTab Title="Giveaway">
+        <div class="container-fluid p-2 mb-2 rounded" style="background-color: #211126">
+            <div class="container-fluid" style="width: 100%">
+                @if (!Data.IsOpenForEntries)
+                {
+                    <button type="button" class="btn btn-secondary p-1 mr-5" style="background-color: #484d72; margin-left: auto; margin-right: 0; width: 200px" @onclick="@OnStartGiveaway">Accept Entries</button>
+
+                    @if (Data.Entrants.Any())
+                    {
+                        <button type="button" class="btn btn-secondary p-1 mr-5" style="background-color: #6c4872; margin-left: auto; margin-right: 0; width: 200px" @onclick="@OnDrawWinner">Draw Winner</button>
+                    }
+
+                    <button type="button" class="btn btn-secondary p-1 mr-5" style="background-color: #724859; margin-left: auto; margin-right: 0; width: 200px" @onclick="@OnResetGiveaway">Reset</button>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-secondary p-1 mr-5" style="background-color: #6c4872; margin-left: auto; margin-right: 0; width: 200px" @onclick="@OnCloseGiveaway">Close Giveaway</button>
+                }
+            </div>
+        </div>
+        @if (!String.IsNullOrEmpty(Winner))
+        {
+            <div class="container-fluid p-2 mb-2 rounded" style="background-color: #211126">
+                <h4>The Winner is: @(Winner)</h4>
+            </div>
+        }
+        <div class="container-fluid p-2">
+            <TelerikGrid Sortable="true" FilterMode="Telerik.Blazor.GridFilterMode.FilterRow" Pageable="true" Data="@Data.Entrants" PageSize="50">
+                <GridColumns>
+                    <GridColumn Width="400px" Filterable="true" Title="Entrant Name">
+                        <Template Context="data">
+                            @(data as string)
+                        </Template>
+                    </GridColumn>
+                </GridColumns>
+            </TelerikGrid>
+        </div>
+    </TabStripTab>
+
+    <TabStripTab Title="Settings">
+        <div class="form-group">
+            <label for="uiEntryBehavior"><b>Entry Behavior:</b></label>
+            <small id="uiEntryBehavior" class="form-text text-white-50">
+                How would you like viewers to enter your giveaway? You can use chat with subscriber luck benefits, or you can have a ticket-based system by using Channel Points. If you use Channel Points, the rewards will be created and destroyed for you as you open and close the giveaway so users cannot accidentally enter without a running giveaway.
+            </small>
+            <RadzenRadioButtonList @bind-Value="mEntryBehaviorSelection" TValue="int" Change="@(args => OnEntryBehaviorSelectionChange(args))">
+                <Items>
+                    <RadzenRadioButtonListItem Text="Command" Value="0" />
+                    <RadzenRadioButtonListItem Text="Channel Points" Value="1" />
+                </Items>
+            </RadzenRadioButtonList>
+        </div>
+        @if (Data.EntryBehavior == GiveawayData.GiveawayEntryBehaviorType.Command)
+        {
+            <div class="form-group">
+                <label for="uiCommand"><b>Command:</b></label>
+                <small id="uiCommandLabel" class="form-text text-white-50">The command that viewers type in chat to enter your giveaway. (Note: Does not have to have ! in front of it.)</small>
+                <TelerikTextBox Id="uiCommand" @bind-Value="Data.Command" />
+            </div>
+            <div class="form-group">
+                <label for="uiSubLuckMultiplier"><b>Sub Luck Multiplier:</b></label>
+                <small id="uiSubLuckMultiplierLabel" class="form-text text-white-50">The additional number of tickets that a subscriber gets when entering your giveaways (<i>e.g. 2 = 2 tickets vs the 1 ticket regulars get</i>).</small>
+                <TelerikNumericTextBox Id="uiSubLuckMultiplier" Min="1" Max="1000" @bind-Value="Data.SubLuckMultiplier" />
+            </div>
+            <div class="form-group">
+                <label for="uiAccess"><b>Access Type:</b></label>
+                <small id="uiAccess" class="form-text text-white-50">
+                    You can limit what kind of viewer has access to use this giveaway. Your options are below.
+                </small>
+                <RadzenRadioButtonList @bind-Value="mAccessSelection" TValue="int" Change="@(args => OnAccessLevelChange(args))">
+                    <Items>
+                        <RadzenRadioButtonListItem Text="Anyone" Value="0" />
+                        <RadzenRadioButtonListItem Text="Follower" Value="1" />
+                        <RadzenRadioButtonListItem Text="Subscriber" Value="2" />
+                        <RadzenRadioButtonListItem Text="VIP" Value="3" />
+                        <RadzenRadioButtonListItem Text="Moderator" Value="4" />
+                    </Items>
+                </RadzenRadioButtonList>
+            </div>
+        }
+        else if (Data.EntryBehavior == GiveawayData.GiveawayEntryBehaviorType.ChannelPoints)
+        {
+            <div class="form-group">
+                <label for="uiChannelPointRewardTitle"><b>Reward Title:</b></label>
+                <small id="uiChannelPointRewardTitleLabel" class="form-text text-white-50">The title of the channel point reward.</small>
+                <TelerikTextBox Id="uiChannelPointRewardTitle" @bind-Value="Data.ChannelPointRewardTitle" />
+            </div>
+            <div class="form-group">
+                <label for="uiChannelPoints"><b>Points Required:</b></label>
+                <small id="uiChannelPointsLabel" class="form-text text-white-50">The number of points required for the channel point reward redemption. Will be created automatically for you when you start the giveaway. Cannot be the same number of points as another channel point reward.</small>
+                <TelerikNumericTextBox Id="uiChannelPoints" Min="1" Max="999999" @bind-Value="Data.ChannelPointsRequired" />
+            </div>
+            <div class="form-group">
+                <label for="uiMaxNumberOfEntriesAllowed"><b>Number of Redemptions Allowed for Entry:</b></label>
+                <small id="uiMaxNumberOfEntriesAllowedLabel" class="form-text text-white-50">You can allow your viewers to redeem multiple times for multiple entries. Think of this as a "ticket" system for channel points.</small>
+                <TelerikNumericTextBox Id="uiMaxNumberOfEntriesAllowed" Min="1" Max="1000" @bind-Value="Data.MaxNumberOfEntriesAllowed" />
+            </div>
+        }
+        <div class="form-group">
+            <label for="uiGiveawayOpenAnnouncementText"><b>Giveaway Open Announcement Text:</b></label>
+            <small id="uiGiveawayOpenAnnouncementTextLabel" class="form-text text-white-50">The text sent to chat when the giveaway is opened. Use $command if you want the command to be displayed in the output.</small>
+            <TelerikTextBox Id="uiGiveawayOpenAnnouncementText" Width="600px" @bind-Value="Data.GiveawayOpenAnnouncementText" />
+        </div>
+        <div class="form-group">
+            <label for="uiGiveawayClosedAnnouncementText"><b>Giveaway Closed Announcement Text:</b></label>
+            <small id="uiGiveawayClosedAnnouncementTextLabel" class="form-text text-white-50">The text sent to chat when the giveaway is closed.</small>
+            <TelerikTextBox Id="uiGiveawayClosedAnnouncementText" Width="600px" @bind-Value="Data.GiveawayClosedAnnouncementText" />
+        </div>
+        <div class="form-group">
+            <label for="uiWinnerAnnouncementText"><b>Winner Announcement Text:</b></label>
+            <small id="uiWinnerAnnouncementTextLabel" class="form-text text-white-50">The text sent to chat when the winner is selected. Use $user if you would like the winner's name to appear in the announcement.</small>
+            <TelerikTextBox Id="uiWinnerAnnouncementText" Width="600px" @bind-Value="Data.WinnerAnnouncementText" />
+        </div>
+        <div class="form-group">
+            <label for="uiDrumrollAnimation"><b>Drumroll Animation:</b></label>
+            <small id="uiDrumrollAnimationLabel" class="form-text text-white-50">The animation that plays when you draw the winner of a giveaway. The winner won't be drawn or announced until this animation has finished playing.</small>
+            <AnimationSelectorComponent Animations="@AnimationOptions" SelectedAnimation="Data.DrumrollAnimation" OnSelectedAnimationChanged="@HandleDrumrollAnimationSelectionChanged" />
+        </div>
+        <div class="form-group">
+            <label for="uiWinnerAnimation"><b>Winner Animation:</b></label>
+            <small id="uiWinnerAnimationLabel" class="form-text text-white-50">The animation that plays when the winner is announced.</small>
+            <AnimationSelectorComponent Animations="@AnimationOptions" SelectedAnimation="Data.WinnerAnimation" OnSelectedAnimationChanged="@HandleWinnerAnimationSelectionChanged" />
+        </div>
+        <div class="row">
+            <div class="container-fluid text-right p-3">
+                <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnCancel">Cancel</button>
+                <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e" @onclick="@OnSaveChanges">Save Changes</button>
+            </div>
+        </div>
+    </TabStripTab>
+
+    <TabStripTab Title="Banned Users">
+        <div class="container-fluid p-2">
+            <TelerikGrid Sortable="true" FilterMode="Telerik.Blazor.GridFilterMode.FilterRow" Pageable="true" Data="@Data.BannedUsers" PageSize="20">
+                <GridToolBar>
+                    <GridSearchBox />
+                    <GridCommandButton Command="AddCommand" OnClick="@HandleAddBannedUserRequest" Icon="add">Add New Banned User</GridCommandButton>
+                </GridToolBar>
+                <GridColumns>
+                    <GridColumn Width="400px" Title="Name">
+                        <Template Context="data">
+                            @(data as string)
+                        </Template>
+                    </GridColumn>
+                    <GridColumn Width="75px">
+                        <Template Context="data">
+                            <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleDeleteBannedUserRequest((data as string)))"><span class="oi oi-trash"></span></button>
+                        </Template>
+                    </GridColumn>
+                </GridColumns>
+            </TelerikGrid>
+        </div>
+    </TabStripTab>
+</TelerikTabStrip>

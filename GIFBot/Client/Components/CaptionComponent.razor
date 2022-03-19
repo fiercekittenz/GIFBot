@@ -1,0 +1,188 @@
+﻿@using GIFBot.Shared.Models.Visualization
+
+<!-- Thank you to strothj for the top/transform help! -->
+@if (PositionAbsolutely)
+{
+   <div style="position: absolute; top: 50%; transform: translateY(-50%); z-index: 10000000000000; padding-left: 5px; padding-right: 5px; font-size: @mCaptionFontSize; text-align: @mTextAlignStyle; width: @mWidthStr; font-family: @mCaptionFontFamily; font-weight: @mCaptionWeight; -webkit-text-fill-color: @mCaptionFontColor; -webkit-text-stroke-width: @mCaptionStrokeThickness; -webkit-text-stroke-color: @mCaptionFontStrokeColor;">
+      @mCaption
+   </div>
+}
+else
+{
+   <div style="font-size: @mCaptionFontSize; text-align: @mTextAlignStyle; max-width: @mWidthStr; font-family: @(mCaptionFontFamily.Replace('_', ' ')); font-weight: @mCaptionWeight; -webkit-text-fill-color: @mCaptionFontColor; -webkit-text-stroke-width: @mCaptionStrokeThickness; -webkit-text-stroke-color: @mCaptionFontStrokeColor;">
+      @mCaption
+   </div>
+}
+
+@code {
+
+   [Parameter]
+   public bool PositionAbsolutely
+   {
+      get;
+      set;
+   } = false;
+
+   [Parameter]
+   public CaptionData CaptionData
+   {
+      get { return mCaptionData; }
+      set
+      {
+         mCaptionData = value;
+         UpdateCaptionData();
+      }
+   }
+
+   [Parameter]
+   public string TextAlignStyle
+   {
+      get { return mTextAlignStyle; }
+      set
+      {
+         mTextAlignStyle = value;
+         StateHasChanged();
+      }
+   }
+
+   [Parameter]
+   public string OverrideCaptionText
+   {
+      get { return mOverrideCaptionText; }
+      set
+      {
+         mOverrideCaptionText = value;
+         UpdateCaptionData();
+      }
+   }
+
+   [Parameter]
+   public int Width
+   {
+      get { return mWidth; }
+      set
+      {
+         mWidth = value;
+         UpdateCaptionData();
+      }
+   }
+
+   [Parameter]
+   public string Triggerer
+   {
+      get { return mTriggerer; }
+      set
+      {
+         mTriggerer = value;
+         UpdateCaptionData();
+      }
+   }
+
+   [Parameter]
+   public string Target
+   {
+      get { return mTarget; }
+      set
+      {
+         mTarget = value;
+         UpdateCaptionData();
+      }
+   }
+
+   [Parameter]
+   public string Amount
+   {
+      get { return mAmount; }
+      set
+      {
+         mAmount = value;
+         UpdateCaptionData();
+      }
+   }
+
+   /// <summary>
+   /// Updates the caption display data.
+   /// </summary>
+   private void UpdateCaptionData()
+   {
+      mCaption = CaptionData.Text;
+      if (!String.IsNullOrEmpty(OverrideCaptionText))
+      {
+         mCaption = OverrideCaptionText;
+      }
+
+      if (!String.IsNullOrEmpty(Triggerer))
+      {
+         mCaption = mCaption.Replace("$user", Triggerer);
+      }
+
+      if (!String.IsNullOrEmpty(Target))
+      {
+         mCaption = mCaption.Replace("$target", Target);
+      }
+
+      if (!String.IsNullOrEmpty(Amount))
+      {
+         mCaption = mCaption.Replace("$amount", Amount);
+      }
+
+      mCaptionFontSize = $"{CaptionData.FontSize}px";
+      mCaptionFontColor = CaptionData.FontColor;
+      mCaptionFontStrokeColor = CaptionData.FontStrokeColor;
+      mCaptionStrokeThickness = $"{CaptionData.StrokeThickness}px";
+
+      mWidthStr = $"{Width}px";
+
+      // Font Weight
+      mCaptionWeight = "normal";
+      if (CaptionData.IsBold)
+      {
+         mCaptionWeight = "bold";
+      }
+
+      // Font Family
+      switch (CaptionData.FontFamily)
+      {
+         case FontFamily.ArialHelveticaSansSerif:
+            mCaptionFontFamily = "Arial, helvetica, sans-serif";
+            break;
+
+         case FontFamily.ComicSans:
+            mCaptionFontFamily = "\"Comic Sans MS\", cursive, sans-serif";
+            break;
+
+         case FontFamily.Impact:
+            mCaptionFontFamily = "Impact, Charcoal, sans-serif";
+            break;
+
+         case FontFamily.Monospace:
+            mCaptionFontFamily = "\"Courier New\", Courier, monospace";
+            break;
+
+         default:
+            mCaptionFontFamily = Enum.GetName(typeof(FontFamily), CaptionData.FontFamily);
+            break;
+      }
+
+      StateHasChanged();
+   }
+
+   // Caption Variables
+   private CaptionData mCaptionData = new CaptionData();
+   private string mOverrideCaptionText = String.Empty;
+   private int mWidth = 700;
+   private string mTriggerer = String.Empty;
+   private string mTarget = String.Empty;
+   private string mAmount = String.Empty;
+   private string mTextAlignStyle = "center";
+
+   private string mCaption = String.Empty;
+   private string mCaptionFontSize = String.Empty;
+   private string mCaptionFontFamily = String.Empty;
+   private string mCaptionFontColor = String.Empty;
+   private string mCaptionWeight = "normal";
+   private string mCaptionFontStrokeColor = String.Empty;
+   private string mCaptionStrokeThickness = String.Empty;
+   private string mWidthStr = "700px";
+
+}

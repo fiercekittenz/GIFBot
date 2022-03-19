@@ -1,0 +1,62 @@
+﻿@page "/animationseditor/editanimation/{CategoryId}/{AnimationId}"
+@using Microsoft.AspNetCore.SignalR.Client
+@using GIFBot.Client.Pages.Setup.Models
+@using GIFBot.Client.Components
+@using Microsoft.AspNetCore.Components
+@inject NavigationManager NavigationManager
+@inject NotificationService NotificationService
+@inject IJSRuntime JSRuntime
+
+<div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+   <h1><span class="oi oi-play-circle" aria-hidden="true"></span> <a href="animationseditor/">Animations</a> « Edit Animation</h1>
+</div>
+
+<!-- Clone Animation Confirmation Window -->
+<TelerikWindow Class="gifbot-modal-window" Width="600px" Height="325px" Centered="true" Visible="@mIsCloneDialogVisible" Modal="true">
+   <WindowTitle>
+      <strong>Clone Animation?</strong>
+   </WindowTitle>
+   <WindowContent>
+      <div class="form-group">
+         <label for="uiTitleLabel">Let's clone this animation! What is the command for the new animation?</label>
+         <small id="uiTitleLabel" class="form-text text-muted">The command that must be entered to activate this animation.</small>
+         <TelerikTextBox @bind-Value="@mTempAnimationCommand" />
+      </div>
+      <div class="container-fluid p-2">
+         <p>
+            <center>
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelClone">
+                  Cancel
+               </button>
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmClone">
+                  Yes, Clone!
+               </button>
+            </center>
+         </p>
+      </div>
+   </WindowContent>
+</TelerikWindow>
+
+<div class="container-fluid p-3">
+   @if (mSelectedAnimation != null)
+   {
+      <div class="container-fluid text-light p-1 mb-2" style="background-color:#36173e"><b>Editing Animation: @mSelectedAnimation?.Command</b></div>
+
+      <AnimationComponent Data="@mSelectedAnimation" UserGroupNames="@mUserGroupNames" AnimUserGroup="@mSelectedAnimationUserGroupName" IsDisplayTestMode="@mIsDisplayTestMode"
+                          OnTestAnimation="@HandleTestAnimation"
+                          OnDeleteAnimation="@HandleDeleteAnimation"
+                          OnVisualFileChanged="@HandleVisualFileChanged"
+                          OnCancel="@HandleCancelAnimationChanges"
+                          OnCloneAnimation="@HandleCloneAnimation"
+                          OnUserGroupSelected="@HandleUserGroupSelected"
+                          OnVariantAdded="@(args => HandleVariantAdded(args))"
+                          OnVariantPlay="@(args => HandleVariantPlay(args))"
+                          OnVariantUpdated="@(args => HandleVariantUpdated(args))"
+                          OnVariantDeleted="@(args => HandleVariantDeleted(args))"
+                          OnChainedCommandDelete="@(args => HandleChainedCommandDeleted(args))"
+                          OnAddChainedCommand="@(args => HandleChainedCommandAdded(args as string))"
+                          OnDisplayTestModeChanged="@(args => HandleDisplayTestModeChanged(args))"
+                          OnNotifyDimensionsChanged="@(args => HandleNotifyDimensionsChanged(args as Tuple<int, int>))"
+                          OnSave="@(args => HandleSaveAnimation(args))" />
+   }
+</div>

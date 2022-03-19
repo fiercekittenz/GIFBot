@@ -1,0 +1,86 @@
+﻿@page "/animationseditor/addcategory"
+@using Microsoft.AspNetCore.Http.Connections
+@using Microsoft.AspNetCore.SignalR.Client
+@using GIFBot.Client.Pages.Setup.Models
+@inject NavigationManager NavigationManager
+@inject NotificationService NotificationService
+@implements IAsyncDisposable
+
+<div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+   <h1><span class="oi oi-folder" aria-hidden="true"></span> Add New Category</h1>
+</div>
+
+<center>
+   <div class="container p-0 m-0 text-left" style="background-color: #1d161f; width: 600px">
+      <div class="container-fluid p-2">
+         <EditForm Model="@Model" OnSubmit="@HandleSave">
+            <div class="form-group">
+               <label for="uiValue"><b>Category Name:</b></label>
+               <small id="uiValue" class="form-text text-white-50">Pretty self-explanatory, right?</small>
+               <RadzenTextBox id="uiValue" class="form-control" Style="color: #232323" @bind-Value="Model.Name" />
+            </div>
+            <div class="row">
+               <div class="container-fluid text-right p-3">
+                  <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnCancel">Cancel</button>
+                  <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e">OK</button>
+               </div>
+            </div>
+         </EditForm>
+      </div>
+   </div>
+</center>
+
+@code {
+
+   private TwitchNameModel Model { get; set; } = new TwitchNameModel();
+
+   protected override async Task OnInitializedAsync()
+   {
+      // Build the connection to the main bot hub.
+      mHubConnection = new HubConnectionBuilder()
+         .WithUrl(NavigationManager.ToAbsoluteUri("/gifbothub"), HttpTransportType.LongPolling) 
+         .WithAutomaticReconnect()
+         .Build();
+
+      // Start the connection.
+      await mHubConnection.StartAsync();
+   }
+
+   /// <summary>
+   /// IAsyncDisposable Implementation
+   /// </summary>
+   public async ValueTask DisposeAsync()
+   {
+      await mHubConnection.DisposeAsync();
+   }
+
+   private void OnCancel()
+   {
+      NavigationManager.NavigateTo("/animationseditor/");
+   }
+
+   private async Task HandleSave()
+   {
+      // Just a catalog addition.
+      if (!String.IsNullOrEmpty(Model.Name))
+      {
+         bool result = await mHubConnection.InvokeAsync<bool>("AddAnimationCategory", Model.Name);
+         if (result)
+         {
+            NavigationManager.NavigateTo("/animationseditor/");
+         }
+         else
+         {
+            NotificationService.Notify(NotificationSeverity.Error, "Error", "That category already exists!", 5000);
+            await InvokeAsync(() => { StateHasChanged(); });
+         }
+      }
+      else
+      {
+         NotificationService.Notify(NotificationSeverity.Error, "Error", "The category has no name!", 5000);
+         await InvokeAsync(() => { StateHasChanged(); });
+      }
+   }
+
+   private HubConnection mHubConnection;
+}

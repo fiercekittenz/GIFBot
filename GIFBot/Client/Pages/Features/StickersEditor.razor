@@ -1,0 +1,798 @@
+﻿@page "/stickerseditor/"
+@using Microsoft.AspNetCore.SignalR.Client
+@using GIFBot.Shared.Models.Features
+@using GIFBot.Shared.Models.Visualization
+@using GIFBot.Client.Components
+@using Newtonsoft.Json
+@using Telerik.DataSource
+@using Telerik.DataSource.Extensions
+@inject NavigationManager NavigationManager
+@inject NotificationService NotificationService
+@inject IJSRuntime JSRuntime
+@inject HttpClient Http
+
+<div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+   <h1><span class="oi oi-badge" aria-hidden="true"></span> Stickers</h1>
+</div>
+
+<!-- Add New Category Window -->
+<TelerikWindow Class="gifbot-modal-window" Width="550px" Height="400px" Centered="true" Visible="@mIsCreateCategoryDialogVisible" Modal="true">
+   <WindowTitle>
+      <strong>Add New Category</strong>
+   </WindowTitle>
+   <WindowContent>
+      <div class="form-group">
+         <font class="text-white">What is the name of the sticker category you would like to create?</font>
+      </div>
+      <div class="form-group">
+         <label for="uiCategoryName"><b>Name:</b></label>
+         <TelerikTextBox Id="uiCategoryName" @bind-Value="mTempCategory.Name" />
+      </div>
+      <div class="container-fluid p-2">
+         <p>
+            <center>
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelAddCategory">
+                  Cancel
+               </button>
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmAddCategory">
+                  Add!
+               </button>
+            </center>
+         </p>
+      </div>
+   </WindowContent>
+</TelerikWindow>
+
+<!-- Edit Category Window -->
+<TelerikWindow Class="gifbot-modal-window" Width="550px" Height="400px" Centered="true" Visible="@mIsEditCategoryDialogVisible" Modal="true">
+   <WindowTitle>
+      <strong>Edit Category</strong>
+   </WindowTitle>
+   <WindowContent>
+      <div class="form-group">
+         <font class="text-white">You can rename the category below. Please note that if you have any channel point rewards that use this category directly, you'll need to change that too!</font>
+      </div>
+      <div class="form-group">
+         <label for="uiCategoryName"><b>Name:</b></label>
+         <TelerikTextBox Id="uiCategoryName" @bind-Value="mTempCategory.Name" />
+      </div>
+      <div class="container-fluid p-2">
+         <p>
+            <center>
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelEditCategory">
+                  Cancel
+               </button>
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmEditCategory">
+                  Update!
+               </button>
+            </center>
+         </p>
+      </div>
+   </WindowContent>
+</TelerikWindow>
+
+<!-- Move Sticker Categories Window -->
+<TelerikWindow Class="gifbot-modal-window" Width="550px" Height="400px" Centered="true" Visible="@mIsMoveCategoryDialogVisible" Modal="true">
+   <WindowTitle>
+      <strong>Change Category</strong>
+   </WindowTitle>
+   <WindowContent>
+      <div class="form-group">
+         <font class="text-white">Choose the new category for the selected stickers from the list below:</font>
+      </div>
+      <div class="form-group">
+         <TelerikDropDownList Data="@mStickerData.Categories" TextField="Name" ValueField="Id" DefaultText="Select Category..." @bind-Value="@mTempStickerCategoryId" />
+      </div>
+      <div class="container-fluid p-2">
+         <p>
+            <center>
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelMoveCategory">
+                  Cancel
+               </button>
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmMoveCategory">
+                  Update!
+               </button>
+            </center>
+         </p>
+      </div>
+   </WindowContent>
+</TelerikWindow>
+
+<!-- Edit Placement Window (Until Telerik gives me a way to size the modal popups for inline editing) -->
+<TelerikWindow Class="gifbot-modal-window" Width="1200px" Height="800px" Centered="true" Visible="@mIsPlacementBeingEdited" Modal="true">
+   <WindowTitle>
+      <strong>Edit Sticker</strong>
+   </WindowTitle>
+   <WindowContent>
+      <nav class="navbar navbar-expand-sm" style="background-color:#1f0c24">
+         <ul class="navbar-nav">
+            <li class="nav-item">
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelStickerUpdate">
+                  Cancel
+               </button>
+            </li>
+            <li class="nav-item">
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmStickerUpdate">
+                  Update!
+               </button>
+            </li>
+         </ul>
+      </nav>
+      <TelerikTabStrip>
+         <TabStripTab Title="Required Data">
+            <div class="form-group">
+               <label for="uiTempStickerName"><b>Name (optional):</b></label>
+               <small id="uiTempStickerName" class="form-text text-white-50">The name of this sticker. If you enable the chat command, it can be specifically requested. Also required for channel point redemptions to target specific stickers OR you can even use the same name to target multiple stickers and a random one will be picked (i.e. "!sticker costume" to choose from a pool of costumes).</small>
+               <TelerikTextBox Id="uiTempStickerName" @bind-Value="CurrentlyEditedSticker.Name" />
+            </div>
+            <div class="form-group form-check">
+               <label class="form-check-label">
+                  <TelerikCheckBox Id="uiNewStickerEnabled" @bind-Value="CurrentlyEditedSticker.Enabled" /> Enabled
+                  <small id="uiNewStickerEnabled" class="form-text text-muted">When enabled, this sticker can be used! You can disable if you are creating a large batch for later use.</small>
+               </label>
+            </div>
+            <div class="form-group">
+               <label for="uiStickerVisual"><b>Sticker Visual:</b></label>
+               <small id="uiStickerVisual" class="form-text text-white-50">The visual file displayed with this sticker.</small>
+               <table>
+                  <tr>
+                     <td valign="top">
+                        <TelerikTextBox Id="uiStickerVisual" Width="100%" Enabled="false" @bind-Value="CurrentlyEditedSticker.Visual" />
+                        <RadzenUpload Style="width: 100%; background-color: #1e1e1e" Url="upload/animation" Accept="image/gif,image/jpeg,image/png" Error="@(args => OnImportStickerVisualFileError(args))" Progress="@(args => OnImportStickerVisualFileProgress(args))" Complete="@(args => OnImportStickerVisualFileComplete(args))" />
+                        <RadzenProgressBar Value="@mUploadStickerVisualProgress" Visible="@(mUploadStickerVisualProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
+                        @if (!String.IsNullOrEmpty(mUploadStickerVisualErrorMessage))
+                        {
+                        <label class="text-danger">@mUploadStickerVisualErrorMessage</label>
+                        }
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </TabStripTab>
+         <TabStripTab Title="Behavior Override">
+            <div class="form-group form-check">
+               <label class="form-check-label">
+                  <TelerikCheckBox Id="uiAllowRandom" @bind-Value="CurrentlyEditedSticker.AllowRandomPlacement" OnChange="@(() => StateHasChanged())" /> Allow Random Placement (Only use global Stickers behavior)
+                  <small id="uiAllowRandom" class="form-text text-muted">When enabled, the sticker will be able to be randomly placed per events configured from the Stickers global behaviors tab. If you want this sticker to only display for sticker-specific cheers/tips/donations then toggle this off and update the custom configurations to override the global behaviors!</small>
+               </label>
+            </div>
+
+            @if (!CurrentlyEditedSticker.AllowRandomPlacement)
+            {
+            <div class="form-group form-check">
+               <label class="form-check-label">
+                  <TelerikCheckBox Id="uiNewStickerIncludeCheers" @bind-Value="CurrentlyEditedSticker.IncludeBits" /> Include Bits
+                  <small id="uiNewStickerIncludeCheers" class="form-text text-muted">When enabled, cheering will count as a sticker.</small>
+               </label>
+            </div>
+
+            @if (CurrentlyEditedSticker.IncludeBits)
+               {
+            <div class="form-group">
+               <label for="uiNewStickerBitPointsLabel">Bits Amount:</label>
+               <small id="uiNewStickerBitPointsLabel" class="form-text text-muted">The exact number of bits that need to be cheered to make this sticker appear.</small>
+               <TelerikNumericTextBox Id="uiNewStickerBitPoints" Decimals="2" Min="0" Max="999999" @bind-Value="CurrentlyEditedSticker.BitAmount" />
+            </div>
+               }
+
+            <div class="form-group form-check">
+               <label class="form-check-label">
+                  <TelerikCheckBox Id="uiNewStickerIncludeTips" @bind-Value="CurrentlyEditedSticker.IncludeTips" /> Include Streamlabs Tips
+                  <small id="uiNewStickerIncludeTips" class="form-text text-muted">When enabled, tipping via Streamlabs will create this sticker.</small>
+               </label>
+            </div>
+
+            @if (CurrentlyEditedSticker.IncludeTips)
+               {
+            <div class="form-group">
+               <label for="uiNewStickerTipPointsLabel">Tip Amount:</label>
+               <small id="uiNewStickerTipPointsLabel" class="form-text text-muted">The exact tip amount to make this sticker appear.</small>
+               <TelerikNumericTextBox Id="uiNewStickerTipPoints" Decimals="2" Min="0" Max="999999" @bind-Value="CurrentlyEditedSticker.TipAmount" />
+            </div>
+               }
+
+            <div class="form-group form-check">
+               <label class="form-check-label">
+                  <TelerikCheckBox Id="uiNewStickerIncludeTiltify" @bind-Value="CurrentlyEditedSticker.IncludeTiltifyDonations" /> Include Tiltify Donations
+                  <small id="uiNewStickerIncludeTiltify" class="form-text text-muted">When enabled, donating to charity via Tiltify will create a sticker.</small>
+               </label>
+            </div>
+
+            @if (CurrentlyEditedSticker.IncludeTiltifyDonations)
+               {
+            <div class="form-group">
+               <label for="uiNewStickerDonationsPointsLabel">Donation Amount:</label>
+               <small id="uiNewStickerDonationsPointsLabel" class="form-text text-muted">The exact donation amount to make this sticker appear.</small>
+               <TelerikNumericTextBox Id="uiNewStickerDonationsPoints" Decimals="2" Min="0" Max="999999" @bind-Value="CurrentlyEditedSticker.TiltifyDonationAmount" />
+            </div>
+               }
+
+            <div class="form-group form-check">
+               <label class="form-check-label">
+                  <TelerikCheckBox Id="uiNewStickerOverrideTimeout" @bind-Value="CurrentlyEditedSticker.UseVisibilityTimeoutOverride" /> Override Global Sticker Timeout
+                  <small id="uiNewStickerOverrideTimeout" class="form-text text-muted">When enabled, this sticker will use a different timeout than the global one configured in the behavior tab.</small>
+               </label>
+            </div>
+
+            @if (CurrentlyEditedSticker.UseVisibilityTimeoutOverride)
+               {
+            <div class="form-group">
+               <label for="uiNumSecondsVisibleOverride"><b>Number of Seconds this Sticker is Visible:</b></label>
+               <small id="uiNumSecondsVisibleOverride" class="form-text text-white-50">The sticker will only remain visible for the number of seconds you specify below. If you do not want them to disappear, set this to 0.</small>
+               <TelerikNumericTextBox Id="uiNumSecondsVisibleOverride" Min="0" Max="999999" @bind-Value="CurrentlyEditedSticker.NumSecondsStickerVisibleOverride" />
+            </div>
+               }
+            }
+         </TabStripTab>
+         <TabStripTab Title="Dimensions and Placement">
+            <div class="container-fluid text-white-50 p-0">
+               <p>
+                  If your sticker image is too big, you can resize it using the placement control below. You can provide a placement override and use that as well, should you
+                  want this sticker to always appear in the same location.
+               </p>
+            </div>
+            <div class="form-group form-check">
+               <label class="form-check-label">
+                  <TelerikCheckBox Id="uiNewStickerOverridePosition" @bind-Value="CurrentlyEditedSticker.UsePlacementOverride" /> Always use the position below for this sticker.
+                  <small id="uiNewStickerOverridePosition" class="form-text text-muted">When enabled, this sticker will always appear in the same location as illustrated on the control below:</small>
+               </label>
+            </div>
+            <div class="form-group">
+               <label for="uiStickerLayer">Layer:</label>
+               <small id="uiStickerLayer" class="form-text text-muted">The sticker can appear on a primary or secondary layer (browser source) that you can capture in your broadcaster software.</small>
+               <RadzenRadioButtonList @bind-Value="@CurrentlyEditedStickerLayer" TValue="int" Change="@(args => OnLayerChange(args))">
+                  <Items>
+                     <RadzenRadioButtonListItem Text="Primary" Value="0" />
+                     <RadzenRadioButtonListItem Text="Secondary" Value="1" />
+                  </Items>
+               </RadzenRadioButtonList>
+            </div>
+
+            <div class="container-fluid p-2 text-center">
+               <PlacementComponent CanvasWidth="@mWorkingCanvasWidth"
+                                   CanvasHeight="@mWorkingCanvasHeight"
+                                   Width="@CurrentlyEditedSticker.Placement.Width"
+                                   Height="@CurrentlyEditedSticker.Placement.Height"
+                                   Top="@CurrentlyEditedSticker.Placement.Top"
+                                   Left="@CurrentlyEditedSticker.Placement.Left"
+                                   IsOutOfBounds="@CurrentlyEditedSticker.Placement.IsOutOfBounds"
+                                   ShowCommitButton="false"
+                                   IsDisplayTestMode="@mIsDisplayTestMode"
+                                   DataEditType="@GIFBot.Shared.AnimationEnums.UpdateVisualType.Sticker"
+                                   OnDisplayTestModeChanged="@(args => HandleDisplayTestModeChanged(args, CurrentlyEditedSticker))"
+                                   OnNotifyDimensionsChanged="@(args => HandleNotifyDimensionsChanged(args, CurrentlyEditedSticker))" />
+            </div>
+         </TabStripTab>
+      </TelerikTabStrip>
+      <nav class="navbar navbar-expand-sm" style="background-color:#1f0c24">
+         <ul class="navbar-nav">
+            <li class="nav-item">
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelStickerUpdate">
+                  Cancel
+               </button>
+            </li>
+            <li class="nav-item">
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmStickerUpdate">
+                  Update!
+               </button>
+            </li>
+         </ul>
+      </nav>
+   </WindowContent>
+</TelerikWindow>
+
+<nav class="navbar navbar-expand-sm" style="background-color:#1f0c24">
+   <span class="navbar-text mr-3">
+      <b>Quick Actions:</b>
+   </span>
+   <ul class="navbar-nav">
+      <li class="nav-item">
+         <button class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@ClearAllStickers">Clear All Stickers</button>
+      </li>
+   </ul>
+</nav>
+
+<EditForm Model="@mStickerData" OnSubmit="@OnSaveChanges">
+   <TelerikTabStrip @bind-ActiveTabIndex="@ActiveTabIndex">
+      <TabStripTab Title="Settings">
+         <div class="container-fluid" style="width: 100%">
+            <div class="container-fluid text-left p-3 rounded" style="width: 100%; background-color:#1e1e1e">
+               <p>
+                  <b>Stickers</b> is a feature of GIFBot where you can have certain events place a sticker on the screen. Think of this as a
+                  virtual way to torture yourself for your viewers' benefit. It's a great way to promote charitable events and to have viewers
+                  feel like they are making an impact on your streams.
+               </p>
+               <p>
+                  You don't have to just support random events though! An individual sticker can be placed for a specific amount of bits, tips,
+                  or donations too! If you enable the command, you can even use that in a channel point reward. Hint: Have your viewers donate
+                  to charity to put you in a virtual costume!
+               </p>
+               <div class="container text-left p-3 rounded" style="background-color: #1d161f">
+
+                  <div class="form-group form-check">
+                     <label class="form-check-label">
+                        <TelerikCheckBox Id="uiEnabled" @bind-Value="mStickerData.Enabled" /> Feature Enabled
+                        <small id="uiEnabled" class="form-text text-muted">When enabled, Twitch events will be able to contribute to the stickers overlay.</small>
+                     </label>
+                  </div>
+
+                  @if (mStickerData.Enabled)
+                  {
+                     <RadzenFieldset Text="Chat Command" AllowCollapse="true" Collapsed="false" Style="width: 100%; margin-bottom: 20px">
+                        <div class="form-group form-check">
+                           <label class="form-check-label">
+                              <TelerikCheckBox Id="uiUseChatCommand" @bind-Value="mStickerData.CanUseCommand" /> Allow Chat Command Access
+                              <small id="uiUseChatCommand" class="form-text text-muted">When enabled, the system can place stickers using the chat command. You can also use this command in a bot-only mode to have channel point rewards activating special stickers by name. Just put "!stickers [name of sticker]" in your reward title!</small>
+                           </label>
+                        </div>
+
+                        @if (mStickerData.CanUseCommand)
+                        {
+                           <div class="form-group">
+                              <label for="uiChatCommand">Chat Command:</label>
+                              <small id="uiChatCommand" class="form-text text-muted">The command used to access this feature.</small>
+                              <TelerikTextBox Id="uiChatCommandText" @bind-Value="mStickerData.Command" />
+                           </div>
+                           <div class="form-group">
+                              <label for="uiSecondsBetweenCommandUses">Command Cooldown:</label>
+                              <small id="uiSecondsBetweenCommandUses" class="form-text text-muted">The number of seconds between command uses. Helps space out the zany. Does not affect placement from channel point redemptions.</small>
+                              <DataAnnotationsValidator />
+                              <ValidationSummary />
+                              <TelerikNumericTextBox Id="uiSecondsBetweenCommandUsesField" Decimals="0" Min="0" Max="999999" @bind-Value="mStickerData.CommandCooldownSeconds" />
+                           </div>
+                           <div class="form-group">
+                              <label for="uiAccess"><b>Access Type:</b></label>
+                              <small id="uiAccess" class="form-text text-white-50">
+                                 You can limit what kind of viewer has access to use this command. Your options are below. If you are making
+                                 this command to be used from channel point rewards, it is recommended to flag it as Bot Only!
+                              </small>
+                              <RadzenRadioButtonList @bind-Value="mAccessSelection" TValue="int" Change="@(args => OnAccessLevelChange(args))">
+                                 <Items>
+                                    <RadzenRadioButtonListItem Text="Anyone" Value="0" />
+                                    <RadzenRadioButtonListItem Text="Follower" Value="1" />
+                                    <RadzenRadioButtonListItem Text="Subscriber" Value="2" />
+                                    <RadzenRadioButtonListItem Text="VIP" Value="3" />
+                                    <RadzenRadioButtonListItem Text="Moderator" Value="4" />
+                                    <RadzenRadioButtonListItem Text="User Group" Value="5" />
+                                    <RadzenRadioButtonListItem Text="Specific Viewer" Value="6" />
+                                    <RadzenRadioButtonListItem Text="Bot Only" Value="7" />
+                                 </Items>
+                              </RadzenRadioButtonList>
+                           </div>
+
+                           @if (mStickerData.Access == GIFBot.Shared.AnimationEnums.AccessType.UserGroup)
+                           {
+                              <div class="form-group">
+                                 <label for="uiUserGroup"><b>User Group:</b></label>
+                                 <small id="uiUserGroup" class="form-text text-white-50">Access is restricted to a user group. Which one?</small>
+
+                                 <RadzenDropDown Placeholder="Select User Group..." Style="background-color: #2c2241; color: #e5e5e5; font-weight: bold; width: 250px;"
+                                                 Data="@mUserGroupNames" @bind-Value="@mUserGroupName" Change="@(args => HandleUserGroupSelected(args as string))" />
+                              </div>
+                           }
+                           else if (mStickerData.Access == GIFBot.Shared.AnimationEnums.AccessType.SpecificViewer)
+                           {
+                              <div class="form-group">
+                                 <label for="uiRestrictedToUser"><b>Specific Viewer:</b></label>
+                                 <small id="uiRestrictedToUser" class="form-text text-white-50">Access is restricted to a specific viewer. Which one?</small>
+                                 <TelerikTextBox Id="uiRestrictedToUser" @bind-Value="@mStickerData.RestrictedToUser" />
+                              </div>
+                              <div class="mt-2">
+                                 <TelerikCheckBox Id="uiRestrictedUserMustBeSub" @bind-Value="mStickerData.RestrictedUserMustBeSub" />
+                                 <label for="uiRestrictedUserMustBeSub">Viewer must be subscribed</label>
+                              </div>
+                           }
+                        }
+                     </RadzenFieldset>
+
+                     <div class="form-group">
+                        <label for="uiAudio"><b>Audio:</b></label>
+                        <small id="uiAudio" class="form-text text-white-50">The audio file played when a sticker appears.</small>
+                        <table>
+                           <tr>
+                              <td valign="top">
+                                 <TelerikTextBox Id="uiAudio" Width="100%" Enabled="false" @bind-Value="mStickerData.Audio" />
+                                 <RadzenUpload Style="width: 100%; background-color: #1e1e1e;" Url="upload/animation" Accept="audio/*" Error="@(args => OnImportAudioFileError(args))" Progress="@(args => OnImportAudioFileProgress(args))" Complete="@(args => OnImportAudioFileComplete(args))" />
+                                 <RadzenProgressBar Value="@mUploadAudioProgress" Visible="@(mUploadAudioProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
+                                 @if (!String.IsNullOrEmpty(mUploadAudioErrorMessage))
+                                 {
+                                    <label class="text-danger">@mUploadAudioErrorMessage</label>
+                                 }
+                              </td>
+                              <td style="width: 30px; text-align: center; vertical-align: top"><button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="ClearAudioFile"><span class="oi oi-x"></span></button></td>
+                           </tr>
+                        </table>
+                     </div>
+
+                     @if (!String.IsNullOrEmpty(mStickerData.Audio))
+                     {
+                        <div class="form-group">
+                           <label for="uiVolumeSlider" class="ml-2 mt-2"><b>Volume:</b></label>
+                           <center><input type="range" class="slider" min="0" max="100" value="@mFormVolume" id="uiVolumeSlider" @onchange="@(args => OnVolumeChanged(args))"></center>
+                           <p align="right">
+                              @if (!String.IsNullOrEmpty(mStickerData.Audio))
+                              {
+                                 <button type="button" class="btn btn-primary p-1 mr-2 mb-2 text-center" style="background-color: #5c4872; width: 200px" @onclick="@HandleTestAudioVolume">
+                                    Test Audio File Volume
+                                 </button>
+                              }
+                           </p>
+                        </div>
+                     }
+
+                     <div class="form-group">
+                        <label for="uiNumSecondsVisible"><b>Number of Seconds a Sticker is Visible:</b></label>
+                        <small id="uiNumSecondsVisible" class="form-text text-white-50">The sticker will only remain visible for the number of seconds you specify below. If you do not want them to disappear, set this to 0.</small>
+                        <TelerikNumericTextBox Id="uiNumSecondsVisible" Min="0" Max="999999" @bind-Value="mStickerData.NumSecondsStickerVisible" />
+                     </div>
+
+                     <div class="form-group">
+                        <label for="uiMaxStickers"><b>Max Stickers:</b></label>
+                        <small id="uiMaxStickers" class="form-text text-white-50">The max number of visible stickers at any time. If exceeded, older stickers will be removed.</small>
+                        <TelerikNumericTextBox Id="uiMaxStickersField" Min="1" Max="300" @bind-Value="mStickerData.MaxStickers" />
+                     </div>
+
+                     <RadzenFieldset Text="Primary Layer Canvas Size">
+                        <p>
+                           The canvas is the area that stickers will appear in. By default, this is 1920x1080, but you can size it however you like. When
+                           you put the browser source in your broadcaster software, make sure that the size matches up!
+                        </p>
+                        <div class="form-group">
+                           <label for="uiCanvasWidth"><b>Max Canvas Width:</b></label>
+                           <small id="uiCanvasWidth" class="form-text text-white-50">The max width of your overlay area where you want stickers to be visible.</small>
+                           <TelerikNumericTextBox Id="uiCanvasWidthField" Min="100" Max="999999" @bind-Value="mStickerData.CanvasWidth" />
+                        </div>
+
+                        <div class="form-group">
+                           <label for="uiCanvasHeight"><b>Max Canvas Height:</b></label>
+                           <small id="uiCanvasHeight" class="form-text text-white-50">The max height of your overlay area where you want stickers to be visible.</small>
+                           <TelerikNumericTextBox Id="uiCanvasHeightField" Min="100" Max="999999" @bind-Value="mStickerData.CanvasHeight" />
+                        </div>
+                     </RadzenFieldset>
+
+                     <RadzenFieldset Text="Secondary Layer Canvas Size">
+                        <p>
+                           You can have a second layer where stickers can appear, with its own size! This allows you to have randomly generated stickers and more unique stickers appear on separate layers in OBS.
+                        </p>
+                        <div class="form-group">
+                           <label for="uiSecondaryCanvasWidth"><b>Max Canvas Width:</b></label>
+                           <small id="uiSecondaryCanvasWidth" class="form-text text-white-50">The max width of your overlay area where you want stickers to be visible.</small>
+                           <TelerikNumericTextBox Id="uiSecondaryCanvasWidthField" Min="100" Max="999999" @bind-Value="mStickerData.SecondaryCanvasWidth" />
+                        </div>
+
+                        <div class="form-group">
+                           <label for="uiSecondaryCanvasHeight"><b>Max Canvas Height:</b></label>
+                           <small id="uiSecondaryCanvasHeight" class="form-text text-white-50">The max height of your overlay area where you want stickers to be visible.</small>
+                           <TelerikNumericTextBox Id="uiSecondaryCanvasHeightField" Min="100" Max="999999" @bind-Value="mStickerData.SecondaryCanvasHeight" />
+                        </div>
+                     </RadzenFieldset>
+                  }
+               </div>
+            </div>
+         </div>
+      </TabStripTab>
+
+      <TabStripTab Title="Randomized Stickers Behavior">
+         <div class="container-fluid" style="width: 100%">
+            <div class="container-fluid text-left p-3 rounded" style="width: 100%; background-color:#1e1e1e">
+               <div class="container text-left p-3 rounded" style="background-color: #1d161f">
+                  <p>
+                     Stickers can be randomly placed or deliberately placed by name. For stickers with random placement enabled, you can have one of those stickers
+                     appear when the following events happen (as long as they meet your thresholds!):
+                  </p>
+
+                  <div class="form-group form-check">
+                     <label class="form-check-label">
+                        <TelerikCheckBox Id="uiIncludeCheers" @bind-Value="mStickerData.IncludeBits" /> Include Bits
+                        <small id="uiIncludeCheers" class="form-text text-muted">When enabled, cheering will count as a sticker.</small>
+                     </label>
+                  </div>
+
+                  @if (mStickerData.IncludeBits)
+                  {
+                     <div class="form-group">
+                        <label for="uiBitPointsLabel">Bits Minimum:</label>
+                        <small id="uiBitPointsLabel" class="form-text text-muted">The minimum number of bits that need to be cheered to make a sticker. Must be non-zero to work.</small>
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+                        <TelerikNumericTextBox Id="uiBitPoints" Decimals="2" Min="1" Max="999999" @bind-Value="mStickerData.BitMinimum" />
+                     </div>
+                  }
+
+                  <div class="form-group form-check">
+                     <label class="form-check-label">
+                        <TelerikCheckBox Id="uiIncludeTips" @bind-Value="mStickerData.IncludeTips" /> Include Streamlabs Tips
+                        <small id="uiIncludeTips" class="form-text text-muted">When enabled, tipping via Streamlabs will create a sticker.</small>
+                     </label>
+                  </div>
+
+                  @if (mStickerData.IncludeTips)
+                  {
+                     <div class="form-group">
+                        <label for="uiTipPointsLabel">Tip Minimum:</label>
+                        <small id="uiTipPointsLabel" class="form-text text-muted">The minimum tip amount to make a sticker.</small>
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+                        <TelerikNumericTextBox Id="uiTipPoints" Decimals="2" Min="0" Max="999999" @bind-Value="mStickerData.TipMinimum" />
+                     </div>
+                  }
+
+                  <div class="form-group form-check">
+                     <label class="form-check-label">
+                        <TelerikCheckBox Id="uiIncludeTiltify" @bind-Value="mStickerData.IncludeTiltifyDonations" /> Include Tiltify Donations
+                        <small id="uiIncludeTiltify" class="form-text text-muted">When enabled, donating to charity via Tiltify will create a sticker.</small>
+                     </label>
+                  </div>
+
+                  @if (mStickerData.IncludeTiltifyDonations)
+                  {
+                     <div class="form-group">
+                        <label for="uiDonationsPointsLabel">Donation Minimum:</label>
+                        <small id="uiDonationsPointsLabel" class="form-text text-muted">The minimum donation amount to make a sticker.</small>
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+                        <TelerikNumericTextBox Id="uiDonationsPoints" Decimals="2" Min="0" Max="999999" @bind-Value="mStickerData.TiltifyDonationMinimum" />
+                     </div>
+                  }
+
+                  <div class="form-group form-check">
+                     <label class="form-check-label">
+                        <TelerikCheckBox Id="uiIncludeSubs" @bind-Value="mStickerData.IncludeSubs" /> Include Subscriptions
+                        <small id="uiIncludeSubs" class="form-text text-muted">When enabled, subscriptions and resubscriptions create stickers.</small>
+                     </label>
+                  </div>
+
+                  <div class="form-group form-check">
+                     <label class="form-check-label">
+                        <TelerikCheckBox Id="uiIncludeGiftSubs" @bind-Value="mStickerData.IncludeGiftSubs" /> Include Gifted Subscriptions
+                        <small id="uiIncludeGiftSubs" class="form-text text-muted">When enabled, gifted subscriptions create stickers.</small>
+                     </label>
+                  </div>
+
+                  @if (mStickerData.IncludeGiftSubs)
+                  {
+                     <div class="form-group">
+                        <label for="uiGiftSubPointsLabel">Gift Sub Count Minimum:</label>
+                        <small id="uiGiftSubPointsLabel" class="form-text text-muted">The minimum number of gifted subscriptions to make a sticker.</small>
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+                        <TelerikNumericTextBox Id="uiGiftSubPoints" Decimals="2" Min="0" Max="999999" @bind-Value="mStickerData.GiftSubMinimum" />
+                     </div>
+                  }
+
+                  <div class="form-group form-check">
+                     <label class="form-check-label">
+                        <TelerikCheckBox Id="uiIncludeChannelPoints" @bind-Value="mStickerData.IncludeChannelPoints" /> Include Channel Points
+                        <small id="uiIncludeChannelPoints" class="form-text text-muted">When enabled, channel point redemptions will create stickers.</small>
+                     </label>
+                  </div>
+
+                  @if (mStickerData.IncludeChannelPoints)
+                  {
+                     <div class="form-group">
+                        <label for="uiNumChannelPoints"><b>Channel Point Minimum</b></label>
+                        <small id="uiNumChannelPoints" class="form-text text-white-50">The minimum number of points that must be spent in order to create a sticker.</small>
+                        <TelerikNumericTextBox Id="uiNumChannelPoints" Min="0" Max="999999" @bind-Value="mStickerData.ChannelPointsMinimum" />
+                     </div>
+                  }
+
+                  <div class="form-group form-check">
+                     <label class="form-check-label">
+                        <TelerikCheckBox Id="uiIncludeFollows" @bind-Value="mStickerData.IncludeFollows" /> Include Follows
+                        <small id="uiIncludeFollows" class="form-text text-muted">When enabled, follows will create stickers.</small>
+                     </label>
+                  </div>
+
+                  <div class="form-group form-check">
+                     <label class="form-check-label">
+                        <TelerikCheckBox Id="uiIncludeHosts" @bind-Value="mStickerData.IncludeHosts" /> Include Hosts
+                        <small id="uiIncludeHosts" class="form-text text-muted">When enabled, hosts will create stickers.</small>
+                     </label>
+                  </div>
+
+                  <div class="form-group form-check">
+                     <label class="form-check-label">
+                        <TelerikCheckBox Id="uiIncludeRaids" @bind-Value="mStickerData.IncludeRaids" /> Include Raids
+                        <small id="uiIncludeRaids" class="form-text text-muted">When enabled, raids will create stickers.</small>
+                     </label>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </TabStripTab>
+
+      <TabStripTab Title="Sticker Images">
+         <TelerikTooltip TargetSelector="button[title]" Position="@Telerik.Blazor.TooltipPosition.Top" ShowOn="@TooltipShowEvent.Hover" Id="position-tooltip">
+         </TelerikTooltip>
+
+         <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+            <div class="container-fluid p-2">
+               <div class="container-fluid text-white-50 p-0">
+                  <p>
+                     There are two kinds of stickers - those that are placed randomly by the system based on events you configured in the Behavior tab or those stickers which have very specific, individual requirements. The stickers with trigger requirements are largely used
+                     for fun things like costumes or stickers you only want to show up for very SPECIFIC requirements. Some examples:
+                     <ul>
+                        <li>Channel point reward to put a wizard hat over your head.</li>
+                        <li>Charitable donation to cover your face with a pug mask.</li>
+                        <li>Bits to give you a mustache.</li>
+                        <li>etc, etc, etc</li>
+                     </ul>
+                  </p>
+               </div>
+               <div class="form-group">
+                  <TelerikTabStrip @bind-ActiveTabIndex="@ActiveStickerTabIndex">
+                     <TabStripTab Title="Stickers">
+                        <TelerikTreeList Data="@mStickerTreeListData"
+                                         IdField="TreeId"
+                                         ParentIdField="ParentTreeId"
+                                         Pageable="true"
+                                         Sortable="true"
+                                         SelectedItems="@mSelectedTreeItems"
+                                         FilterMode="@TreeListFilterMode.FilterMenu"
+                                         SelectionMode="@TreeListSelectionMode.Multiple"
+                                         SelectedItemsChanged="@( (IEnumerable<StickerTreeListItem> items) => StickersListSelectionChanged(items) )"
+                                         Page="@mStickerPage"
+                                         PageChanged="@StickerPageChanged"
+                                         PageSize="20">
+                           <TreeListToolBar>
+                              <TreeListSearchBox />
+                              <TreeListCommandButton Command="AddCategory" OnClick="@HandleAddCategoryRequest" Icon="add">Add Category</TreeListCommandButton>
+                              @if (mSelectedTreeItems.Where(t => t.Type == StickerTreeListItem.ItemType.Entry).Any())
+                              {
+                                 <TreeListCommandButton Command="AddCategory" OnClick="@HandleMoveSelectedRequest" Icon="arrow-double-60-left">Move Selected</TreeListCommandButton>
+                                 <TreeListCommandButton Command="DeleteSelected" OnClick="@HandleDeleteSelectedRequest" Icon="trash">Delete Selected</TreeListCommandButton>
+                                 <TreeListCommandButton Command="EnableSelected" OnClick="@HandleEnableSelectedRequest" Icon="check">Enable Selected</TreeListCommandButton>
+                                 <TreeListCommandButton Command="DisableSelected" OnClick="@HandleDisableSelectedRequest" Icon="cancel-circle">Disable Selected</TreeListCommandButton>
+                              }
+                           </TreeListToolBar>
+                           <TreeListColumns>
+                              <TreeListCheckboxColumn SelectChildren="true" SelectAll="true" SelectAllMode="TreeListSelectAllMode.All"></TreeListCheckboxColumn>
+                              <TreeListColumn Field="Name" Title="Name" Filterable="true" Expandable="true">
+                                 <Template Context="stickercontext">
+                                    @{ var sticker = stickercontext as StickerTreeListItem; }
+                                    @if (sticker.Type == StickerTreeListItem.ItemType.Category)
+                                    {
+                                       <strong>@sticker.Name</strong>
+                                    }
+                                    else
+                                    {
+                                       @sticker.Name
+                                    }
+                                 </Template>
+                              </TreeListColumn>
+                              <TreeListColumn Field="Enabled" Width="110px" Title="Enabled" Filterable="false">
+                                 <Template Context="stickercontext">
+                                    @{
+                                       string output = "No";
+                                       var sticker = stickercontext as StickerTreeListItem;
+                                       if (sticker.Enabled)
+                                       {
+                                          output = "Yes";
+                                       }
+                                    }
+                                    @if (sticker.Type == StickerTreeListItem.ItemType.Entry)
+                                    {
+                                       <center>@output</center>
+                                    }
+                                 </Template>
+                              </TreeListColumn>
+                              <TreeListColumn Field="Visual" Width="100px" Filterable="false">
+                                 <Template Context="stickercontext">
+                                    @{ var sticker = stickercontext as StickerTreeListItem; }
+                                    @if (sticker.Type == StickerTreeListItem.ItemType.Entry)
+                                    {
+                                       <img src="@($"media/{sticker.Visual}?{System.DateTimeOffset.UtcNow.ToUnixTimeSeconds()}")" style="height: 50px; width: auto" />
+                                    }
+                                 </Template>
+                              </TreeListColumn>
+                              <TreeListColumn Field="Visual" Width="200px" Title="Visual Filename" Filterable="true" />
+                              <TreeListColumn Width="220px">
+                                 <Template Context="stickercontext">
+                                    @{
+                                        var sticker = stickercontext as StickerTreeListItem;
+                                    }
+                                    @if (sticker.Type == StickerTreeListItem.ItemType.Category)
+                                     {
+                                        <button type="button" title="Add Sticker to Category" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleAddStickerRequest(sticker.Id))"><span class="oi oi-plus"></span></button>
+                                        <button type="button" title="Rename Category" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleEditStickerRequest(sticker))"><span class="oi oi-pencil"></span></button>
+                                        <button type="button" title="Delete Category" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleDeleteSticker(sticker))"><span class="oi oi-delete"></span></button>
+                                     }
+                                     else
+                                     {
+                                        <button type="button" title="Edit Sticker" class="btn btn-secondary p-0 m-0" style="background-color: #646464; width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleEditStickerRequest(sticker))"><span class="oi oi-pencil"></span></button>
+                                        <button type="button" title="Delete Sticker" class="btn btn-secondary p-0 m-0" style="background-color: #646464; width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleDeleteSticker(sticker))"><span class="oi oi-trash"></span></button>
+                                        <button type="button" title="Place Sticker" class="btn btn-secondary p-0 m-0" style="background-color: #646464; width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandlePlaceSticker(sticker))"><span class="oi oi-media-play"></span></button>
+                                     }
+                                 </Template>                                 
+                              </TreeListColumn>
+                           </TreeListColumns>
+                        </TelerikTreeList>
+                     </TabStripTab>
+                     @if (mStickerData.Categories.Any())
+                     {
+                        <TabStripTab Title="Add New Sticker...">
+                           <div class="form-group">
+                              <label for="uiTempStickerName"><b>Name (optional):</b></label>
+                              <small id="uiTempStickerName" class="form-text text-white-50">The name of this sticker. If you enable the chat command, it can be specifically requested. Also required for channel point redemptions to target specific stickers OR you can even use the same name to target multiple stickers and a random one will be picked (i.e. "!sticker costume" to choose from a pool of costumes).</small>
+                              <TelerikTextBox Id="uiTempStickerName" @bind-Value="mTempStickerToAdd.Name" />
+                           </div>
+                           <div class="form-group">
+                              <label for="uiTempStickerCategory">Select the new category from the list below:</label>
+                              <small id="uiTempStickerCategory" class="form-text text-muted">Once moved, the animation data will be immediately saved.</small>
+                              <TelerikDropDownList Data="@mStickerData.Categories" TextField="Name" ValueField="Id" DefaultText="Select Category..." @bind-Value="@mTempStickerCategoryId" />
+                           </div>
+                           <div class="form-group">
+                              <label for="uiStickerVisual"><b>Sticker Visual:</b></label>
+                              <small id="uiStickerVisual" class="form-text text-white-50">The visual file displayed with this sticker.</small>
+                              <table>
+                                 <tr>
+                                    <td valign="top">
+                                       <TelerikTextBox Id="uiStickerVisual" Width="100%" Enabled="false" @bind-Value="mTempStickerToAdd.Visual" />
+                                       <RadzenUpload Style="width: 100%; background-color: #1e1e1e" Url="upload/animation" Accept="image/gif,image/jpeg,image/png" Error="@(args => OnImportStickerVisualFileError(args))" Progress="@(args => OnImportStickerVisualFileProgress(args))" Complete="@(args => OnImportStickerVisualFileComplete(args))" />
+                                       <RadzenProgressBar Value="@mUploadStickerVisualProgress" Visible="@(mUploadStickerVisualProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
+                                       @if (!String.IsNullOrEmpty(mUploadStickerVisualErrorMessage))
+                                       {
+                                          <label class="text-danger">@mUploadStickerVisualErrorMessage</label>
+                                       }
+                                    </td>
+                                 </tr>
+                              </table>
+                           </div>
+                           <div class="container-fluid text-right p-3">
+                              <button type="button" class="btn btn-secondary p-1" style="background-color: #6c4872" @onclick="HandleCancelNewSticker">Cancel</button>
+                              <button type="button" class="btn btn-secondary p-1" style="background-color: #6c4872" @onclick="HandleAddNewSticker">Add New Sticker</button>
+                           </div>
+                        </TabStripTab>
+                     }
+                  </TelerikTabStrip>
+               </div>
+            </div>
+         </div>
+      </TabStripTab>
+
+      <TabStripTab Title="BrowserSource URL">
+         <div class="container-fluid">
+            <div class="container-fluid text-white-50 p-0">
+               <p>
+                  To display the stickers in your broadcaster software, copy these URLs and use them as the input for new Browser Source elements.
+                  Make sure that the size of your browser source matches the working canvas size that you specified in the sticker settings!
+               </p>
+               <p>
+                  Note: If you set this browser source to refresh when you switch scenes, the stickers will flicker since it will rebuild as if you had refreshed in Chrome.
+               </p>
+            </div>
+            <table width="100%">
+               <tr>
+                  <td><b>Primary Stickers Layer:</b></td>
+               </tr>
+               <tr>
+                  <td width="600">
+                     <RadzenTextBox id="uiURL" class="form-control" Style="background-color: #2c2241; color: #FFFFFF; width: 100%" ReadOnly="true" @bind-Value="mURL" />
+                  </td>
+                  <td align="left">
+                     <button type="button" class="btn btn-secondary p-1 ml-2" style="background-color: #6c4872" @onclick='(() => HandleCopyUrl("uiURL"))'>Copy to Clipboard</button>
+                  </td>
+               </tr>
+               <tr>
+                  <td><b>Secondary Stickers Layer:</b></td>
+               </tr>
+               <tr>
+                  <td width="600">
+                     <RadzenTextBox id="uiSecondaryURL" class="form-control" Style="background-color: #2c2241; color: #FFFFFF; width: 100%" ReadOnly="true" @bind-Value="mSecondaryURL" />
+                  </td>
+                  <td align="left">
+                     <button type="button" class="btn btn-secondary p-1 ml-2" style="background-color: #6c4872" @onclick='(() => HandleCopyUrl("uiSecondaryURL"))'>Copy to Clipboard</button>
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </TabStripTab>
+   </TelerikTabStrip>
+
+   <div class="row">
+      <div class="container-fluid text-right p-3">
+         <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnCancel">Cancel</button>
+         <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e">Save Changes</button>
+      </div>
+   </div>
+</EditForm>

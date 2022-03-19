@@ -1,0 +1,814 @@
+﻿@page "/settings/"
+@using System.Net.Http
+@using Microsoft.AspNetCore.Http.Connections
+@using Microsoft.AspNetCore.SignalR.Client
+@using GIFBot.Client.Components
+@using GIFBot.Shared
+@using GIFBot.Shared.Utility
+@using GIFBot.Shared.Models.GIFBot
+@using GIFBot.Shared.Models.Animation
+@using GIFBot.Shared.Models.Tiltify
+@using GIFBot.Shared.Models.Visualization
+@using Newtonsoft.Json
+@inject NavigationManager NavigationManager
+@inject NotificationService NotificationService
+@inject IJSRuntime JSRuntime
+@inject HttpClient Http
+@implements IAsyncDisposable
+
+<div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+   <h1><span class="oi oi-cog" aria-hidden="true"></span> Bot Settings</h1>
+</div>
+
+<!-- Clone Animation Confirmation Window -->
+<TelerikWindow Class="gifbot-modal-window" Width="500px" Height="325px" Centered="true" Visible="@mIsRenameGroupDialogVisible" Modal="true">
+   <WindowTitle>
+      <strong>Rename User Group?</strong>
+   </WindowTitle>
+   <WindowContent>
+      <div class="form-group">
+         <label for="uiTitleLabel">What is the new name for this group?</label>
+         <TelerikTextBox @bind-Value="@mRenamedUserGroupValue" />
+      </div>
+      <div class="container-fluid p-2">
+         <p>
+            <center>
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelRenameUserGroup">
+                  Cancel
+               </button>
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmRenameUserGroup">
+                  Yes, Rename!
+               </button>
+            </center>
+         </p>
+      </div>
+   </WindowContent>
+</TelerikWindow>
+
+<div class="container-fluid" style="width: 100%">
+   <div class="container-fluid text-left p-3 rounded" style="width: 100%; background-color:#1e1e1e">
+      <EditForm Model="@mBotSettings" OnSubmit="@OnSaveChanges">
+         <TelerikTabStrip @bind-ActiveTabIndex="@ActiveTabIndex">
+
+            <TabStripTab Title="Credentials">
+               <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+                  <div class="container-fluid p-2">
+                     <p class="text-white-50">
+                        Below are the credentials that are associated with your bot. For security reasons, your oauth tokens
+                        are not displayed. If you would like to reauthorize, please use the 'Reauthorize' button and you can
+                        go through the setup process just for the credentials. No other bot data is lost during this process.
+                     </p>
+                     <div class="form-group">
+                        <label for="uiBotName"><b>Bot Account Name:</b></label>
+                        <TelerikTextBox Id="uiBotName" Width="100%" Enabled="false" @bind-Value="mBotSettings.BotName" />
+                     </div>
+                     <div class="form-group">
+                        <label for="uiChannelName"><b>Channel Name:</b></label>
+                        <small id="uiChannelName" class="form-text text-white-50">The channel your bot will connect to. You can change this without needing to reauthorize.</small>
+                        <TelerikTextBox Id="uiChannelName" Width="100%" @bind-Value="mBotSettings.ChannelName" />
+                     </div>
+                     <div class="container-fluid text-right p-3">
+                        <button type="button" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnReauthorize">Reauthorize Bot</button>
+                     </div>
+                  </div>
+               </div>
+            </TabStripTab>
+
+            <TabStripTab Title="Bot Behavior">
+               <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+                  <div class="container-fluid p-2">
+                     <RadzenFieldset AllowCollapse="true" Style="width: 100%; margin-bottom: 20px">
+                        <HeaderTemplate>
+                           <RadzenLabel Text="Timing Mechanics" Style="color: #FFFFFF; font-weight: bold" />
+                        </HeaderTemplate>
+                        <ChildContent>
+                           <div class="form-group">
+                              <label for="uiGlobalCooldown"><b>Global Cooldown (in seconds):</b></label>
+                              <small id="uiGlobalCooldown" class="form-text text-white-50">The number of seconds users will have to wait between executing animation commands.</small>
+                              <TelerikNumericTextBox Id="uiGlobalCooldown" Min="0" Max="100000" @bind-Value="mBotSettings.GlobalCooldownInSeconds" />
+                           </div>
+                           <div class="form-group">
+                              <label for="uiTimeBetweenAnimations"><b>Time Between Animations (in ms):</b></label>
+                              <small id="uiTimeBetweenAnimations" class="form-text text-white-50">The number of milliseconds when spacing queued animations.</small>
+                              <TelerikNumericTextBox Id="uiTimeBetweenAnimations" Min="0" Max="100000" @bind-Value="mBotSettings.TimeBetweenAnimationsMs" />
+                           </div>
+                        </ChildContent>
+                     </RadzenFieldset>
+
+                     <RadzenFieldset AllowCollapse="true" Style="width: 100%; margin-bottom: 20px">
+                        <HeaderTemplate>
+                           <RadzenLabel Text="Flags" Style="color: #FFFFFF; font-weight: bold" />
+                        </HeaderTemplate>
+                        <ChildContent>
+                           <div class="form-group form-check">
+                              <label class="form-check-label">
+                                 <TelerikCheckBox Id="uiAnnounceCooldowns" @bind-Value="mBotSettings.AnnounceAnimationCooldown" /> Announce Animation Cooldown
+                                 <small id="uiAnnounceCooldowns" class="form-text text-white-50">When enabled, the bot will let chat know if it is in cooldown mode.</small>
+                              </label>
+                           </div>
+                           <div class="form-group form-check">
+                              <label class="form-check-label">
+                                 <TelerikCheckBox Id="uiCanExecuteRoulette" @bind-Value="mBotSettings.AnimationRouletteChatEnabled" /> Can Execute !animationroulette from Chat
+                                 <small id="uiCanExecuteRoulette" class="form-text text-white-50">When enabled, viewers can execute !animationroulette from chat. Disable this if you want it to be a channel point-exclusive feature.</small>
+                              </label>
+                           </div>
+                           <div class="form-group form-check">
+                              <label class="form-check-label">
+                                 <TelerikCheckBox Id="uiAllowWhispers" @bind-Value="mBotSettings.CanTriggerAnimationsByWhisper" /> Allow Commands via Whisper
+                                 <small id="uiAllowWhispers" class="form-text text-white-50">When enabled, the bot will accept commands from the channel account (e.g. your account) via whisper.</small>
+                              </label>
+                           </div>
+                        </ChildContent>
+                     </RadzenFieldset>
+
+                     <RadzenFieldset AllowCollapse="true" Style="width: 100%; margin-bottom: 20px">
+                        <HeaderTemplate>
+                           <RadzenLabel Text="Animation Command" Style="color: #FFFFFF; font-weight: bold" />
+                        </HeaderTemplate>
+                        <ChildContent>
+                           <div class="form-group form-check">
+                              <label class="form-check-label">
+                                 <TelerikCheckBox Id="uiAnimationCommandEnabled" @bind-Value="mBotSettings.AnimationCommandEnabled" /> Animation Command Enabled
+                                 <small id="uiAnimationCommandEnabled" class="form-text text-white-50">When enabled, the animation command allows viewers to see a list of your available animations. The list will ONLY include animations that are able to be triggered by users via the command in chat. The list will not include any that behave as alerts for events such as cheering. The command will spit out a list of them to chat as a result.</small>
+                              </label>
+                           </div>
+                           <div class="form-group">
+                              <label for="uiAnimationCommandCooldown"><b>Animation Command:</b></label>
+                              <small id="uiAnimationCommandCooldown" class="form-text text-white-50">What viewers need to type in chat to see a list of animations.</small>
+                              <TelerikTextBox Id="uiAnimationCommandCooldown" @bind-Value="mBotSettings.AnimationCommand" />
+                           </div>
+                           <div class="form-group">
+                              <label for="uiAnimationCommandCooldown"><b>Animation Command Cooldown (in minutes):</b></label>
+                              <small id="uiAnimationCommandCooldown" class="form-text text-white-50">The number of minutes the animation command is on cooldown.</small>
+                              <TelerikNumericTextBox Id="uiAnimationCommandCooldown" Min="0" Max="100000" @bind-Value="mBotSettings.AnimationCommandCooldownSeconds" />
+                           </div>
+                        </ChildContent>
+                     </RadzenFieldset>
+                  </div>
+               </div>
+            </TabStripTab>
+
+            <TabStripTab Title="Global Positioning">
+               <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+                  <div class="container-fluid p-2">
+                     <p class="text-white-50">
+                        If you like, you may have a global placement for all of your animations. If you choose to enable this option, all animations,
+                        regardless of their individual placement settings, will be placed according to the settings below:
+                     </p>
+                     <div class="form-group form-check">
+                        <label class="form-check-label">
+                           <TelerikCheckBox Id="uiUseGlobalPositioning" @bind-Value="mBotSettings.UseGlobalPositioning" /> Use Global Positioning
+                           <small id="uiUseGlobalPositioning" class="form-text text-white-50">When enabled, all animations will use the same positioning data as set below.</small>
+                        </label>
+                     </div>
+                     <PlacementComponent Width="@mBotSettings.GlobalPlacement.Width"
+                                         Height="@mBotSettings.GlobalPlacement.Height"
+                                         Top="@mBotSettings.GlobalPlacement.Top"
+                                         Left="@mBotSettings.GlobalPlacement.Left"
+                                         IsOutOfBounds="@mBotSettings.GlobalPlacement.IsOutOfBounds"
+                                         ShowCommitButton="true"
+                                         CommitButtonText="Apply to Bot Settings"
+                                         OnCommitCallback="@(args => HandleGlobalPlacementUpdated(args))" />
+                  </div>
+               </div>
+            </TabStripTab>
+
+            <TabStripTab Title="Integrations">
+               <TelerikTabStrip @bind-ActiveTabIndex="@ActiveIntegrationsTabIndex">
+
+                  <TabStripTab Title="Streamlabs">
+                     <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+                        <div class="container-fluid p-2">
+                           <p class="text-white-50">
+                              In your Streamlabs account settings you may access API Tokens that are used to grant access to reading tips through their service. You go to Account -> Settings -> API Settings -> API Tokens. Copy the <b>Socket API Token</b> and paste it into the text field below.
+                           </p>
+                           <p class="text-white-50">
+                              <center><img src="streamlabs_info.png" style="max-width: 70%; height: auto" /></center>
+                           </p>
+                           <div class="form-group">
+                              <label for="uiStreamlabsKey"><b>Streamlabs Access Token:</b></label>
+                              <RadzenPassword id="uiStreamlabsKey" class="k-textbox" Style="width: 100%" Placeholder="Enter the Streamlabs Socket API Token..." @bind-Value="mBotSettings.StreamlabsOauthToken" />
+                           </div>
+                        </div>
+                     </div>
+                  </TabStripTab>
+
+                  <TabStripTab Title="StreamElements">
+                     <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+                        <div class="container-fluid p-2">
+                           <p class="text-white-50">
+                              To have GIFBot be able to listen for StreamElements events such as tipping, you need to provide your JWT token, which is available on your profile under "Channels". 
+                              Once you are on that tab, toggle on "Show secrets" and you may copy the code into the text area below:
+                           </p>
+                           <p class="text-white-50">
+                              <a href="https://streamelements.com/dashboard/account/channels" target="_blank"><b>Go to your StreamElements Channel Dashboard</b></a>
+                           </p>
+                           <div class="form-group">
+                              <label for="uiStreamlabsKey"><b>StreamElements JWT Token:</b></label>
+                              <RadzenPassword id="uiStreamElementsKey" class="k-textbox" Style="width: 100%" Placeholder="Enter the StreamElements JWT Token from the website..." @bind-Value="mBotSettings.StreamElementsToken" />
+                           </div>
+                        </div>
+                     </div>
+                  </TabStripTab>
+
+                  <TabStripTab Title="Tiltify">
+                     <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+                        <div class="container-fluid p-2">
+                           <p class="text-white-50">
+                              If you want to capture charitable donations through the <a href="https://www.tiltify.com/" target="_blank">Tiltify</a> service, you will need to provide your Tiltify username and the application token from your dashboard. To access this information, log into Tiltify, go to your dashboard and choose "My Account". You can then click on "Connected Accounts" at the top of the page, followed by "Your Applications" on the left. From here you must create an application with the following information:
+                           </p>
+                           <p class="text-white-50">
+                              <center><img src="tiltify_info.png" style="max-width: 70%; height: auto" /></center>
+                           </p>
+                           <p class="text-white-50">
+                              Once you have entered your information for the application, save. It will then generate your secrets for the application. You need to copy the <b>Access Token</b> and paste it into the provided text field below.
+                           </p>
+                           <div class="form-group">
+                              <label for="uiTiltifySlug"><b>Tiltify Slug:</b></label>
+                              <small id="uiTiltifySlugDesc" class="form-text text-white-50">Your username within the Tiltify system. Typically shows in the Tiltify dashboard URL.</small>
+                              <TelerikTextBox id="uiTiltifySlug" Width="100%" @bind-Value="mBotSettings.TiltifySlug" />
+                           </div>
+                           <div class="form-group">
+                              <label for="uiTiltifyAuthToken"><b>Tiltify Application Access Token:</b></label>
+                              <RadzenPassword id="uiTiltifyAuthToken" class="k-textbox" Style="width: 100%" Placeholder="Enter the Tiltify Access Token from the Tiltify Dashboard..." @bind-Value="mBotSettings.TiltifyAuthToken" />
+                           </div>
+                           <div class="form-group">
+                              <label for="uiTiltifyCampaigns"><b>Active Campaign:</b></label><br />
+                              <small id="uiTiltifyCampaigns" class="form-text text-white-50">Please select a campaign that you would like to listen to for donations. If you do not see campaigns in the list, please add your credentials above and save. The list should update if the provided information is correct.</small>
+                              <RadzenDropDown Placeholder="Select Active Campaign..." Style="background-color: #2c2241; color: #e5e5e5; font-weight: bold; width: 250px;"
+                                              Data="@mTiltifyCampaignNames" @bind-Value="@mSelectedTiltifyCampaignName" Change="@(args => OnTiltifyCampaignSelected(args))" />
+                           </div>
+                        </div>
+                     </div>
+                  </TabStripTab>
+               </TelerikTabStrip>
+            </TabStripTab>
+
+            <TabStripTab Title="User Groups">
+               <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+                  <div class="container-fluid p-2">
+                     <p class="text-white-50">
+                        User groups allow you to limit access to specific animations to a subset of viewers. This is great for rewarding people for supporting you via Patreon,
+                        donating to charity campaigns, or just special people (let's admit it, they're ALL special).
+                     </p>
+                     <div class="container-fluid">
+                        <table width="100%">
+                           <tr>
+                              <td valign="top" align="left" width="50%">
+                                 <div class="container-fluid" mt-5>
+                                    <table>
+                                       <tr>
+                                          <td valign="bottom">
+                                             <label for="uiUserGroups"><b>User Groups:</b></label><br />
+                                             <RadzenDropDown Placeholder="Select User Group..." Style="background-color: #2c2241; color: #e5e5e5; font-weight: bold; width: 250px;"
+                                                             Data="@mUserGroupNames" @bind-Value="@mSelectedUserGroupName" Change="@(args => OnUserGroupSelected(args))" />
+                                          </td>
+                                       </tr>
+                                    </table>
+                                 </div>
+                              </td>
+                              <td valign="bottom" align="right" width="50%">
+                                 <div class="container-fluid" mt-5>
+                                    <table>
+                                       <tr>
+                                          <td valign="top">
+                                             <label for="uiNewGroup"><b>Group Name:</b></label>
+                                             <TelerikTextBox Id="uiNewGroup" Width="200px" Enabled="true" @bind-Value="mNewGroupValue" />
+                                          </td>
+                                          <td valign="top">
+                                             <button type="button" class="btn btn-secondary p-1 ml-2" style="background-color: #6c4872" @onclick="HandleAddNewGroup">Add New Group</button>
+                                          </td>
+                                       </tr>
+                                    </table>
+                                 </div>
+                              </td>
+                           </tr>
+                        </table>
+                     </div>
+                     @if (mSelectedUserGroup != null)
+                     {
+                        <div class="container-fluid mt-3">
+                           <TelerikGrid Sortable="true" SortMode="@SortMode.Single" FilterMode="@Telerik.Blazor.GridFilterMode.FilterRow" Pageable="true" Data="@mSelectedUserGroup.UserEntries" PageSize="10">
+                              <GridColumns>
+                                 <GridColumn Width="400px" Field="@nameof(UserEntry.Name)" Title="Viewer Name" />
+                                 @*
+                                    <Template Context="data">
+                                       <strong>@(data as string)</strong>
+                                    </Template>
+                                    </GridColumn>*@
+                                 <GridColumn Width="50px" Title="">
+                                    <Template Context="data">
+                                       <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleDeleteUserFromGroup((data as string)))"><span class="oi oi-trash"></span></button>
+                                    </Template>
+                                 </GridColumn>
+                              </GridColumns>
+                           </TelerikGrid>
+                        </div>
+                        <div class="container-fluid mt-3">
+                           <table width="100%">
+                              <tr>
+                                 <td align="left">
+                                    <label for="uiNewUser"><b>Viewer Name:</b></label>
+                                    <TelerikTextBox Id="uiNewUser" Width="300px" Enabled="true" @bind-Value="uiNewUserValue" />
+                                    <button type="button" class="btn btn-secondary p-1" style="background-color: #6c4872" @onclick="HandleAddUserToGroup">Add User to Group</button>
+                                 </td>
+                                 <td />
+                                 <td align="right">
+                                    @if (mSelectedUserGroup != null)
+                                    {
+                                       <button type="button" id="uiRenameGroup" class="btn btn-secondary p-1 ml-2" style="background-color: #724859; margin-top: -3px" @onclick="HandleRenameGroup">Rename Group</button>
+                                    }
+                                 </td>
+                                 <td align="right">
+                                    @if (mSelectedUserGroup != null)
+                                    {
+                                       <button type="button" id="uiCloneGroup" class="btn btn-secondary p-1 ml-2" style="background-color: #724859; margin-top: -3px" @onclick="HandleCloneGroup">Clone Group</button>
+                                    }
+                                 </td>
+                                 <td align="right">
+                                    @if (mSelectedUserGroup != null)
+                                    {
+                                       <button type="button" id="uiDeleteGroup" class="btn btn-secondary p-1 ml-2" style="background-color: #724859; margin-top: -3px" @onclick="HandleDeleteGroup">Delete Group</button>
+                                    }
+                                 </td>
+                              </tr>
+                           </table>
+                        </div>
+                     }
+                  </div>
+               </div>
+            </TabStripTab>
+
+            <TabStripTab Title="Throttle List">
+               <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+                  <div class="container-fluid p-2">
+                     <p class="text-white-50">
+                        Sometimes we get some very enthusiastic viewers that take advantage of timing the animations and no matter how well you space out timeouts and such, they still find a way to interrupt
+                        that very special moment in your stream with horrific beat boxing animations. You can ban users from using animations OR you can just apply a personal throttle to them so that they can't
+                        execute animations like everyone else in chat.
+                     </p>
+                     <div class="container-fluid">
+                        <TelerikGrid Data="@mBotSettings.ThrottledUsers" EditMode="@GridEditMode.Popup" Pageable="true" PageSize="15" OnUpdate="@UpdateThrottledUser" OnDelete="DeleteThrottledUser" OnCreate="CreateThrottledUser">
+                           <GridToolBar>
+                              <GridCommandButton Command="Add" Icon="add">Add Viewer</GridCommandButton>
+                              <GridSearchBox DebounceDelay="200"></GridSearchBox>
+                           </GridToolBar>
+                           <GridColumns>
+                              <GridColumn Field="@nameof(ThrottledUserData.Name)" Editable="true" />
+                              <GridColumn Field="@nameof(ThrottledUserData.PersonalThrottleRate)" Width="200px" Editable="true" Title="Throttle Rate (in sec)" />
+                              <GridColumn Field="@nameof(ThrottledUserData.IsBanned)" Width="120px" Editable="true" Title="Is Banned" />
+                              <GridCommandColumn Context="subcontext" Width="250px">
+                                 <GridCommandButton Command="Edit" Icon="edit">Edit</GridCommandButton>
+                                 <GridCommandButton Command="Delete" Icon="delete">Delete</GridCommandButton>
+                              </GridCommandColumn>
+                           </GridColumns>
+                        </TelerikGrid>
+                     </div>
+                  </div>
+               </div>
+            </TabStripTab>
+
+            <TabStripTab Title="Browsersource URLs">
+               <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+                  <div class="container-fluid p-2">
+                     <p class="text-white-50">
+                        Below are the URLs you need to capture for various GIFBot features. Click in the textbox to copy the URL. The only one that is absolutely required to use the bot
+                        correctly is the GIFBot Main browser source. This will establish the appropriate connections.
+                     </p>
+                     <p class="text-white-50">
+                        You will need to add a new Browser source to your scene for each of the URLs listed below. Copy these addresses and use them as the URL source of your Browser sources
+                        elements. Set the canvas size to be 1920x1080. Note: You may resize it, but your animations and bot elements will render smaller. Set the framerate to 60fps.
+                     </p>
+                     <p class="text-white-50">
+                        <u>Note:</u> If you are using XSplit, you will need to add these as Media sources, not Browser sources. These are files installed by GIFBot and not hosted on a web server.
+                     </p>
+                     <div class="container-fluid">
+                        <table width="100%">
+                           <tr>
+                              <td colspan="2">
+                                 <label for="uiAnimsUrl"><b>[<u>Required</u>] GIFBot Main (Animations):</b></label>
+                              </td>
+                           </tr>
+                           <tr>
+                              <td width="600">
+                                 <RadzenTextBox id="uiAnimsUrl" class="form-control" Style="background-color: #2c2241; color: #FFFFFF; width: 100%" ReadOnly="true" @bind-Value="mPrimaryAnimationsURL" />
+                              </td>
+                              <td align="left">
+                                 <button type="button" class="btn btn-secondary p-1 ml-2" style="background-color: #6c4872" @onclick='(() => HandleCopyUrl("uiAnimsUrl"))'>Copy to Clipboard</button>
+                              </td>
+                           </tr>
+                        </table>
+                     </div>
+                     <div class="container-fluid">
+                        <table width="100%">
+                           <tr>
+                              <td colspan="2">
+                                 <label for="uiGoalBarUrl"><b>Goal Bar:</b></label>
+                              </td>
+                           </tr>
+                           <tr>
+                              <td width="600">
+                                 <RadzenTextBox id="uiGoalBarUrl" class="form-control" Style="background-color: #2c2241; color: #FFFFFF; width: 100%" ReadOnly="true" @bind-Value="mGoalBarURL" />
+                              </td>
+                              <td align="left">
+                                 <button type="button" class="btn btn-secondary p-1 ml-2" style="background-color: #6c4872" @onclick='(() => HandleCopyUrl("uiGoalBarUrl"))'>Copy to Clipboard</button>
+                              </td>
+                           </tr>
+                        </table>
+                     </div>
+                  </div>
+               </div>
+            </TabStripTab>
+         </TelerikTabStrip>
+
+         <div class="row">
+            <div class="container-fluid text-right p-3">
+               <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnCancel">Cancel</button>
+               <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e">Save Changes</button>
+            </div>
+         </div>
+      </EditForm>
+   </div>
+</div>
+
+@code {
+
+      /// <summary>
+      /// Keeps track of which tab is selected.
+      ///</summary>
+   public int ActiveTabIndex { get; set; } = 0;
+   public int ActiveIntegrationsTabIndex { get; set; } = 0;
+
+   protected override async Task OnInitializedAsync()
+   {
+      // Build the connection to the main bot hub.
+      mHubConnection = new HubConnectionBuilder()
+         .WithUrl(NavigationManager.ToAbsoluteUri("/gifbothub"), HttpTransportType.LongPolling) 
+         .WithAutomaticReconnect()
+         .Build();
+
+      // Start the connection.
+      await mHubConnection.StartAsync();
+
+      // Get the bot settings data.
+      await UpdateClientBotSettingsData();
+
+      // Get the tiltify campaign data.
+      await UpdateTiltifyCampaignsList();
+
+      // Build the URLs to the animations HTML and goalbar files that users will use as their browser sources.
+      mPrimaryAnimationsURL = await mHubConnection.InvokeAsync<string>("GetAnimationsPath", AnimationEnums.AnimationLayer.Primary);
+      mGoalBarURL = await mHubConnection.InvokeAsync<string>("GetGoalBarWebPath");
+
+      // Can't use this until they've setup!
+      if (mBotSettings.CurrentSetupStep != SetupStep.Finished)
+      {
+         NavigationManager.NavigateTo("/setup/");
+      }
+
+      // Render.
+      StateHasChanged();
+   }
+
+   /// <summary>
+   /// IAsyncDisposable Implementation
+   /// </summary>
+   public async ValueTask DisposeAsync()
+   {
+      await mHubConnection.DisposeAsync();
+   }
+
+   private async Task UpdateClientBotSettingsData()
+   {
+      // Get the bot settings data.
+      string botSettingsJson = await mHubConnection.InvokeAsync<string>("GetBotSettings");
+      if (!String.IsNullOrEmpty(botSettingsJson))
+      {
+         mBotSettings = Newtonsoft.Json.JsonConvert.DeserializeObject<BotSettings>
+            (botSettingsJson);
+
+         mUserGroupNames.Clear();
+         foreach (var userGroup in mBotSettings.UserGroups)
+         {
+            mUserGroupNames.Add(userGroup.Name);
+            if (!String.IsNullOrEmpty(mSelectedUserGroupName) && userGroup.Name.Equals(mSelectedUserGroupName, StringComparison.OrdinalIgnoreCase))
+            {
+               mSelectedUserGroup = userGroup;
+            }
+         }
+
+         mUserGroupNames.Sort();
+      }
+   }
+
+   private async Task UpdateTiltifyCampaignsList()
+   {
+      string campaignsJson = await mHubConnection.InvokeAsync<string>("GetTiltifyCampaigns");
+      if (!String.IsNullOrEmpty(campaignsJson))
+      {
+         mTiltifyCampaigns = Newtonsoft.Json.JsonConvert.DeserializeObject<List<TiltifyCampaign>>(campaignsJson);
+         mTiltifyCampaignNames.Clear();
+         mSelectedTiltifyCampaign = null;
+         mSelectedTiltifyCampaignName = String.Empty;
+
+         foreach (var campaign in mTiltifyCampaigns)
+         {
+            mTiltifyCampaignNames.Add(campaign.Name);
+            if (mBotSettings.TiltifyActiveCampaign > 0 && campaign.Id == mBotSettings.TiltifyActiveCampaign)
+            {
+               mSelectedTiltifyCampaign = campaign;
+               mSelectedTiltifyCampaignName = campaign.Name;
+            }
+         }
+
+         mTiltifyCampaignNames.Sort();
+      }
+   }
+
+   /// <summary>
+   /// Handles the placement being updated.
+   /// </summary>
+   private void HandleGlobalPlacementUpdated(PlacementData e)
+   {
+      mBotSettings.GlobalPlacement.Width = e.Width;
+      mBotSettings.GlobalPlacement.Height = e.Height;
+      mBotSettings.GlobalPlacement.Top = e.Top;
+      mBotSettings.GlobalPlacement.Left = e.Left;
+      mBotSettings.GlobalPlacement.IsOutOfBounds = e.IsOutOfBounds;
+      StateHasChanged();
+   }
+
+   private async Task HandleCopyUrl(string elementName)
+   {
+      await JSRuntime.InvokeVoidAsync("CopyToClipboard", elementName);
+      NotificationService.Notify(NotificationSeverity.Success, "Success", "The URL was copied to your clipboard!", 5000);
+      await InvokeAsync(() => { StateHasChanged(); });
+   }
+
+   private void OnUserGroupSelected(object args)
+   {
+      string groupName = (string)args;
+      if (!String.IsNullOrEmpty(groupName))
+      {
+         UserGroup group = mBotSettings.UserGroups.FirstOrDefault(g => g.Name.Equals(groupName, StringComparison.OrdinalIgnoreCase));
+         if (group != null)
+         {
+            mSelectedUserGroup = group;
+            StateHasChanged();
+         }
+      }
+   }
+
+   private void OnTiltifyCampaignSelected(object args)
+   {
+      string campaignName = (string)args;
+      if (!String.IsNullOrEmpty(campaignName))
+      {
+         TiltifyCampaign campaign = mTiltifyCampaigns.FirstOrDefault(g => g.Name.Equals(campaignName, StringComparison.OrdinalIgnoreCase));
+         if (campaign != null)
+         {
+            mBotSettings.TiltifyActiveCampaign = campaign.Id;
+            mSelectedTiltifyCampaign = campaign;
+            StateHasChanged();
+         }
+      }
+   }
+
+   private async Task HandleDeleteUserFromGroup(string user)
+   {
+      if (mSelectedUserGroup != null && !String.IsNullOrEmpty(user))
+      {
+         bool result = await mHubConnection.InvokeAsync<bool>
+            ("RemoveUserFromGroup", mSelectedUserGroup.Id, user);
+         if (result)
+         {
+            NotificationService.Notify(NotificationSeverity.Success, "Success", $"{user} was removed from the group!", 5000);
+            await UpdateClientBotSettingsData();
+         }
+         else
+         {
+            NotificationService.Notify(NotificationSeverity.Error, "Error", $"{user} couldn't be found!", 5000);
+         }
+
+         await InvokeAsync(() => { StateHasChanged(); });
+      }
+   }
+
+   private async Task HandleAddNewGroup()
+   {
+      Guid result = await mHubConnection.InvokeAsync<Guid>
+         ("AddUserGroup", mNewGroupValue);
+      if (result != Guid.Empty)
+      {
+         NotificationService.Notify(NotificationSeverity.Success, "Success", $"{mNewGroupValue} was added!", 5000);
+         await UpdateClientBotSettingsData();
+         mSelectedUserGroup = mBotSettings.UserGroups.FirstOrDefault(g => g.Id == result);
+         if (mSelectedUserGroup != null)
+         {
+            mSelectedUserGroupName = mSelectedUserGroup.Name;
+         }
+      }
+      else
+      {
+         NotificationService.Notify(NotificationSeverity.Error, "Error", $"{mNewGroupValue} already exists!", 5000);
+      }
+
+      await InvokeAsync(() => { StateHasChanged(); });
+   }
+
+   private async Task HandleDeleteGroup()
+   {
+      if (mSelectedUserGroup != null)
+      {
+         bool result = await mHubConnection.InvokeAsync<bool>
+            ("DeleteUserGroup", mSelectedUserGroup.Id);
+         if (result)
+         {
+            NotificationService.Notify(NotificationSeverity.Success, "Success", $"The group was deleted!", 5000);
+            await UpdateClientBotSettingsData();
+            mSelectedUserGroup = null;
+            mSelectedUserGroupName = String.Empty;
+         }
+         else
+         {
+            NotificationService.Notify(NotificationSeverity.Error, "Error", $"The group could not be deleted. There are dependent animations!", 5000);
+         }
+
+         await InvokeAsync(() => { StateHasChanged(); });
+      }
+   }
+
+   private async Task HandleCloneGroup()
+   {
+      if (mSelectedUserGroup != null)
+      {
+         bool result = await mHubConnection.InvokeAsync<bool>
+            ("CloneUserGroup", mSelectedUserGroup.Id);
+         if (result)
+         {
+            NotificationService.Notify(NotificationSeverity.Success, "Success", $"The group was cloned!", 5000);
+            await UpdateClientBotSettingsData();
+            mSelectedUserGroup = null;
+            mSelectedUserGroupName = String.Empty;
+         }
+         else
+         {
+            NotificationService.Notify(NotificationSeverity.Error, "Error", $"The group could not be cloned.", 5000);
+         }
+
+         await InvokeAsync(() => { StateHasChanged(); });
+      }
+   }
+
+   private void HandleRenameGroup()
+   {
+      mIsRenameGroupDialogVisible = true;
+      StateHasChanged();
+   }
+
+   private void HandleCancelRenameUserGroup()
+   {
+      mIsRenameGroupDialogVisible = false;
+      StateHasChanged();
+   }
+
+   private async Task HandleConfirmRenameUserGroup()
+   {
+      if (mSelectedUserGroup != null && !String.IsNullOrEmpty(mRenamedUserGroupValue))
+      {
+         bool result = await mHubConnection.InvokeAsync<bool>
+            ("RenameUserGroup", mSelectedUserGroup.Id, mRenamedUserGroupValue);
+         if (result)
+         {
+            NotificationService.Notify(NotificationSeverity.Success, "Success", $"The group was renamed!", 5000);
+            await UpdateClientBotSettingsData();
+            mSelectedUserGroup = null;
+            mSelectedUserGroupName = String.Empty;
+         }
+         else
+         {
+            NotificationService.Notify(NotificationSeverity.Error, "Error", $"The group could not be renamed.", 5000);
+         }
+
+         await InvokeAsync(() => { StateHasChanged(); });
+      }
+   }
+
+   private async Task HandleAddUserToGroup()
+   {
+      if (mSelectedUserGroup != null && !String.IsNullOrEmpty(uiNewUserValue))
+      {
+         bool result = await mHubConnection.InvokeAsync<bool>("AddUserToGroup", mSelectedUserGroup.Id, uiNewUserValue);
+         if (result)
+         {
+            NotificationService.Notify(NotificationSeverity.Success, "Success", $"{uiNewUserValue} was added to the group!", 5000);
+            uiNewUserValue = String.Empty;
+            await UpdateClientBotSettingsData();
+            await InvokeAsync(() => { StateHasChanged(); });
+         }
+         else
+         {
+            NotificationService.Notify(NotificationSeverity.Error, "Error", $"{uiNewUserValue} already exists in the group!", 5000);
+            await InvokeAsync(() => { StateHasChanged(); });
+         }
+      }
+   }
+
+   private async Task CreateThrottledUser(GridCommandEventArgs args)
+   {
+      var throttledUser = args.Item as ThrottledUserData;
+      bool result = await mHubConnection.InvokeAsync<bool>("AddThrottledUser", Newtonsoft.Json.JsonConvert.SerializeObject(throttledUser));
+      if (result)
+      {
+         NotificationService.Notify(NotificationSeverity.Success, "Success", $"{throttledUser.Name} was added!", 5000);
+         await UpdateClientBotSettingsData();
+         await InvokeAsync(() => { StateHasChanged(); });
+      }
+      else
+      {
+         NotificationService.Notify(NotificationSeverity.Error, "Error", $"{throttledUser.Name} already exists in the list!", 5000);
+         await InvokeAsync(() => { StateHasChanged(); });
+      }
+   }
+
+   private async Task DeleteThrottledUser(GridCommandEventArgs args)
+   {
+      var throttledUser = args.Item as ThrottledUserData;
+      bool result = await mHubConnection.InvokeAsync<bool>("DeleteThrottledUser", throttledUser.Name);
+      if (result)
+      {
+         NotificationService.Notify(NotificationSeverity.Success, "Success", $"{throttledUser.Name} was deleted!", 5000);
+         await UpdateClientBotSettingsData();
+         await InvokeAsync(() => { StateHasChanged(); });
+      }
+      else
+      {
+         NotificationService.Notify(NotificationSeverity.Error, "Error", $"{throttledUser.Name} could not be deleted!", 5000);
+         await InvokeAsync(() => { StateHasChanged(); });
+      }
+   }
+
+   private async Task UpdateThrottledUser(GridCommandEventArgs args)
+   {
+      var throttledUser = args.Item as ThrottledUserData;
+      bool result = await mHubConnection.InvokeAsync<bool>("UpdateThrottledUser", Newtonsoft.Json.JsonConvert.SerializeObject(throttledUser));
+      if (result)
+      {
+         NotificationService.Notify(NotificationSeverity.Success, "Success", $"{throttledUser.Name} was updated!", 5000);
+         await UpdateClientBotSettingsData();
+         await InvokeAsync(() => { StateHasChanged(); });
+      }
+      else
+      {
+         NotificationService.Notify(NotificationSeverity.Error, "Error", $"{throttledUser.Name} could not be updated! Viewer not found. Did you change their name? Delete them and add as a new viewer instead!", 7000);
+         await InvokeAsync(() => { StateHasChanged(); });
+      }
+   }
+
+   private async Task OnReauthorize()
+   {
+      // When reauthorizing, simply set the bot back to Welcome state and navigate to the setup page.
+      mBotSettings.CurrentSetupStep = SetupStep.Welcome;
+      await mHubConnection.InvokeAsync("UpdateBotSettings", Newtonsoft.Json.JsonConvert.SerializeObject(mBotSettings), false);
+      NavigationManager.NavigateTo("/setup/");
+   }
+
+   private void OnCancel()
+   {
+      NavigationManager.NavigateTo("/");
+   }
+
+   private async Task OnSaveChanges()
+   {
+      // Update, but don't reconnect. Make sure the bot name and channel name don't have leading or trailing whitespace. TwitchLib doesn't clean up the data.
+      mBotSettings.BotName = mBotSettings.BotName.Trim();
+      mBotSettings.ChannelName = mBotSettings.ChannelName.Trim();
+
+      await mHubConnection.InvokeAsync("UpdateBotSettings", Newtonsoft.Json.JsonConvert.SerializeObject(mBotSettings), true);
+
+      await UpdateTiltifyCampaignsList();
+
+      NotificationService.Notify(NotificationSeverity.Success, "Save Successful", "Your bot's settings has been saved.", 5000);
+      await InvokeAsync(() => { StateHasChanged(); });
+   }
+
+   private HubConnection mHubConnection;
+   private BotSettings mBotSettings = new BotSettings();
+   private string mPrimaryAnimationsURL = String.Empty;
+   private string mGoalBarURL = String.Empty;
+   private string uiNewUserValue = String.Empty;
+   private string mNewGroupValue = String.Empty;
+   private string mRenamedUserGroupValue = String.Empty;
+   private bool mIsRenameGroupDialogVisible = false;
+
+   // Some jank crap I had to do in order to get the dropdown to work.
+   private List<string> mUserGroupNames = new List<string>();
+   private string mSelectedUserGroupName = String.Empty;
+   private UserGroup mSelectedUserGroup = null;
+
+   // Tiltify Campaign Data
+   private List<TiltifyCampaign> mTiltifyCampaigns = new List<TiltifyCampaign>();
+   private List<string> mTiltifyCampaignNames = new List<string>();
+   private string mSelectedTiltifyCampaignName = String.Empty;
+   private TiltifyCampaign mSelectedTiltifyCampaign = null;
+}

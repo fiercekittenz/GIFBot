@@ -1,0 +1,112 @@
+﻿@inject HttpClient Http
+
+<div class="top-row pl-4 navbar navbar-dark">
+   <a class="navbar-brand" href="">GIFBot-R (v1.0e: Test 6)</a>
+</div>
+
+<ul class="nav flex-column">
+   <li class="nav-item px-3">
+      <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+         <span class="oi oi-home" aria-hidden="true"></span> Dashboard
+      </NavLink>
+   </li>
+   <li class="nav-item px-3">
+      <NavLink class="nav-link" href="/settings/" Match="NavLinkMatch.All">
+         <span class="oi oi-cog" aria-hidden="true"></span> Bot Settings
+      </NavLink>
+   </li>
+   <li class="nav-item px-3">
+      <NavLink class="nav-link" href="/animationseditor/" Match="NavLinkMatch.All">
+         <span class="oi oi-play-circle" aria-hidden="true"></span> Animations
+      </NavLink>
+   </li>
+   <li class="nav-item px-3">
+      <NavLink class="nav-link" href="/giveawayeditor/" Match="NavLinkMatch.All">
+         <span class="oi oi-box" aria-hidden="true"></span> Giveaway
+      </NavLink>
+   </li>
+   <li class="nav-item px-3">
+      <NavLink class="nav-link" href="/goalbareditor/" Match="NavLinkMatch.All">
+         <span class="oi oi-target" aria-hidden="true"></span> Goal Bar
+      </NavLink>
+   </li>
+   <li class="nav-item px-3">
+      <NavLink class="nav-link" href="/greetereditor/" Match="NavLinkMatch.All">
+         <span class="oi oi-thumb-up" aria-hidden="true"></span> Greeter
+      </NavLink>
+   </li>
+   <li class="nav-item px-3">
+      <NavLink class="nav-link" href="/stickerseditor/" Match="NavLinkMatch.All">
+         <span class="oi oi-badge" aria-hidden="true"></span> Stickers
+      </NavLink>
+   </li>
+   <li class="nav-item px-3">
+      <NavLink class="nav-link" href="/regurgitator/" Match="NavLinkMatch.All">
+         <span class="oi oi-trash" aria-hidden="true"></span> Regurgitator
+      </NavLink>
+   </li>
+   <li class="nav-item px-3">
+      <NavLink class="nav-link" href="/snappereditor/" Match="NavLinkMatch.All">
+         <span class="oi oi-person" aria-hidden="true"></span> Snapper
+      </NavLink>
+   </li>
+   <li class="nav-item px-3">
+      <NavLink class="nav-link" href="/userlistmanager/" Match="NavLinkMatch.All">
+         <span class="oi oi-people" aria-hidden="true"></span> Channel List
+      </NavLink>
+   </li>
+   <li class="nav-item px-3">
+      <NavLink class="nav-link" href="/backdropeditor/" Match="NavLinkMatch.All">
+         <span class="oi oi-image" aria-hidden="true"></span> Backdrop
+      </NavLink>
+   </li>
+   <li class="nav-item px-3">
+      <NavLink class="nav-link" href="/countdowneditor/" Match="NavLinkMatch.All">
+         <span class="oi oi-timer" aria-hidden="true"></span> Countdown
+      </NavLink>
+   </li>
+   <li class="nav-item px-3">
+      <NavLink class="nav-link" href="help">
+         <span class="oi oi-question-mark" aria-hidden="true"></span> Help
+      </NavLink>
+   </li>
+   <li class="nav-item px-3">
+      <NavLink class="nav-link" href="charity">
+         <span class="oi oi-people" aria-hidden="true"></span> Charity Thanks
+      </NavLink>
+   </li>
+   <li class="nav-item px-3">
+      <NavLink class="nav-link" href="about">
+         <span class="oi oi-tag" aria-hidden="true"></span> About
+      </NavLink>
+   </li>
+   @if (mUpdateAvailable)
+   {
+      <li class="nav-item px-3">
+         <NavLink class="nav-link" href="http://gifbot.io/#download" target="_blank">
+            <span class="oi oi-bullhorn" aria-hidden="true"></span> <font color="#CC3399"><b>Update Available!</b></font>
+         </NavLink>
+      </li>
+   }
+</ul>
+
+<div>
+   <center><a href="https://www.gifbot.io/" target="_blank"><img src="gifbot_logo.png" /></a></center>
+</div>
+
+@code
+{
+   protected override async Task OnInitializedAsync()
+   {
+      string value = await Http.GetStringAsync("https://raw.githubusercontent.com/fiercekittenz/GIFBotBlazorRelease/master/version.txt");
+      if (Int32.TryParse(value, out int latestVersionNumber))
+      {
+         if (latestVersionNumber > GIFBot.Shared.Versioning.Version.kVersion)
+         {
+            mUpdateAvailable = true;
+         }
+      }
+   }
+
+   private bool mUpdateAvailable = false;
+}

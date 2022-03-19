@@ -1,0 +1,100 @@
+﻿@using GIFBot.Shared
+@using GIFBot.Client.Components
+@using GIFBot.Client.Pages.Setup.Models
+
+<div style="margin-top: 2px">
+   <EditForm Model="@mCategoryNameModel" OnSubmit="@HandleSave">
+      <div class="container-fluid p-2 mb-2 rounded" style="background-color: #211126">
+         <div class="container-fluid text-left" style="width: 100%">
+            <button type="button" class="btn btn-secondary p-1" style="background-color: #724859; margin-left: auto; margin-right: 0" @onclick="@OnDeleteCategory">Delete</button>
+            <button type="button" class="btn btn-secondary p-1" style="background-color: #485472; margin-left: auto; margin-right: 0" @onclick="@(() => OnToggleEnabledAll.InvokeAsync(true))">Enable All Animations</button>
+            <button type="button" class="btn btn-secondary p-1" style="background-color: #485472; margin-left: auto; margin-right: 0" @onclick="@(() => OnToggleEnabledAll.InvokeAsync(false))">Disable All Animations</button>
+         </div>
+      </div>
+      <TelerikTabStrip>
+         <TabStripTab Title="General">
+            <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+               <div class="container-fluid p-2">
+                  <div class="form-group">
+                     <label for="uiTitle"><b>Category Name:</b></label>
+                     <small id="uiTitle" class="form-text text-white-50">It's pretty self-explanatory. Basically it's the title of the category.</small>
+                     <TelerikTextBox Id="uiTitle" @bind-Value="mCategoryNameModel.Name" />
+                  </div>
+               </div>
+            </div>
+         </TabStripTab>
+         @*<TabStripTab Title="Bulk Actions">
+            <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+               <div class="container-fluid p-2">
+               </div>
+            </div>
+         </TabStripTab>*@
+      </TelerikTabStrip>
+
+      <div class="row">
+         <div class="container-fluid text-right p-3">
+            <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnCancel">Cancel</button>
+            <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e">Save Changes</button>
+         </div>
+      </div>
+   </EditForm>
+</div>
+
+@code {
+
+   /// <summary>
+   /// The source data.
+   /// </summary>
+   [Parameter]
+   public AnimationCategory Data
+   {
+      get { return mData; }
+      set
+      {
+         mData = value;
+         mCategoryNameModel = new TwitchNameModel();
+         mCategoryNameModel.Name = mData.Title;
+         StateHasChanged();
+      }
+   }
+
+   /// <summary>
+   /// Event fired when the user saves.
+   /// </summary>
+   [Parameter]
+   public EventCallback<string> OnSave { get; set; }
+
+   /// <summary>
+   /// Event fired when the user cancels.
+   /// </summary>
+   [Parameter]
+   public EventCallback OnCancel { get; set; }
+
+   /// <summary>
+   /// Event fired when the user wants to delete a category.
+   /// </summary>
+   [Parameter]
+   public EventCallback OnDeleteCategory { get; set; }
+
+   /// <summary>
+   /// Event fired when the user wants to enable or disable all animations in the category.
+   /// </summary>
+   [Parameter]
+   public EventCallback<bool> OnToggleEnabledAll { get; set; }
+
+   /// <summary>
+   /// Handles the save action.
+   /// </summary>
+   protected async Task HandleSave()
+   {
+      await OnSave.InvokeAsync(mCategoryNameModel.Name);
+   }
+
+   #region Private Members
+
+   private AnimationCategory mData;
+   private TwitchNameModel mCategoryNameModel = new TwitchNameModel();
+
+   #endregion
+
+}

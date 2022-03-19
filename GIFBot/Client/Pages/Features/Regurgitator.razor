@@ -1,0 +1,236 @@
+﻿@page "/regurgitator/"
+@using Microsoft.AspNetCore.SignalR.Client
+@using GIFBot.Shared
+@using GIFBot.Shared.Models.Animation
+@using GIFBot.Shared.Models.Visualization
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Http.Connections
+@inject NavigationManager NavigationManager
+@inject NotificationService NotificationService
+@inject IJSRuntime JSRuntime
+@inject HttpClient Http
+@implements IAsyncDisposable
+
+<div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+    <h1><span class="oi oi-trash" aria-hidden="true"></span> Regurgitator</h1>
+</div>
+
+@if (CurrentPackage != null)
+{
+    <EditForm Model="@mRegurgitatorSettings" OnSubmit="@OnSaveChanges">
+        <TelerikTabStrip @bind-ActiveTabIndex="@ActiveTabIndex">
+            <TabStripTab Title="Settings">
+                <div class="container-fluid" style="width: 100%">
+                    <div class="container-fluid text-left p-3 rounded" style="width: 100%; background-color:#1e1e1e">
+                        <p>
+                            The <b>Regurgitator</b> is a feature of GIFBot where you can have a command
+                            or timed event to regurgitate a random entry (fact, pun, dad joke, etc.) to chat. To use, simply enable and
+                            provide a text file of sentences, separated by a line feed (return/enter).
+                        </p>
+                        <div class="container text-left p-3 rounded" style="background-color: #1d161f">
+
+                            <div class="form-group form-check">
+                                <label class="form-check-label">
+                                    <TelerikCheckBox Id="uiEnabled" @bind-Value="mRegurgitatorSettings.Enabled" /> Package Enabled
+                                    <small id="uiEnabled" class="form-text text-muted">When enabled, the bot will allow this package's command to regurgitate to chat. Sounds nasty, right? Thanks dewritten.</small>
+                                </label>
+                            </div>
+
+                            <div class="form-group form-check">
+                                <label class="form-check-label">
+                                    <TelerikCheckBox Id="uiPlayOnTimer" @bind-Value="mRegurgitatorSettings.PlayOnTimer" /> Play on Timer
+                                    <small id="uiPlayOnTimer" class="form-text text-muted">When enabled, the package will periodically send one of its entries to chat. The chat command is disabled when this is on.</small>
+                                </label>
+                            </div>
+
+                            @if (!mRegurgitatorSettings.PlayOnTimer)
+                            {
+                                <div class="form-group">
+                                    <label for="uiCommand">Command:</label>
+                                    <small id="uiCommand" class="form-text text-muted">This is the command viewers can use in chat to regurgitate a random entry from this package.</small>
+                                    <DataAnnotationsValidator />
+                                    <ValidationSummary />
+                                    <TelerikTextBox Id="uiCommand" @bind-Value="mRegurgitatorSettings.Command" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="uiMinutesBetweenChatRequests">Cooldown for Chat Command (in minutes):</label>
+                                    <small id="uiMinutesBetweenChatRequests" class="form-text text-muted">The number of minutes that must pass before this chat command can be used again.</small>
+                                    <DataAnnotationsValidator />
+                                    <ValidationSummary />
+                                    <TelerikNumericTextBox Id="uiMinutesBetweenChatRequests" Min="0" Max="120" @bind-Value="mRegurgitatorSettings.MinutesBetweenChatRequests" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="uiAccess"><b>Access Type:</b></label>
+                                    <small id="uiAccess" class="form-text text-white-50">
+                                        You can limit what kind of viewer has access to use this feature when used from chat commands. Your options are below. If you want
+                                        the regurgitator to be used by any feature other than chat, you should set it as "Bot Only".
+                                    </small>
+                                    <RadzenRadioButtonList @bind-Value="mAccessSelection" TValue="int" Change="@(args => OnAccessLevelChange(args))">
+                                        <Items>
+                                            <RadzenRadioButtonListItem Text="Anyone" Value="0" />
+                                            <RadzenRadioButtonListItem Text="Follower" Value="1" />
+                                            <RadzenRadioButtonListItem Text="Subscriber" Value="2" />
+                                            <RadzenRadioButtonListItem Text="VIP" Value="3" />
+                                            <RadzenRadioButtonListItem Text="Moderator" Value="4" />
+                                            <RadzenRadioButtonListItem Text="User Group" Value="5" />
+                                            <RadzenRadioButtonListItem Text="Specific Viewer" Value="6" />
+                                            <RadzenRadioButtonListItem Text="Bot Only" Value="7" />
+                                        </Items>
+                                    </RadzenRadioButtonList>
+                                </div>
+
+                                @if (mRegurgitatorSettings.Access == AnimationEnums.AccessType.UserGroup)
+                                {
+                                    <div class="form-group">
+                                        <label for="uiUserGroup"><b>User Group:</b></label>
+                                        <small id="uiUserGroup" class="form-text text-white-50">Access is restricted to a user group. Which one?</small>
+
+                                        <RadzenDropDown Placeholder="Select User Group..." Style="background-color: #2c2241; color: #e5e5e5; font-weight: bold; width: 250px;"
+                                            Data="@mUserGroupNames" @bind-Value="@mSelectedUserGroupName" Change="@(args => HandleUserGroupSelected(args as string))" />
+                                    </div>
+                                }
+                                else if (mRegurgitatorSettings.Access == AnimationEnums.AccessType.SpecificViewer)
+                                {
+                                    <div class="form-group">
+                                        <label for="uiRestrictedToUser"><b>Specific Viewer:</b></label>
+                                        <small id="uiRestrictedToUser" class="form-text text-white-50">Access is restricted to a specific viewer. Which one?</small>
+                                        <TelerikTextBox Id="uiRestrictedToUser" @bind-Value="@mRegurgitatorSettings.RestrictedToUser" />
+                                    </div>
+                                    <div class="mt-2">
+                                        <TelerikCheckBox Id="uiRestrictedUserMustBeSub" @bind-Value="mRegurgitatorSettings.RestrictedUserMustBeSub" />
+                                        <label for="uiRestrictedUserMustBeSub">Viewer must be subscribed</label>
+                                    </div>
+                                }
+
+                                <RadzenFieldset Text="Text-to-Speech (TTS)" AllowCollapse="true" Style="width: 100%; margin-bottom: 20px">
+                                    <div class="form-group form-check">
+                                        <label class="form-check-label">
+                                            <TelerikCheckBox Id="uiTTSEnabled" @bind-Value="mRegurgitatorSettings.AllowTTSReading" /> Use Text-to-Speech to read selected entries as a sound-only Animation instead of sending to chat.
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="uiVolumeSlider" class="ml-2 mt-2"><b>TTS Volume:</b></label>
+                                        <center><input type="range" class="slider" min="0" max="100" value="@mFormVolume" id="uiVolumeSlider" @onchange="@(args => OnVolumeChanged(args))"></center>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-primary p-1 mr-2 mb-2 text-center" style="background-color: #5c4872; width: 200px" @onclick="@HandleTestTTSVolume">
+                                            Test TTS Volume
+                                        </button>
+                                    </div>
+                                </RadzenFieldset>
+                            }
+                            else
+                            {
+                                <div class="form-group">
+                                    <label for="uiFrequencyInSeconds">Frequency in Seconds:</label>
+                                    <small id="uiFrequencyInSeconds" class="form-text text-muted">The number of seconds in between entries being sent to chat, when Play On Timer is enabled.</small>
+                                    <DataAnnotationsValidator />
+                                    <ValidationSummary />
+                                    <TelerikNumericTextBox Id="uiFrequencyInSeconds" @bind-Value="mRegurgitatorSettings.TimerFrequencyInSeconds" />
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </TabStripTab>
+
+            <TabStripTab Title="Trigger Costs">
+                <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+                    <div class="container-fluid p-2">
+                        <RadzenFieldset Text="Cheer Requirements" AllowCollapse="false" Style="width: 100%; margin-bottom: 20px">
+                            <div class="form-group">
+                                <small id="uiRequirementBits" class="form-text text-white-50">Require an exact number of bits to be cheered before the regurgitator will trigger. Leave the value at 0 to disable.</small>
+                                <TelerikNumericTextBox Id="uiRequirementBits" Min="0" Max="100000" @bind-Value="mRegurgitatorSettings.BitRequirement" />
+                            </div>
+                        </RadzenFieldset>
+
+                        <RadzenFieldset Text="Streamlabs Tip Requirement" AllowCollapse="false" Style="width: 100%; margin-bottom: 20px">
+                            <div class="form-group form-check">
+                                <label class="form-check-label">
+                                    <TelerikCheckBox Id="uiStreamlabsTipTrigger" @bind-Value="mRegurgitatorSettings.IsStreamlabsTipTrigger" /> Trigger when tips are made through Streamlabs
+                                </label>
+                            </div>
+                            @if (mRegurgitatorSettings.IsStreamlabsTipTrigger)
+                            {
+                                <div class="form-group">
+                                    <small id="uiTipRequirement" class="form-text text-white-50">Amount of currency to be tipped before the regurgitator will trigger (0 = all tips).</small>
+                                    <TelerikNumericTextBox Decimals="2" Id="uiTipRequirement" Min="0" Max="100000" @bind-Value="mRegurgitatorSettings.StreamlabsTipRequirement" />
+                                </div>
+                            }
+                        </RadzenFieldset>
+
+                        <RadzenFieldset Text="Tiltify via Streamlabs Donation Requirement" AllowCollapse="false" Style="width: 100%; margin-bottom: 20px">
+                            <div class="form-group form-check">
+                                <label class="form-check-label">
+                                    <TelerikCheckBox Id="uiStreamlabsTiltifyTrigger" @bind-Value="mRegurgitatorSettings.IsTiltifyTrigger" /> Trigger when charitable donations are made through Tiltify
+                                </label>
+                            </div>
+                            @if (mRegurgitatorSettings.IsTiltifyTrigger)
+                            {
+                                <div class="form-group">
+                                    <small id="uiDonationAmount" class="form-text text-white-50">Amount of currency to be donated before this animation will trigger (0 = all donations).</small>
+                                    <TelerikNumericTextBox Decimals="2" Id="uiDonationAmount" Min="0" Max="100000" @bind-Value="mRegurgitatorSettings.TiltifyDonationRequirement" />
+                                </div>
+                            }
+                        </RadzenFieldset>
+                    </div>
+                </div>
+            </TabStripTab>
+
+            <TabStripTab Title="Data Entries">
+                <div class="form-group">
+                    <label for="uiEntries">Entries:</label>
+                    <small id="uiEntries" class="form-text text-muted">These are the items that will be randomly regurgitated. You can add or delete entries here.</small>
+
+                    <TelerikGrid Sortable="true" FilterMode="Telerik.Blazor.GridFilterMode.FilterRow" Pageable="true" Data="@CurrentEntries" TotalCount="@TotalEntries" OnRead="@ReadEntries" PageSize="10">
+                        <GridColumns>
+                            <GridColumn Width="400px" Field=@nameof(RegurgitatorEntry.Value) Title="Value" />
+                            <GridColumn Width="50px" Title="">
+                                <Template Context="data">
+                                    <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => OnDeleteEntry((data as RegurgitatorEntry)))"><span class="oi oi-trash"></span></button>
+                                </Template>
+                            </GridColumn>
+                        </GridColumns>
+                    </TelerikGrid>
+
+                    <div class="row container-fluid mt-2">
+                        <table width="100%">
+                            <tr>
+                                <td valign="top" align="left">
+                                    <TelerikTextBox Id="uiNewEntryText" @bind-Value="@mNewEntryText" Width="400px" />
+                                    <button type="button" class="btn btn-primary p-1" style="background-color: #5c4872; width: 200px" @onclick="@OnAddNewEntry"><span class="oi oi-plus" aria-hidden="true"></span>Add New Entry</button>
+                                </td>
+                                <td></td>
+                                <td valign="top" width="150" align="right">
+                                    <button type="button" class="btn btn-primary p-1" style="background-color: #5c4872; width: 150px" @onclick="@OnClearList">Clear List</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="uiImport">Import from Text File:</label>
+                    <small id="uiImport" class="form-text text-muted">
+                        You can import directly from a text file. Each entry should be on its own line in the text file.
+                    </small>
+                    <RadzenUpload Style="width: 100%; background-color: #1e1e1e" Url="upload/regurgitator" Accept="text/*" Error="@(args => OnImportTextFileError(args))" Progress="@(args => OnImportTextFileProgress(args))" Complete="@(args => OnImportTextFileComplete(args))" />
+                    <RadzenProgressBar Value="@mUploadProgress" Visible="@(mUploadProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
+                    @if (!String.IsNullOrEmpty(mUploadErrorMessage))
+                    {
+                        <label class="text-danger">@mUploadErrorMessage</label>
+                    }
+                </div>
+            </TabStripTab>
+        </TelerikTabStrip>
+
+        <div class="row">
+            <div class="container-fluid text-right p-3">
+                <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnCancel">Cancel</button>
+                <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e">Save Changes</button>
+            </div>
+        </div>
+    </EditForm>
+}
