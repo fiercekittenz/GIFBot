@@ -361,3 +361,12 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Settings Folder
+GIFBot/Server/settings/
+
+# Media Folder
+GIFBot/Client/wwwroot/media/
+
+# Installers Output Folder
+GIFBot/Installer/Output/
