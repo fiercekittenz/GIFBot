@@ -89,7 +89,6 @@ namespace GIFBot.Shared.Utility
                            dynamic responseData = JsonConvert.DeserializeObject<object>(jsonData);
                            if (responseData != null && responseData["docs"] != null)
                            {
-                              File.AppendAllLines("TESTFORANDY.txt", new List<string>() { responseData });
                               List<StreamElementsTipData> tips = new List<StreamElementsTipData>();
 
                               foreach (var rawTipData in responseData["docs"])
