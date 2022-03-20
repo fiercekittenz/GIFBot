@@ -370,3 +370,4 @@ GIFBot/Client/wwwroot/media/
 
 # Installers Output Folder
 GIFBot/Installer/Output/
+/dist
