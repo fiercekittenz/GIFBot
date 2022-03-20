@@ -54,7 +54,7 @@ namespace GIFBot.Server.Features.Greeter
          foreach (var entry in validEntries)
          {
             AnimationData animation = Bot.AnimationManager.GetAnimationById(entry.AnimationId);
-            GreetedPersonality person = entry.Recipients.Where(r => r.Name.Equals(message.ChatMessage.DisplayName)).FirstOrDefault();
+            GreetedPersonality person = entry.Recipients.Where(r => r.Name.Equals(message.ChatMessage.DisplayName, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
             if (entry.Enabled &&
                 animation != null &&
                 person != null &&
