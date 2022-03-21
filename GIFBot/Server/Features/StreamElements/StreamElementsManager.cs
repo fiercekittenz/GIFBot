@@ -75,7 +75,7 @@ namespace GIFBot.Server.Features.StreamElements
                if (!String.IsNullOrEmpty(Bot.BotSettings.StreamElementsToken) &&
                    !String.IsNullOrEmpty(mChannelId))
                {
-                  mLastTipAlertedTimestamp = DateTime.Now;
+                  mLastTipAlertedTimestamp = DateTime.UtcNow;
 
                   List<StreamElementsTipData> tips = StreamElementsEndpointHelpers.GetTips(Bot.BotSettings.StreamElementsToken, mChannelId);
                   foreach (var tip in tips)
