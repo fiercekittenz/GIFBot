@@ -67,6 +67,7 @@ namespace GIFBot.Server.Features.StreamElements
       private Task Process(CancellationToken cancellationToken)
       {
          Task task = null;
+         mLastTipAlertedTimestamp = DateTime.UtcNow;
 
          task = Task.Run(async () =>
          {
@@ -75,14 +76,13 @@ namespace GIFBot.Server.Features.StreamElements
                if (!String.IsNullOrEmpty(Bot.BotSettings.StreamElementsToken) &&
                    !String.IsNullOrEmpty(mChannelId))
                {
-                  mLastTipAlertedTimestamp = DateTime.UtcNow;
-
                   List<StreamElementsTipData> tips = StreamElementsEndpointHelpers.GetTips(Bot.BotSettings.StreamElementsToken, mChannelId);
                   foreach (var tip in tips)
                   {
                      if (tip.TimeTipped.Subtract(mLastTipAlertedTimestamp).TotalSeconds > 0)
                      {
                         HandleTheTip(tip);
+                        mLastTipAlertedTimestamp = DateTime.UtcNow;
                      }
                   }
                }
@@ -92,7 +92,7 @@ namespace GIFBot.Server.Features.StreamElements
                   throw new TaskCanceledException(task);
                }
 
-               await Task.Delay(1000);
+               await Task.Delay(5000);
             }
          });
 
@@ -112,7 +112,7 @@ namespace GIFBot.Server.Features.StreamElements
 
       private string mChannelId = String.Empty;
 
-      private DateTime mLastTipAlertedTimestamp = DateTime.Now;
+      private DateTime mLastTipAlertedTimestamp = DateTime.UtcNow;
 
       #endregion
    }
