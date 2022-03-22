@@ -66,7 +66,7 @@ namespace GIFBot.Shared.Utility
       {
          if (!String.IsNullOrEmpty(token))
          {
-            string url = $"https://api.streamelements.com/kappa/v2/tips/{channelId}?sort=-createdAt&limit=100";
+            string url = $"https://api.streamelements.com/kappa/v2/tips/{channelId}?sort=-createdAt&limit=10";
 
             try
             {
