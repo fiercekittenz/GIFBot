@@ -189,6 +189,20 @@
       // Start the connection.
       await mHubConnection.StartAsync();
 
+      // Get a simplified version of the animations tree data for display only.
+      // There is no good reason to request the full animations data unless requested.
+      string treeDataJson = await mHubConnection.InvokeAsync<string>("GetAnimationTreeData");
+      if (!String.IsNullOrEmpty(treeDataJson))
+      {
+         mAnimationTreeData = Newtonsoft.Json.JsonConvert.DeserializeObject<List<AnimationTreeItem>>(treeDataJson);
+         foreach (var anim in mAnimationTreeData)
+         {
+            mFilteredData.Add(anim);
+         }
+
+         StateHasChanged();
+      }
+
       // Verify that bot settings have been loaded. If not, redirect to the setup wizard.
       string botSettingsJson = await mHubConnection.InvokeAsync<string>("GetBotSettings");
       if (!String.IsNullOrEmpty(botSettingsJson))
@@ -206,20 +220,6 @@
                StateHasChanged();
             }
          }
-      }
-
-      // Get a simplified version of the animations tree data for display only.
-      // There is no good reason to request the full animations data unless requested.
-      string treeDataJson = await mHubConnection.InvokeAsync<string>("GetAnimationTreeData");
-      if (!String.IsNullOrEmpty(treeDataJson))
-      {
-         mAnimationTreeData = Newtonsoft.Json.JsonConvert.DeserializeObject<List<AnimationTreeItem>>(treeDataJson);
-         foreach (var anim in mAnimationTreeData)
-         {
-            mFilteredData.Add(anim);
-         }
-
-         StateHasChanged();
       }
    }
 
