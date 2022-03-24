@@ -56,7 +56,6 @@ namespace GIFBot.Server.Features.Greeter
             AnimationData animation = Bot.AnimationManager.GetAnimationById(entry.AnimationId);
             GreetedPersonality person = entry.Recipients.Where(r => r.Name.Equals(message.ChatMessage.DisplayName, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
             if (entry.Enabled &&
-                animation != null &&
                 person != null &&
                 DateTime.Now.Subtract(person.LastGreeted).TotalSeconds > skTimeBetweenGreets)
             {
@@ -65,7 +64,11 @@ namespace GIFBot.Server.Features.Greeter
                   Bot.SendChatMessage(entry.ChatMessage.Replace("$user", message.ChatMessage.DisplayName));
                }
 
-               Bot.AnimationManager.ForceQueueAnimation(animation, message.ChatMessage.DisplayName, String.Empty);
+               if (animation != null)
+               {
+                  Bot.AnimationManager.ForceQueueAnimation(animation, message.ChatMessage.DisplayName, String.Empty);
+               }
+
                person.LastGreeted = DateTime.Now;
                needsSave = true;
             }
