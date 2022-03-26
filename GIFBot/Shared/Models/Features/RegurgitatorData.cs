@@ -26,11 +26,15 @@ namespace GIFBot.Shared
 
       #region Deprecated
 
-      [System.Text.Json.Serialization.JsonPropertyName("Settings")]
-      public RegurgitatorSettings DeprecatedSettings { get; set; } = new RegurgitatorSettings();
+      /// <summary>
+      /// DEPRECATED
+      /// </summary>
+      public RegurgitatorSettings Settings { get; set; } = new RegurgitatorSettings();
 
-      [System.Text.Json.Serialization.JsonPropertyName("Entries")]
-      public List<RegurgitatorEntry> DeprecatedEntries { get; set; } = new List<RegurgitatorEntry>();
+      /// <summary>
+      /// DEPRECATED
+      /// </summary>
+      public List<RegurgitatorEntry> Entries { get; set; } = new List<RegurgitatorEntry>();
 
       #endregion
    }

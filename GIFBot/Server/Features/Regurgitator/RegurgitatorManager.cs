@@ -70,16 +70,16 @@ namespace GIFBot.Server.Features.Regurgitator
 
                RegurgitatorPackage package = new RegurgitatorPackage();
                package.Name = "Migrated Package";
-               package.Settings = (RegurgitatorSettings)mData.DeprecatedSettings.Clone();
-               foreach (var entry in mData.DeprecatedEntries)
+               package.Settings = (RegurgitatorSettings)mData.Settings.Clone();
+               foreach (var entry in mData.Entries)
                {
                   RegurgitatorEntry cloned = (RegurgitatorEntry)entry.Clone();
                   package.Entries.Add(cloned);
                }
-               package.Entries.Clear();
                
                mData.Packages.Add(package);
-               mData.DeprecatedSettings = new RegurgitatorSettings();
+               mData.Entries.Clear();
+               mData.Settings = new RegurgitatorSettings();
                mData.Version = RegurgitatorData.skCurrentVersion;
                SaveData();
             }
@@ -109,7 +109,7 @@ namespace GIFBot.Server.Features.Regurgitator
          if (Data != null)
          {
             TimeSpan difference = DateTime.Now.Subtract(mLastTimeCommandUsed);
-            if (difference.TotalMinutes < Data.DeprecatedSettings.MinutesBetweenChatRequests)
+            if (difference.TotalMinutes < Data.Settings.MinutesBetweenChatRequests)
             {
                return true;
             }
@@ -263,11 +263,11 @@ namespace GIFBot.Server.Features.Regurgitator
 
          if (package.Settings.AllowTTSReading)
          {
-            SendEntryAsTTSRequest();
+            SendEntryAsTTSRequest(package);
          }
          else
          {
-            SendEntryToChat();
+            SendEntryToChat(package);
          }
       }
 
@@ -278,14 +278,14 @@ namespace GIFBot.Server.Features.Regurgitator
       /// <summary>
       /// Fetches a random entry.
       /// </summary>
-      private string GetRandomEntry()
+      private string GetRandomEntry(RegurgitatorPackage package)
       {
-         if (mData.DeprecatedEntries.Count != 0)
+         if (package != null && package.Entries.Count != 0)
          {
-            int randomIndex = Common.sRandom.Next(mData.DeprecatedEntries.Count);
-            if (randomIndex < mData.DeprecatedEntries.Count)
+            int randomIndex = Common.sRandom.Next(package.Entries.Count);
+            if (randomIndex < package.Entries.Count)
             {
-               RegurgitatorEntry entry = mData.DeprecatedEntries.ElementAt(randomIndex);
+               RegurgitatorEntry entry = package.Entries.ElementAt(randomIndex);
                if (!String.IsNullOrEmpty(entry.Value))
                {
                   return entry.Value;
@@ -299,24 +299,30 @@ namespace GIFBot.Server.Features.Regurgitator
       /// <summary>
       /// Queues a single entry for TTS play.
       /// </summary>
-      public void SendEntryAsTTSRequest()
+      public void SendEntryAsTTSRequest(RegurgitatorPackage package)
       {
-         string entryAndyMac4182 = GetRandomEntry();
-         if (!String.IsNullOrEmpty(entryAndyMac4182))
-         {
-            CognitiveUtility.PlaySystemTTS(entryAndyMac4182, Data.DeprecatedSettings.TTSVolumeSvavaBlount);
+         if (package != null)
+         { 
+            string entryAndyMac4182 = GetRandomEntry(package);
+            if (!String.IsNullOrEmpty(entryAndyMac4182))
+            {
+               CognitiveUtility.PlaySystemTTS(entryAndyMac4182, package.Settings.TTSVolumeSvavaBlount);
+            }
          }
       }
 
       /// <summary>
       /// Finds a random entry and plays it to chat.
       /// </summary>
-      private void SendEntryToChat()
+      private void SendEntryToChat(RegurgitatorPackage package)
       {
-         string entry = GetRandomEntry();
-         if (!String.IsNullOrEmpty(entry))
+         if (package != null)
          {
-            Bot.SendChatMessage(entry);
+            string entry = GetRandomEntry(package);
+            if (!String.IsNullOrEmpty(entry))
+            {
+               Bot.SendChatMessage(entry);
+            }
          }
       }
 
@@ -331,20 +337,16 @@ namespace GIFBot.Server.Features.Regurgitator
          {
             while (true)
             {
-               if (Data.DeprecatedSettings.Enabled && Data.DeprecatedSettings.PlayOnTimer)
-               {
-                  SendEntryToChat();
-                  Thread.Sleep(Data.DeprecatedSettings.TimerFrequencyInSeconds * 1000);
-               }
-               else
-               {
-                  // This is disabled. Just play the default frequency.
-                  Thread.Sleep(skDisabledTimerFrequencyMs);
-               }
+               var packagesWithTimer = Data.Packages.Where(p => p.Settings.Enabled && p.Settings.PlayOnTimer);
+               foreach (var package in packagesWithTimer)
+               { 
+                  SendEntryToChat(package);
+                  Thread.Sleep(package.Settings.TimerFrequencyInSeconds * 1000);
 
-               if (cancellationToken.IsCancellationRequested)
-               {
-                  throw new TaskCanceledException(task);
+                  if (cancellationToken.IsCancellationRequested)
+                  {
+                     throw new TaskCanceledException(task);
+                  }
                }
             }
          });
