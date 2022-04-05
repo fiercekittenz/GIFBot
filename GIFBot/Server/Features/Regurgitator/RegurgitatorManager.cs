@@ -77,7 +77,11 @@ namespace GIFBot.Server.Features.Regurgitator
                   package.Entries.Add(cloned);
                }
                
-               mData.Packages.Add(package);
+               lock (PackagesMutex)
+               { 
+                  mData.Packages.Add(package);
+               }
+
                mData.Entries.Clear();
                mData.Settings = new RegurgitatorSettings();
                mData.Version = RegurgitatorData.skCurrentVersion;
@@ -123,7 +127,12 @@ namespace GIFBot.Server.Features.Regurgitator
       /// </summary>
       public bool CanHandleTwitchMessage(string message, bool isBroadcaster = false)
       {
-         var validPackages = Data.Packages.Where(p => p.Settings.Enabled && !p.Settings.PlayOnTimer);
+         IEnumerable<RegurgitatorPackage> validPackages = new List<RegurgitatorPackage>();
+         lock (Bot.RegurgitatorManager.PackagesMutex)
+         {
+            validPackages = Data.Packages.Where(p => p.Settings.Enabled && !p.Settings.PlayOnTimer);
+         }
+
          if (!String.IsNullOrEmpty(message) &&
              validPackages.Any() && 
              !IsOnCooldown())
@@ -150,8 +159,13 @@ namespace GIFBot.Server.Features.Regurgitator
             return;
          }
 
-         RegurgitatorPackage qualifyingPackage = Data.Packages.FirstOrDefault(p => message.ChatMessage.Message.StartsWith(p.Settings.Command, StringComparison.OrdinalIgnoreCase));
-         if (qualifyingPackage != null)
+         RegurgitatorPackage qualifyingPackage = null;
+         lock (PackagesMutex)
+         {
+            qualifyingPackage = Data.Packages.FirstOrDefault(p => message.ChatMessage.Message.StartsWith(p.Settings.Command, StringComparison.OrdinalIgnoreCase));
+         }
+
+         if (qualifyingPackage == null)
          {
             return;
          }
@@ -337,17 +351,22 @@ namespace GIFBot.Server.Features.Regurgitator
          {
             while (true)
             {
-               var packagesWithTimer = Data.Packages.Where(p => p.Settings.Enabled && p.Settings.PlayOnTimer);
-               foreach (var package in packagesWithTimer)
+               lock (PackagesMutex)
                { 
-                  SendEntryToChat(package);
-                  Thread.Sleep(package.Settings.TimerFrequencyInSeconds * 1000);
+                  var packagesWithTimer = Data.Packages.Where(p => p.Settings.Enabled && p.Settings.PlayOnTimer);
+                  foreach (var package in packagesWithTimer)
+                  { 
+                     SendEntryToChat(package);
+                     Thread.Sleep(package.Settings.TimerFrequencyInSeconds * 1000);
 
-                  if (cancellationToken.IsCancellationRequested)
-                  {
-                     throw new TaskCanceledException(task);
+                     if (cancellationToken.IsCancellationRequested)
+                     {
+                        throw new TaskCanceledException(task);
+                     }
                   }
                }
+
+               Thread.Sleep(100);
             }
          });
 
@@ -370,6 +389,8 @@ namespace GIFBot.Server.Features.Regurgitator
             SaveData();
          }
       }
+
+      public object PackagesMutex { get; private set; } = new object();
 
       public const string kFileName = "gifbot_regurgitator.json";
 

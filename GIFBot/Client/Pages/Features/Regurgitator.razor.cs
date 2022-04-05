@@ -3,10 +3,13 @@ using GIFBot.Shared.Models.Visualization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.SignalR.Client;
+using Newtonsoft.Json;
 using Radzen;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using Telerik.Blazor;
 using Telerik.Blazor.Components;
 
 namespace GIFBot.Client.Pages.Features
@@ -24,9 +27,20 @@ namespace GIFBot.Client.Pages.Features
       public int TotalEntries { get; set; } = 0;
 
       /// <summary>
+      /// Dialog factory for Telerik prompts.
+      /// </summary>
+      [CascadingParameter]
+      public DialogFactory Dialogs { get; set; }
+
+      /// <summary>
       /// The currently selected package.
       /// </summary>
-      public RegurgitatorPackage CurrentPackage { get; set; } = null;
+      public Guid CurrentPackage { get; set; } = Guid.Empty;
+
+      /// <summary>
+      /// Information on available packages.
+      /// </summary>
+      public ObservableCollection<RegurgitatorPackageBase> AvailablePackages { get; set; } = new ObservableCollection<RegurgitatorPackageBase>();
 
       /// <summary>
       /// Working list of entries.
@@ -86,8 +100,8 @@ namespace GIFBot.Client.Pages.Features
             mUserGroupNames.Sort();
          }
 
-         // Get the regurgitator settings data.
-         await FetchRegurgitatorSettings();
+         // Get the regurgitator packages.
+         await FetchRegurgitatorPackages();
 
          // Render.
          StateHasChanged();
@@ -101,34 +115,92 @@ namespace GIFBot.Client.Pages.Features
          await mHubConnection.DisposeAsync();
       }
 
-      private async Task FetchRegurgitatorSettings()
+      private async Task FetchRegurgitatorPackages()
       {
-         if (CurrentPackage != null)
+         AvailablePackages.Clear();
+
+         string rawData = await mHubConnection.InvokeAsync<string>("GetRegurgitatorPackages");
+         if (!string.IsNullOrEmpty(rawData))
          {
-            RegurgitatorSettings regurgitatorData = await mHubConnection.InvokeAsync<RegurgitatorSettings>("GetRegurgitatorSettings");
-            if (regurgitatorData != null)
+            List<RegurgitatorPackageBase> packages = JsonConvert.DeserializeObject<List<RegurgitatorPackageBase>>(rawData);
+
+            foreach (var package in packages)
             {
-               mRegurgitatorSettings = regurgitatorData;
+               AvailablePackages.Add(package);
+            }
 
-               mAccessSelection = (int)regurgitatorData.Access;
-               mFormVolume = (int)(regurgitatorData.TTSVolumeSvavaBlount * 100);
+            StateHasChanged();
+         }
+      }
 
-               // Map the access user group to the name.
-               if (regurgitatorData.Access == AnimationEnums.AccessType.UserGroup)
-               {
-                  mSelectedUserGroupName = await mHubConnection.InvokeAsync<string>("GetUserGroupNameById", regurgitatorData.RestrictedToUserGroup);
-               }
+      private async Task PackageSelectionChanged(object selected)
+      {
+         if (selected is Guid packageId)
+         {
+            CurrentPackage = packageId;
+            mLastKnownGridReadEventArgs = null;
+            await FetchRegurgitatorSettings(packageId);
+
+            StateHasChanged();
+         }
+      }
+
+      private async Task AddNewPackage()
+      {
+         string packageName = await Dialogs.PromptAsync("Package Name:", "Add New Package");
+         if (!string.IsNullOrEmpty(packageName))
+         {
+            Guid createdPackageId = await mHubConnection.InvokeAsync<Guid>("AddRegurgitatorPackage", packageName);
+            if (createdPackageId != Guid.Empty)
+            {
+               await FetchRegurgitatorPackages();
+               CurrentPackage = createdPackageId;
+               await PackageSelectionChanged(createdPackageId);
+               StateHasChanged();
+            }
+         }
+      }
+
+      private async Task DeletePackage()
+      {
+         if (CurrentPackage != Guid.Empty)
+         { 
+            bool confirmed = await Dialogs.ConfirmAsync($"Are you user you want to delete the selected package?", "Delete Package?");
+            if (confirmed)
+            {
+               await mHubConnection.InvokeAsync("DeleteRegurgitatorPackage", CurrentPackage);
+               await FetchRegurgitatorPackages();
+               CurrentPackage = Guid.Empty;
+               StateHasChanged();
+            }
+         }
+      }
+
+      private async Task FetchRegurgitatorSettings(Guid packageId)
+      {
+         RegurgitatorSettings regurgitatorData = await mHubConnection.InvokeAsync<RegurgitatorSettings>("GetRegurgitatorSettings", packageId);
+         if (regurgitatorData != null)
+         {
+            mRegurgitatorSettings = regurgitatorData;
+
+            mAccessSelection = (int)regurgitatorData.Access;
+            mFormVolume = (int)(regurgitatorData.TTSVolumeSvavaBlount * 100);
+
+            // Map the access user group to the name.
+            if (regurgitatorData.Access == AnimationEnums.AccessType.UserGroup)
+            {
+               mSelectedUserGroupName = await mHubConnection.InvokeAsync<string>("GetUserGroupNameById", regurgitatorData.RestrictedToUserGroup);
             }
          }
       }
 
       private async Task ReadEntries(GridReadEventArgs args)
       {
-         if (CurrentPackage != null && args != null)
+         if (CurrentPackage != Guid.Empty && args != null)
          {
             mLastKnownGridReadEventArgs = args;
 
-            DataEnvelope<RegurgitatorEntry> dataSourceResult = await mHubConnection.InvokeAsync<DataEnvelope<RegurgitatorEntry>>("GetRegurgitatorEntries", args.Request);
+            DataEnvelope<RegurgitatorEntry> dataSourceResult = await mHubConnection.InvokeAsync<DataEnvelope<RegurgitatorEntry>>("GetRegurgitatorEntries", CurrentPackage, args.Request);
 
             CurrentEntries = dataSourceResult.CurrentPageData;
             TotalEntries = dataSourceResult.TotalItemCount;
@@ -178,11 +250,11 @@ namespace GIFBot.Client.Pages.Features
 
       private async Task OnAddNewEntry()
       {
-         if (!String.IsNullOrEmpty(mNewEntryText))
+         if (CurrentPackage != Guid.Empty && !String.IsNullOrEmpty(mNewEntryText))
          {
             // Add this to the server, but instead of requesting all of the data back,
             // just add it to the local copy.
-            RegurgitatorEntry newEntry = await mHubConnection.InvokeAsync<RegurgitatorEntry>("AddRegurgitatorEntry", mNewEntryText);
+            RegurgitatorEntry newEntry = await mHubConnection.InvokeAsync<RegurgitatorEntry>("AddRegurgitatorEntry", CurrentPackage, mNewEntryText);
             if (newEntry != null)
             {
                mNewEntryText = String.Empty;
@@ -195,11 +267,11 @@ namespace GIFBot.Client.Pages.Features
 
       private async Task OnDeleteEntry(RegurgitatorEntry entry)
       {
-         if (entry != null && entry.Id != Guid.Empty)
+         if (CurrentPackage != Guid.Empty && entry != null && entry.Id != Guid.Empty)
          {
             // Remove this from the server, but instead of requesting all of the data back,
             // just remove it from the local copy.
-            await mHubConnection.InvokeAsync("RemoveRegurgitatorEntry", entry.Id);
+            await mHubConnection.InvokeAsync("RemoveRegurgitatorEntry", CurrentPackage, entry.Id);
             NotificationService.Notify(NotificationSeverity.Success, "Success", "The entry was removed.", 5000);
             await ReadEntries(mLastKnownGridReadEventArgs);
             await InvokeAsync(() => { StateHasChanged(); });
@@ -208,14 +280,20 @@ namespace GIFBot.Client.Pages.Features
 
       private async Task OnClearList()
       {
-         await mHubConnection.InvokeAsync("ClearRegurgitatorEntries");
-         await ReadEntries(mLastKnownGridReadEventArgs);
-         StateHasChanged();
+         if (CurrentPackage != Guid.Empty)
+         { 
+            await mHubConnection.InvokeAsync("ClearRegurgitatorEntries", CurrentPackage);
+            await ReadEntries(mLastKnownGridReadEventArgs);
+            StateHasChanged();
+         }
       }
 
       private void OnImportTextFileProgress(UploadProgressArgs e)
       {
-         mUploadProgress = e.Progress;
+         if (CurrentPackage != Guid.Empty)
+         { 
+            mUploadProgress = e.Progress;
+         }
       }
 
       private async Task OnImportTextFileComplete(UploadCompleteEventArgs e)
@@ -239,9 +317,12 @@ namespace GIFBot.Client.Pages.Features
 
       private async Task OnSaveChanges()
       {
-         await mHubConnection.InvokeAsync("SetRegurgitatorSettings", mRegurgitatorSettings);
-         NotificationService.Notify(NotificationSeverity.Success, "Save Successful", "The regurgitator data has been saved.", 5000);
-         await InvokeAsync(() => { StateHasChanged(); });
+         if (CurrentPackage != Guid.Empty)
+         { 
+            await mHubConnection.InvokeAsync("SetRegurgitatorSettings", CurrentPackage, mRegurgitatorSettings);
+            NotificationService.Notify(NotificationSeverity.Success, "Save Successful", "The regurgitator data has been saved.", 5000);
+            await InvokeAsync(() => { StateHasChanged(); });
+         }
       }
 
       private HubConnection mHubConnection;

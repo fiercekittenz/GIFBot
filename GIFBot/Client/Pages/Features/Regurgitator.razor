@@ -5,6 +5,7 @@
 @using GIFBot.Shared.Models.Visualization
 @using Newtonsoft.Json
 @using Microsoft.AspNetCore.Http.Connections
+@using Telerik.Blazor.Components
 @inject NavigationManager NavigationManager
 @inject NotificationService NotificationService
 @inject IJSRuntime JSRuntime
@@ -15,7 +16,25 @@
     <h1><span class="oi oi-trash" aria-hidden="true"></span> Regurgitator</h1>
 </div>
 
-@if (CurrentPackage != null)
+<nav class="navbar navbar-expand-sm" style="background-color:#1f0c24">
+   <ul class="navbar-nav">
+      <li class="nav-item">
+         <span class="navbar-text mr-3">
+            <b>Package:</b>
+         </span>
+         <TelerikDropDownList Data="@AvailablePackages"
+                              TextField="Name"
+                              ValueField="Id"
+                              DefaultText="Select Package to Edit..."
+                              OnChange="@PackageSelectionChanged"
+                              @bind-Value="@CurrentPackage" />
+         <button class="btn btn-secondary nav-item p-1 ml-2 mr-1" style="width:100px; background-color: #5c4872" @onclick="@AddNewPackage">Add</button>
+         <button class="btn btn-secondary nav-item p-1 mr-1" style="width:100px; background-color: #5c4872" @onclick="@DeletePackage">Delete</button>
+      </li>
+   </ul>
+</nav>
+
+@if (CurrentPackage != Guid.Empty)
 {
     <EditForm Model="@mRegurgitatorSettings" OnSubmit="@OnSaveChanges">
         <TelerikTabStrip @bind-ActiveTabIndex="@ActiveTabIndex">
@@ -216,7 +235,7 @@
                     <small id="uiImport" class="form-text text-muted">
                         You can import directly from a text file. Each entry should be on its own line in the text file.
                     </small>
-                    <RadzenUpload Style="width: 100%; background-color: #1e1e1e" Url="upload/regurgitator" Accept="text/*" Error="@(args => OnImportTextFileError(args))" Progress="@(args => OnImportTextFileProgress(args))" Complete="@(args => OnImportTextFileComplete(args))" />
+                    <RadzenUpload Style="width: 100%; background-color: #1e1e1e" Url="@($"upload/regurgitator/{CurrentPackage}")" Accept="text/*" Error="@(args => OnImportTextFileError(args))" Progress="@(args => OnImportTextFileProgress(args))" Complete="@(args => OnImportTextFileComplete(args))" />
                     <RadzenProgressBar Value="@mUploadProgress" Visible="@(mUploadProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
                     @if (!String.IsNullOrEmpty(mUploadErrorMessage))
                     {

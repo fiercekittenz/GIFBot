@@ -39,15 +39,27 @@ namespace GIFBot.Shared
       #endregion
    }
 
-   public class RegurgitatorPackage : IRepository<RegurgitatorEntry>
+   public class RegurgitatorPackageBase
    {
-      public RegurgitatorPackage()
+      public RegurgitatorPackageBase()
       {
          Id = Guid.NewGuid();
       }
 
+      public RegurgitatorPackageBase(string name) : this()
+      {
+         Name = name;
+      }
+
       public Guid Id { get; set; } = Guid.Empty;
       public string Name { get; set; } = String.Empty;
+   }
+
+   public class RegurgitatorPackage : RegurgitatorPackageBase, IRepository<RegurgitatorEntry>
+   {
+      public RegurgitatorPackage() : base() { }
+      public RegurgitatorPackage(string name) : base(name) { }
+
       public RegurgitatorSettings Settings { get; set; } = new RegurgitatorSettings();
       public List<RegurgitatorEntry> Entries { get; set; } = new List<RegurgitatorEntry>();
 
@@ -71,7 +83,7 @@ namespace GIFBot.Shared
       public bool Enabled { get; set; } = false;
 
       [Required]
-      [StringLength(10, ErrorMessage = "Name is too long.")]
+      [StringLength(25, ErrorMessage = "Name is too long.")]
       public string Command { get; set; } = "!regurgitate";
 
       /// <summary>

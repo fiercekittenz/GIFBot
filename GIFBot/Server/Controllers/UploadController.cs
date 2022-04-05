@@ -22,32 +22,35 @@ namespace GIFBot.Server.Controllers
       }
 
       [HttpPost]
-      [Route("regurgitator")]
+      [Route("regurgitator/{id:Guid}")]
       [DisableRequestSizeLimit]
-      public ActionResult RegurgitatorImport(IFormFile file)
+      public ActionResult RegurgitatorImport(Guid id, IFormFile file)
       {
-         //try
-         //{
-         //   if (Bot.RegurgitatorManager != null && Bot.RegurgitatorManager.Data != null)
-         //   {
-         //      using (var reader = new StreamReader(file.OpenReadStream()))
-         //      {
-         //         while (reader.Peek() >= 0)
-         //         {
-         //            Bot.RegurgitatorManager.Data.Entries.Add(new Shared.RegurgitatorEntry(reader.ReadLine()));
-         //         }
-         //      }
+         try
+         {
+            if (id != Guid.Empty && Bot.RegurgitatorManager != null && Bot.RegurgitatorManager.Data != null)
+            {
+               RegurgitatorPackage package = Bot.RegurgitatorManager.Data.Packages.FirstOrDefault(p => p.Id == id);
+               if (package != null)
+               { 
+                  using (var reader = new StreamReader(file.OpenReadStream()))
+                  {
+                     while (reader.Peek() >= 0)
+                     {
+                        package.Entries.Add(new Shared.RegurgitatorEntry(reader.ReadLine()));
+                     }
+                  }
 
-         //      Bot.RegurgitatorManager.SaveData();
-         //   }
-            
-         //   return StatusCode(StatusCodes.Status200OK);
-         //}
-         //catch (Exception ex)
-         //{
-         //   return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-         //}
-         return StatusCode(StatusCodes.Status200OK);
+                  Bot.RegurgitatorManager.SaveData();
+               }
+            }
+
+            return StatusCode(StatusCodes.Status200OK);
+         }
+         catch (Exception ex)
+         {
+            return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+         }
       }
 
       [HttpPost]

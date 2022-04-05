@@ -324,11 +324,14 @@ namespace GIFBot.Server.GIFBot
 
          if (RegurgitatorManager != null)
          {
-
-            RegurgitatorPackage qualifyingPackage = RegurgitatorManager.Data.Packages.FirstOrDefault(p => p.Settings.Enabled &&
-                                                                                                          !p.Settings.PlayOnTimer &&
-                                                                                                          p.Settings.IsStreamlabsTipTrigger &&
-                                                                                                          (p.Settings.StreamlabsTipRequirement == 0 || p.Settings.StreamlabsTipRequirement == amount));
+            RegurgitatorPackage qualifyingPackage = null;            
+            lock (RegurgitatorManager.PackagesMutex)
+            {
+               RegurgitatorManager.Data.Packages.FirstOrDefault(p => p.Settings.Enabled &&
+                                                                     !p.Settings.PlayOnTimer &&
+                                                                     p.Settings.IsStreamlabsTipTrigger &&
+                                                                     (p.Settings.StreamlabsTipRequirement == 0 || p.Settings.StreamlabsTipRequirement == amount));
+            }
 
             if (qualifyingPackage != null)
             {
@@ -1112,6 +1115,9 @@ namespace GIFBot.Server.GIFBot
 
             _ = manager.Start();
          }
+
+         RegurgitatorPackage package = new RegurgitatorPackage("test");
+         package.Name = "test";
       }
 
       private async Task InitializeTwitchMessageHandler()
@@ -1261,10 +1267,14 @@ namespace GIFBot.Server.GIFBot
          if (RegurgitatorManager != null)
          {
 
-            RegurgitatorPackage qualifyingPackage = RegurgitatorManager.Data.Packages.FirstOrDefault(p => p.Settings.Enabled &&
-                                                                                                          !p.Settings.PlayOnTimer &&
-                                                                                                          p.Settings.IsTiltifyTrigger &&
-                                                                                                          (p.Settings.TiltifyDonationRequirement == 0 || p.Settings.TiltifyDonationRequirement == donation.Amount));
+            RegurgitatorPackage qualifyingPackage = null;
+            lock (RegurgitatorManager.PackagesMutex)
+            { 
+               RegurgitatorManager.Data.Packages.FirstOrDefault(p => p.Settings.Enabled &&
+                                                                     !p.Settings.PlayOnTimer &&
+                                                                     p.Settings.IsTiltifyTrigger &&
+                                                                     (p.Settings.TiltifyDonationRequirement == 0 || p.Settings.TiltifyDonationRequirement == donation.Amount));
+            }
 
             if (qualifyingPackage != null)
             {

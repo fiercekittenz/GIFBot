@@ -984,18 +984,78 @@ namespace GIFBot.Server.Hubs
       #region Regurgitator
 
       /// <summary>
+      /// Fetches a stub of basic information on the available packages.
+      /// </summary>
+      public string GetRegurgitatorPackages()
+      {
+         List<RegurgitatorPackageBase> results = new List<RegurgitatorPackageBase>();
+
+         lock (Bot.RegurgitatorManager.PackagesMutex)
+         { 
+            foreach (var package in Bot?.RegurgitatorManager?.Data?.Packages)
+            {
+               results.Add(package);
+            }
+         }
+
+         return JsonConvert.SerializeObject(results);
+      }
+
+      /// <summary>
       /// Retrieves the settings associated with the Regurgitator.
       /// </summary>
       /// <returns>Fluff you Carole Baskin.</returns>
       public RegurgitatorSettings GetRegurgitatorSettings(Guid packageId)
       {
-         RegurgitatorPackage package = Bot?.RegurgitatorManager?.Data.Packages.FirstOrDefault(p => p.Id == packageId);
-         if (package != null)
-         { 
-            return package.Settings;
+         lock (Bot.RegurgitatorManager.PackagesMutex)
+         {
+            RegurgitatorPackage package = Bot?.RegurgitatorManager?.Data.Packages.FirstOrDefault(p => p.Id == packageId);
+            if (package != null)
+            { 
+               return package.Settings;
+            }
          }
          
          return new RegurgitatorSettings();
+      }
+
+      /// <summary>
+      /// Adds a new package to the regurgitator.
+      /// </summary>
+      public Guid AddRegurgitatorPackage(string name)
+      {
+         if (!string.IsNullOrEmpty(name))
+         {
+            lock (Bot.RegurgitatorManager.PackagesMutex)
+            {
+               RegurgitatorPackage existing = Bot?.RegurgitatorManager?.Data.Packages.FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+               if (existing == null)
+               {
+                  RegurgitatorPackage package = new RegurgitatorPackage(name);
+                  Bot.RegurgitatorManager.Data.Packages.Add(package);
+                  Bot.RegurgitatorManager.SaveData();
+                  return package.Id;
+               }
+            }
+         }
+
+         return Guid.Empty;
+      }
+
+      /// <summary>
+      /// Deletes the specified package.
+      /// </summary>
+      public void DeleteRegurgitatorPackage(Guid packageId)
+      {
+         lock (Bot.RegurgitatorManager.PackagesMutex)
+         {
+            RegurgitatorPackage existing = Bot?.RegurgitatorManager?.Data.Packages.FirstOrDefault(p => p.Id == packageId);
+            if (existing != null)
+            {
+               Bot.RegurgitatorManager.Data.Packages.Remove(existing);
+               Bot.RegurgitatorManager.SaveData();
+            }
+         }
       }
 
       /// <summary>
@@ -1003,7 +1063,12 @@ namespace GIFBot.Server.Hubs
       /// </summary>
       public RegurgitatorEntry AddRegurgitatorEntry(Guid packageId, string entry)
       {
-         RegurgitatorPackage package = Bot?.RegurgitatorManager?.Data.Packages.FirstOrDefault(p => p.Id == packageId);
+         RegurgitatorPackage package = null;
+         lock (Bot.RegurgitatorManager.PackagesMutex)
+         {
+            package = Bot?.RegurgitatorManager?.Data.Packages.FirstOrDefault(p => p.Id == packageId);
+         }
+
          if (package != null)
          {
             RegurgitatorEntry newEntry = new RegurgitatorEntry(entry);
@@ -1021,7 +1086,12 @@ namespace GIFBot.Server.Hubs
       /// </summary>
       public void RemoveRegurgitatorEntry(Guid packageId, Guid id)
       {
-         RegurgitatorPackage package = Bot?.RegurgitatorManager?.Data.Packages.FirstOrDefault(p => p.Id == packageId);
+         RegurgitatorPackage package = null;
+         lock (Bot.RegurgitatorManager.PackagesMutex)
+         {
+            package = Bot?.RegurgitatorManager?.Data.Packages.FirstOrDefault(p => p.Id == packageId);
+         }
+
          if (package != null)
          {
             RegurgitatorEntry entry = package.Entries.FirstOrDefault(e => e.Id == id);
@@ -1038,7 +1108,12 @@ namespace GIFBot.Server.Hubs
       /// </summary>
       public void ClearRegurgitatorEntries(Guid packageId)
       {
-         RegurgitatorPackage package = Bot?.RegurgitatorManager?.Data.Packages.FirstOrDefault(p => p.Id == packageId);
+         RegurgitatorPackage package = null;
+         lock (Bot.RegurgitatorManager.PackagesMutex)
+         {
+            package = Bot?.RegurgitatorManager?.Data.Packages.FirstOrDefault(p => p.Id == packageId);
+         }
+
          if (package != null)
          {
             package.Entries.Clear();
@@ -1051,7 +1126,12 @@ namespace GIFBot.Server.Hubs
       /// </summary>
       public void SetRegurgitatorSettings(Guid packageId, RegurgitatorSettings settings)
       {
-         RegurgitatorPackage package = Bot?.RegurgitatorManager?.Data.Packages.FirstOrDefault(p => p.Id == packageId);
+         RegurgitatorPackage package = null;
+         lock (Bot.RegurgitatorManager.PackagesMutex)
+         {
+            package = Bot?.RegurgitatorManager?.Data.Packages.FirstOrDefault(p => p.Id == packageId);
+         }
+
          if (package != null)
          {
             package.Settings = settings;
@@ -1064,7 +1144,12 @@ namespace GIFBot.Server.Hubs
       /// </summary>
       public async Task<DataEnvelope<RegurgitatorEntry>> GetRegurgitatorEntries(Guid packageId, DataSourceRequest request)
       {
-         RegurgitatorPackage package = Bot?.RegurgitatorManager?.Data.Packages.FirstOrDefault(p => p.Id == packageId);
+         RegurgitatorPackage package = null;
+         lock (Bot.RegurgitatorManager.PackagesMutex)
+         {
+            package = Bot?.RegurgitatorManager?.Data.Packages.FirstOrDefault(p => p.Id == packageId);
+         }
+
          if (package != null)
          {
             DataSourceResult processedData = await package.GetQueryableDataSource().ToDataSourceResultAsync(request);

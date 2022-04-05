@@ -128,7 +128,12 @@ namespace GIFBot.Server.Features.ChannelPoints
             }
 
             // Look for a valid regurgitator package
-            RegurgitatorPackage qualifyingPackage = Bot.RegurgitatorManager.Data.Packages.FirstOrDefault(p => e.RewardTitle.Contains(p.Settings.Command, StringComparison.OrdinalIgnoreCase));
+            RegurgitatorPackage qualifyingPackage = null;
+            lock (Bot.RegurgitatorManager.PackagesMutex)
+            {
+               qualifyingPackage = Bot.RegurgitatorManager.Data.Packages.FirstOrDefault(p => e.RewardTitle.Contains(p.Settings.Command, StringComparison.OrdinalIgnoreCase));
+            }
+
             if (qualifyingPackage != null && qualifyingPackage.Settings.Enabled && !qualifyingPackage.Settings.PlayOnTimer)
             {
                Bot.RegurgitatorManager.Play(qualifyingPackage);
