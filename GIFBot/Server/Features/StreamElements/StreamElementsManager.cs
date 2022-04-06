@@ -79,11 +79,19 @@ namespace GIFBot.Server.Features.StreamElements
                   List<StreamElementsTipData> tips = StreamElementsEndpointHelpers.GetTips(Bot.BotSettings.StreamElementsToken, mChannelId);
                   foreach (var tip in tips)
                   {
-                     if (tip.TimeTipped.Subtract(mLastTipAlertedTimestamp).TotalSeconds > 0)
+                     if (!mTrackedTips.Contains(tip.Id) && 
+                         tip.TimeTipped.Subtract(mLastTipAlertedTimestamp).TotalSeconds > 0)
                      {
                         HandleTheTip(tip);
+                        mTrackedTips.Enqueue(tip.Id);
                         mLastTipAlertedTimestamp = DateTime.UtcNow;
                      }
+                  }
+
+                  if (mTrackedTips.Count > skMaxTipsToTrack)
+                  {
+                     // Roll off the oldest tip in the tracker.
+                     mTrackedTips.Dequeue();
                   }
                }
 
@@ -108,11 +116,17 @@ namespace GIFBot.Server.Features.StreamElements
 
       #region Private Members
 
+      // Oftentimes double will come in - store the last n number of tip identifiers and check against
+      // this queue before processing the tip alert, then roll them off as we reach a limit.
+      private Queue<string> mTrackedTips = new Queue<string>();
+
       private CancellationTokenSource mProcessorCancellationTokenSource;
 
       private string mChannelId = String.Empty;
 
       private DateTime mLastTipAlertedTimestamp = DateTime.UtcNow;
+
+      private static int skMaxTipsToTrack = 100;
 
       #endregion
    }
