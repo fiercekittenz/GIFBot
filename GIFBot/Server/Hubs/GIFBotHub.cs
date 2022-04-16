@@ -867,12 +867,9 @@ namespace GIFBot.Server.Hubs
             AnimationData animation = Bot.AnimationManager.GetAnimationById(animationId);
             if (animation != null)
             {
-               if (!animation.ChainedAnimations.Contains(command))
-               {
-                  animation.ChainedAnimations.Add(command);
-                  Bot.AnimationManager.SaveData();
-                  return true;
-               }
+               animation.ChainedAnimations.Add(command);
+               Bot.AnimationManager.SaveData();
+               return true;
             }
          }
 
