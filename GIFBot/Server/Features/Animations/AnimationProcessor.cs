@@ -112,6 +112,8 @@ namespace GIFBot.Server.GIFBot
                if (chainedVariant != null)
                {
                   chainedRequest.Variant = chainedVariant;
+                  chainedRequest.PrePlayText = chainedVariant.PrePlayText;
+                  chainedRequest.PostPlayText = chainedVariant.PostPlayText;
                   chainedVariant.HasPlayedOnce = true;
                }
 
