@@ -30,7 +30,7 @@
       }
       else if (mFileType == AnimationEnums.FileType.Video)
       {
-         <video id="videoAnimation" width="480" height="320" style="display: none;background-color: transparent">
+         <video id="videoAnimation" width="480" height="320" style="@mVideoStyle">
             <source src="">
          </video>
       }
@@ -87,8 +87,8 @@
 
       mHubConnection.On("StopAnimation", async () =>
       {
-         // Hide the animation again.
-         if (!mHasPlayedOnce)
+      // Hide the animation again.
+      if (!mHasPlayedOnce)
          {
             await Task.Delay(500);
             mHasPlayedOnce = true;
@@ -158,6 +158,7 @@
          string audio = $"media/{animationRequest.AnimationData.Audio}?{System.DateTimeOffset.UtcNow.ToUnixTimeSeconds()}";
          mVisual = $"media/{animationRequest.AnimationData.Visual}?{System.DateTimeOffset.UtcNow.ToUnixTimeSeconds()}";
          mFileType = AnimationLibrary.GetFileTypeOfAnimation(animationRequest.AnimationData.Visual);
+         mVideoStyle = animationRequest.AnimationData.IsMirrored ? skMirroredVideoStyle : skDefaultVideoStyle;
 
          if (animationRequest.Variant != null)
          {
@@ -227,6 +228,7 @@
          mVisual = $"media/{testVisualRequest.Visual}?{System.DateTimeOffset.UtcNow.ToUnixTimeSeconds()}";
          mFileType = AnimationLibrary.GetFileTypeOfAnimation(testVisualRequest.Visual);
          mCaptionData = new CaptionData();
+         mVideoStyle = testVisualRequest.IsMirrored ? skMirroredVideoStyle : skDefaultVideoStyle;
 
          mTop = ($"{testVisualRequest.Placement.Top}px").Replace(",", ".");
          mLeft = ($"{testVisualRequest.Placement.Left}px").Replace(",", ".");
@@ -270,6 +272,8 @@
    public string mVisual = String.Empty;
    public string mAudio = String.Empty;
 
+   public string mVideoStyle = skDefaultVideoStyle;
+
    private CaptionData mCaptionData = new CaptionData();
    private string mTriggerer = String.Empty;
    private string mTarget = String.Empty;
@@ -278,7 +282,9 @@
 
    private bool mHasPlayedOnce = false;
 
-   public const string mDisconnectedWarning = "DISCONNECTED! You have to run the bot, then refresh your browser source cache in your broadcaster software.";
+   public const string skDisconnectedWarning = "DISCONNECTED! You have to run the bot, then refresh your browser source cache in your broadcaster software.";
+   public const string skMirroredVideoStyle = "display: none;background-color: transparent; transform: rotateY(180deg); -webkit-transform:rotateY(180deg); -moz-transform:rotateY(180deg)";
+   public const string skDefaultVideoStyle = "display: none;background-color: transparent";
 
    #endregion
 }
