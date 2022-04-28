@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "GIFBot-R"
-#define MyAppVersion "1.0e: Test 7"
+#define MyAppVersion "1.0e"
 #define MyAppPublisher "Fierce Kitten Studio"
 #define MyAppURL "http://www.gifbot.io"
 #define MyAppExeName "GIFBotR.exe"
