@@ -449,6 +449,7 @@
                         <GridColumn Field="@(nameof(AnimationVariantData.AudioTimingOffsetMilliseconds))" Width="50px" Title="Offset (in ms)" />
                         <GridColumn Field="@(nameof(AnimationVariantData.PrePlayText))" Width="50px" Title="PrePlayText" />
                         <GridColumn Field="@(nameof(AnimationVariantData.PostPlayText))" Width="50px" Title="PostPlayText" />
+                        <GridColumn Field="@(nameof(AnimationVariantData.IsMirrored))" Width="50px" Title="Mirrored" />
                         <GridCommandColumn Context="subcontext" Width="55px">
                            <GridCommandButton Command="Edit" Icon="edit"></GridCommandButton>
                            <GridCommandButton Command="PlayVariant" Icon="play" OnClick="@HandlePlayVariant"></GridCommandButton>
@@ -539,6 +540,17 @@
                      <small id="uiVariantAudioOffset" class="form-text text-white-50">Plays the audio file on a delay <i>after</i> the visual is played (<i>Math Reminder: 1 second = 1000ms</i>).</small>
                      <TelerikNumericTextBox Id="uiVariantAudioOffset" Min="0" Max="600000" @bind-Value="mVariantAudioOffset" />
                   </div>
+                  @if (AnimationLibrary.GetFileTypeOfAnimation(mData.Visual) == AnimationEnums.FileType.Video || 
+                       AnimationLibrary.GetFileTypeOfAnimation(mVariantVisual) == AnimationEnums.FileType.Video)
+                  {
+                     <div class="container-fluid p-2">
+                        <div class="form-group form-check">
+                           <label class="form-check-label">
+                              <TelerikCheckBox Id="uiVariantMirrored" @bind-Value="mVariantMirrored" /> Mirroring: This animation should be flipped horizontally.
+                           </label>
+                        </div>
+                     </div>
+                  }
                   <div class="container-fluid text-right p-3">
                      <button type="button" class="btn btn-secondary p-1" style="background-color: #6c4872" @onclick="HandleAddNewVariant">Add New Variant</button>
                   </div>
@@ -1083,7 +1095,8 @@
             Audio = mVariantAudio,
             DurationMilliseconds = mVariantDuration,
             AudioTimingOffsetMilliseconds = mVariantAudioOffset,
-            Volume = mVariantVolume
+            Volume = mVariantVolume,
+            IsMirrored = mVariantMirrored
          });
 
       mVariantVisual = String.Empty;
@@ -1094,6 +1107,7 @@
       mUploadVariantAudioProgress = 0;
       mFormVariantVolume = 50;
       mVariantVolume = 0.5;
+      mVariantMirrored = false;
    }
 
    /// <summary>
@@ -1277,6 +1291,7 @@
    private string mSelectedUserGroupName = String.Empty;
    private string mFormChainedCommand = String.Empty;
    private string mWidthStr = "700px";
+   private bool mVariantMirrored = false;
    private bool mIsDisplayTestMode = false;
 
    // Visual Upload Variables

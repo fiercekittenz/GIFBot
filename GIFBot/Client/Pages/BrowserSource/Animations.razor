@@ -166,6 +166,7 @@
             audio = $"media/{animationRequest.Variant.Audio}?{System.DateTimeOffset.UtcNow.ToUnixTimeSeconds()}";
             mFileType = AnimationLibrary.GetFileTypeOfAnimation(animationRequest.Variant.Visual);
             volume = animationRequest.Variant.Volume;
+            mVideoStyle = animationRequest.Variant.IsMirrored ? skMirroredVideoStyle : skDefaultVideoStyle;
          }
 
          // If this channel is on the ban list for GIFBot, only present the default GIF.
