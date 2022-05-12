@@ -10,6 +10,7 @@ using TwitchLib.Api.V5.Models.Channels;
 using GIFBot.Shared.Models.Twitch;
 using Newtonsoft.Json.Linq;
 using System.Text;
+using System.Net.Http;
 
 namespace GIFBot.Shared.Utility
 {
@@ -18,7 +19,7 @@ namespace GIFBot.Shared.Utility
       /// <summary>
       /// Checks to see if a user follows the specified channel on Twitch.
       /// </summary>
-      public static bool CheckFollowChannelOnTwitch(string oauth, long channelId, long viewerId)
+      public static bool CheckFollowChannelOnTwitch(HttpClient client, string oauth, long channelId, long viewerId)
       {
          bool result = false;
 
@@ -26,40 +27,19 @@ namespace GIFBot.Shared.Utility
          {
             string url = string.Format("https://api.twitch.tv/helix/users/follows?from_id={0}&to_id={1}", viewerId, channelId);
 
-            try
-            {
-               HttpWebRequest outboundRequest = (HttpWebRequest)WebRequest.Create(url);
-               if (outboundRequest != null)
-               {
-                  // Add the header information for oauth v5
-                  outboundRequest.Method = "GET";
-                  outboundRequest.Timeout = 12000;
-                  outboundRequest.ContentType = "application/json";
-                  outboundRequest.Headers.Add("Authorization", $"Bearer {oauth.Trim()}");
-                  outboundRequest.Headers.Add("Client-ID", Common.skTwitchClientId);
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, url);
+            request.Headers.Add("Authorization", $"Bearer {oauth.Trim()}");
+            request.Headers.Add("Client-ID", Common.skTwitchClientId);
 
-                  using (HttpWebResponse inboundResponse = (HttpWebResponse)outboundRequest.GetResponse())
-                  {
-                     if (inboundResponse.StatusCode == HttpStatusCode.OK)
-                     {
-                        using (StreamReader stream = new StreamReader(inboundResponse.GetResponseStream()))
-                        {
-                           string jsonData = stream.ReadToEnd();
-                           dynamic responseData = JsonConvert.DeserializeObject<object>(jsonData);
-                           if (responseData["total"] != null && responseData["total"] != 0)
-                           {
-                              return true;
-                           }
-                        }
-                     }
-                  }
-               }
-            }
-            catch (Exception /*e*/)
+            HttpResponseMessage response = client.Send(request);
+            if (response.IsSuccessStatusCode)
             {
-               // This exception occurs even on a valid response with a 404. It's the 404 we are looking for here.
-               // Do not log, because it is misleading.
-               result = false;
+               string jsonData = response.Content.ReadAsStringAsync().Result;
+               dynamic responseData = JsonConvert.DeserializeObject<object>(jsonData);
+               if (responseData["total"] != null && responseData["total"] != 0)
+               {
+                  return true;
+               }
             }
          }
 
@@ -72,7 +52,7 @@ namespace GIFBot.Shared.Utility
       /// begins polling for additional info.
       /// </summary>
       /// <returns>ID of the user's channel</returns>
-      public static uint GetChannelId(string channelName, string oauth, out string errorMessage)
+      public static uint GetChannelId(HttpClient client, string channelName, string oauth, out string errorMessage)
       {
          errorMessage = string.Empty;
 
@@ -80,35 +60,19 @@ namespace GIFBot.Shared.Utility
          {
             string url = string.Format("https://api.twitch.tv/helix/users?login={0}", channelName.ToLower().Trim());
 
-            HttpWebRequest channelRequest = (HttpWebRequest)WebRequest.Create(url);
-            try
-            {
-               // Add the header information for Twitch API v5
-               channelRequest.Method = "GET";
-               channelRequest.Timeout = 12000;
-               channelRequest.ContentType = "application/json";
-               channelRequest.Headers.Add("Authorization", $"Bearer {oauth.Trim()}");
-               channelRequest.Headers.Add("Client-ID", Common.skTwitchClientId);
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, url);
+            request.Headers.Add("Authorization", $"Bearer {oauth.Trim()}");
+            request.Headers.Add("Client-ID", Common.skTwitchClientId);
 
-               using (HttpWebResponse inboundResponse = (HttpWebResponse)channelRequest.GetResponse())
-               {
-                  if (inboundResponse.StatusCode == HttpStatusCode.OK)
-                  {
-                     using (StreamReader stream = new StreamReader(inboundResponse.GetResponseStream()))
-                     {
-                        string jsonData = stream.ReadToEnd();
-                        dynamic responseData = JsonConvert.DeserializeObject<object>(jsonData);
-                        if (responseData["data"][0]["id"] != null)
-                        {
-                           return responseData["data"][0]["id"];
-                        }
-                     }
-                  }
-               }
-            }
-            catch (Exception /*ex*/)
+            HttpResponseMessage response = client.Send(request);
+            if (response.IsSuccessStatusCode)
             {
-               errorMessage = $"Unable to get the channel ID for {channelName}.";
+               string jsonData = response.Content.ReadAsStringAsync().Result;
+               dynamic responseData = JsonConvert.DeserializeObject<object>(jsonData);
+               if (responseData["data"][0]["id"] != null)
+               {
+                  return responseData["data"][0]["id"];
+               }
             }
          }
 
@@ -124,53 +88,34 @@ namespace GIFBot.Shared.Utility
          public bool should_redemptions_skip_request_queue {  get; private set; } = true;
       }
 
-      public static Guid CreateChannelPointReward(string streamerOauth, long channelId, string title, int pointsRequired, int maxUsesAllowed)
+      public static Guid CreateChannelPointReward(HttpClient client, string streamerOauth, long channelId, string title, int pointsRequired, int maxUsesAllowed)
       {
          string url = string.Format("https://api.twitch.tv/helix/channel_points/custom_rewards?broadcaster_id={0}", channelId);
 
-         HttpWebRequest channelRequest = (HttpWebRequest)WebRequest.Create(url);
-         try
+         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, url);
+         request.Headers.Add("Authorization", $"Bearer {streamerOauth.Trim()}");
+         request.Headers.Add("Client-ID", Common.skTwitchClientId);
+
+         ChannelPointRewardCreationData channelPointRewardCreationData = new ChannelPointRewardCreationData() {
+            title = title,
+            cost = pointsRequired,
+            max_per_user_per_stream = maxUsesAllowed
+         };
+
+         string channelPointRewardJson = JsonConvert.SerializeObject(channelPointRewardCreationData);
+         byte[] channelPointRewardRaw = Encoding.ASCII.GetBytes(channelPointRewardJson);
+         request.Content = new ByteArrayContent(channelPointRewardRaw);
+
+         HttpResponseMessage response = client.Send(request);
+         if (response.IsSuccessStatusCode)
          {
-            ChannelPointRewardCreationData channelPointRewardCreationData = new ChannelPointRewardCreationData() {
-               title = title,
-               cost = pointsRequired,
-               max_per_user_per_stream = maxUsesAllowed
-            };
-
-            string channelPointRewardJson = JsonConvert.SerializeObject(channelPointRewardCreationData);
-            byte[] channelPointRewardRaw = Encoding.ASCII.GetBytes(channelPointRewardJson);
-
-            // Add the header information for Twitch API v5
-            channelRequest.Method = "POST";
-            channelRequest.Timeout = 12000;
-            channelRequest.ContentType = "application/json";
-            channelRequest.Headers.Add("Authorization", $"Bearer {streamerOauth.Trim()}");
-            channelRequest.Headers.Add("Client-ID", Common.skTwitchClientId);
-            channelRequest.ContentLength = channelPointRewardRaw.Length;
-
-            Stream dataStream = channelRequest.GetRequestStream();
-            dataStream.Write(channelPointRewardRaw, 0, channelPointRewardRaw.Length);
-            dataStream.Close();
-
-            using (HttpWebResponse inboundResponse = (HttpWebResponse)channelRequest.GetResponse())
+            string jsonData = response.Content.ReadAsStringAsync().Result;
+            dynamic responseData = JsonConvert.DeserializeObject<object>(jsonData);
+            if (responseData["data"][0]["id"] != null)
             {
-               if (inboundResponse.StatusCode == HttpStatusCode.OK)
-               {
-                  using (StreamReader stream = new StreamReader(inboundResponse.GetResponseStream()))
-                  {
-                     string jsonData = stream.ReadToEnd();
-                     dynamic responseData = JsonConvert.DeserializeObject<object>(jsonData);
-                     if (responseData["data"][0]["id"] != null)
-                     {
-                        Guid rewardId = Guid.Parse((string)responseData["data"][0]["id"]);
-                        return rewardId;
-                     }
-                  }
-               }
+               Guid rewardId = Guid.Parse((string)responseData["data"][0]["id"]);
+               return rewardId;
             }
-         }
-         catch (Exception /*ex*/)
-         {
          }
 
          return Guid.Empty;
@@ -181,73 +126,45 @@ namespace GIFBot.Shared.Utility
          public bool is_enabled { get; set; }
       }
 
-      public static bool UpdateChannelPointReward(string streamerOauth, long channelId, Guid rewardId, bool isEnabled)
+      public static bool UpdateChannelPointReward(HttpClient client, string streamerOauth, long channelId, Guid rewardId, bool isEnabled)
       {
          string url = string.Format("https://api.twitch.tv/helix/channel_points/custom_rewards?broadcaster_id={0}&id={1}", channelId, rewardId.ToString());
 
-         HttpWebRequest channelRequest = (HttpWebRequest)WebRequest.Create(url);
-         try
+         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Patch, url);
+         request.Headers.Add("Authorization", $"Bearer {streamerOauth.Trim()}");
+         request.Headers.Add("Client-ID", Common.skTwitchClientId);
+
+         ChannelPointRewardUpdateData channelPointRewardUpdateData = new ChannelPointRewardUpdateData() {
+            is_enabled = isEnabled
+         };
+
+         string channelPointRewardJson = JsonConvert.SerializeObject(channelPointRewardUpdateData);
+         byte[] channelPointRewardRaw = Encoding.ASCII.GetBytes(channelPointRewardJson);
+         request.Content = new ByteArrayContent(channelPointRewardRaw);
+
+         HttpResponseMessage response = client.Send(request);
+         if (response.IsSuccessStatusCode)
          {
-            ChannelPointRewardUpdateData channelPointRewardUpdateData = new ChannelPointRewardUpdateData() {
-               is_enabled = isEnabled
-            };
-
-            string channelPointRewardJson = JsonConvert.SerializeObject(channelPointRewardUpdateData);
-            byte[] channelPointRewardRaw = Encoding.ASCII.GetBytes(channelPointRewardJson);
-
-            // Add the header information for Twitch API v5
-            channelRequest.Method = "PATCH";
-            channelRequest.Timeout = 12000;
-            channelRequest.ContentType = "application/json";
-            channelRequest.Headers.Add("Authorization", $"Bearer {streamerOauth.Trim()}");
-            channelRequest.Headers.Add("Client-ID", Common.skTwitchClientId);
-            channelRequest.ContentLength = channelPointRewardRaw.Length;
-
-            Stream dataStream = channelRequest.GetRequestStream();
-            dataStream.Write(channelPointRewardRaw, 0, channelPointRewardRaw.Length);
-            dataStream.Close();
-
-            using (HttpWebResponse inboundResponse = (HttpWebResponse)channelRequest.GetResponse())
-            {
-               if (inboundResponse.StatusCode == HttpStatusCode.OK)
-               {
-                  return true;
-               }
-            }
-         }
-         catch (Exception /*ex*/)
-         {
+            return true;
          }
 
          return false;
       }
 
-      public static bool DeleteChannelPointReward(string streamerOauth, long channelId, Guid rewardId)
+      public static bool DeleteChannelPointReward(HttpClient client, string streamerOauth, long channelId, Guid rewardId)
       {
          string url = string.Format("https://api.twitch.tv/helix/channel_points/custom_rewards?broadcaster_id={0}&id={1}", channelId, rewardId.ToString());
+         
+         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, url);
+         request.Headers.Add("Authorization", $"Bearer {streamerOauth.Trim()}");
+         request.Headers.Add("Client-ID", Common.skTwitchClientId);
 
-         HttpWebRequest channelRequest = (HttpWebRequest)WebRequest.Create(url);
-         try
+         HttpResponseMessage response = client.Send(request);
+         if (response.StatusCode == HttpStatusCode.NoContent)
          {
-            // Add the header information for Twitch API v5
-            channelRequest.Method = "DELETE";
-            channelRequest.Timeout = 12000;
-            channelRequest.ContentType = "application/json";
-            channelRequest.Headers.Add("Authorization", $"Bearer {streamerOauth.Trim()}");
-            channelRequest.Headers.Add("Client-ID", Common.skTwitchClientId);
-
-            using (HttpWebResponse inboundResponse = (HttpWebResponse)channelRequest.GetResponse())
-            {
-               if (inboundResponse.StatusCode == HttpStatusCode.NoContent)
-               {
-                  return true;
-               }
-            }
+            return true;
          }
-         catch (Exception /*ex*/)
-         {
-         }
-
+         
          return false;
       }
 
@@ -255,7 +172,7 @@ namespace GIFBot.Shared.Utility
       /// Retrieves the latest information on the most recent Hype Train of the given channel ID.
       /// </summary>
       /// <returns>ID of the user's channel</returns>
-      public static TwitchHypeTrainEvent GetHypeTrainEventData(string oauth, long channelId, int authVersion)
+      public static TwitchHypeTrainEvent GetHypeTrainEventData(HttpClient client, string oauth, long channelId, int authVersion)
       {
          // Deprecated until Twitch allows this endpoint to be called again. It was closed off for a "security" risk.
          // See: https://discuss.dev.twitch.tv/t/get-hype-train-events-via-app-token/31727/6
@@ -306,7 +223,7 @@ namespace GIFBot.Shared.Utility
       /// <summary>
       /// Retrieves the logged in user information based solely on the bearer token.
       /// </summary>
-      public static TwitchUserData GetCurrentUser(string oauth)
+      public static TwitchUserData GetCurrentUser(HttpClient client, string oauth)
       {
          string result = String.Empty;
 
@@ -314,46 +231,26 @@ namespace GIFBot.Shared.Utility
          {
             string url = "https://api.twitch.tv/helix/users";
 
-            try
-            {
-               HttpWebRequest outboundRequest = (HttpWebRequest)WebRequest.Create(url);
-               if (outboundRequest != null)
-               {
-                  // Add the header information for oauth v5
-                  outboundRequest.Method = "GET";
-                  outboundRequest.Timeout = 12000;
-                  outboundRequest.ContentType = "application/json";
-                  outboundRequest.Headers.Add("Authorization", $"Bearer {oauth.Trim()}");
-                  outboundRequest.Headers.Add("Client-ID", Common.skTwitchClientId);
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, url);
+            request.Headers.Add("Authorization", $"Bearer {oauth.Trim()}");
+            request.Headers.Add("Client-ID", Common.skTwitchClientId);
 
-                  using (HttpWebResponse inboundResponse = (HttpWebResponse)outboundRequest.GetResponse())
-                  {
-                     if (inboundResponse.StatusCode == HttpStatusCode.OK)
-                     {
-                        using (StreamReader stream = new StreamReader(inboundResponse.GetResponseStream()))
-                        {
-                           string jsonData = stream.ReadToEnd();
-                           TwitchGetUserResponse responseData = JsonConvert.DeserializeObject<TwitchGetUserResponse>(jsonData);
-                           if (responseData.data != null && responseData.data.Any())
-                           {
-                              return responseData.data.FirstOrDefault();
-                           }
-                        }
-                     }
-                  }
+            HttpResponseMessage response = client.Send(request);
+            if (response.IsSuccessStatusCode)
+            {
+               string jsonData = response.Content.ReadAsStringAsync().Result;
+               TwitchGetUserResponse responseData = JsonConvert.DeserializeObject<TwitchGetUserResponse>(jsonData);
+               if (responseData.data != null && responseData.data.Any())
+               {
+                  return responseData.data.FirstOrDefault();
                }
             }
-            catch (Exception /*e*/)
-            {
-               // This exception occurs even on a valid response with a 404. It's the 404 we are looking for here.
-               // Do not log, because it is misleading.
-            }
          }
-
+         
          return null;
       }
 
-      public static List<string> GetUserList(string oauth, string channelName)
+      public static List<string> GetUserList(HttpClient client, string oauth, string channelName)
       {
          List<string> users = new List<string>();
 
@@ -361,38 +258,23 @@ namespace GIFBot.Shared.Utility
          {
             string url = string.Format("https://tmi.twitch.tv/group/user/{0}/chatters", channelName.ToLower().Trim());
 
-            HttpWebRequest channelRequest = (HttpWebRequest)WebRequest.Create(url);
-            try
-            {
-               // Add the header information for Twitch API v5
-               channelRequest.Method = "GET";
-               channelRequest.Timeout = 12000;
-               channelRequest.ContentType = "application/json";
-               channelRequest.Headers.Add("Authorization", $"Bearer {oauth.Trim()}");
-               channelRequest.Headers.Add("Client-ID", Common.skTwitchClientId);
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, url);            
+            request.Headers.Add("Authorization", $"Bearer {oauth.Trim()}");
+            request.Headers.Add("Client-ID", Common.skTwitchClientId);
 
-               using (HttpWebResponse inboundResponse = (HttpWebResponse)channelRequest.GetResponse())
+            HttpResponseMessage response = client.Send(request);            
+            if (response.IsSuccessStatusCode)
+            { 
+               string jsonData = response.Content.ReadAsStringAsync().Result;
+               dynamic responseData = JsonConvert.DeserializeObject<object>(jsonData);
+               if (responseData["chatters"] != null)
                {
-                  if (inboundResponse.StatusCode == HttpStatusCode.OK)
+                  JArray userArray = responseData["chatters"]["viewers"];
+                  foreach (var user in userArray.Children())
                   {
-                     using (StreamReader stream = new StreamReader(inboundResponse.GetResponseStream()))
-                     {
-                        string jsonData = stream.ReadToEnd();
-                        dynamic responseData = JsonConvert.DeserializeObject<object>(jsonData);
-                        if (responseData["chatters"] != null)
-                        {
-                           JArray userArray = responseData["chatters"]["viewers"];
-                           foreach (var user in userArray.Children())
-                           {
-                              users.Add((string)user);
-                           }
-                        }
-                     }
+                     users.Add((string)user);
                   }
                }
-            }
-            catch (Exception /*ex*/)
-            {
             }
          }
 

@@ -31,6 +31,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -61,10 +62,12 @@ namespace GIFBot.Server.GIFBot
       /// Constructor
       /// </summary>
       public GIFBot(IConfiguration configuration,
-                    IHubContext<GIFBotHub> gifbotHub)
+                    IHubContext<GIFBotHub> gifbotHub,
+                    IHttpClientFactory httpClientFactory)
       {
          Configuration = configuration;
          GIFBotHub = gifbotHub;
+         HttpClientFactory = httpClientFactory;
 
          Start();
       }
@@ -626,8 +629,8 @@ namespace GIFBot.Server.GIFBot
          {
             lock (UsersInChannelMutex)
             {
-               UsersInChannel.Clear();  
-               UsersInChannel.UnionWith(TwitchEndpointHelpers.GetUserList(BotSettings.BotOauthToken, BotSettings.ChannelName.ToLower()));
+               UsersInChannel.Clear();                 
+               UsersInChannel.UnionWith(TwitchEndpointHelpers.GetUserList(HttpClientFactory.CreateClient(Common.skHttpClientName), BotSettings.BotOauthToken, BotSettings.ChannelName.ToLower()));
             }
          }
       }
@@ -778,7 +781,7 @@ namespace GIFBot.Server.GIFBot
       {
          _ = SendLogMessage("Connected to Twitch!");
 
-         ChannelId = TwitchEndpointHelpers.GetChannelId(BotSettings.ChannelName, BotSettings.BotOauthToken, out string result);
+         ChannelId = TwitchEndpointHelpers.GetChannelId(HttpClientFactory.CreateClient(Common.skHttpClientName), BotSettings.ChannelName, BotSettings.BotOauthToken, out string result);
 
          ChannelPointManager.InitializePubSub();
          CheckForHypeTrainEvent(false);
@@ -1369,7 +1372,7 @@ namespace GIFBot.Server.GIFBot
                    !String.IsNullOrEmpty(BotSettings.BotOauthToken) &&
                    !String.IsNullOrEmpty(BotSettings.ChannelName))
                {
-                  List<string> usersInChat = TwitchEndpointHelpers.GetUserList(BotSettings.BotOauthToken, BotSettings.ChannelName.ToLower());
+                  List<string> usersInChat = TwitchEndpointHelpers.GetUserList(HttpClientFactory.CreateClient(Common.skHttpClientName), BotSettings.BotOauthToken, BotSettings.ChannelName.ToLower());
 
                   lock (UsersInChannelMutex)
                   {
@@ -1483,6 +1486,8 @@ namespace GIFBot.Server.GIFBot
       public TwitchAPI TwitchAPI { get { return mTwitchApi; } }
 
       public IHubContext<GIFBotHub> GIFBotHub { get; private set; }
+
+      public IHttpClientFactory HttpClientFactory { get; private set; }
 
       public BotSettings BotSettings
       {

@@ -65,7 +65,7 @@ namespace GIFBot.Server.Hubs
       /// </summary>
       public TwitchUserData GetCurrentUser(string oauth)
       {
-         return TwitchEndpointHelpers.GetCurrentUser(oauth);
+         return TwitchEndpointHelpers.GetCurrentUser(Bot.HttpClientFactory.CreateClient(Common.skHttpClientName), oauth);
       }
 
       /// <summary>
@@ -2226,10 +2226,10 @@ namespace GIFBot.Server.Hubs
              !String.IsNullOrEmpty(Bot.BotSettings.TiltifySlug) && 
              !String.IsNullOrEmpty(Bot.BotSettings.TiltifyAuthToken))
          {
-            int tiltifyUserId = TiltifyEndpointHelpers.GetUserId(Bot.BotSettings.TiltifyAuthToken, Bot.BotSettings.TiltifySlug);
+            int tiltifyUserId = TiltifyEndpointHelpers.GetUserId(Bot.HttpClientFactory.CreateClient(Common.skHttpClientName), Bot.BotSettings.TiltifyAuthToken, Bot.BotSettings.TiltifySlug);
             if (tiltifyUserId > 0)
             {
-               campaigns = TiltifyEndpointHelpers.GetCampaigns(Bot.BotSettings.TiltifyAuthToken, tiltifyUserId);
+               campaigns = TiltifyEndpointHelpers.GetCampaigns(Bot.HttpClientFactory.CreateClient(Common.skHttpClientName), Bot.BotSettings.TiltifyAuthToken, tiltifyUserId);
             }
          }
 

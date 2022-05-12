@@ -27,7 +27,7 @@ namespace GIFBot.Server.Features.StreamElements
 
       public void InitializeWithChannelId()
       {
-         mChannelId = StreamElementsEndpointHelpers.GetChannelId(Bot.BotSettings.StreamElementsToken, Bot.BotSettings.ChannelName);
+         mChannelId = StreamElementsEndpointHelpers.GetChannelId(Bot.HttpClientFactory.CreateClient(Common.skHttpClientName), Bot.BotSettings.StreamElementsToken, Bot.BotSettings.ChannelName);
       }
 
       #endregion
@@ -76,7 +76,7 @@ namespace GIFBot.Server.Features.StreamElements
                if (!String.IsNullOrEmpty(Bot.BotSettings.StreamElementsToken) &&
                    !String.IsNullOrEmpty(mChannelId))
                {
-                  List<StreamElementsTipData> tips = StreamElementsEndpointHelpers.GetTips(Bot.BotSettings.StreamElementsToken, mChannelId);
+                  List<StreamElementsTipData> tips = StreamElementsEndpointHelpers.GetTips(Bot.HttpClientFactory.CreateClient(Common.skHttpClientName), Bot.BotSettings.StreamElementsToken, mChannelId);
                   foreach (var tip in tips)
                   {
                      if (!mTrackedTips.Contains(tip.Id) && 

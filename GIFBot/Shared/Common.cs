@@ -11,6 +11,8 @@ namespace GIFBot.Shared
    {
       public const string skTwitchClientId = "4nobmh8xn5ufrkjgmozi0hvg1gv5kx";
 
+      public const string skHttpClientName = "WebClient";
+
       // A random number generator.
       public static Random sRandom = new Random(System.Environment.TickCount);
    }

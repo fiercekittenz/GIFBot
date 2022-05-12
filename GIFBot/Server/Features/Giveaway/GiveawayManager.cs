@@ -67,7 +67,7 @@ namespace GIFBot.Server.Features.Giveaway
             { 
                if (Data.ChannelPointRewardId == Guid.Empty)
                { 
-                  Guid rewardId = TwitchEndpointHelpers.CreateChannelPointReward(Bot.BotSettings.StreamerOauthToken, Bot.ChannelId, Data.ChannelPointRewardTitle, Data.ChannelPointsRequired, Data.MaxNumberOfEntriesAllowed);
+                  Guid rewardId = TwitchEndpointHelpers.CreateChannelPointReward(Bot.HttpClientFactory.CreateClient(Common.skHttpClientName), Bot.BotSettings.StreamerOauthToken, Bot.ChannelId, Data.ChannelPointRewardTitle, Data.ChannelPointsRequired, Data.MaxNumberOfEntriesAllowed);
                   if (rewardId == Guid.Empty)
                   {
                      _ = Bot.SendLogMessage("Unable to create channel point reward for giveaway. Please make sure you are authenticated with your streamer account.");
@@ -80,7 +80,7 @@ namespace GIFBot.Server.Features.Giveaway
                }
                else
                {
-                  if (!TwitchEndpointHelpers.UpdateChannelPointReward(Bot.BotSettings.StreamerOauthToken, Bot.ChannelId, Data.ChannelPointRewardId, true))
+                  if (!TwitchEndpointHelpers.UpdateChannelPointReward(Bot.HttpClientFactory.CreateClient(Common.skHttpClientName), Bot.BotSettings.StreamerOauthToken, Bot.ChannelId, Data.ChannelPointRewardId, true))
                   {
                      _ = Bot.SendLogMessage("Unable to disable the channel point reward associated with the giveaway.");
                   }
@@ -109,7 +109,7 @@ namespace GIFBot.Server.Features.Giveaway
          {
             if (Data.EntryBehavior == GiveawayData.GiveawayEntryBehaviorType.ChannelPoints && 
                 Data.ChannelPointRewardId != Guid.Empty &&
-                !TwitchEndpointHelpers.UpdateChannelPointReward(Bot.BotSettings.StreamerOauthToken, Bot.ChannelId, Data.ChannelPointRewardId, false))
+                !TwitchEndpointHelpers.UpdateChannelPointReward(Bot.HttpClientFactory.CreateClient(Common.skHttpClientName), Bot.BotSettings.StreamerOauthToken, Bot.ChannelId, Data.ChannelPointRewardId, false))
             {
                _ = Bot.SendLogMessage("Unable to disable the channel point reward associated with the giveaway.");
             }
@@ -147,7 +147,7 @@ namespace GIFBot.Server.Features.Giveaway
 
       public void Reset()
       {
-         if (!TwitchEndpointHelpers.DeleteChannelPointReward(Bot.BotSettings.StreamerOauthToken, Bot.ChannelId, Data.ChannelPointRewardId))
+         if (!TwitchEndpointHelpers.DeleteChannelPointReward(Bot.HttpClientFactory.CreateClient(Common.skHttpClientName), Bot.BotSettings.StreamerOauthToken, Bot.ChannelId, Data.ChannelPointRewardId))
          {
             _ = Bot.SendLogMessage("Unable to delete the channel reward for the giveaway! Please remove it yourself.");
          }
@@ -177,7 +177,7 @@ namespace GIFBot.Server.Features.Giveaway
             string entrant = message.ChatMessage.DisplayName.ToLower();
 
             bool isFollower = false;
-            if (TwitchEndpointHelpers.CheckFollowChannelOnTwitch(Bot.BotSettings.BotOauthToken, long.Parse(message.ChatMessage.RoomId), long.Parse(message.ChatMessage.UserId)))
+            if (TwitchEndpointHelpers.CheckFollowChannelOnTwitch(Bot.HttpClientFactory.CreateClient(Common.skHttpClientName), Bot.BotSettings.BotOauthToken, long.Parse(message.ChatMessage.RoomId), long.Parse(message.ChatMessage.UserId)))
             {
                isFollower = true;
             }

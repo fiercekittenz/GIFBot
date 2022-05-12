@@ -11,6 +11,7 @@ using System.Text;
 using TwitchLib.Api.Helix.Models.Tags;
 using TwitchLib.Client.Enums;
 using TwitchLib.Client.Models;
+using System.Net.Http;
 
 namespace GIFBot.Shared
 {
@@ -118,9 +119,10 @@ namespace GIFBot.Shared
       /// <summary>
       /// Determines if the animation can play or not.
       /// </summary>
-      public bool CanPlay(BotSettings settings, ChatMessage chatMessage)
+      public bool CanPlay(HttpClient client, BotSettings settings, ChatMessage chatMessage)
       {
-         return CanPlay(settings,
+         return CanPlay(client,
+                        settings,
                         chatMessage.DisplayName,
                         chatMessage.UserId,
                         chatMessage.RoomId,
@@ -134,7 +136,7 @@ namespace GIFBot.Shared
       /// <summary>
       /// Determines if the animation can play or not.
       /// </summary>
-      public bool CanPlay(BotSettings settings, string displayName, string userId, string roomId, int bitsCheered, bool isBroadcaster, bool isSubscriber, bool isVIP, bool isModerator)
+      public bool CanPlay(HttpClient client, BotSettings settings, string displayName, string userId, string roomId, int bitsCheered, bool isBroadcaster, bool isSubscriber, bool isVIP, bool isModerator)
       {
          if (String.IsNullOrEmpty(Visual) && String.IsNullOrEmpty(Audio))
          {
@@ -175,7 +177,7 @@ namespace GIFBot.Shared
                      return false;
                   }
 
-                  if (!TwitchEndpointHelpers.CheckFollowChannelOnTwitch(settings.BotOauthToken, long.Parse(roomId), long.Parse(userId)))
+                  if (!TwitchEndpointHelpers.CheckFollowChannelOnTwitch(client, settings.BotOauthToken, long.Parse(roomId), long.Parse(userId)))
                   {
                      return false;
                   }

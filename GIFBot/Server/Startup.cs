@@ -13,6 +13,8 @@ using Microsoft.Net.Http.Headers;
 using GIFBot.Server.Features.Regurgitator;
 using System;
 using System.Net;
+using System.Net.Http;
+using GIFBot.Shared;
 
 namespace GIFBot.Server
 {
@@ -39,6 +41,7 @@ namespace GIFBot.Server
             });
          });
 
+         services.AddHttpClient(Common.skHttpClientName);
          services.AddSingleton<GIFBot.GIFBot>();
          services.AddHostedService<GIFBotService>();
          services.AddControllersWithViews();

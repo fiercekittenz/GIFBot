@@ -366,7 +366,7 @@
                             </div>
                         </TabStripTab>
 
-                        <TabStripTab Title="Tip Triggers">
+                        <TabStripTab Title="Tips">
                             <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
                                 <div class="container-fluid text-white-50 p-0">
                                     <p>If you are authenticated with Streamlabs or StreamElements, you can receive tip alerts from their respective services
@@ -385,6 +385,33 @@
                                             <div class="form-group">
                                                 <small id="uiTipRequirement" class="form-text text-white-50">Amount of currency to be tipped before this animation will trigger (0 = all tips).</small>
                                                 <TelerikNumericTextBox Decimals="2" Id="uiTipRequirement" Min="0" Max="100000" @bind-Value="mData.StreamlabsTipRequirement" />
+                                            </div>
+                                        }
+                                    </RadzenFieldset>
+                                </div>
+                            </div>
+                        </TabStripTab>
+
+                        <TabStripTab Title="Charity">
+                            <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+                                <div class="container-fluid text-white-50 p-0">
+                                    <p>If you are authenticated with Tiltify, you can receive donation alerts from their services
+                                       to use in GIFBot. In order to authenticate, please go to your Bot Settings -> Integrations. Make 
+                                       sure to select your active campaign!
+                                    </p>
+                                </div>
+                                <div class="container-fluid p-2">
+                                    <RadzenFieldset Text="Tip Requirement" AllowCollapse="false" Style="width: 100%; margin-bottom: 20px">
+                                        <div class="form-group form-check">
+                                            <label class="form-check-label">
+                                                <TelerikCheckBox Id="uiStreamlabsTiltifyTrigger" @bind-Value="mData.IsTiltifyTrigger" /> Trigger when donations are made through Tiltify
+                                            </label>
+                                        </div>
+                                        @if (mData.IsTiltifyTrigger)
+                                        {
+                                            <div class="form-group">
+                                                <small id="uiTilitifyRequirement" class="form-text text-white-50">Amount of currency to be donated before this animation will trigger (0 = all donations).</small>
+                                                <TelerikNumericTextBox Decimals="2" Id="uiTiltifyRequirement" Min="0" Max="1000000" @bind-Value="mData.TiltifyDonationRequirement" />
                                             </div>
                                         }
                                     </RadzenFieldset>

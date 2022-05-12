@@ -138,7 +138,7 @@ namespace GIFBot.Server.Features.Stickers
                   }
                case AnimationEnums.AccessType.Follower:
                   {
-                     if (!TwitchEndpointHelpers.CheckFollowChannelOnTwitch(Bot.BotSettings.BotOauthToken, long.Parse(message.ChatMessage.RoomId), long.Parse(message.ChatMessage.UserId)))
+                     if (!TwitchEndpointHelpers.CheckFollowChannelOnTwitch(Bot.HttpClientFactory.CreateClient(Common.skHttpClientName), Bot.BotSettings.BotOauthToken, long.Parse(message.ChatMessage.RoomId), long.Parse(message.ChatMessage.UserId)))
                      {
                         return;
                      }

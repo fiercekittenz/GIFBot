@@ -1,4 +1,5 @@
 ﻿using GIFBot.Server.Interfaces;
+using GIFBot.Shared;
 using GIFBot.Shared.Models.Tiltify;
 using GIFBot.Shared.Utility;
 using System;
@@ -91,7 +92,7 @@ namespace GIFBot.Server.Features.Tiltify
                if (Bot.BotSettings.TiltifyActiveCampaign > 0 &&
                    !String.IsNullOrEmpty(Bot.BotSettings.TiltifyAuthToken))
                {
-                  List<TiltifyDonation> donations = TiltifyEndpointHelpers.GetCampaignDonations(Bot.BotSettings.TiltifyAuthToken, Bot.BotSettings.TiltifyActiveCampaign);
+                  List<TiltifyDonation> donations = TiltifyEndpointHelpers.GetCampaignDonations(Bot.HttpClientFactory.CreateClient(Common.skHttpClientName), Bot.BotSettings.TiltifyAuthToken, Bot.BotSettings.TiltifyActiveCampaign);
                   if (donations.Any())
                   {
                      TiltifyDonation firstDonation = donations.FirstOrDefault();
