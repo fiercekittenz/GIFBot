@@ -8,14 +8,17 @@ namespace GIFBot.Shared.Models.Visualization
 {
    public class TestVisualRequest
    {
-      public TestVisualRequest(string visual, AnimationPlacement placement, AnimationEnums.AnimationLayer layer)
+      public TestVisualRequest(string visual, bool mirrored, AnimationPlacement placement, AnimationEnums.AnimationLayer layer)
       {
          Visual = visual;
+         IsMirrored = mirrored;
          Placement = placement;
          Layer = layer;
       }
 
       public string Visual { get; set; } = String.Empty;
+
+      public bool IsMirrored { get; set; } = false;
 
       public AnimationPlacement Placement { get; set; } = new AnimationPlacement();
 

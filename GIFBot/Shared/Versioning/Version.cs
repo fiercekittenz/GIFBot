@@ -6,6 +6,6 @@ namespace GIFBot.Shared.Versioning
 {
    public class Version
    {
-      public static readonly int kVersion = 5;
+      public static readonly int kVersion = 6;
    }
 }

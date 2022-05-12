@@ -10,6 +10,8 @@
 		<!-- At this time, the only platforms we are really targetting, and supported by the Stream Deck SDK are Windows and macOS  -->
 		<RuntimeIdentifiers Condition="'$(Configuration)'=='Release' ">win-x64;osx-x64</RuntimeIdentifiers>
 		<RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+      <AppendRuntimeIdentifer>false</AppendRuntimeIdentifer>
+      <OutDir>$(SolutionDir)/GIFBot/GIFBotStreamDeckPlugin/bin/$(Configuration)/com.fiercekittenz.gifbot.sdPlugin</OutDir>
 	</PropertyGroup>
 
 	<!--Dependencies-->

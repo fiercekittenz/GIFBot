@@ -9,6 +9,7 @@ namespace GIFBot.Shared.Models.Base
    {
       public Guid Id { get; set; }
       public string Visual { get; set; }
+      public bool IsMirrored { get; set; } = false;
       public AnimationPlacement Placement { get; set; } = new AnimationPlacement();
       public AnimationEnums.AnimationLayer Layer { get; set; } = AnimationEnums.AnimationLayer.Primary;
    }

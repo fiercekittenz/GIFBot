@@ -1,44 +1,43 @@
 {
-  "Actions": [
-   {
-      "Icon": "images/actionIcon",
-      "Name": "Play Animation",
-      "States": [
-         {
-            "Image": "images/actionDefaultImage",
-            "TitleAlignment": "middle",
-            "FontSize": "16"
-         }
-      ],
-      "SupportedInMultiActions": false,
-      "Tooltip": "Plays the specified animation command in GIFBot.",
-      "UUID": "com.fiercekittenz.gifbot.playanimation"
-   }
-  ],
-	"Category": "GIFBot",
-	"CategoryIcon": "images/category/categoryIcon.png",
-	"Disabled":  false,
-	"Author": "Fiercekittenz",
-	"CodePathWin": "GIFBotStreamDeckPlugin.exe",
-	"CodePathMac":  "GIFBotStreamDeckPlugin",
-  "PropertyInspectorPath": "property_inspector/property_inspector.html",
-  "Description": "GIFBot animation playing directly from your Stream Deck!",
-  "Name": "GIFBot Stream Deck",
-  "Icon": "images/pluginIcon",
-  "URL": "http://www.gifbot.io/",
-  "Version": "1.0",
-	"SDKVersion": 2,
-	"Software": {
-		"MinimumVersion":  "4.1"
-	},
-	"OS": [
-    {
-        "Platform": "mac",
-        "MinimumVersion" : "10.11"
-    },
-    {
-        "Platform": "windows",
-        "MinimumVersion" : "10"
-    }
-  ]
+   "Actions": [
+      {
+         "Icon": "images/actionIcon",
+         "Name": "Play Animation",
+         "States": [
+            {
+               "Image": "images/actionDefaultImage",
+               "TitleAlignment": "middle",
+               "FontSize": "16"
+            }
+         ],
+         "SupportedInMultiActions": false,
+         "Tooltip": "Plays the specified animation command in GIFBot.",
+         "UUID": "com.fiercekittenz.gifbot.playanimation"
+      }
+   ],
+   "Category": "GIFBot",
+   "CategoryIcon": "images/pluginIcon",
+   "Disabled": false,
+   "Author": "Fiercekittenz",
+   "CodePath": "GIFBotStreamDeckPlugin.exe",
+   "PropertyInspectorPath": "property_inspector/property_inspector.html",
+   "Description": "GIFBot animation playing directly from your Stream Deck!",
+   "Name": "GIFBot Stream Deck",
+   "Icon": "images/pluginIcon",
+   "URL": "http://www.gifbot.io/",
+   "Version": "1.0",
+   "SDKVersion": 2,
+   "Software": {
+      "MinimumVersion": "4.1"
+   },
+   "OS": [
+      {
+         "Platform": "mac",
+         "MinimumVersion": "10.11"
+      },
+      {
+         "Platform": "windows",
+         "MinimumVersion": "10"
+      }
+   ]
 }

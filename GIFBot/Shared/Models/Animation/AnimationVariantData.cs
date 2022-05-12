@@ -47,5 +47,7 @@ namespace GIFBot.Shared.Models.Animation
       public string PostPlayText { get; set; } = String.Empty;
 
       public bool HasPlayedOnce { get; set; } = false;
+
+      public bool IsMirrored { get; set; } = false;
    }
 }
