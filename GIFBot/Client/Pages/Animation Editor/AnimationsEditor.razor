@@ -193,6 +193,7 @@
                                          Pageable="true"
                                          Sortable="true"
                                          SelectedItems="@mSelectedTreeItems"
+                                         OnRowClick="@OnAnimationsTreeRowClickHander"
                                          FilterMode="@TreeListFilterMode.FilterMenu"
                                          SelectionMode="@TreeListSelectionMode.Multiple"
                                          SelectedItemsChanged="@( (IEnumerable<AnimationTreeItem> items) => AnimationListSelectionChanged(items) )"

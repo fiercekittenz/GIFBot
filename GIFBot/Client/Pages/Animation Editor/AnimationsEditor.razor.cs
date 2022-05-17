@@ -211,6 +211,19 @@ namespace GIFBot.Client.Pages.Animation_Editor
          StateHasChanged();
       }
 
+      private void OnAnimationsTreeRowClickHander(TreeListRowClickEventArgs args)
+      {
+         if (args.Item is AnimationTreeItem item && item.Tier == AnimationTreeTier.Category)
+         {
+            var currentState = AnimationTreeListRef.GetState();
+            if (currentState != null && !currentState.ExpandedItems.Contains(item))
+            {
+               currentState.ExpandedItems.Add(item);
+               StateHasChanged();
+            }
+         }
+      }
+
       #endregion
 
       #region Categories
