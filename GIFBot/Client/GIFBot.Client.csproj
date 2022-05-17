@@ -33,7 +33,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Radzen.Blazor" Version="3.18.9" />
     <PackageReference Include="System.Net.Http.Json" Version="6.0.0" />
-    <PackageReference Include="Telerik.UI.for.Blazor" Version="3.2.0" />
+    <PackageReference Include="Telerik.UI.for.Blazor" Version="3.3.0" />
   </ItemGroup>
 
   <ItemGroup>
