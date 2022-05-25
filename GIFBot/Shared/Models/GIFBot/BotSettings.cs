@@ -120,6 +120,7 @@ namespace GIFBot.Shared
       public string TiltifySlug { get; set; } = String.Empty;
       public string TiltifyAuthToken { get; set; } = String.Empty;
       public long TiltifyActiveCampaign { get; set; } = 0;
+      public bool TiltifyDonationAlertChat { get; set; } = false;
 
       #endregion
    }

@@ -366,6 +366,7 @@ namespace GIFBot.Shared
       public bool IsStreamlabsTipTrigger { get; set; } = false;
       public double StreamlabsTipRequirement { get; set; } = 0;
       public bool IsTiltifyTrigger { get; set; } = false;
+      public bool TiltifyDonationAlertChat { get; set; } = false;
       public double TiltifyDonationRequirement { get; set; } = 0;
       public bool IsHostAlert { get; set; } = false;
       public string HostRestrictedToUsername { get; set; } = String.Empty;

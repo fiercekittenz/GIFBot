@@ -266,7 +266,7 @@ namespace GIFBot.Server.GIFBot
 
          if (processor != null)
          {
-            await processor.DeactivateAnimation(animationRequest.AnimationData.Command, GIFBotHub.Clients, animationRequest.PostPlayText, animationRequest.Triggerer);
+            await processor.DeactivateAnimation(animationRequest.AnimationData.Command, GIFBotHub.Clients, animationRequest.PostPlayText, animationRequest.Triggerer, animationRequest.Amount);
             OnAnimationCompleted?.Invoke(this, new AnimationCompletedEventArgs(animationRequest.AnimationData.Id));
          }
       }
@@ -1259,7 +1259,6 @@ namespace GIFBot.Server.GIFBot
          foreach (var animation in sortedAnimations)
          {
             _ = SendLogMessage("Triggering [" + animation.Command + "] by user [" + donation.Name + "] with a Tiltify donation of [" + donation.Amount + "].");
-            SendChatMessage($"We received a {donation.Amount} Tiltify donation from {donation.Name}! Thank you!");
             AnimationManager.ForceQueueAnimation(animation, donation.Name, donation.Amount.ToString());
          }
 

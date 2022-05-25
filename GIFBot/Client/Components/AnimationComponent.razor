@@ -321,20 +321,20 @@
                               }
                            </RadzenFieldset>
                            @*<RadzenFieldset Text="Hype Train Leveling" AllowCollapse="false" Style="width: 100%; margin-bottom: 20px">
-                              <div class="form-group form-check">
-                              <label class="form-check-label">
-                              <TelerikCheckBox Id="uiHypeTrainEnabled" @bind-Value="mData.IsHypeTrainTrigger" /> Trigger when a new hype train level has been reached
-                              </label>
-                              </div>
-                              @if (mData.IsHypeTrainTrigger)
-                              {
-                              <div class="form-group">
-                              <label for="uiHypeTrainLevel"><b>Hype Train Level:</b></label>
-                              <small id="uiHypeTrainLevel" class="form-text text-white-50">The level of hype train that must be reached to trigger this animation.</small>
-                              <TelerikNumericTextBox Id="uiHypeTrainLevel" Min="0" Max="2500" @bind-Value="mData.HypeTrainLevel" />
-                              </div>
-                              }
-                              </RadzenFieldset>*@
+                           <div class="form-group form-check">
+                           <label class="form-check-label">
+                           <TelerikCheckBox Id="uiHypeTrainEnabled" @bind-Value="mData.IsHypeTrainTrigger" /> Trigger when a new hype train level has been reached
+                           </label>
+                           </div>
+                           @if (mData.IsHypeTrainTrigger)
+                           {
+                           <div class="form-group">
+                           <label for="uiHypeTrainLevel"><b>Hype Train Level:</b></label>
+                           <small id="uiHypeTrainLevel" class="form-text text-white-50">The level of hype train that must be reached to trigger this animation.</small>
+                           <TelerikNumericTextBox Id="uiHypeTrainLevel" Min="0" Max="2500" @bind-Value="mData.HypeTrainLevel" />
+                           </div>
+                           }
+                           </RadzenFieldset>*@
                         </div>
                      </div>
                   </TabStripTab>
@@ -376,163 +376,165 @@
                      </div>
                   </TabStripTab>
 
-                        <TabStripTab Title="Tips">
-                            <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
-                                <div class="container-fluid text-white-50 p-0">
-                                    <p>If you are authenticated with Streamlabs or StreamElements, you can receive tip alerts from their respective services
-                                       to use in GIFBot. In order to authenticate, please go to your Bot Settings -> Integrations.
-                                    </p>
-                                </div>
-                                <div class="container-fluid p-2">
-                                    <RadzenFieldset Text="Tip Requirement" AllowCollapse="false" Style="width: 100%; margin-bottom: 20px">
-                                        <div class="form-group form-check">
-                                            <label class="form-check-label">
-                                                <TelerikCheckBox Id="uiStreamlabsTipTrigger" @bind-Value="mData.IsStreamlabsTipTrigger" /> Trigger when tips are made through Streamlabs or StreamElements
-                                            </label>
-                                        </div>
-                                        @if (mData.IsStreamlabsTipTrigger)
-                                        {
-                                            <div class="form-group">
-                                                <small id="uiTipRequirement" class="form-text text-white-50">Amount of currency to be tipped before this animation will trigger (0 = all tips).</small>
-                                                <TelerikNumericTextBox Decimals="2" Id="uiTipRequirement" Min="0" Max="100000" @bind-Value="mData.StreamlabsTipRequirement" />
-                                            </div>
-                                        }
-                                    </RadzenFieldset>
-                                </div>
-                            </div>
-                        </TabStripTab>
+                  <TabStripTab Title="Tips">
+                     <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+                        <div class="container-fluid text-white-50 p-0">
+                           <p>
+                              If you are authenticated with Streamlabs or StreamElements, you can receive tip alerts from their respective services
+                              to use in GIFBot. In order to authenticate, please go to your Bot Settings -> Integrations.
+                           </p>
+                        </div>
+                        <div class="container-fluid p-2">
+                           <RadzenFieldset Text="Tip Requirement" AllowCollapse="false" Style="width: 100%; margin-bottom: 20px">
+                              <div class="form-group form-check">
+                                 <label class="form-check-label">
+                                    <TelerikCheckBox Id="uiStreamlabsTipTrigger" @bind-Value="mData.IsStreamlabsTipTrigger" /> Trigger when tips are made through Streamlabs or StreamElements
+                                 </label>
+                              </div>
+                              @if (mData.IsStreamlabsTipTrigger)
+                              {
+                                 <div class="form-group">
+                                    <small id="uiTipRequirement" class="form-text text-white-50">Amount of currency to be tipped before this animation will trigger (0 = all tips).</small>
+                                    <TelerikNumericTextBox Decimals="2" Id="uiTipRequirement" Min="0" Max="100000" @bind-Value="mData.StreamlabsTipRequirement" />
+                                 </div>
+                              }
+                           </RadzenFieldset>
+                        </div>
+                     </div>
+                  </TabStripTab>
 
-                        <TabStripTab Title="Charity">
-                            <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
-                                <div class="container-fluid text-white-50 p-0">
-                                    <p>If you are authenticated with Tiltify, you can receive donation alerts from their services
-                                       to use in GIFBot. In order to authenticate, please go to your Bot Settings -> Integrations. Make 
-                                       sure to select your active campaign!
-                                    </p>
-                                </div>
-                                <div class="container-fluid p-2">
-                                    <RadzenFieldset Text="Tip Requirement" AllowCollapse="false" Style="width: 100%; margin-bottom: 20px">
-                                        <div class="form-group form-check">
-                                            <label class="form-check-label">
-                                                <TelerikCheckBox Id="uiStreamlabsTiltifyTrigger" @bind-Value="mData.IsTiltifyTrigger" /> Trigger when donations are made through Tiltify
-                                            </label>
-                                        </div>
-                                        @if (mData.IsTiltifyTrigger)
-                                        {
-                                            <div class="form-group">
-                                                <small id="uiTilitifyRequirement" class="form-text text-white-50">Amount of currency to be donated before this animation will trigger (0 = all donations).</small>
-                                                <TelerikNumericTextBox Decimals="2" Id="uiTiltifyRequirement" Min="0" Max="1000000" @bind-Value="mData.TiltifyDonationRequirement" />
-                                            </div>
-                                        }
-                                    </RadzenFieldset>
-                                </div>
-                            </div>
-                        </TabStripTab>
+                  <TabStripTab Title="Charity">
+                     <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+                        <div class="container-fluid text-white-50 p-0">
+                           <p>
+                              If you are authenticated with Tiltify, you can receive donation alerts from their services
+                              to use in GIFBot. In order to authenticate, please go to your Bot Settings -> Integrations. Make
+                              sure to select your active campaign!
+                           </p>
+                        </div>
+                        <div class="container-fluid p-2">
+                           <RadzenFieldset Text="Tip Requirement" AllowCollapse="false" Style="width: 100%; margin-bottom: 20px">
+                              <div class="form-group form-check">
+                                 <label class="form-check-label">
+                                    <TelerikCheckBox Id="uiStreamlabsTiltifyTrigger" @bind-Value="mData.IsTiltifyTrigger" /> Trigger when donations are made through Tiltify
+                                 </label>
+                              </div>
+                              @if (mData.IsTiltifyTrigger)
+                              {
+                                 <div class="form-group">
+                                    <small id="uiTilitifyRequirement" class="form-text text-white-50">Amount of currency to be donated before this animation will trigger (0 = all donations).</small>
+                                    <TelerikNumericTextBox Decimals="2" Id="uiTiltifyRequirement" Min="0" Max="1000000" @bind-Value="mData.TiltifyDonationRequirement" />
+                                 </div>
+                              }
+                           </RadzenFieldset>
+                        </div>
+                     </div>
+                  </TabStripTab>
 
-                        <TabStripTab Title="Chat Output">
-                            <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
-                                <div class="container-fluid p-2">
-                                    <div class="mt-2">
-                                        <label for="uiPrePlayText"><b>Pre Play Text:</b></label>
-                                        <small id="uiPrePlayText" class="form-text text-white-50">Text that is sent to chat just prior to playing the animation. If triggered from chat, use $user in the place where you would like to have the trigger's name appear in the message.</small>
-                                        <TelerikTextBox Id="uiPrePlayText" Width="100%" @bind-Value="mData.PrePlayText" />
-                                    </div>
-                                    <div class="mt-2">
-                                        <label for="uiPostPlayText"><b>Post Play Text:</b></label>
-                                        <small id="uiPostPlayText" class="form-text text-white-50">Text that is sent to chat after playing the animation. If triggered from chat, use $user in the place where you would like to have the trigger's name appear in the message.</small>
-                                        <TelerikTextBox Id="uiPostPlayText" Width="100%" @bind-Value="mData.PostPlayText" />
-                                    </div>
-                                </div>
-                            </div>
-                        </TabStripTab>
-                    </TelerikTabStrip>
-                </div>
+                  <TabStripTab Title="Chat Output">
+                     <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+                        <div class="container-fluid p-2">
+                           <div class="mt-2">
+                              <label for="uiPrePlayText"><b>Pre Play Text:</b></label>
+                              <small id="uiPrePlayText" class="form-text text-white-50">Text that is sent to chat just prior to playing the animation. If triggered from chat, use $user in the place where you would like to have the trigger's name appear in the message.</small>
+                              <TelerikTextBox Id="uiPrePlayText" Width="100%" @bind-Value="mData.PrePlayText" />
+                           </div>
+                           <div class="mt-2">
+                              <label for="uiPostPlayText"><b>Post Play Text:</b></label>
+                              <small id="uiPostPlayText" class="form-text text-white-50">Text that is sent to chat after playing the animation. If triggered from chat, use $user in the place where you would like to have the trigger's name appear in the message.</small>
+                              <TelerikTextBox Id="uiPostPlayText" Width="100%" @bind-Value="mData.PostPlayText" />
+                           </div>
+                        </div>
+                     </div>
+                  </TabStripTab>
+               </TelerikTabStrip>
             </div>
-        </TabStripTab>
-        <TabStripTab Title="Variations">
-            <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
-                <div class="container-fluid p-2">
-                    <div class="container-fluid text-white-50 p-0">
-                        <p>
-                            Variations offer you a great opportunity to use the same command, but have different sounds or visuals play randomly when it's used.
-                            Variations will use the same placement data as the parent animation; however, you can provide a separate volume and duration for each.
-                        </p>
-                    </div>
-                    <div class="form-group mt-2">
-                        <label for="uiPlayAllVariantsBeforeRepeat"><b>Variations Repeat Behavior:</b></label>
-                        <small id="uiPlayAllVariantsBeforeRepeat" class="form-text text-white-50">Would you like all variations to be played before they can repeat? If enabled, all variations in the grid below will have to play at least once before they can be played again. Otherwise, they stand a chance of being repeated with multiple command executions.</small>
-                        <TelerikCheckBox Id="uiPlayAllVariantsBeforeRepeat" @bind-Value="mData.PlayAllVariantsBeforeRepeat" />
-                        <label for="uiPlayAllVariantsBeforeRepeat">Play all variants before repeating</label>
-                    </div>
-                    <div class="form-group">
-                        <label for="uiVariationsGrid"><b>Variations:</b></label>
-                        <TelerikGrid Sortable="true" Pageable="true" EditMode="@GridEditMode.Popup" Data="@mData.Variants" OnUpdate="@UpdateVariationHandler" Page="@mVariationPage" PageChanged="@VariationPageChanged" PageSize="10">
-                            <GridColumns>
-                                <GridColumn Field="@(nameof(AnimationVariantData.Visual))" Editable="false" Width="50px" Title="Visual" />
-                                <GridColumn Field="@(nameof(AnimationVariantData.Audio))" Editable="false" Width="50px" Title="Audio" />
-                                <GridColumn Field="@(nameof(AnimationVariantData.Volume))" Width="50px" Title="Volume" />
-                                <GridColumn Field="@(nameof(AnimationVariantData.DurationMilliseconds))" Width="50px" Title="Duration (in ms)" />
-                                <GridColumn Field="@(nameof(AnimationVariantData.AudioTimingOffsetMilliseconds))" Width="50px" Title="Offset (in ms)" />
-                                <GridColumn Field="@(nameof(AnimationVariantData.PrePlayText))" Width="50px" Title="PrePlayText" />
-                                <GridColumn Field="@(nameof(AnimationVariantData.PostPlayText))" Width="50px" Title="PostPlayText" />
-                                <GridCommandColumn Context="subcontext" Width="55px">
-                                    <GridCommandButton Command="Edit" Icon="edit"></GridCommandButton>
-                                    <GridCommandButton Command="PlayVariant" Icon="play" OnClick="@HandlePlayVariant"></GridCommandButton>
-                                    <GridCommandButton Command="DeleteVariant" Icon="delete" Class="alert-danger" OnClick="@HandleDeleteVariant"></GridCommandButton>
-                                </GridCommandColumn>
-                            </GridColumns>
-                        </TelerikGrid>
-                    </div>
-                    <RadzenFieldset Text="Add New Variant" AllowCollapse="true" Style="width: 100%; margin-bottom: 20px">
-                        <table>
-                            <tr>
-                                <td style="width: 45%" valign="top">
-                                    <div class="form-group">
-                                        <label for="uiVariantVisual"><b>Variant Visual:</b></label>
-                                        <small id="uiVariantVisual" class="form-text text-white-50">The visual file played with this variant (optional).</small>
-                                        <table>
-                                            <tr>
-                                                <td valign="top">
-                                                    <TelerikTextBox Id="uiVariantVisual" Width="100%" Enabled="false" @bind-Value="mVariantVisual" />
-                                                    <RadzenUpload Style="width: 100%; background-color: #1e1e1e" Url="upload/animation" Accept="image/gif,image/jpeg,image/png,video/mp4,video/webm" Error="@(args => OnImportVariantVisualFileError(args))" Progress="@(args => OnImportVariantVisualFileProgress(args))" Complete="@(args => OnImportVariantVisualFileComplete(args))" />
-                                                    <RadzenProgressBar Value="@mUploadVariantVisualProgress" Visible="@(mUploadVariantVisualProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
-                                                    @if (!String.IsNullOrEmpty(mUploadVariantVisualErrorMessage))
-                                                    {
-                                                        <label class="text-danger">@mUploadVariantVisualErrorMessage</label>
-                                                    }
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </td>
-                                <td style="width: 10%"></td>
-                                <td style="width: 45%" valign="top">
-                                    <div class="form-group">
-                                        <label for="uiVariantAudio"><b>Audio:</b></label>
-                                        <small id="uiVariantAudio" class="form-text text-white-50">The audio file played with this variant (optional).</small>
-                                        <table>
-                                            <tr>
-                                                <td valign="top">
-                                                    <TelerikTextBox Id="uiVariantAudio" Width="100%" Enabled="false" @bind-Value="mVariantAudio" />
-                                                    <RadzenUpload Style="width: 100%; background-color: #1e1e1e" Url="upload/animation" Accept="audio/*" Error="@(args => OnImportVariantAudioFileError(args))" Progress="@(args => OnImportVariantAudioFileProgress(args))" Complete="@(args => OnImportVariantAudioFileComplete(args))" />
-                                                    <RadzenProgressBar Value="@mUploadVariantAudioProgress" Visible="@(mUploadVariantAudioProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
-                                                    @if (!String.IsNullOrEmpty(mUploadVariantAudioErrorMessage))
-                                                    {
-                                                        <label class="text-danger">@mUploadVariantAudioErrorMessage</label>
-                                                    }
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
-                        @if (!String.IsNullOrEmpty(mVariantAudio) || AnimationLibrary.GetFileTypeOfAnimation(mVariantVisual) == AnimationEnums.FileType.Video)
-                        {
-                            <div class="form-group">
-                                <label for="uiVariantVolumeSlider" class="ml-2 mt-2"><b>Variant Volume:</b></label>
-                                <center><input type="range" class="slider" min="0" max="100" value="@mFormVariantVolume" id="uiVariantVolumeSlider" @onchange="@(args => OnVariantVolumeChanged(args))"></center>
-                                <p align="right">
+         </div>
+      </TabStripTab>
+      <TabStripTab Title="Variations">
+         <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+            <div class="container-fluid p-2">
+               <div class="container-fluid text-white-50 p-0">
+                  <p>
+                     Variations offer you a great opportunity to use the same command, but have different sounds or visuals play randomly when it's used.
+                     Variations will use the same placement data as the parent animation; however, you can provide a separate volume and duration for each.
+                  </p>
+               </div>
+               <div class="form-group mt-2">
+                  <label for="uiPlayAllVariantsBeforeRepeat"><b>Variations Repeat Behavior:</b></label>
+                  <small id="uiPlayAllVariantsBeforeRepeat" class="form-text text-white-50">Would you like all variations to be played before they can repeat? If enabled, all variations in the grid below will have to play at least once before they can be played again. Otherwise, they stand a chance of being repeated with multiple command executions.</small>
+                  <TelerikCheckBox Id="uiPlayAllVariantsBeforeRepeat" @bind-Value="mData.PlayAllVariantsBeforeRepeat" />
+                  <label for="uiPlayAllVariantsBeforeRepeat">Play all variants before repeating</label>
+               </div>
+               <div class="form-group">
+                  <label for="uiVariationsGrid"><b>Variations:</b></label>
+                  <TelerikGrid Sortable="true" Pageable="true" EditMode="@GridEditMode.Popup" Data="@mData.Variants" OnUpdate="@UpdateVariationHandler" Page="@mVariationPage" PageChanged="@VariationPageChanged" PageSize="10">
+                     <GridColumns>
+                        <GridColumn Field="@(nameof(AnimationVariantData.Visual))" Editable="false" Width="50px" Title="Visual" />
+                        <GridColumn Field="@(nameof(AnimationVariantData.Audio))" Editable="false" Width="50px" Title="Audio" />
+                        <GridColumn Field="@(nameof(AnimationVariantData.Volume))" Width="50px" Title="Volume" />
+                        <GridColumn Field="@(nameof(AnimationVariantData.DurationMilliseconds))" Width="50px" Title="Duration (in ms)" />
+                        <GridColumn Field="@(nameof(AnimationVariantData.AudioTimingOffsetMilliseconds))" Width="50px" Title="Offset (in ms)" />
+                        <GridColumn Field="@(nameof(AnimationVariantData.PrePlayText))" Width="50px" Title="PrePlayText" />
+                        <GridColumn Field="@(nameof(AnimationVariantData.PostPlayText))" Width="50px" Title="PostPlayText" />
+                        <GridCommandColumn Context="subcontext" Width="55px">
+                           <GridCommandButton Command="Edit" Icon="edit"></GridCommandButton>
+                           <GridCommandButton Command="PlayVariant" Icon="play" OnClick="@HandlePlayVariant"></GridCommandButton>
+                           <GridCommandButton Command="DeleteVariant" Icon="delete" Class="alert-danger" OnClick="@HandleDeleteVariant"></GridCommandButton>
+                        </GridCommandColumn>
+                     </GridColumns>
+                  </TelerikGrid>
+               </div>
+               <RadzenFieldset Text="Add New Variant" AllowCollapse="true" Style="width: 100%; margin-bottom: 20px">
+                  <table>
+                     <tr>
+                        <td style="width: 45%" valign="top">
+                           <div class="form-group">
+                              <label for="uiVariantVisual"><b>Variant Visual:</b></label>
+                              <small id="uiVariantVisual" class="form-text text-white-50">The visual file played with this variant (optional).</small>
+                              <table>
+                                 <tr>
+                                    <td valign="top">
+                                       <TelerikTextBox Id="uiVariantVisual" Width="100%" Enabled="false" @bind-Value="mVariantVisual" />
+                                       <RadzenUpload Style="width: 100%; background-color: #1e1e1e" Url="upload/animation" Accept="image/gif,image/jpeg,image/png,video/mp4,video/webm" Error="@(args => OnImportVariantVisualFileError(args))" Progress="@(args => OnImportVariantVisualFileProgress(args))" Complete="@(args => OnImportVariantVisualFileComplete(args))" />
+                                       <RadzenProgressBar Value="@mUploadVariantVisualProgress" Visible="@(mUploadVariantVisualProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
+                                       @if (!String.IsNullOrEmpty(mUploadVariantVisualErrorMessage))
+                                       {
+                                          <label class="text-danger">@mUploadVariantVisualErrorMessage</label>
+                                       }
+                                    </td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                        <td style="width: 10%"></td>
+                        <td style="width: 45%" valign="top">
+                           <div class="form-group">
+                              <label for="uiVariantAudio"><b>Audio:</b></label>
+                              <small id="uiVariantAudio" class="form-text text-white-50">The audio file played with this variant (optional).</small>
+                              <table>
+                                 <tr>
+                                    <td valign="top">
+                                       <TelerikTextBox Id="uiVariantAudio" Width="100%" Enabled="false" @bind-Value="mVariantAudio" />
+                                       <RadzenUpload Style="width: 100%; background-color: #1e1e1e" Url="upload/animation" Accept="audio/*" Error="@(args => OnImportVariantAudioFileError(args))" Progress="@(args => OnImportVariantAudioFileProgress(args))" Complete="@(args => OnImportVariantAudioFileComplete(args))" />
+                                       <RadzenProgressBar Value="@mUploadVariantAudioProgress" Visible="@(mUploadVariantAudioProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
+                                       @if (!String.IsNullOrEmpty(mUploadVariantAudioErrorMessage))
+                                       {
+                                          <label class="text-danger">@mUploadVariantAudioErrorMessage</label>
+                                       }
+                                    </td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                  </table>
+                  @if (!String.IsNullOrEmpty(mVariantAudio) || AnimationLibrary.GetFileTypeOfAnimation(mVariantVisual) == AnimationEnums.FileType.Video)
+                  {
+                     <div class="form-group">
+                        <label for="uiVariantVolumeSlider" class="ml-2 mt-2"><b>Variant Volume:</b></label>
+                        <center><input type="range" class="slider" min="0" max="100" value="@mFormVariantVolume" id="uiVariantVolumeSlider" @onchange="@(args => OnVariantVolumeChanged(args))"></center>
+                        <p align="right">
 
                            @if (!String.IsNullOrEmpty(mVariantAudio))
                            {
@@ -565,8 +567,8 @@
                      <small id="uiVariantAudioOffset" class="form-text text-white-50">Plays the audio file on a delay <i>after</i> the visual is played (<i>Math Reminder: 1 second = 1000ms</i>).</small>
                      <TelerikNumericTextBox Id="uiVariantAudioOffset" Min="0" Max="600000" @bind-Value="mVariantAudioOffset" />
                   </div>
-                  @if (AnimationLibrary.GetFileTypeOfAnimation(mData.Visual) == AnimationEnums.FileType.Video || 
-                       AnimationLibrary.GetFileTypeOfAnimation(mVariantVisual) == AnimationEnums.FileType.Video)
+                  @if (AnimationLibrary.GetFileTypeOfAnimation(mData.Visual) == AnimationEnums.FileType.Video ||
+                  AnimationLibrary.GetFileTypeOfAnimation(mVariantVisual) == AnimationEnums.FileType.Video)
                   {
                      <div class="container-fluid p-2">
                         <div class="form-group form-check">

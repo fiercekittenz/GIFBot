@@ -238,6 +238,11 @@
                               <RadzenDropDown Placeholder="Select Active Campaign..." Style="background-color: #2c2241; color: #e5e5e5; font-weight: bold; width: 250px;"
                                               Data="@mTiltifyCampaignNames" @bind-Value="@mSelectedTiltifyCampaignName" Change="@(args => OnTiltifyCampaignSelected(args))" />
                            </div>
+                           <div class="form-group form-check">
+                              <label class="form-check-label">
+                                 <TelerikCheckBox Id="uiTiltifyDonationAlertChat" @bind-Value="mBotSettings.TiltifyDonationAlertChat" /> Announce the donation in chat <i>after</i> the alert has played
+                              </label>
+                           </div>
                         </div>
                      </div>
                   </TabStripTab>

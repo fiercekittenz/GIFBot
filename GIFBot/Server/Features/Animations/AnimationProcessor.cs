@@ -175,7 +175,7 @@ namespace GIFBot.Server.GIFBot
       /// <summary>
       /// Deactivates the specified animation by removing it from the active animations collection.
       /// </summary>
-      public async Task DeactivateAnimation(string command, IHubClients hubClients, string postPlayText = "", string triggerer = "")
+      public async Task DeactivateAnimation(string command, IHubClients hubClients, string postPlayText = "", string triggerer = "", string amount = "")
       {
          mActiveAnimations.TryRemove(command, out AnimationRequest removed);
          await hubClients.All.SendAsync("StopAnimation");
@@ -190,6 +190,11 @@ namespace GIFBot.Server.GIFBot
             }
 
             Bot.SendChatMessage(postPlayFormatted);
+         }
+
+         if (Bot.BotSettings.TiltifyDonationAlertChat)
+         {
+            Bot.SendChatMessage($"We received a charity donation of [ {amount} ] from {triggerer}! Thank you!");
          }
       }
 
