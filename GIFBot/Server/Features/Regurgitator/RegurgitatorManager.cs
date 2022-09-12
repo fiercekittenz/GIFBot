@@ -127,11 +127,7 @@ namespace GIFBot.Server.Features.Regurgitator
       /// </summary>
       public bool CanHandleTwitchMessage(string message, bool isBroadcaster = false)
       {
-         IEnumerable<RegurgitatorPackage> validPackages = new List<RegurgitatorPackage>();
-         lock (Bot.RegurgitatorManager.PackagesMutex)
-         {
-            validPackages = Data.Packages.Where(p => p.Settings.Enabled && !p.Settings.PlayOnTimer);
-         }
+         IEnumerable<RegurgitatorPackage> validPackages = Data.Packages.Where(p => p.Settings.Enabled && !p.Settings.PlayOnTimer);
 
          if (!String.IsNullOrEmpty(message) &&
              validPackages.Any() && 
@@ -159,12 +155,7 @@ namespace GIFBot.Server.Features.Regurgitator
             return;
          }
 
-         RegurgitatorPackage qualifyingPackage = null;
-         lock (PackagesMutex)
-         {
-            qualifyingPackage = Data.Packages.FirstOrDefault(p => message.ChatMessage.Message.StartsWith(p.Settings.Command, StringComparison.OrdinalIgnoreCase));
-         }
-
+         RegurgitatorPackage qualifyingPackage = Data.Packages.FirstOrDefault(p => message.ChatMessage.Message.StartsWith(p.Settings.Command, StringComparison.OrdinalIgnoreCase));
          if (qualifyingPackage == null)
          {
             return;
@@ -351,18 +342,15 @@ namespace GIFBot.Server.Features.Regurgitator
          {
             while (true)
             {
-               lock (PackagesMutex)
+               var packagesWithTimer = Data.Packages.Where(p => p.Settings.Enabled && p.Settings.PlayOnTimer);
+               foreach (var package in packagesWithTimer)
                { 
-                  var packagesWithTimer = Data.Packages.Where(p => p.Settings.Enabled && p.Settings.PlayOnTimer);
-                  foreach (var package in packagesWithTimer)
-                  { 
-                     SendEntryToChat(package);
-                     Thread.Sleep(package.Settings.TimerFrequencyInSeconds * 1000);
+                  SendEntryToChat(package);
+                  Thread.Sleep(package.Settings.TimerFrequencyInSeconds * 1000);
 
-                     if (cancellationToken.IsCancellationRequested)
-                     {
-                        throw new TaskCanceledException(task);
-                     }
+                  if (cancellationToken.IsCancellationRequested)
+                  {
+                     throw new TaskCanceledException(task);
                   }
                }
 
