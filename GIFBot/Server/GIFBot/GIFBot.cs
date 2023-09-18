@@ -635,46 +635,48 @@ namespace GIFBot.Server.GIFBot
          }
       }
 
-      private void FollowerService_OnNewFollowersDetected(object sender, TwitchLib.Api.Services.Events.FollowerService.OnNewFollowersDetectedArgs e)
-      {
-         if (e.NewFollowers.Any())
-         {
-            var follower = e.NewFollowers.FirstOrDefault();
-            if (follower != null)
-            {
-               if ((DateTime.Now.Subtract(follower.FollowedAt).TotalMinutes < 5))
-               {
-                  _ = SendLogMessage($"New Follower: {follower.FromUserName}");
+      // TODO: Put this back, but as my own service using a poll against the new endpoint for the channel to scrape for followers.
+      //       The original endpoint was deprecated in September 2023.
+      //private void FollowerService_OnNewFollowersDetected(object sender, TwitchLib.Api.Services.Events.FollowerService.OnNewFollowersDetectedArgs e)
+      //{
+      //   if (e.NewFollowers.Any())
+      //   {
+      //      var follower = e.NewFollowers.FirstOrDefault();
+      //      if (follower != null)
+      //      {
+      //         if ((DateTime.Now.Subtract(follower.FollowedAt).TotalMinutes < 5))
+      //         {
+      //            _ = SendLogMessage($"New Follower: {follower.FromUserName}");
 
-                  AnimationData animation = null;                  
-                  var qualifyingAnimations = AnimationManager.GetAllAnimations(AnimationManager.FetchType.EnabledOnly).Where(a => a.IsFollowerAlert).ToList();            
-                  if (qualifyingAnimations.Count > 0)
-                  {
-                     int randomIndex = Common.sRandom.Next(qualifyingAnimations.Count);
-                     if (randomIndex < qualifyingAnimations.Count)
-                     {
-                        animation = qualifyingAnimations[randomIndex];
-                     }
+      //            AnimationData animation = null;                  
+      //            var qualifyingAnimations = AnimationManager.GetAllAnimations(AnimationManager.FetchType.EnabledOnly).Where(a => a.IsFollowerAlert).ToList();            
+      //            if (qualifyingAnimations.Count > 0)
+      //            {
+      //               int randomIndex = Common.sRandom.Next(qualifyingAnimations.Count);
+      //               if (randomIndex < qualifyingAnimations.Count)
+      //               {
+      //                  animation = qualifyingAnimations[randomIndex];
+      //               }
 
-                     if (animation != null)
-                     {
-                        AnimationManager.ForceQueueAnimation(animation, follower.FromUserName, String.Empty);
-                     }
-                  }
+      //               if (animation != null)
+      //               {
+      //                  AnimationManager.ForceQueueAnimation(animation, follower.FromUserName, String.Empty);
+      //               }
+      //            }
 
-                  // Place a sticker, if applicable.
-                  if (StickersManager != null &&
-                      StickersManager.Data != null &&
-                      StickersManager.Data.Enabled &&
-                      StickersManager.Data.IncludeFollows)
-                  {
-                     _ = SendLogMessage($"Sticker placed for follow from [{follower.FromUserName}].");
-                     _ = StickersManager.PlaceASticker();
-                  }
-               }
-            }
-         }
-      }
+      //            // Place a sticker, if applicable.
+      //            if (StickersManager != null &&
+      //                StickersManager.Data != null &&
+      //                StickersManager.Data.Enabled &&
+      //                StickersManager.Data.IncludeFollows)
+      //            {
+      //               _ = SendLogMessage($"Sticker placed for follow from [{follower.FromUserName}].");
+      //               _ = StickersManager.PlaceASticker();
+      //            }
+      //         }
+      //      }
+      //   }
+      //}
 
       private void TwitchClient_OnWhisperReceived(object sender, TwitchLib.Client.Events.OnWhisperReceivedArgs e)
       {
@@ -797,11 +799,6 @@ namespace GIFBot.Server.GIFBot
             ClientId = Common.skTwitchClientId,
             Scopes = new List<TwitchLib.Api.Core.Enums.AuthScopes>() { TwitchLib.Api.Core.Enums.AuthScopes.Any, TwitchLib.Api.Core.Enums.AuthScopes.Chat_Login, TwitchLib.Api.Core.Enums.AuthScopes.Channel_Read, TwitchLib.Api.Core.Enums.AuthScopes.Channel_Subscriptions }
          };
-
-         mFollowerService = new FollowerService(new TwitchAPI(null, null, apiSettings));
-         mFollowerService.SetChannelsByName(new List<string>() { BotSettings.ChannelName.Trim() });
-         mFollowerService.OnNewFollowersDetected += FollowerService_OnNewFollowersDetected;
-         mFollowerService.Start();
       }
 
       private void TwitchClient_OnJoinedChannel(object sender, TwitchLib.Client.Events.OnJoinedChannelArgs e)
