@@ -25,22 +25,25 @@ namespace GIFBot.Shared.Utility
 
          if (channelId != 0)
          {
-            string url = string.Format("https://api.twitch.tv/helix/users/follows?from_id={0}&to_id={1}", viewerId, channelId);
+            // GO LOOK AT dev.twitch.tv/docs/api/reference/#get-channel-followers
+            // Need to poll this once a minute, get all followers, chuck into the dictionary, then have this method reference it to find a follower.
 
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, url);
-            request.Headers.Add("Authorization", $"Bearer {oauth.Trim()}");
-            request.Headers.Add("Client-ID", Common.skTwitchClientId);
+            //string url = string.Format("https://api.twitch.tv/helix/channels/followers?broadcaster_id={0}&user_id={1}", channelId, channelId);
 
-            HttpResponseMessage response = client.Send(request);
-            if (response.IsSuccessStatusCode)
-            {
-               string jsonData = response.Content.ReadAsStringAsync().Result;
-               dynamic responseData = JsonConvert.DeserializeObject<object>(jsonData);
-               if (responseData["total"] != null && responseData["total"] != 0)
-               {
-                  return true;
-               }
-            }
+            //HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, url);
+            //request.Headers.Add("Authorization", $"Bearer {oauth.Trim()}");
+            //request.Headers.Add("Client-ID", Common.skTwitchClientId);
+
+            //HttpResponseMessage response = client.Send(request);
+            //if (response.IsSuccessStatusCode)
+            //{
+            //   string jsonData = response.Content.ReadAsStringAsync().Result;
+            //   dynamic responseData = JsonConvert.DeserializeObject<object>(jsonData);
+            //   if (responseData["total"] != null && responseData["total"] != 0)
+            //   {
+            //      return true;
+            //   }
+            //}
          }
 
          return result;
@@ -280,5 +283,10 @@ namespace GIFBot.Shared.Utility
 
          return users;
       }
+
+      /// <summary>
+      /// List of followers, periodically pulled from Twitch endpoints and stored locally for reference and lookups.
+      /// </summary>
+      private static Dictionary<long, string> mFollowers = new Dictionary<long, string>();      
    }
 }
