@@ -60,7 +60,6 @@ namespace GIFBot.Shared.Models.Visualization
       Viga,
       Quantico,
       Bungee,
-      Molle,
       Sriracha,
       Arsenal,
       Gaegu,
