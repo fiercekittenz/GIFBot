@@ -7,7 +7,6 @@ using GIFBot.Server.Features.Giveaway;
 using GIFBot.Server.Features.GoalBar;
 using GIFBot.Server.Features.Greeter;
 using GIFBot.Server.Features.Regurgitator;
-using GIFBot.Server.Features.Snapper;
 using GIFBot.Server.Features.Stickers;
 using GIFBot.Server.Features.StreamElements;
 using GIFBot.Server.Features.Tiltify;
@@ -40,6 +39,7 @@ using System.Web;
 using TwitchLib.Api;
 using TwitchLib.Api.Core;
 using TwitchLib.Api.Core.Models.Undocumented.Chatters;
+using TwitchLib.Api.Helix.Models.Chat.GetChatters;
 using TwitchLib.Api.Services;
 using TwitchLib.Client;
 using TwitchLib.Client.Enums;
@@ -373,28 +373,6 @@ namespace GIFBot.Server.GIFBot
             }
          }
 
-         if (SnapperManager != null && SnapperManager.Enabled)
-         {
-            foreach (var command in SnapperManager.EnabledCommands)
-            {
-               if (command.RedemptionType == SnapperRedemptionType.Tip && (int)(Math.Floor(amount)) == command.Cost)
-               {
-                  switch (command.BehaviorType)
-                  {
-                  case SnapperBehaviorType.SpecificViewer:
-                     _ = SnapperManager.Snap(command, message, tipper);
-                     break;
-
-                  case SnapperBehaviorType.Revenge:
-                  case SnapperBehaviorType.Thanos:
-                  case SnapperBehaviorType.Self:
-                     _ = SnapperManager.Snap(command, String.Empty, tipper);
-                     break;
-                  }
-               }
-            }
-         }
-
          // Look for Backdrops
          if (BackdropManager?.Data?.Enabled == true &&
              BackdropManager.Data.RedemptionType == CostRedemptionType.Tip &&
@@ -567,8 +545,6 @@ namespace GIFBot.Server.GIFBot
 
          if (mStreamerTwitchClient != null)
          {
-            mStreamerTwitchClient.OnBeingHosted -= TwitchClient_OnBeingHosted;
-
             mStreamerTwitchClient.Disconnect();
          }
 
@@ -618,8 +594,6 @@ namespace GIFBot.Server.GIFBot
 
             mStreamerTwitchClient = new TwitchClient(customClient);
             mStreamerTwitchClient.Initialize(connectionCredentials, BotSettings.ChannelName.Trim());
-
-            mStreamerTwitchClient.OnBeingHosted += TwitchClient_OnBeingHosted;
 
             mStreamerTwitchClient.Connect();
          }
@@ -797,46 +771,13 @@ namespace GIFBot.Server.GIFBot
          ApiSettings apiSettings = new ApiSettings() {
             AccessToken = BotSettings.BotOauthToken,
             ClientId = Common.skTwitchClientId,
-            Scopes = new List<TwitchLib.Api.Core.Enums.AuthScopes>() { TwitchLib.Api.Core.Enums.AuthScopes.Any, TwitchLib.Api.Core.Enums.AuthScopes.Chat_Login, TwitchLib.Api.Core.Enums.AuthScopes.Channel_Read, TwitchLib.Api.Core.Enums.AuthScopes.Channel_Subscriptions }
+            Scopes = new List<TwitchLib.Api.Core.Enums.AuthScopes>() { TwitchLib.Api.Core.Enums.AuthScopes.Any, TwitchLib.Api.Core.Enums.AuthScopes.Chat_Moderate, TwitchLib.Api.Core.Enums.AuthScopes.Chat_Edit, TwitchLib.Api.Core.Enums.AuthScopes.Chat_Read, TwitchLib.Api.Core.Enums.AuthScopes.Channel_Read, TwitchLib.Api.Core.Enums.AuthScopes.Channel_Subscriptions }
          };
       }
 
       private void TwitchClient_OnJoinedChannel(object sender, TwitchLib.Client.Events.OnJoinedChannelArgs e)
       {
          _ = SendLogMessage($"Joined channel {e.Channel} as {e.BotUsername}");
-      }
-
-      private void TwitchClient_OnBeingHosted(object sender, TwitchLib.Client.Events.OnBeingHostedArgs e)
-      {
-         AnimationData animation = null;                  
-         var qualifyingAnimations = AnimationManager.GetAllAnimations(AnimationManager.FetchType.EnabledOnly).Where(a => a.IsHostAlert &&
-                                                                                                                         (String.IsNullOrEmpty(a.HostRestrictedToUsername) ||
-                                                                                                                         a.HostRestrictedToUsername.Equals(e.BeingHostedNotification.HostedByChannel, StringComparison.OrdinalIgnoreCase))).ToList();
-         if (qualifyingAnimations.Count > 0)
-         {
-            int randomIndex = Common.sRandom.Next(qualifyingAnimations.Count);
-            if (randomIndex < qualifyingAnimations.Count)
-            {
-               animation = qualifyingAnimations[randomIndex];
-            }
-            
-            if (animation != null)
-            {
-               AnimationManager.ForceQueueAnimation(animation, e.BeingHostedNotification.HostedByChannel, String.Empty);
-            }
-         }
-
-         _ = SendLogMessage($"Hosted by {e.BeingHostedNotification.HostedByChannel}.");
-
-         // Place a sticker, if applicable.
-         if (StickersManager != null &&
-             StickersManager.Data != null &&
-             StickersManager.Data.Enabled &&
-             StickersManager.Data.IncludeHosts)
-         {
-            _ = SendLogMessage($"Sticker placed for host from [{e.BeingHostedNotification.HostedByChannel}].");
-            _ = StickersManager.PlaceASticker();
-         }
       }
 
       private void TwitchClient_OnRaidNotification(object sender, TwitchLib.Client.Events.OnRaidNotificationArgs e)
@@ -1018,10 +959,14 @@ namespace GIFBot.Server.GIFBot
 
       #region TwitchLib API
 
-      public async Task<List<ChatterFormatted>> GetChattersAsync()
+      public async Task<List<Chatter>> GetChattersAsync()
       {
-         List<ChatterFormatted> chatters = await mTwitchApi.Undocumented.GetChattersAsync(BotSettings.ChannelName);
-         return chatters;
+         GetChattersResponse response = await mTwitchApi.Helix.Chat.GetChattersAsync(BotSettings.ChannelName, BotSettings.ChannelName, 0, null, BotSettings.BotOauthToken);
+         if (response != null)
+         {
+            return response.Data.ToList();
+         }
+         return new List<Chatter>();
       }
 
       #endregion
@@ -1082,9 +1027,6 @@ namespace GIFBot.Server.GIFBot
 
             StickersManager stickersManager = new StickersManager(this, Path.Combine(settingsDir, StickersManager.kFileName));
             FeatureManagers.Add(stickersManager);
-
-            SnapperManager snapperManager = new SnapperManager(this, Path.Combine(settingsDir, SnapperManager.kFileName));
-            FeatureManagers.Add(snapperManager);
 
             BackdropManager backdropManager = new BackdropManager(this, Path.Combine(settingsDir, BackdropManager.kFileName));
             FeatureManagers.Add(backdropManager);
@@ -1312,28 +1254,6 @@ namespace GIFBot.Server.GIFBot
             }
          }
 
-         if (SnapperManager != null && SnapperManager.Enabled)
-         {
-            foreach (var command in SnapperManager.EnabledCommands)
-            {
-               if (command.RedemptionType == SnapperRedemptionType.Tiltify && (int)(Math.Floor(donation.Amount)) == command.Cost)
-               {
-                  switch (command.BehaviorType)
-                  {
-                  case SnapperBehaviorType.SpecificViewer:
-                     _ = SnapperManager.Snap(command, donation.Comment, donation.Name);
-                     break;
-
-                  case SnapperBehaviorType.Revenge:
-                  case SnapperBehaviorType.Thanos:
-                  case SnapperBehaviorType.Self:
-                     _ = SnapperManager.Snap(command, String.Empty, donation.Name);
-                     break;
-                  }
-               }
-            }
-         }
-
          // Look for Backdrops
          if (BackdropManager != null &&
              BackdropManager.Data != null &&
@@ -1530,13 +1450,6 @@ namespace GIFBot.Server.GIFBot
       {
          get {
             return FeatureManagers.OfType<StickersManager>().FirstOrDefault();
-         }
-      }
-
-      public SnapperManager SnapperManager
-      {
-         get {
-            return FeatureManagers.OfType<SnapperManager>().FirstOrDefault();
          }
       }
 

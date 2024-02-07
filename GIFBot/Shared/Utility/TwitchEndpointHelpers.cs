@@ -6,7 +6,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.IO;
-using TwitchLib.Api.V5.Models.Channels;
+using TwitchLib.Api.Helix.Models.Channels;
 using GIFBot.Shared.Models.Twitch;
 using Newtonsoft.Json.Linq;
 using System.Text;

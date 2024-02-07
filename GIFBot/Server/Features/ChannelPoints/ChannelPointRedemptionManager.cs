@@ -151,32 +151,6 @@ namespace GIFBot.Server.Features.ChannelPoints
                Bot.RegurgitatorManager.Play(qualifyingPackage);
             }
 
-            // Look for Thanos
-            if (Bot.SnapperManager.Enabled)
-            {
-               foreach (var command in Bot.SnapperManager.EnabledCommands)
-               {
-                  if (rewardTitle.Contains(command.Command, StringComparison.OrdinalIgnoreCase) &&
-                      command.RedemptionType == SnapperRedemptionType.ChannelPoints &&
-                      rewardCost == command.Cost)
-                  {
-                     switch (command.BehaviorType)
-                     {
-                     case SnapperBehaviorType.SpecificViewer:
-                        // This is a specific viewer, so we need to send the reward input as the name of the viewer to snap.
-                        _ = Bot.SnapperManager.Snap(command, userInput, e.RewardRedeemed.Redemption.User.DisplayName);
-                        break;
-
-                     case SnapperBehaviorType.Revenge:
-                     case SnapperBehaviorType.Thanos:
-                     case SnapperBehaviorType.Self:
-                        _ = Bot.SnapperManager.Snap(command, String.Empty, e.RewardRedeemed.Redemption.User.DisplayName);
-                        break;
-                     }
-                  }
-               }
-            }
-
             // Look for Backdrops
             if (Bot.BackdropManager?.Data?.Enabled == true &&
                 Bot.BackdropManager.Data.RedemptionType == CostRedemptionType.ChannelPoints &&
