@@ -249,21 +249,6 @@
                                </div>
                             </RadzenFieldset>
                             -->
-                           <RadzenFieldset Text="Host Alerts" AllowCollapse="false" Style="width: 100%; margin-bottom: 20px">
-                              <div class="form-group form-check">
-                                 <label class="form-check-label">
-                                    <TelerikCheckBox Id="uiHostTriggerEnabled" @bind-Value="mData.IsHostAlert" /> Trigger when someone hosts the channel
-                                 </label>
-                              </div>
-                              @if (mData.IsHostAlert)
-                              {
-                                 <div class="form-group">
-                                    <label for="uiRestrictedToHost"><b>Restricted to Hosts By User:</b></label>
-                                    <small id="uiRestrictedToHost" class="form-text text-white-50">Only triggers if this specific user hosts. You may leave this blank to trigger for all hosts.</small>
-                                    <TelerikTextBox Id="uiRestrictedToHost" @bind-Value="mData.HostRestrictedToUsername" />
-                                 </div>
-                              }
-                           </RadzenFieldset>
                            <RadzenFieldset Text="Raid Alerts" AllowCollapse="false" Style="width: 100%; margin-bottom: 20px">
                               <div class="form-group form-check">
                                  <label class="form-check-label">
