@@ -21,7 +21,7 @@ namespace GIFBot.Shared.Utility
       {
          if (!String.IsNullOrEmpty(slug))
          {
-            string url = string.Format("https://tiltify.com/api/v3/users/{0}", slug);
+            string url = string.Format("https://v5api.tiltify.com/api/public/users/by/slug/{0}", slug);
 
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, url);
             request.Headers.Add("Authorization", $"Bearer {authToken}");
@@ -53,7 +53,7 @@ namespace GIFBot.Shared.Utility
 
          if (userId > 0)
          {
-            string url = string.Format("https://tiltify.com/api/v3/users/{0}/campaigns", userId);
+            string url = string.Format("https://v5api.tiltify.com/api/public/users/{0}/campaigns", userId);
 
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, url);
             request.Headers.Add("Authorization", $"Bearer {authToken}");
@@ -93,7 +93,7 @@ namespace GIFBot.Shared.Utility
 
          if (campaignId > 0)
          {
-            string url = string.Format("https://tiltify.com/api/v3/campaigns/{0}/donations", campaignId);
+            string url = string.Format("https://v5api.tiltify.com/api/campaigns/{0}/donations", campaignId);
 
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, url);
             request.Headers.Add("Authorization", $"Bearer {authToken}");
