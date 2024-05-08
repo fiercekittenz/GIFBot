@@ -215,7 +215,7 @@
                      <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
                         <div class="container-fluid p-2">
                            <p class="text-white-50">
-                              If you want to capture charitable donations through the <a href="https://www.tiltify.com/" target="_blank">Tiltify</a> service, you will need to provide your Tiltify username and the application token from your dashboard. To access this information, log into Tiltify, go to your dashboard and choose "My Account". You can then click on "Connected Accounts" at the top of the page, followed by "Your Applications" on the left. From here you must create an application with the following information:
+                              If you want to capture charitable donations through the <a href="https://www.tiltify.com/" target="_blank">Tiltify</a> service, you will need to provide your Tiltify slug (display name) and the client_id and client_secret from your dashboard. This information is only stored on your personal computer and not shared! It's needed to authenticate your copy of GIFBot since I'm not hosting it anywhere as a central application. Otherwise it would cost a lot of money and I would be sad. To access this information, log into Tiltify, go to your dashboard and choose "My Account". You can then click on "Connected Accounts" at the top of the page, followed by "Your Applications" on the left. From here you must create an application with the following information:
                            </p>
                            <p class="text-white-50">
                               <center><img src="tiltify_info.png" style="max-width: 70%; height: auto" /></center>
@@ -225,12 +225,16 @@
                            </p>
                            <div class="form-group">
                               <label for="uiTiltifySlug"><b>Tiltify Slug:</b></label>
-                              <small id="uiTiltifySlugDesc" class="form-text text-white-50">Your username within the Tiltify system. Typically shows in the Tiltify dashboard URL.</small>
+                              <small id="uiTiltifySlugDesc" class="form-text text-white-50">Your display name within the Tiltify system. Typically shows in the Tiltify dashboard URL.</small>
                               <TelerikTextBox id="uiTiltifySlug" Width="100%" @bind-Value="mBotSettings.TiltifySlug" />
                            </div>
                            <div class="form-group">
-                              <label for="uiTiltifyAuthToken"><b>Tiltify Application Access Token:</b></label>
-                              <RadzenPassword id="uiTiltifyAuthToken" class="k-textbox" Style="width: 100%" Placeholder="Enter the Tiltify Access Token from the Tiltify Dashboard..." @bind-Value="mBotSettings.TiltifyAuthToken" />
+                              <label for="uiTiltifyClientId"><b>Tiltify Application Client ID:</b></label>
+                              <RadzenPassword id="uiTiltifyClientId" class="k-textbox" Style="width: 100%" Placeholder="Enter the Client ID from the Tiltify Dashboard..." @bind-Value="mBotSettings.TiltifyClientId" />
+                           </div>
+                           <div class="form-group">
+                              <label for="uiTiltifyClientSecret"><b>Tiltify Application Client Secret:</b></label>
+                              <RadzenPassword id="uiTiltifyClientSecret" class="k-textbox" Style="width: 100%" Placeholder="Enter the Client Secret from the Tiltify Dashboard..." @bind-Value="mBotSettings.TiltifyClientSecret" />
                            </div>
                            <div class="form-group">
                               <label for="uiTiltifyCampaigns"><b>Active Campaign:</b></label><br />
@@ -519,7 +523,7 @@
          foreach (var campaign in mTiltifyCampaigns)
          {
             mTiltifyCampaignNames.Add(campaign.Name);
-            if (mBotSettings.TiltifyActiveCampaign > 0 && campaign.Id == mBotSettings.TiltifyActiveCampaign)
+            if (!string.IsNullOrEmpty(mBotSettings.TiltifyActiveCampaignv5) && campaign.Id == mBotSettings.TiltifyActiveCampaignv5)
             {
                mSelectedTiltifyCampaign = campaign;
                mSelectedTiltifyCampaignName = campaign.Name;
@@ -572,7 +576,7 @@
          TiltifyCampaign campaign = mTiltifyCampaigns.FirstOrDefault(g => g.Name.Equals(campaignName, StringComparison.OrdinalIgnoreCase));
          if (campaign != null)
          {
-            mBotSettings.TiltifyActiveCampaign = campaign.Id;
+            mBotSettings.TiltifyActiveCampaignv5 = campaign.Id;
             mSelectedTiltifyCampaign = campaign;
             StateHasChanged();
          }

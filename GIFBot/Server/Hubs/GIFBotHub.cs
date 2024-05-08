@@ -104,6 +104,8 @@ namespace GIFBot.Server.Hubs
             // Cache old settings for comparison.
             string oldChannelName = Bot.BotSettings.ChannelName;
             long oldTiltifyCampaignId = Bot.BotSettings.TiltifyActiveCampaign;
+            string oldTiltifyClientId = Bot.BotSettings.TiltifyClientId;
+            string oldTiltifyClientSecret = Bot.BotSettings.TiltifyClientSecret;
 
             Bot.BotSettings = JsonConvert.DeserializeObject<BotSettings>(jsonData);
             if (reconnectToTwitch)
@@ -117,10 +119,16 @@ namespace GIFBot.Server.Hubs
                Bot.ConnectToTwitch(channelHasChanged);
             }
 
+            if (oldTiltifyClientId != Bot.BotSettings.TiltifyClientId ||
+                oldTiltifyClientSecret != Bot.BotSettings.TiltifyClientSecret)
+            {
+               Bot.TiltifyManager.Authenticate();
+            }
+
             if (oldTiltifyCampaignId != Bot.BotSettings.TiltifyActiveCampaign && 
                 Bot.BotSettings.TiltifyActiveCampaign > 0)
             {
-               Bot.TiltifyManager.LastAlertedDonationId = -1;
+               Bot.TiltifyManager.LastDonationPollTime = DateTime.UnixEpoch;
             }
 
             Bot.StreamElementsManager.InitializeWithChannelId();
@@ -2110,8 +2118,8 @@ namespace GIFBot.Server.Hubs
              !String.IsNullOrEmpty(Bot.BotSettings.TiltifySlug) && 
              !String.IsNullOrEmpty(Bot.BotSettings.TiltifyAuthToken))
          {
-            int tiltifyUserId = TiltifyEndpointHelpers.GetUserId(Bot.HttpClientFactory.CreateClient(Common.skHttpClientName), Bot.BotSettings.TiltifyAuthToken, Bot.BotSettings.TiltifySlug);
-            if (tiltifyUserId > 0)
+            string tiltifyUserId = TiltifyEndpointHelpers.GetUserId(Bot.HttpClientFactory.CreateClient(Common.skHttpClientName), Bot.BotSettings.TiltifyAuthToken, Bot.BotSettings.TiltifySlug);
+            if (!string.IsNullOrEmpty(tiltifyUserId))
             {
                campaigns = TiltifyEndpointHelpers.GetCampaigns(Bot.HttpClientFactory.CreateClient(Common.skHttpClientName), Bot.BotSettings.TiltifyAuthToken, tiltifyUserId);
             }

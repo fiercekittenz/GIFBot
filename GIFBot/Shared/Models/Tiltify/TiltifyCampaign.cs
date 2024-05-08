@@ -8,7 +8,7 @@ namespace GIFBot.Shared.Models.Tiltify
 {
    public class TiltifyCampaign
    {
-      public long Id { get; set; }
+      public string Id { get; set; } // in v5 Tiltify made this a guid
       public string Name { get; set; }
       public string Slug { get; set; }
    }

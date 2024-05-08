@@ -17,11 +17,11 @@ namespace GIFBot.Server.Features.Tiltify
 
       public GIFBot.GIFBot Bot { get; private set; }
 
-      public long LastAlertedDonationId
+      public DateTime LastDonationPollTime
       {
          get;
          set;
-      } = -1;
+      } = DateTime.UnixEpoch;
 
       #endregion
 
@@ -30,6 +30,20 @@ namespace GIFBot.Server.Features.Tiltify
       public TiltifyManager(GIFBot.GIFBot bot)
       {
          Bot = bot;
+
+         // The Tiltify API for authenticating a personal, connected application doesn't provide a refresh token.
+         // We need to reauthenticate when we load the bot or make any settings changes.
+         Authenticate();
+      }
+
+      public void Authenticate()
+      {
+         if (!string.IsNullOrEmpty(Bot.BotSettings.TiltifyClientId) && 
+             !string.IsNullOrEmpty(Bot.BotSettings.TiltifyClientSecret))
+         {
+            Bot.BotSettings.TiltifyAuthToken = TiltifyEndpointHelpers.Authenticate(Bot.HttpClientFactory.CreateClient(Common.skHttpClientName), Bot.BotSettings.TiltifyClientId, Bot.BotSettings.TiltifyClientSecret);
+            Bot.SaveSettings();
+         }
       }
 
       #endregion
@@ -82,6 +96,7 @@ namespace GIFBot.Server.Features.Tiltify
 
       private Task DonationCheckPulse(CancellationToken cancellationToken)
       {
+         LastDonationPollTime = DateTime.Now;
          Task task = null;
 
          task = Task.Run(() =>
@@ -89,42 +104,17 @@ namespace GIFBot.Server.Features.Tiltify
             while (true)
             {
                // Poll for the latest donation data available on a specific campaign.
-               if (Bot.BotSettings.TiltifyActiveCampaign > 0 &&
-                   !String.IsNullOrEmpty(Bot.BotSettings.TiltifyAuthToken))
+               if (!string.IsNullOrEmpty(Bot.BotSettings.TiltifyActiveCampaignv5) &&
+                   !string.IsNullOrEmpty(Bot.BotSettings.TiltifyAuthToken))
                {
-                  List<TiltifyDonation> donations = TiltifyEndpointHelpers.GetCampaignDonations(Bot.HttpClientFactory.CreateClient(Common.skHttpClientName), Bot.BotSettings.TiltifyAuthToken, Bot.BotSettings.TiltifyActiveCampaign);
-                  if (donations.Any())
+                  List<TiltifyDonation> donations = TiltifyEndpointHelpers.GetCampaignDonations(Bot.HttpClientFactory.CreateClient(Common.skHttpClientName), Bot.BotSettings.TiltifyAuthToken, Bot.BotSettings.TiltifyActiveCampaignv5, LastDonationPollTime);
+                  foreach (TiltifyDonation donation in donations)
                   {
-                     TiltifyDonation firstDonation = donations.FirstOrDefault();
-
-                     if (LastAlertedDonationId < 0)
-                     {
-                        // We have not set any alerted donation ids yet, so we don't want to 
-                        // spin off a lot of alerts. Cache the topmost ID and break.
-                        if (firstDonation != null)
-                        {
-                           LastAlertedDonationId = firstDonation.Id;
-                        }
-                     }
-                     else
-                     {
-                        foreach (TiltifyDonation donation in donations)
-                        {
-                           if (donation.Id <= LastAlertedDonationId)
-                           {
-                              break;
-                           }
-                           else
-                           {
-                              Bot.HandleTiltifyDonation(donation);
-                           }
-                        }
-
-                        LastAlertedDonationId = firstDonation.Id;
-                     }
+                     Bot.HandleTiltifyDonation(donation);
                   }
                }
 
+               LastDonationPollTime = DateTime.Now;
                Thread.Sleep(skGeneralTiltifyRateLimit);
 
                if (cancellationToken.IsCancellationRequested)
