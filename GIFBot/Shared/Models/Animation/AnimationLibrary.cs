@@ -116,6 +116,7 @@ namespace GIFBot.Shared
       /// <summary>
       /// Determines what the visual file's dimensions should be.
       /// </summary>
+      [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
       public static Tuple<int, int> GetVisualFileDimensions(string visualFileName)
       {
          string visualFilePath = Path.Combine(AnimationLibrary.GetMediaRootPath(), visualFileName);

@@ -609,49 +609,6 @@ namespace GIFBot.Server.GIFBot
          }
       }
 
-      // TODO: Put this back, but as my own service using a poll against the new endpoint for the channel to scrape for followers.
-      //       The original endpoint was deprecated in September 2023.
-      //private void FollowerService_OnNewFollowersDetected(object sender, TwitchLib.Api.Services.Events.FollowerService.OnNewFollowersDetectedArgs e)
-      //{
-      //   if (e.NewFollowers.Any())
-      //   {
-      //      var follower = e.NewFollowers.FirstOrDefault();
-      //      if (follower != null)
-      //      {
-      //         if ((DateTime.Now.Subtract(follower.FollowedAt).TotalMinutes < 5))
-      //         {
-      //            _ = SendLogMessage($"New Follower: {follower.FromUserName}");
-
-      //            AnimationData animation = null;                  
-      //            var qualifyingAnimations = AnimationManager.GetAllAnimations(AnimationManager.FetchType.EnabledOnly).Where(a => a.IsFollowerAlert).ToList();            
-      //            if (qualifyingAnimations.Count > 0)
-      //            {
-      //               int randomIndex = Common.sRandom.Next(qualifyingAnimations.Count);
-      //               if (randomIndex < qualifyingAnimations.Count)
-      //               {
-      //                  animation = qualifyingAnimations[randomIndex];
-      //               }
-
-      //               if (animation != null)
-      //               {
-      //                  AnimationManager.ForceQueueAnimation(animation, follower.FromUserName, String.Empty);
-      //               }
-      //            }
-
-      //            // Place a sticker, if applicable.
-      //            if (StickersManager != null &&
-      //                StickersManager.Data != null &&
-      //                StickersManager.Data.Enabled &&
-      //                StickersManager.Data.IncludeFollows)
-      //            {
-      //               _ = SendLogMessage($"Sticker placed for follow from [{follower.FromUserName}].");
-      //               _ = StickersManager.PlaceASticker();
-      //            }
-      //         }
-      //      }
-      //   }
-      //}
-
       private void TwitchClient_OnWhisperReceived(object sender, TwitchLib.Client.Events.OnWhisperReceivedArgs e)
       {
          if (e.WhisperMessage.Username.Equals(BotSettings.ChannelName, StringComparison.OrdinalIgnoreCase))
