@@ -70,5 +70,36 @@ namespace GIFBot.Shared.Models.Features
       //
 
       public List<StickerCategory> Categories { get; set; } = new List<StickerCategory>();
+
+      #region Version History
+
+      /// <summary>
+      /// The version of this data. Used for advancing and converting data when loaded.
+      /// </summary>
+      public int Version { get; set; } = 1;
+
+      /// <summary>
+      /// Determines if a bump in versions is required. Handles converting data as upgrades are made.
+      /// </summary>
+      public bool BumpVersion()
+      {
+         // Removed "Follower" as an option for defining access to use features of GIFBot. (6-8-2024)
+         const int kFollowerRemoval = 3;
+
+         if (Version < kFollowerRemoval)
+         {
+            if (Access == AnimationEnums.AccessType.Follower)
+            {
+               Access = AnimationEnums.AccessType.Anyone;
+            }
+
+            Version = BotSettings.skCurrentBotSettingsVersion;
+            return true;
+         }
+
+         return false;
+      }
+
+      #endregion
    }
 }

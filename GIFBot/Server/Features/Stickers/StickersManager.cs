@@ -80,6 +80,11 @@ namespace GIFBot.Server.Features.Stickers
                SaveData();
             }
 
+            if (mData.BumpVersion())
+            {
+               SaveData();
+            }
+
             if (mData.Enabled)
             {
                _ = Bot?.SendLogMessage("Stickers data loaded and enabled.");
@@ -136,14 +141,6 @@ namespace GIFBot.Server.Features.Stickers
                   {
                      return;
                   }
-               case AnimationEnums.AccessType.Follower:
-                  {
-                     if (!TwitchEndpointHelpers.CheckFollowChannelOnTwitch(Bot.HttpClientFactory.CreateClient(Common.skHttpClientName), Bot.BotSettings.BotOauthToken, long.Parse(message.ChatMessage.RoomId), long.Parse(message.ChatMessage.UserId)))
-                     {
-                        return;
-                     }
-                  }
-                  break;
                case AnimationEnums.AccessType.Moderator:
                   {
                      if (!message.ChatMessage.UserDetail.IsModerator)

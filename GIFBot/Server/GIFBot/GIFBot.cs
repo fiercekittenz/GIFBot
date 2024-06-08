@@ -148,26 +148,6 @@ namespace GIFBot.Server.GIFBot
          }
          sb.Clear();
 
-         var followerOnlyAnimations = animations.Where(g => g.Access == AccessType.Follower);
-         sb.Append("Follower Only: ");
-         foreach (AnimationData animation in followerOnlyAnimations)
-         {
-            sb.Append(animation.Command);
-            sb.Append(" ");
-
-            if (sb.Length > skMaxCharactersPerAnimOutput)
-            {
-               animMessages.Add(sb.ToString());
-               sb.Clear();
-            }
-         }
-
-         if (followerOnlyAnimations.Count() > 0)
-         {
-            animMessages.Add(sb.ToString());
-         }
-         sb.Clear();
-
          var subOnlyAnimations = animations.Where(g => g.Access == AccessType.Subscriber);
          sb.Append("Subscriber Only: ");
          foreach (AnimationData animation in subOnlyAnimations)
@@ -327,7 +307,7 @@ namespace GIFBot.Server.GIFBot
 
          if (RegurgitatorManager != null)
          {
-            RegurgitatorPackage qualifyingPackage = null;            
+            RegurgitatorPackage qualifyingPackage = null;
             lock (RegurgitatorManager.PackagesMutex)
             {
                RegurgitatorManager.Data.Packages.FirstOrDefault(p => p.Settings.Enabled &&
@@ -595,7 +575,7 @@ namespace GIFBot.Server.GIFBot
          {
             lock (UsersInChannelMutex)
             {
-               UsersInChannel.Clear();                 
+               UsersInChannel.Clear();
                UsersInChannel.UnionWith(TwitchEndpointHelpers.GetUserList(HttpClientFactory.CreateClient(Common.skHttpClientName), BotSettings.BotOauthToken, BotSettings.ChannelName.ToLower()));
             }
          }
@@ -762,12 +742,6 @@ namespace GIFBot.Server.GIFBot
          ChannelPointManager.InitializePubSub();
          CheckForHypeTrainEvent(false);
 
-         if (mFollowerService != null)
-         {
-            mFollowerService.Stop();
-            mFollowerService = null;
-         }
-
          ApiSettings apiSettings = new ApiSettings() {
             AccessToken = BotSettings.BotOauthToken,
             ClientId = Common.skTwitchClientId,
@@ -786,7 +760,7 @@ namespace GIFBot.Server.GIFBot
 
       private Task TwitchClient_OnRaidNotification(object sender, TwitchLib.Client.Events.OnRaidNotificationArgs e)
       {
-         AnimationData animation = null;                  
+         AnimationData animation = null;
          var allRaidAnimations = AnimationManager.GetAllAnimations(AnimationManager.FetchType.EnabledOnly).Where(a => a.IsRaidAlert).ToList();
 
          _ = SendLogMessage($"KITTENZDEBUG: Raid notification received! Raider DisplayName: {e.RaidNotification.DisplayName}");
@@ -1065,7 +1039,7 @@ namespace GIFBot.Server.GIFBot
          foreach (var manager in FeatureManagers)
          {
             if (manager is IFeatureManager featureManager)
-            { 
+            {
                featureManager.LoadData();
             }
 
@@ -1224,7 +1198,7 @@ namespace GIFBot.Server.GIFBot
 
             RegurgitatorPackage qualifyingPackage = null;
             lock (RegurgitatorManager.PackagesMutex)
-            { 
+            {
                RegurgitatorManager.Data.Packages.FirstOrDefault(p => p.Settings.Enabled &&
                                                                      !p.Settings.PlayOnTimer &&
                                                                      p.Settings.IsTiltifyTrigger &&
@@ -1297,8 +1271,8 @@ namespace GIFBot.Server.GIFBot
          task = Task.Run(() =>
          {
             while (true)
-            {               
-               if (BotSettings != null && 
+            {
+               if (BotSettings != null &&
                    !String.IsNullOrEmpty(BotSettings.BotOauthToken) &&
                    !String.IsNullOrEmpty(BotSettings.ChannelName))
                {
@@ -1506,8 +1480,7 @@ namespace GIFBot.Server.GIFBot
 
       public StreamElementsManager StreamElementsManager
       {
-         get
-         {
+         get {
             return FeatureManagers.OfType<StreamElementsManager>().FirstOrDefault();
          }
       }
@@ -1547,11 +1520,6 @@ namespace GIFBot.Server.GIFBot
       /// Authorized access to the Twitch API.
       /// </summary>
       private TwitchAPI mTwitchApi = new TwitchAPI();
-
-      /// <summary>
-      /// Twitch follower service.
-      /// </summary>
-      private FollowerService mFollowerService;
 
       /// <summary>
       /// The loaded and active settings for the bot.

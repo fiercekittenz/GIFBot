@@ -170,19 +170,6 @@ namespace GIFBot.Shared
          // Username-specific filters are handled in the CanBeTriggeredByChat message.
          switch (Access)
          {
-            case AnimationEnums.AccessType.Follower:
-               {
-                  if (settings == null)
-                  {
-                     return false;
-                  }
-
-                  if (!TwitchEndpointHelpers.CheckFollowChannelOnTwitch(client, settings.BotOauthToken, long.Parse(roomId), long.Parse(userId)))
-                  {
-                     return false;
-                  }
-               }
-               break;
             case AnimationEnums.AccessType.Subscriber:
                {
                   if (!isSubscriber)
@@ -372,7 +359,7 @@ namespace GIFBot.Shared
       public string HostRestrictedToUsername { get; set; } = String.Empty;
       public bool IsRaidAlert { get; set; } = false;
       public string RaidRestrictedToUsername { get; set; } = String.Empty;
-      public bool IsFollowerAlert { get; set; } = false;
+      public bool IsFollowerAlert { get; set; } = false; // Deprecated (6-8-2024)
       public CaptionData Caption { get; set; } = new CaptionData();
       public bool IsHypeTrainTrigger { get; set; } = false;
       public int HypeTrainLevel { get; set; } = 1;
