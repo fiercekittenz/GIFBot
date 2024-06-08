@@ -156,10 +156,10 @@
    <TabStripTab Title="Backdrops">
       <div class="container-fluid p-2">
          <TelerikGrid Sortable="true" FilterMode="Telerik.Blazor.GridFilterMode.FilterRow" Pageable="true" Data="@Data.Backdrops" PageSize="10">
-            <GridToolBar>
+            <GridToolBarTemplate>
                <GridSearchBox />
-               <GridCommandButton Command="AddCommand" OnClick="@HandleAddRequest" Icon="add">Add Backdrop</GridCommandButton>
-            </GridToolBar>
+               <GridCommandButton Command="AddCommand" OnClick="@HandleAddRequest" Icon="@SvgIcon.Plus">Add Backdrop</GridCommandButton>
+            </GridToolBarTemplate>
             <GridColumns>
                <GridColumn Width="150px" Field=@nameof(BackdropVideoEntryData.Name) Title="Value" />
                <GridColumn Width="100px" Title="">

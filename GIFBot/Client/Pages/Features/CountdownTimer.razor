@@ -223,10 +223,10 @@
    <TabStripTab Title="Timer Actions">
       <div class="container-fluid p-2">
          <TelerikGrid Sortable="true" FilterMode="Telerik.Blazor.GridFilterMode.FilterRow" Pageable="true" Data="@Data.Actions" PageSize="10">
-            <GridToolBar>
+            <GridToolBarTemplate>
                <GridSearchBox />
-               <GridCommandButton Command="AddCommand" OnClick="@HandleAddRequest" Icon="add">Add Action</GridCommandButton>
-            </GridToolBar>
+               <GridCommandButton Command="AddCommand" OnClick="@HandleAddRequest" Icon="@SvgIcon.Plus">Add Action</GridCommandButton>
+            </GridToolBarTemplate>
             <GridColumns>
                <GridColumn Width="150px" Field=@nameof(CountdownTimerAction.Name) Title="Value" />
                <GridColumn Width="100px" Title="">

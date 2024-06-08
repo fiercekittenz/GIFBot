@@ -45,15 +45,15 @@
       <div class="form-group">
          <label for="uiGoalsGrid"><b>Milestones:</b></label>
          <TelerikGrid Sortable="true" Pageable="true" EditMode="@GridEditMode.Popup" Data="@mGoal.Milestones" OnUpdate="@UpdateMilestoneHandler" OnDelete="@DeleteMilestoneHandler" OnCreate="@AddMilestoneHandler" PageSize="10">
-            <GridToolBar>
-               <GridCommandButton Command="Add" Icon="add">Add Milestone</GridCommandButton>
-            </GridToolBar>
+            <GridToolBarTemplate>
+               <GridCommandButton Command="Add" Icon="@SvgIcon.Plus">Add Milestone</GridCommandButton>
+            </GridToolBarTemplate>
             <GridColumns>
                <GridColumn Field="@(nameof(GoalMilestone.PercentageTriggerPoint))" Width="200px" Title="Percentage Trigger Point" />
                <GridColumn Field="@(nameof(GoalMilestone.AnimationCommand))" Width="200px" Title="Animation Command to Fire" />
                <GridCommandColumn Context="subcontext" Width="55px">
-                  <GridCommandButton Command="Edit" Icon="edit"></GridCommandButton>
-                  <GridCommandButton Command="Delete" Icon="delete" Class="alert-danger"></GridCommandButton>
+                  <GridCommandButton Command="Edit" Icon="@SvgIcon.Pencil"></GridCommandButton>
+                  <GridCommandButton Command="Delete" Icon="@SvgIcon.Trash" Class="alert-danger"></GridCommandButton>
                </GridCommandColumn>
             </GridColumns>
          </TelerikGrid>

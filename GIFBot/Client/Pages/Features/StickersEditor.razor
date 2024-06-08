@@ -627,17 +627,17 @@
                                          Page="@mStickerPage"
                                          PageChanged="@StickerPageChanged"
                                          PageSize="20">
-                           <TreeListToolBar>
+                           <TreeListToolBarTemplate>
                               <TreeListSearchBox />
-                              <TreeListCommandButton Command="AddCategory" OnClick="@HandleAddCategoryRequest" Icon="add">Add Category</TreeListCommandButton>
+                              <TreeListCommandButton Command="AddCategory" OnClick="@HandleAddCategoryRequest" Icon="@SvgIcon.Plus">Add Category</TreeListCommandButton>
                               @if (mSelectedTreeItems.Where(t => t.Type == StickerTreeListItem.ItemType.Entry).Any())
                               {
-                                 <TreeListCommandButton Command="AddCategory" OnClick="@HandleMoveSelectedRequest" Icon="arrow-double-60-left">Move Selected</TreeListCommandButton>
-                                 <TreeListCommandButton Command="DeleteSelected" OnClick="@HandleDeleteSelectedRequest" Icon="trash">Delete Selected</TreeListCommandButton>
-                                 <TreeListCommandButton Command="EnableSelected" OnClick="@HandleEnableSelectedRequest" Icon="check">Enable Selected</TreeListCommandButton>
-                                 <TreeListCommandButton Command="DisableSelected" OnClick="@HandleDisableSelectedRequest" Icon="cancel-circle">Disable Selected</TreeListCommandButton>
+                                 <TreeListCommandButton Command="AddCategory" OnClick="@HandleMoveSelectedRequest" Icon="@SvgIcon.ChevronDoubleRight">Move</TreeListCommandButton>
+                                 <TreeListCommandButton Command="DeleteSelected" OnClick="@HandleDeleteSelectedRequest" Icon="@SvgIcon.Trash">Delete</TreeListCommandButton>
+                                 <TreeListCommandButton Command="EnableSelected" OnClick="@HandleEnableSelectedRequest" Icon="@SvgIcon.Check">Enable</TreeListCommandButton>
+                                 <TreeListCommandButton Command="DisableSelected" OnClick="@HandleDisableSelectedRequest" Icon="@SvgIcon.Cancel">Disable</TreeListCommandButton>
                               }
-                           </TreeListToolBar>
+                           </TreeListToolBarTemplate>
                            <TreeListColumns>
                               <TreeListCheckboxColumn SelectChildren="true" SelectAll="true" SelectAllMode="TreeListSelectAllMode.All"></TreeListCheckboxColumn>
                               <TreeListColumn Field="Name" Title="Name" Filterable="true" Expandable="true">
