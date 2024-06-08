@@ -17,39 +17,6 @@ namespace GIFBot.Shared.Utility
    public class TwitchEndpointHelpers
    {
       /// <summary>
-      /// Checks to see if a user follows the specified channel on Twitch.
-      /// </summary>
-      public static bool CheckFollowChannelOnTwitch(HttpClient client, string oauth, long channelId, long viewerId)
-      {
-         bool result = false;
-
-         if (channelId != 0)
-         {
-            // GO LOOK AT dev.twitch.tv/docs/api/reference/#get-channel-followers
-            // Need to poll this once a minute, get all followers, chuck into the dictionary, then have this method reference it to find a follower.
-
-            //string url = string.Format("https://api.twitch.tv/helix/channels/followers?broadcaster_id={0}&user_id={1}", channelId, channelId);
-
-            //HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, url);
-            //request.Headers.Add("Authorization", $"Bearer {oauth.Trim()}");
-            //request.Headers.Add("Client-ID", Common.skTwitchClientId);
-
-            //HttpResponseMessage response = client.Send(request);
-            //if (response.IsSuccessStatusCode)
-            //{
-            //   string jsonData = response.Content.ReadAsStringAsync().Result;
-            //   dynamic responseData = JsonConvert.DeserializeObject<object>(jsonData);
-            //   if (responseData["total"] != null && responseData["total"] != 0)
-            //   {
-            //      return true;
-            //   }
-            //}
-         }
-
-         return result;
-      }
-
-      /// <summary>
       /// As of Twitch API v5 or higher, the user ID is required for fetching details from the API. 
       /// When the application successfully connects to Twitch, it will grab this information before it
       /// begins polling for additional info.
@@ -282,11 +249,6 @@ namespace GIFBot.Shared.Utility
          }
 
          return users;
-      }
-
-      /// <summary>
-      /// List of followers, periodically pulled from Twitch endpoints and stored locally for reference and lookups.
-      /// </summary>
-      private static Dictionary<long, string> mFollowers = new Dictionary<long, string>();      
+      }    
    }
 }

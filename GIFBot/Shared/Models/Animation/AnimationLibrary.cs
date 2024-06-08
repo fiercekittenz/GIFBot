@@ -73,6 +73,31 @@ namespace GIFBot.Shared
             return true;
          }
 
+         // Removed "Follower" as an option for defining access to use features of GIFBot. (6-8-2024)
+         const int kFollowerRemoval = 3;
+
+         if (Version < kFollowerRemoval)
+         {
+            foreach (var category in Categories)
+            {
+               foreach (var animation in category.Animations)
+               {
+                  if (animation.IsFollowerAlert)
+                  {
+                     animation.IsFollowerAlert = false;
+                  }
+
+                  if (animation.Access == AnimationEnums.AccessType.Follower)
+                  {
+                     animation.Access = AnimationEnums.AccessType.Anyone;
+                  }
+               }
+            }
+
+            Version = BotSettings.skCurrentBotSettingsVersion;
+            return true;
+         }
+
          return false;
       }
 
@@ -144,15 +169,6 @@ namespace GIFBot.Shared
 
          return new Tuple<int, int>(0, 0);
       }
-
-      /// <summary>
-      /// Denotes the history of changes to the animation library format in case we need to 
-      /// perform conversions when the data is loaded.
-      /// 
-      ///   Version 1: Launch
-      ///   Version 2: Added a flag to denote an animation as a bit alert, not just assuming 0 meant no. Allows users to have an "alert" for bits.
-      /// </summary>
-      public static int skCurrentBotSettingsVersion = 2;
 
       /// <summary>
       /// The version of this library's data. Used for advancing and converting data when loaded.

@@ -88,6 +88,11 @@ namespace GIFBot.Server.Features.Regurgitator
                SaveData();
             }
 
+            if (mData.Settings.BumpVersion())
+            {
+               SaveData();
+            }
+
             _ = Bot?.SendLogMessage("Regurgitator data loaded.");
          }
       }
@@ -181,14 +186,6 @@ namespace GIFBot.Server.Features.Regurgitator
                   {
                      return;
                   }
-               case AnimationEnums.AccessType.Follower:
-                  {
-                     if (!TwitchEndpointHelpers.CheckFollowChannelOnTwitch(Bot.HttpClientFactory.CreateClient(Common.skHttpClientName), Bot.BotSettings.BotOauthToken, long.Parse(message.ChatMessage.RoomId), long.Parse(message.ChatMessage.UserId)))
-                     {
-                        return;
-                     }
-                  }
-                  break;
                case AnimationEnums.AccessType.Moderator:
                   {
                      if (!message.ChatMessage.IsModerator)
