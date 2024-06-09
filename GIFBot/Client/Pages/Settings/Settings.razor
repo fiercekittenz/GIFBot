@@ -358,17 +358,17 @@
                      </p>
                      <div class="container-fluid">
                         <TelerikGrid Data="@mBotSettings.ThrottledUsers" EditMode="@GridEditMode.Popup" Pageable="true" PageSize="15" OnUpdate="@UpdateThrottledUser" OnDelete="DeleteThrottledUser" OnCreate="CreateThrottledUser">
-                           <GridToolBar>
-                              <GridCommandButton Command="Add" Icon="add">Add Viewer</GridCommandButton>
-                              <GridSearchBox DebounceDelay="200"></GridSearchBox>
-                           </GridToolBar>
+                           <GridToolBarTemplate>
+                              <GridCommandButton Command="Add" Icon="@SvgIcon.Plus">Add Viewer</GridCommandButton>
+                              <GridSearchBox DebounceDelay="200"/>
+                           </GridToolBarTemplate>
                            <GridColumns>
                               <GridColumn Field="@nameof(ThrottledUserData.Name)" Editable="true" />
                               <GridColumn Field="@nameof(ThrottledUserData.PersonalThrottleRate)" Width="200px" Editable="true" Title="Throttle Rate (in sec)" />
                               <GridColumn Field="@nameof(ThrottledUserData.IsBanned)" Width="120px" Editable="true" Title="Is Banned" />
                               <GridCommandColumn Context="subcontext" Width="250px">
-                                 <GridCommandButton Command="Edit" Icon="edit">Edit</GridCommandButton>
-                                 <GridCommandButton Command="Delete" Icon="delete">Delete</GridCommandButton>
+                                 <GridCommandButton Command="Edit" Icon="@SvgIcon.Pencil">Edit</GridCommandButton>
+                                 <GridCommandButton Command="Delete" Icon="@SvgIcon.Trash">Delete</GridCommandButton>
                               </GridCommandColumn>
                            </GridColumns>
                         </TelerikGrid>

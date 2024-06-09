@@ -202,19 +202,19 @@
                                          OnStateChanged="@((TreeListStateEventArgs<AnimationTreeItem> args) => AnimationTreeStateChanged(args))"
                                          PageSize="50"
                                          @ref="@AnimationTreeListRef">
-                            <TreeListToolBar>
+                            <TreeListToolBarTemplate>
                                 <TreeListSearchBox Fields="@SearchableFields" />
-                                <TreeListCommandButton Command="ExpandAll" OnClick="@HandleExpandAllRequest" Icon="download"></TreeListCommandButton>
-                                <TreeListCommandButton Command="CollapseAll" OnClick="@HandleCollapseAllRequest" Icon="upload"></TreeListCommandButton>
-                                <TreeListCommandButton Command="AddCategory" OnClick="@HandleAddCategoryRequest" Icon="add">Add Category</TreeListCommandButton>
+                                <TreeListCommandButton Command="ExpandAll" OnClick="@HandleExpandAllRequest" Icon="@SvgIcon.Download"></TreeListCommandButton>
+                                <TreeListCommandButton Command="CollapseAll" OnClick="@HandleCollapseAllRequest" Icon="@SvgIcon.Upload"></TreeListCommandButton>
+                                <TreeListCommandButton Command="AddCategory" OnClick="@HandleAddCategoryRequest" Icon="@SvgIcon.Plus">Add Category</TreeListCommandButton>
                                 @if (mSelectedTreeItems.Where(t => t.Tier == AnimationTreeTier.Animation).Any())
                                 {
-                                    <TreeListCommandButton Command="AddCategory" OnClick="@HandleMoveSelectedRequest" Icon="arrow-double-60-right">Move</TreeListCommandButton>
-                                    <TreeListCommandButton Command="DeleteSelected" OnClick="@HandleDeleteSelectedRequest" Icon="trash">Delete</TreeListCommandButton>
-                                    <TreeListCommandButton Command="EnableSelected" OnClick="@HandleEnableSelectedRequest" Icon="check">Enable</TreeListCommandButton>
-                                    <TreeListCommandButton Command="DisableSelected" OnClick="@HandleDisableSelectedRequest" Icon="cancel-circle">Disable</TreeListCommandButton>
+                                    <TreeListCommandButton Command="AddCategory" OnClick="@HandleMoveSelectedRequest" Icon="@SvgIcon.ChevronDoubleRight">Move</TreeListCommandButton>
+                                    <TreeListCommandButton Command="DeleteSelected" OnClick="@HandleDeleteSelectedRequest" Icon="@SvgIcon.Trash">Delete</TreeListCommandButton>
+                                    <TreeListCommandButton Command="EnableSelected" OnClick="@HandleEnableSelectedRequest" Icon="@SvgIcon.Check">Enable</TreeListCommandButton>
+                                    <TreeListCommandButton Command="DisableSelected" OnClick="@HandleDisableSelectedRequest" Icon="@SvgIcon.Cancel">Disable</TreeListCommandButton>
                                 }
-                            </TreeListToolBar>
+                            </TreeListToolBarTemplate>
                             <TreeListColumns>
                                 <TreeListCheckboxColumn SelectChildren="true" SelectAll="true" CheckBoxOnlySelection="true" SelectAllMode="TreeListSelectAllMode.All"></TreeListCheckboxColumn>
                                 <TreeListColumn Field="Title" Title="Name" Filterable="true" Expandable="true" Width="150px">

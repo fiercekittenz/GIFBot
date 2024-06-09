@@ -140,7 +140,6 @@
                      <RadzenRadioButtonList @bind-Value="mAccessSelection" TValue="int" Change="@(args => OnAccessLevelChange(args))">
                         <Items>
                            <RadzenRadioButtonListItem Text="Anyone" Value="0" />
-                           <RadzenRadioButtonListItem Text="Follower" Value="1" />
                            <RadzenRadioButtonListItem Text="Subscriber" Value="2" />
                            <RadzenRadioButtonListItem Text="VIP" Value="3" />
                            <RadzenRadioButtonListItem Text="Moderator" Value="4" />
@@ -240,15 +239,6 @@
                                  </div>
                               }
                            </RadzenFieldset>
-                           <!--
-                            <RadzenFieldset Text="Follower Alerts" AllowCollapse="false" Style="width: 100%; margin-bottom: 20px">
-                               <div class="form-group form-check">
-                                  <label class="form-check-label">
-                                     <TelerikCheckBox Id="uiFollowerAlertEnabled" @bind-Value="mData.IsFollowerAlert" /> Trigger when someone follows the channel
-                                  </label>
-                               </div>
-                            </RadzenFieldset>
-                            -->
                            <RadzenFieldset Text="Raid Alerts" AllowCollapse="false" Style="width: 100%; margin-bottom: 20px">
                               <div class="form-group form-check">
                                  <label class="form-check-label">
@@ -465,9 +455,9 @@
                         <GridColumn Field="@(nameof(AnimationVariantData.PrePlayText))" Width="50px" Title="PrePlayText" />
                         <GridColumn Field="@(nameof(AnimationVariantData.PostPlayText))" Width="50px" Title="PostPlayText" />
                         <GridCommandColumn Context="subcontext" Width="55px">
-                           <GridCommandButton Command="Edit" Icon="edit"></GridCommandButton>
-                           <GridCommandButton Command="PlayVariant" Icon="play" OnClick="@HandlePlayVariant"></GridCommandButton>
-                           <GridCommandButton Command="DeleteVariant" Icon="delete" Class="alert-danger" OnClick="@HandleDeleteVariant"></GridCommandButton>
+                           <GridCommandButton Command="Edit" Icon="@SvgIcon.Pencil"></GridCommandButton>
+                           <GridCommandButton Command="PlayVariant" Icon="@SvgIcon.Play" OnClick="@HandlePlayVariant"></GridCommandButton>
+                           <GridCommandButton Command="DeleteVariant" Icon="@SvgIcon.Trash" Class="alert-danger" OnClick="@HandleDeleteVariant"></GridCommandButton>
                         </GridCommandColumn>
                      </GridColumns>
                   </TelerikGrid>
@@ -982,7 +972,7 @@
       if (value.HasValue)
       {
          mCaptionFontSelection = value.Value;
-         mData.Caption.FontFamily = (FontFamily)value.Value;
+         mData.Caption.FontFamily = (GIFBot.Shared.Models.Visualization.FontFamily)value.Value;
          UpdateCaptionPreview(null);
       }
    }

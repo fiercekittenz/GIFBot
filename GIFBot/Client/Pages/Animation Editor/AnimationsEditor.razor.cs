@@ -81,7 +81,7 @@ namespace GIFBot.Client.Pages.Animation_Editor
                   }
                }
 
-               await AnimationTreeListRef.SetState(updatedState);
+               await AnimationTreeListRef.SetStateAsync(updatedState);
             }
 
             StateHasChanged();
@@ -103,14 +103,14 @@ namespace GIFBot.Client.Pages.Animation_Editor
             updatedState.ExpandedItems.Add(item);
          }
 
-         await AnimationTreeListRef.SetState(updatedState);
+         await AnimationTreeListRef.SetStateAsync(updatedState);
       }
 
       private async Task HandleCollapseAllRequest()
       {
          TreeListState<AnimationTreeItem> updatedState = new TreeListState<AnimationTreeItem>();
          updatedState.ExpandedItems = new List<AnimationTreeItem>();
-         await AnimationTreeListRef.SetState(updatedState);
+         await AnimationTreeListRef.SetStateAsync(updatedState);
       }
 
       #region Modal Dialog Handlers

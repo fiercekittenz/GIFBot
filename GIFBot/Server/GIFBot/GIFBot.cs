@@ -1,6 +1,4 @@
-﻿using GIFBot.Client.Pages;
-using GIFBot.Client.Pages.Features;
-using GIFBot.Server.Features.Backdrop;
+﻿using GIFBot.Server.Features.Backdrop;
 using GIFBot.Server.Features.ChannelPoints;
 using GIFBot.Server.Features.CountdownTimer;
 using GIFBot.Server.Features.Giveaway;
@@ -14,11 +12,9 @@ using GIFBot.Server.Hubs;
 using GIFBot.Server.Interfaces;
 using GIFBot.Server.Models;
 using GIFBot.Shared;
-using GIFBot.Shared.Models.Animation;
 using GIFBot.Shared.Models.Features;
 using GIFBot.Shared.Models.GIFBot;
 using GIFBot.Shared.Models.Tiltify;
-using GIFBot.Shared.Models.Twitch;
 using GIFBot.Shared.Utility;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
@@ -26,7 +22,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -37,18 +32,13 @@ using System.Threading.Tasks;
 using System.Timers;
 using System.Web;
 using TwitchLib.Api;
-using TwitchLib.Api.Core;
-using TwitchLib.Api.Core.Models.Undocumented.Chatters;
+using TwitchLib.Api.Core; 
 using TwitchLib.Api.Helix.Models.Chat.GetChatters;
-using TwitchLib.Api.Services;
 using TwitchLib.Client;
 using TwitchLib.Client.Enums;
-using TwitchLib.Client.Events;
-using TwitchLib.Client.Extensions;
 using TwitchLib.Client.Models;
 using TwitchLib.Communication.Clients;
 using TwitchLib.Communication.Models;
-using TwitchLib.PubSub;
 using static GIFBot.Shared.AnimationEnums;
 using static GIFBot.Shared.Utility.Enumerations;
 
@@ -143,26 +133,6 @@ namespace GIFBot.Server.GIFBot
          }
 
          if (notRestrictedAnimations.Count() > 0)
-         {
-            animMessages.Add(sb.ToString());
-         }
-         sb.Clear();
-
-         var followerOnlyAnimations = animations.Where(g => g.Access == AccessType.Follower);
-         sb.Append("Follower Only: ");
-         foreach (AnimationData animation in followerOnlyAnimations)
-         {
-            sb.Append(animation.Command);
-            sb.Append(" ");
-
-            if (sb.Length > skMaxCharactersPerAnimOutput)
-            {
-               animMessages.Add(sb.ToString());
-               sb.Clear();
-            }
-         }
-
-         if (followerOnlyAnimations.Count() > 0)
          {
             animMessages.Add(sb.ToString());
          }
@@ -327,7 +297,7 @@ namespace GIFBot.Server.GIFBot
 
          if (RegurgitatorManager != null)
          {
-            RegurgitatorPackage qualifyingPackage = null;            
+            RegurgitatorPackage qualifyingPackage = null;
             lock (RegurgitatorManager.PackagesMutex)
             {
                RegurgitatorManager.Data.Packages.FirstOrDefault(p => p.Settings.Enabled &&
@@ -603,54 +573,11 @@ namespace GIFBot.Server.GIFBot
          {
             lock (UsersInChannelMutex)
             {
-               UsersInChannel.Clear();                 
+               UsersInChannel.Clear();
                UsersInChannel.UnionWith(TwitchEndpointHelpers.GetUserList(HttpClientFactory.CreateClient(Common.skHttpClientName), BotSettings.BotOauthToken, BotSettings.ChannelName.ToLower()));
             }
          }
       }
-
-      // TODO: Put this back, but as my own service using a poll against the new endpoint for the channel to scrape for followers.
-      //       The original endpoint was deprecated in September 2023.
-      //private void FollowerService_OnNewFollowersDetected(object sender, TwitchLib.Api.Services.Events.FollowerService.OnNewFollowersDetectedArgs e)
-      //{
-      //   if (e.NewFollowers.Any())
-      //   {
-      //      var follower = e.NewFollowers.FirstOrDefault();
-      //      if (follower != null)
-      //      {
-      //         if ((DateTime.Now.Subtract(follower.FollowedAt).TotalMinutes < 5))
-      //         {
-      //            _ = SendLogMessage($"New Follower: {follower.FromUserName}");
-
-      //            AnimationData animation = null;                  
-      //            var qualifyingAnimations = AnimationManager.GetAllAnimations(AnimationManager.FetchType.EnabledOnly).Where(a => a.IsFollowerAlert).ToList();            
-      //            if (qualifyingAnimations.Count > 0)
-      //            {
-      //               int randomIndex = Common.sRandom.Next(qualifyingAnimations.Count);
-      //               if (randomIndex < qualifyingAnimations.Count)
-      //               {
-      //                  animation = qualifyingAnimations[randomIndex];
-      //               }
-
-      //               if (animation != null)
-      //               {
-      //                  AnimationManager.ForceQueueAnimation(animation, follower.FromUserName, String.Empty);
-      //               }
-      //            }
-
-      //            // Place a sticker, if applicable.
-      //            if (StickersManager != null &&
-      //                StickersManager.Data != null &&
-      //                StickersManager.Data.Enabled &&
-      //                StickersManager.Data.IncludeFollows)
-      //            {
-      //               _ = SendLogMessage($"Sticker placed for follow from [{follower.FromUserName}].");
-      //               _ = StickersManager.PlaceASticker();
-      //            }
-      //         }
-      //      }
-      //   }
-      //}
 
       private void TwitchClient_OnWhisperReceived(object sender, TwitchLib.Client.Events.OnWhisperReceivedArgs e)
       {
@@ -762,12 +689,6 @@ namespace GIFBot.Server.GIFBot
          ChannelPointManager.InitializePubSub();
          CheckForHypeTrainEvent(false);
 
-         if (mFollowerService != null)
-         {
-            mFollowerService.Stop();
-            mFollowerService = null;
-         }
-
          ApiSettings apiSettings = new ApiSettings() {
             AccessToken = BotSettings.BotOauthToken,
             ClientId = Common.skTwitchClientId,
@@ -782,7 +703,7 @@ namespace GIFBot.Server.GIFBot
 
       private void TwitchClient_OnRaidNotification(object sender, TwitchLib.Client.Events.OnRaidNotificationArgs e)
       {
-         AnimationData animation = null;                  
+         AnimationData animation = null;
          var allRaidAnimations = AnimationManager.GetAllAnimations(AnimationManager.FetchType.EnabledOnly).Where(a => a.IsRaidAlert).ToList();
 
          _ = SendLogMessage($"KITTENZDEBUG: Raid notification received! Raider DisplayName: {e.RaidNotification.DisplayName}");
@@ -1051,7 +972,7 @@ namespace GIFBot.Server.GIFBot
          foreach (var manager in FeatureManagers)
          {
             if (manager is IFeatureManager featureManager)
-            { 
+            {
                featureManager.LoadData();
             }
 
@@ -1210,7 +1131,7 @@ namespace GIFBot.Server.GIFBot
 
             RegurgitatorPackage qualifyingPackage = null;
             lock (RegurgitatorManager.PackagesMutex)
-            { 
+            {
                RegurgitatorManager.Data.Packages.FirstOrDefault(p => p.Settings.Enabled &&
                                                                      !p.Settings.PlayOnTimer &&
                                                                      p.Settings.IsTiltifyTrigger &&
@@ -1283,8 +1204,8 @@ namespace GIFBot.Server.GIFBot
          task = Task.Run(() =>
          {
             while (true)
-            {               
-               if (BotSettings != null && 
+            {
+               if (BotSettings != null &&
                    !String.IsNullOrEmpty(BotSettings.BotOauthToken) &&
                    !String.IsNullOrEmpty(BotSettings.ChannelName))
                {
@@ -1492,8 +1413,7 @@ namespace GIFBot.Server.GIFBot
 
       public StreamElementsManager StreamElementsManager
       {
-         get
-         {
+         get {
             return FeatureManagers.OfType<StreamElementsManager>().FirstOrDefault();
          }
       }
@@ -1533,11 +1453,6 @@ namespace GIFBot.Server.GIFBot
       /// Authorized access to the Twitch API.
       /// </summary>
       private TwitchAPI mTwitchApi = new TwitchAPI();
-
-      /// <summary>
-      /// Twitch follower service.
-      /// </summary>
-      private FollowerService mFollowerService;
 
       /// <summary>
       /// The loaded and active settings for the bot.

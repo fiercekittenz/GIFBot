@@ -143,24 +143,24 @@ else
       // Font Family
       switch (CaptionData.FontFamily)
       {
-         case FontFamily.ArialHelveticaSansSerif:
+         case GIFBot.Shared.Models.Visualization.FontFamily.ArialHelveticaSansSerif:
             mCaptionFontFamily = "Arial, helvetica, sans-serif";
             break;
 
-         case FontFamily.ComicSans:
+         case GIFBot.Shared.Models.Visualization.FontFamily.ComicSans:
             mCaptionFontFamily = "\"Comic Sans MS\", cursive, sans-serif";
             break;
 
-         case FontFamily.Impact:
+         case GIFBot.Shared.Models.Visualization.FontFamily.Impact:
             mCaptionFontFamily = "Impact, Charcoal, sans-serif";
             break;
 
-         case FontFamily.Monospace:
+         case GIFBot.Shared.Models.Visualization.FontFamily.Monospace:
             mCaptionFontFamily = "\"Courier New\", Courier, monospace";
             break;
 
          default:
-            mCaptionFontFamily = Enum.GetName(typeof(FontFamily), CaptionData.FontFamily);
+            mCaptionFontFamily = Enum.GetName(typeof(GIFBot.Shared.Models.Visualization.FontFamily), CaptionData.FontFamily);
             break;
       }
 

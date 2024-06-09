@@ -9,6 +9,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Telerik.SvgIcons;
 using TwitchLib.Client.Events;
 
 namespace GIFBot.Server.Features.Giveaway
@@ -176,22 +177,21 @@ namespace GIFBot.Server.Features.Giveaway
          {
             string entrant = message.ChatMessage.DisplayName.ToLower();
 
-            bool isFollower = false;
-            if (TwitchEndpointHelpers.CheckFollowChannelOnTwitch(Bot.HttpClientFactory.CreateClient(Common.skHttpClientName), Bot.BotSettings.BotOauthToken, long.Parse(message.ChatMessage.RoomId), long.Parse(message.ChatMessage.UserId)))
-            {
-               isFollower = true;
-            }
-
-            InternalAddEntrant(entrant, isFollower, message.ChatMessage.IsSubscriber, message.ChatMessage.IsVip, true);
+            InternalAddEntrant(entrant, message.ChatMessage.IsSubscriber, message.ChatMessage.IsVip, true);
          }
       }
 
       public void LoadData()
       {
-         if (!String.IsNullOrEmpty(DataFilePath) && File.Exists(DataFilePath))
+         if (!String.IsNullOrEmpty(DataFilePath) && System.IO.File.Exists(DataFilePath))
          {
-            string fileData = File.ReadAllText(DataFilePath);
+            string fileData = System.IO.File.ReadAllText(DataFilePath);
             mData = JsonConvert.DeserializeObject<GiveawayData>(fileData);
+
+            if (mData.BumpVersion())
+            {
+               SaveData();
+            }
 
             _ = Bot?.SendLogMessage("Giveaway data loaded and enabled.");
          }
@@ -204,7 +204,7 @@ namespace GIFBot.Server.Features.Giveaway
             Directory.CreateDirectory(Path.GetDirectoryName(DataFilePath));
 
             var jsonData = JsonConvert.SerializeObject(mData);
-            File.WriteAllText(DataFilePath, jsonData);
+            System.IO.File.WriteAllText(DataFilePath, jsonData);
 
             _ = Bot?.SendLogMessage("Giveaway data saved.");
          }
@@ -223,10 +223,9 @@ namespace GIFBot.Server.Features.Giveaway
 
       #region Private Methods
 
-      private void InternalAddEntrant(string entrant, bool isFollower, bool isSub, bool isVIP, bool restrictDupes = true)
+      private void InternalAddEntrant(string entrant, bool isSub, bool isVIP, bool restrictDupes = true)
       {
-         if ((mData.Access == AnimationEnums.AccessType.Follower && !isFollower) ||
-             (mData.Access == AnimationEnums.AccessType.Subscriber && !isSub) ||
+         if ((mData.Access == AnimationEnums.AccessType.Subscriber && !isSub) ||
              (mData.Access == AnimationEnums.AccessType.VIP && !isVIP))
          {
             return;

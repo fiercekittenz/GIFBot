@@ -117,7 +117,6 @@
                 <RadzenRadioButtonList @bind-Value="mAccessSelection" TValue="int" Change="@(args => OnAccessLevelChange(args))">
                     <Items>
                         <RadzenRadioButtonListItem Text="Anyone" Value="0" />
-                        <RadzenRadioButtonListItem Text="Follower" Value="1" />
                         <RadzenRadioButtonListItem Text="Subscriber" Value="2" />
                         <RadzenRadioButtonListItem Text="VIP" Value="3" />
                         <RadzenRadioButtonListItem Text="Moderator" Value="4" />
@@ -179,10 +178,10 @@
     <TabStripTab Title="Banned Users">
         <div class="container-fluid p-2">
             <TelerikGrid Sortable="true" FilterMode="Telerik.Blazor.GridFilterMode.FilterRow" Pageable="true" Data="@Data.BannedUsers" PageSize="20">
-                <GridToolBar>
+                <GridToolBarTemplate>
                     <GridSearchBox />
-                    <GridCommandButton Command="AddCommand" OnClick="@HandleAddBannedUserRequest" Icon="add">Add New Banned User</GridCommandButton>
-                </GridToolBar>
+                    <GridCommandButton Command="AddCommand" OnClick="@HandleAddBannedUserRequest" Icon="@SvgIcon.Plus">Add New Banned User</GridCommandButton>
+                </GridToolBarTemplate>
                 <GridColumns>
                     <GridColumn Width="400px" Title="Name">
                         <Template Context="data">

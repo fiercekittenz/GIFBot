@@ -145,10 +145,10 @@
     <TabStripTab Title="Greeters">
         <div class="container-fluid p-2">
             <TelerikGrid Sortable="true" FilterMode="Telerik.Blazor.GridFilterMode.FilterRow" Pageable="true" Data="@Data.Entries" PageSize="10">
-                <GridToolBar>
-                    <GridSearchBox />
-                    <GridCommandButton Command="AddCommand" OnClick="@HandleAddRequest" Icon="add">Add New Greeter</GridCommandButton>
-                </GridToolBar>
+               <GridToolBarTemplate>
+                  <GridSearchBox/>
+                  <GridCommandButton Command="AddCommand" OnClick="@HandleAddRequest" Icon="@SvgIcon.Plus">Add New Greeter</GridCommandButton>
+               </GridToolBarTemplate>
                 <GridColumns>
                     <GridColumn Width="200px" Field=@nameof(GreeterEntry.Name) Title="Greeter Name" />
                     <GridColumn Width="400px" Title="Recipients">

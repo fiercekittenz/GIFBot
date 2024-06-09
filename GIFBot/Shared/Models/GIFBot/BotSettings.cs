@@ -30,8 +30,9 @@ namespace GIFBot.Shared
       /// 
       ///   Version 1: Launch
       ///   Version 2: Deprecated "Users" on UserGroup in favor of UserEntry list instead.
+      ///   Version 3: Removed use of "Follower" as a permissions option. Can't check who is a follower or not on Twitch anymore. (6-8-2024)
       /// </summary>
-      public static int skCurrentBotSettingsVersion = 2;
+      public static int skCurrentBotSettingsVersion = 3;
 
       #endregion
 
