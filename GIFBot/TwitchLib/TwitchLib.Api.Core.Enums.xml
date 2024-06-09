@@ -1,0 +1,485 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TwitchLib.Api.Core.Enums</name>
+    </assembly>
+    <members>
+        <member name="T:TwitchLib.Api.Core.Enums.ApiVersion">
+            <summary>
+            Twitch API Version
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.ApiVersion.Auth">
+            <summary>
+            Auth APIs with base url: id.twitch.tv
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.ApiVersion.Helix">
+            <summary>
+            Helix APIs, "Version 6" of the Twitch api with base url: api.twitch.tv/helix
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.ApiVersion.Void">
+            <summary>
+            Anything else
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Any">
+            <summary>
+            Any scope.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Chat_Read">
+            <summary>
+            View live stream chat messages.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Chat_Edit">
+            <summary>
+            Send live stream chat messages.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Channel_Moderate">
+            <summary>
+            Perform moderation actions in a channel. The user requesting the scope must be a moderator in the channel.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Whisper_Read">
+            <summary>
+            View your whisper messages.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Whisper_Edit">
+            <summary>
+            Send whisper messages.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Analytics_Read_Extensions">
+            <summary>
+            View analytics data for the Twitch Extensions owned by the authenticated account.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Analytics_Read_Games">
+            <summary>
+            View analytics data for the games owned by the authenticated account.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Bits_Read">
+            <summary>
+            View Bits information for a channel.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Channel_Bot">
+            <summary>
+            Allows the client’s bot users access to a channel.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Channel_Edit_Commercial">
+            <summary>
+            Run commercials on a channel.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Channel_Manage_Ads">
+            <summary>
+            Manage ads schedule on a channel.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Channel_Manage_Broadcast">
+            <summary>
+            Manage a channel’s broadcast configuration, including updating channel configuration and managing stream markers and stream tags.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Channel_Manage_Extensions">
+            <summary>
+            Manage a channel’s Extension configuration, including activating Extensions.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Channel_Manage_Moderators">
+            <summary>
+            Add or remove the moderator role from users in your channel.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Channel_Manage_Polls">
+            <summary>
+            Manage a channel’s polls.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Channel_Manage_Predictions">
+            <summary>
+            Manage of channel’s Channel Points Predictions
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Channel_Manage_Redemptions">
+            <summary>
+            Manage Channel Points custom rewards and their redemptions on a channel.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Channel_Manage_Schedule">
+            <summary>
+            Manage a channel’s stream schedule.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Channel_Manage_Guest_Star">
+            <summary>
+            Manage Guest Star for your channel.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Channel_Manage_Raids">
+            <summary>
+            Manage a channel raiding another channel.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Channel_Manage_Videos">
+            <summary>
+            Manage a channel’s videos, including deleting videos.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Channel_Manage_VIPs">
+            <summary>
+            Add or remove the VIP role from users in your channel.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Channel_Read_Ads">
+            <summary>
+            Read the ads schedule and details on your channel.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Channel_Read_Charity">
+            <summary>
+            Read charity campaign details and user donations on your channel.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Channel_Read_Editors">
+            <summary>
+            View a list of users with the editor role for a channel.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Channel_Read_Goals">
+            <summary>
+            View Creator Goals for a channel.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Channel_Read_Hype_Train">
+            <summary>
+            View Hype Train information for a channel.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Channel_Read_Polls">
+            <summary>
+            View a channel’s polls.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Channel_Read_Predictions">
+            <summary>
+            View a channel’s Channel Points Predictions.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Channel_Read_Redemptions">
+            <summary>
+            View Channel Points custom rewards and their redemptions on a channel.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Channel_Read_Guest_Star">
+            <summary>
+            Read Guest Star details for your channel.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Channel_Read_Stream_Key">
+            <summary>
+            View an authorized user’s stream key.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Channel_Read_Subscriptions">
+            <summary>
+            View a list of all subscribers to a channel and check if a user is subscribed to a channel.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Channel_Read_VIPs">
+            <summary>
+            Read the list of VIPs in your channel.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Clips_Edit">
+            <summary>
+            Manage Clips for a channel.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Moderation_Read">
+            <summary>
+            View a channel’s moderation data including Moderators, Bans, Timeouts, and Automod settings.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Moderator_Manage_Announcements">
+            <summary>
+            Send announcements in channels where you have the moderator role.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Moderator_Manage_Automod">
+            <summary>
+            Manage messages held for review by AutoMod in channels where you are a moderator.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Moderator_Manage_Automod_Settings">
+            <summary>
+            Manage a broadcaster’s AutoMod settings.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Moderator_Manage_Banned_Users">
+            <summary>
+            Ban and unban users.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Moderator_Manage_Blocked_Terms">
+            <summary>
+            Manage a broadcaster’s list of blocked terms.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Moderator_Manage_Chat_Messages">
+            <summary>
+            Delete chat messages in channels where you have the moderator role
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Moderator_Manage_Chat_Settings">
+            <summary>
+            Manage a broadcaster’s chat room settings.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Moderator_Manage_Guest_Star">
+            <summary>
+            Manage Guest Star for channels where you are a Guest Star moderator.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Moderator_Manage_Shield_Mode">
+            <summary>
+            Manage a broadcaster’s Shield Mode status.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Moderator_Manage_Shoutouts">
+            <summary>
+            Manage a broadcaster’s shoutouts.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Moderator_Read_Automod_Settings">
+            <summary>
+            View a broadcaster’s AutoMod settings.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Moderator_Read_Blocked_Terms">
+            <summary>
+            View a broadcaster’s list of blocked terms.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Moderator_Read_Chat_Settings">
+            <summary>
+            View a broadcaster’s chat room settings.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Moderator_Read_Chatters">
+            <summary>
+            View the chatters in a broadcaster’s chat room.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Moderator_Read_Followers">
+            <summary>
+            Read the followers of a broadcaster.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Moderator_Read_Guest_Star">
+            <summary>
+            Read Guest Star details for channels where you are a Guest Star moderator.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Moderator_Read_Shield_Mode">
+            <summary>
+            View a broadcaster’s Shield Mode status.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.Moderator_Read_Shoutouts">
+            <summary>
+            View a broadcaster’s shoutouts.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.User_Bot">
+            <summary>
+            Allows client’s bot to act as this user.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.User_Edit">
+            <summary>
+            Manage a user object.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.User_Edit_Follows">
+            <summary>
+            Deprecated. Was previously used for “Create User Follows” and “Delete User Follows.”
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.User_Manage_BlockedUsers">
+            <summary>
+            Manage the block list of a user.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.User_Manage_Chat_Color">
+            <summary>
+            Update the color used for the user’s name in chat.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.User_Manage_Whispers">
+            <summary>
+            Read whispers that you send and receive, and send whispers on your behalf.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.User_Read_BlockedUsers">
+            <summary>
+            View the block list of a user.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.User_Read_Broadcast">
+            <summary>
+            View a user’s broadcasting configuration, including Extension configurations.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.User_Read_Chat">
+            <summary>
+            View live stream chat and room messages.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.User_Read_Email">
+            <summary>
+            View a user’s email address.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.User_Read_Follows">
+            <summary>
+            View the list of channels a user follows.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.User_Read_Subscriptions">
+            <summary>
+            View if an authorized user is subscribed to specific channels.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.AuthScopes.None">
+            <summary>
+            No scope
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Core.Enums.BadgeColor">
+            <summary>Color enum representing color based on cheer amount.</summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.BadgeColor.Red">
+            <summary>Red = 10000+</summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.BadgeColor.Blue">
+            <summary>Blue = 5000 -> 9999</summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.BadgeColor.Green">
+            <summary>Green = 1000 -> 4999</summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.BadgeColor.Purple">
+            <summary>Purple = 100 -> 999</summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.BadgeColor.Gray">
+            <summary>Gray = 1 -> 99</summary>
+        </member>
+        <member name="T:TwitchLib.Api.Core.Enums.ContentClassificationLabelEnum">
+            <summary>
+            <para>Enum representing the Content Classification Labels.</para>
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.ContentClassificationLabelEnum.DrugsIntoxication">
+            <summary>
+            <para>Content Classification Label for broadcasts with excessive tobacco glorification or promotion, 
+            any marijuana consumption/use, legal drug and alcohol induced intoxication, discussions of illegal drugs.</para>
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.ContentClassificationLabelEnum.SexualThemes">
+            <summary>
+            <para>Content Classification Label for broadcasts with content that focuses on 
+            sexualized physical attributes and activities, sexual topics, or experiences.</para>
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.ContentClassificationLabelEnum.ViolentGraphic">
+            <summary>
+            <para>Content Classification Label for broadcasts with simulations and/or depictions 
+            of realistic violence, gore, extreme injury, or death.</para>
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.ContentClassificationLabelEnum.Gambling">
+            <summary>
+            <para>Content Classification Label for broadcasts that participate in online or 
+            in-person gambling, poker or fantasy sports, that involve the exchange of real money.</para>
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.ContentClassificationLabelEnum.ProfanityVulgarity">
+            <summary>
+            <para>Content Classification Label for broadcasts with prolonged, and repeated use 
+            of obscenities, profanities, and vulgarities, especially as a regular part of speech.</para>
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Core.Enums.LogType">
+            <summary>Enum to alter color effects in log</summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.LogType.Normal">
+            <summary>White</summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.LogType.Failure">
+            <summary>Red</summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.LogType.Success">
+            <summary>Green</summary>
+        </member>
+        <member name="T:TwitchLib.Api.Core.Enums.Period">
+            <summary>Period value used to specify time frame for clips.</summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.Period.Day">
+            <summary>Represents a single day.</summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.Period.Week">
+            <summary>Represents a single week.</summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.Period.Month">
+            <summary>Represents a single month.</summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.Period.All">
+            <summary>Represents a all time frames.</summary>
+        </member>
+        <member name="T:TwitchLib.Api.Core.Enums.StringEnum">
+            <summary>Really cool way of doing string enums, credits to RogueException (https://github.com/RogueException)</summary>
+        </member>
+        <member name="P:TwitchLib.Api.Core.Enums.StringEnum.Value">
+            <summary>Value of enum</summary>
+        </member>
+        <member name="M:TwitchLib.Api.Core.Enums.StringEnum.#ctor(System.String)">
+            <summary>StringEnum constructor.</summary>
+        </member>
+        <member name="M:TwitchLib.Api.Core.Enums.StringEnum.ToString">
+            <summary>Returns string value for overriden ToString()</summary>
+            <returns>Enum value</returns>
+        </member>
+        <member name="T:TwitchLib.Api.Core.Enums.UserType">
+            <summary>Enum representing various user-types.</summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.UserType.Viewer">
+            <summary>The standard user-type representing a standard viewer.</summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.UserType.VIP">
+            <summary>User-type representing viewers with channel-specific vip powers.</summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.UserType.Moderator">
+            <summary>User-type representing viewers with channel-specific moderation powers.</summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.UserType.GlobalModerator">
+            <summary>User-type representing viewers with Twitch-wide moderation powers.</summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.UserType.Broadcaster">
+            <summary>User-type representing the broadcaster of the channel</summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.UserType.Admin">
+            <summary>User-type representing viewers with Twitch-wide moderation powers that are paid.</summary>
+        </member>
+        <member name="F:TwitchLib.Api.Core.Enums.UserType.Staff">
+            <summary>User-type representing viewers that are Twitch employees.</summary>
+        </member>
+    </members>
+</doc>

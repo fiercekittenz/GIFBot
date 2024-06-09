@@ -57,7 +57,7 @@
         </div>
         <div class="form-group">
             <label for="uiTempName"><b>Name:</b></label>
-            <small id="uiTempNameLabel" class="form-text text-white-50">The name to identify this greeter</small>
+            <small id="uiTempNameLabel" class="form-text text-white-50">The name to identify this greeter function entry (not the name of the recipient).</small>
             <TelerikTextBox Id="uiTempName" @bind-Value="mTempGreeterEntry.Name" />
         </div>
         <div class="form-group">
@@ -73,7 +73,6 @@
         <div class="form-group">
             <TelerikListView Data=@mTempGreeterEntry.Recipients
                              Pageable="true"
-                             Height="400px"
                              OnDelete="@DeleteRecipientHandler"
                              OnCreate="@CreateRecipientHandler">
                 <HeaderTemplate>

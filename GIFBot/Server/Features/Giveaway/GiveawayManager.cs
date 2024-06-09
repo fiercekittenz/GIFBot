@@ -177,7 +177,7 @@ namespace GIFBot.Server.Features.Giveaway
          {
             string entrant = message.ChatMessage.DisplayName.ToLower();
 
-            InternalAddEntrant(entrant, message.ChatMessage.IsSubscriber, message.ChatMessage.IsVip, true);
+            InternalAddEntrant(entrant, message.ChatMessage.UserDetail.IsSubscriber, message.ChatMessage.UserDetail.IsVip, true);
          }
       }
 

@@ -27,8 +27,6 @@ namespace GIFBot.Server.Models
       {
          System.Diagnostics.Debug.WriteLine($"{MessageData.ChatMessage.RawIrcMessage}");
 
-         Bot.AddUserToChannelList(MessageData.ChatMessage.DisplayName.ToLower());
-
          if (MessageData.ChatMessage.Message.Equals(Bot.BotSettings.AnimationCommand, StringComparison.OrdinalIgnoreCase) && Bot.BotSettings.AnimationCommandEnabled)
          {
             Bot.SendAnimationsListToChat();

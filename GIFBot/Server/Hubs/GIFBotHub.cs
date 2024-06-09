@@ -1179,8 +1179,8 @@ namespace GIFBot.Server.Hubs
       /// </summary>
       public async Task ToggleBonkersMode()
       {
-         Bot.CrazyModeEnabled = !Bot.CrazyModeEnabled;
-         await Clients.All.SendAsync("UpdateBonkersModeState", Bot.CrazyModeEnabled);
+         Bot.BonkersModeEnabled = !Bot.BonkersModeEnabled;
+         await Clients.All.SendAsync("UpdateBonkersModeState", Bot.BonkersModeEnabled);
       }
 
       /// <summary>

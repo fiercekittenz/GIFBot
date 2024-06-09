@@ -165,7 +165,7 @@ namespace GIFBot.Server.GIFBot
          }
 
          // Is the animation on cooldown?
-         if (animation != null && !Bot.CrazyModeEnabled && Bot.UnderGlobalCooldown())
+         if (animation != null && !Bot.BonkersModeEnabled && Bot.UnderGlobalCooldown())
          {
             if (Bot.BotSettings.AnnounceAnimationCooldown)
             {
@@ -273,7 +273,7 @@ namespace GIFBot.Server.GIFBot
          {
             // Play the animation.
             AnimationData animationToPlay = GetAnimationFromMessage(message.ChatMessage.Message);
-            if (animationToPlay != null && animationToPlay.CanPlay(Bot.HttpClientFactory.CreateClient(Common.skHttpClientName), Bot.BotSettings, message.ChatMessage))
+            if (animationToPlay != null && animationToPlay.CanPlay(Bot.HttpClientFactory.CreateClient(Common.skHttpClientName), Bot.BotSettings, message.ChatMessage, Bot.BonkersModeEnabled))
             {
                // Need to override the manual trigger so cooldowns are applied.
                AnimationRequest request = new AnimationRequest(animationToPlay, Bot.BotSettings.ChannelName, message.ChatMessage.Id, message.ChatMessage.DisplayName, String.Empty, String.Empty, message.ChatMessage.IsBroadcaster, false);

@@ -119,7 +119,7 @@ namespace GIFBot.Shared
       /// <summary>
       /// Determines if the animation can play or not.
       /// </summary>
-      public bool CanPlay(HttpClient client, BotSettings settings, ChatMessage chatMessage)
+      public bool CanPlay(HttpClient client, BotSettings settings, ChatMessage chatMessage, bool bonkersModeEnabled = false)
       {
          return CanPlay(client,
                         settings,
@@ -128,15 +128,16 @@ namespace GIFBot.Shared
                         chatMessage.RoomId,
                         chatMessage.Bits,
                         chatMessage.IsBroadcaster,
-                        chatMessage.IsSubscriber,
-                        chatMessage.IsVip,
-                        chatMessage.IsModerator);
+                        chatMessage.UserDetail.IsSubscriber,
+                        chatMessage.UserDetail.IsVip,
+                        chatMessage.UserDetail.IsModerator,
+                        bonkersModeEnabled);
       }
 
       /// <summary>
       /// Determines if the animation can play or not.
       /// </summary>
-      public bool CanPlay(HttpClient client, BotSettings settings, string displayName, string userId, string roomId, int bitsCheered, bool isBroadcaster, bool isSubscriber, bool isVIP, bool isModerator)
+      private bool CanPlay(HttpClient client, BotSettings settings, string displayName, string userId, string roomId, int bitsCheered, bool isBroadcaster, bool isSubscriber, bool isVIP, bool isModerator, bool bonkersModeEnabled)
       {
          if (String.IsNullOrEmpty(Visual) && String.IsNullOrEmpty(Audio))
          {
@@ -161,7 +162,7 @@ namespace GIFBot.Shared
             return false;
          }
 
-         if (IsOnCooldown())
+         if (IsOnCooldown(bonkersModeEnabled))
          {
             return false;
          }
@@ -217,13 +218,16 @@ namespace GIFBot.Shared
       /// <summary>
       /// Returns if this animation is on cooldown or not.
       /// </summary>
-      public bool IsOnCooldown()
+      public bool IsOnCooldown(bool bonkersModeEnabled = false)
       {
-         // Test the user-triggered cooldown.
-         double minuteDiff = System.DateTime.Now.Subtract(mLastUsed).TotalMinutes;
-         if (minuteDiff < MainCooldownMinutes)
+         if (!bonkersModeEnabled)
          {
-            return true;
+            // Test the user-triggered cooldown.
+            double minuteDiff = System.DateTime.Now.Subtract(mLastUsed).TotalMinutes;
+            if (minuteDiff < MainCooldownMinutes)
+            {
+               return true;
+            }
          }
 
          return false;

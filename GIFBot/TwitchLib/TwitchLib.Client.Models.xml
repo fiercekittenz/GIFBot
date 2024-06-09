@@ -1,0 +1,1485 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TwitchLib.Client.Models</name>
+    </assembly>
+    <members>
+        <member name="T:TwitchLib.Client.Models.Announcement">
+            <summary>Class representing Announcement in a Twitch channel.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.Announcement.MsgParamColor">
+            <summary>Property representing the color value of the announcement.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.Announcement.Message">
+            <summary>Property representing the message of the announcement.</summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.Announcement.#ctor(TwitchLib.Client.Models.Internal.IrcMessage)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.Announcement"/> class.
+            </summary>
+            <param name="ircMessage">The IRC message from Twitch to be processed.</param>
+        </member>
+        <member name="M:TwitchLib.Client.Models.Announcement.#ctor(System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.DateTimeOffset,TwitchLib.Client.Models.UserDetail,System.String,TwitchLib.Client.Enums.UserType,System.Collections.Generic.Dictionary{System.String,System.String},System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.Announcement"/> class.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.Announcement.TrySet(System.Collections.Generic.KeyValuePair{System.String,System.String})">
+            <inheritdoc/>
+        </member>
+        <member name="P:TwitchLib.Client.Models.AnonGiftPaidUpgrade.MsgParamPromoGiftTotal">
+            <summary>
+            The number of gifts the gifter has given during the promo indicated by <see cref="P:TwitchLib.Client.Models.AnonGiftPaidUpgrade.MsgParamPromoName"/>.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.AnonGiftPaidUpgrade.MsgParamPromoName">
+            <summary>
+            The subscriptions promo, if any, that is ongoing (for example, Subtember 2018).
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.AnonGiftPaidUpgrade.#ctor(TwitchLib.Client.Models.Internal.IrcMessage)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.AnonGiftPaidUpgrade"/> class.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.AnonGiftPaidUpgrade.#ctor(System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.DateTimeOffset,TwitchLib.Client.Models.UserDetail,System.String,TwitchLib.Client.Enums.UserType,System.Collections.Generic.Dictionary{System.String,System.String},System.Int32,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.AnonGiftPaidUpgrade"/> class.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.AnonGiftPaidUpgrade.TrySet(System.Collections.Generic.KeyValuePair{System.String,System.String})">
+            <inheritdoc/>
+        </member>
+        <member name="P:TwitchLib.Client.Models.BitsBadgeTier.MsgParamThreshold">
+            <summary>
+            The tier of the Bits badge the user just earned. For example, 100, 1000, or 10000.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.BitsBadgeTier.#ctor(TwitchLib.Client.Models.Internal.IrcMessage)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.BitsBadgeTier"/> class.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.BitsBadgeTier.#ctor(System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.DateTimeOffset,TwitchLib.Client.Models.UserDetail,System.String,TwitchLib.Client.Enums.UserType,System.Collections.Generic.Dictionary{System.String,System.String},System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.BitsBadgeTier"/> class.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.BitsBadgeTier.TrySet(System.Collections.Generic.KeyValuePair{System.String,System.String})">
+            <inheritdoc/>
+        </member>
+        <member name="T:TwitchLib.Client.Models.ChannelState">
+            <summary>Class representing a channel state as received from Twitch chat.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChannelState.BroadcasterLanguage">
+            <summary>Property representing the current broadcaster language.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChannelState.Channel">
+            <summary>Property representing the current channel.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChannelState.EmoteOnly">
+            <summary>Property representing whether EmoteOnly mode is being applied to chat or not. WILL BE NULL IF VALUE NOT PRESENT.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChannelState.FollowersOnly">
+            <summary>Property representing how long needed to be following to talk. Timeout.InfiniteTimespan indicates that FollowersOnly mode is switched off. If null, FollowersOnly status is not changed.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChannelState.Mercury">
+            <summary>Property representing mercury value. Not sure what it's for.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChannelState.R9K">
+            <summary>Property representing whether R9K is being applied to chat or not. WILL BE NULL IF VALUE NOT PRESENT.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChannelState.Rituals">
+            <summary>Property representing whether Rituals is enabled or not. WILL BE NULL IF VALUE NOT PRESENT.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChannelState.RoomId">
+            <summary>Twitch assigned room id</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChannelState.SlowMode">
+            <summary>Property representing whether Slow mode is being applied to chat or not. WILL BE NULL IF VALUE NOT PRESENT.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChannelState.SubOnly">
+            <summary>Property representing whether Sub Mode is being applied to chat or not. WILL BE NULL IF VALUE NOT PRESENT.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChannelState.UndocumentedTags">
+            <summary>
+            Contains undocumented tags.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.ChannelState.#ctor(TwitchLib.Client.Models.Internal.IrcMessage)">
+            <summary>ChannelState object constructor.</summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.ChannelState.#ctor(System.Boolean,System.Boolean,System.Boolean,System.Int32,System.Boolean,System.String,System.String,System.TimeSpan,System.Boolean,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.ChannelState"/> class.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Models.ChatMessage">
+            <summary>Class represents ChatMessage in a Twitch channel.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChatMessage.BadgeInfo">
+            <summary>Information associated with badges. Not all badges will be in this list. Use carefully.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChatMessage.Bits">
+            <summary>If viewer sent bits in their message, total amount will be here.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChatMessage.BitsInDollars">
+            <summary>Number of USD (United States Dollars) spent on bits.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChatMessage.Channel">
+            <summary>Twitch channel message was sent from (useful for multi-channel bots).</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChatMessage.CheerBadge">
+            <summary>If a cheer badge exists, this property represents the raw value and color (more later). Can be null.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChatMessage.CustomRewardId">
+            <summary>If a custom reward is present with the message, the ID will be set (null by default)</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChatMessage.EmoteReplacedMessage">
+            <summary>Text after emotes have been handled (if desired). Will be null if replaceEmotes is false.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChatMessage.Id">
+            <summary>Unique message identifier assigned by Twitch</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChatMessage.IsBroadcaster">
+            <summary>Chat message from broadcaster identifier flag</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChatMessage.IsFirstMessage">
+            <summary>Chat message is the first message, ever, from this user in this chat</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChatMessage.IsHighlighted">
+            <summary>Chat message is highlighted in chat via channel points</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChatMessage.IsMe">
+            <summary>Chat message /me identifier flag.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChatMessage.IsSkippingSubMode">
+            <summary>Message used channel points to skip sub mode</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChatMessage.Message">
+            <summary>Twitch chat message contents.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChatMessage.Noisy">
+            <summary>Experimental property noisy determination by Twitch.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChatMessage.RoomId">
+            <summary>Unique identifier of chat room.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChatMessage.SubscribedMonthCount">
+            <summary>Number of months a person has been subbed.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChatMessage.TmiSent">
+            <summary>Sent timestamp generated by TMI</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChatMessage.ChatReply">
+            <summary>Chat reply information. Will be null if it is not a reply.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChatMessage.HypeChat">
+            <summary>Hype Chat information.</summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.ChatMessage.#ctor(System.String,TwitchLib.Client.Models.Internal.IrcMessage,TwitchLib.Client.Models.MessageEmoteCollection,System.Boolean,System.String,System.String)">
+            <summary>Constructor for ChatMessage object.</summary>
+            <param name="botUsername">The username of the bot that received the message.</param>
+            <param name="ircMessage">The IRC message from Twitch to be processed.</param>
+            <param name="emoteCollection">The <see cref="T:TwitchLib.Client.Models.MessageEmoteCollection"/> to register new emotes on and, if desired, use for emote replacement.</param>
+            <param name="replaceEmotes">Whether to replace emotes for this chat message. Defaults to false.</param>
+            <param name="prefix">Adds prefix to replaced emotes. Defaults to empty string.</param>
+            <param name="suffix">Adds prefix to replaced emotes. Defaults to empty string.</param>
+        </member>
+        <member name="M:TwitchLib.Client.Models.ChatMessage.#ctor(System.String,System.String,System.String,System.String,System.String,TwitchLib.Client.Models.EmoteSet,System.String,TwitchLib.Client.Enums.UserType,System.String,System.String,System.Int32,System.String,System.Boolean,System.Boolean,TwitchLib.Client.Enums.Noisy,System.String,System.String,System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},TwitchLib.Client.Models.CheerBadge,System.Int32,System.Double,TwitchLib.Client.Models.UserDetail)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.ChatMessage"/> class.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Models.ChatReply">
+            <summary>Class representing a chat reply/thread</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChatReply.ParentDisplayName">
+            <summary>
+            The display name of the sender of the direct parent message.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChatReply.ParentMsgBody">
+            <summary>
+            The text of the direct parent message.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChatReply.ParentMsgId">
+            <summary>
+            An ID that uniquely identifies the direct parent message that this message is replying to.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChatReply.ParentUserId">
+            <summary>
+            An ID that identifies the sender of the direct parent message.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChatReply.ParentUserLogin">
+            <summary>
+            The login name of the sender of the direct parent message.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChatReply.ThreadParentMsgId">
+            <summary>
+            An ID that uniquely identifies the top-level parent message of the reply thread that this message is replying to.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ChatReply.ThreadParentUserLogin">
+            <summary>
+            The login name of the sender of the top-level parent message.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Models.CheerBadge">
+            <summary>Class representing cheer badge.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.CheerBadge.CheerAmount">
+            <summary>Property representing raw cheer amount represented by badge.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.CheerBadge.Color">
+            <summary>Property representing the color of badge via an enum.</summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.CheerBadge.#ctor(System.Int32)">
+            <summary>Constructor for CheerBadge</summary>
+        </member>
+        <member name="T:TwitchLib.Client.Models.CommandInfo">
+            <summary>Object representing a command received via Twitch chat.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.CommandInfo.Identifier">
+            <summary>Property representing the command identifier (ie command prefix).</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.CommandInfo.Name">
+            <summary>Property representing the actual command (without the command prefix).</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.CommandInfo.ArgumentsAsString">
+            <summary>Property representing all arguments received in a string form.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.CommandInfo.ArgumentsAsList">
+            <summary>Property representing all arguments received in a List form.</summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.CommandInfo.#ctor(System.Char,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.CommandInfo"/> class.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.CommandInfo.#ctor(System.Char,System.String,System.String,System.Collections.Generic.List{System.String})">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.CommandInfo"/> class.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.CommandInfo.TryParse(System.ReadOnlySpan{System.Char},TwitchLib.Client.Models.CommandInfo@)">
+            <summary>
+            Tries to parse a span of characters into a value.
+            </summary>
+            <param name="s">The span of characters to parse.</param>
+            <param name="result">When this method returns, contains the result of successfully parsing s, or an undefined value on failure.</param>
+            <returns>true if s was successfully parsed; otherwise, false.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Models.CommandInfo.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="M:TwitchLib.Client.Models.CommunityPayForward.#ctor(TwitchLib.Client.Models.Internal.IrcMessage)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.CommunityPayForward"/> class.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.CommunityPayForward.#ctor(System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.DateTimeOffset,TwitchLib.Client.Models.UserDetail,System.String,TwitchLib.Client.Enums.UserType,System.Collections.Generic.Dictionary{System.String,System.String},System.Boolean,System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.CommunityPayForward"/> class.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.CommunityPayForward.TrySet(System.Collections.Generic.KeyValuePair{System.String,System.String})">
+            <inheritdoc/>
+        </member>
+        <member name="P:TwitchLib.Client.Models.CommunitySubscription.MsgParamSubPlan">
+            <summary>
+            The type of subscription plan being used.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.CommunitySubscription.#ctor(TwitchLib.Client.Models.Internal.IrcMessage)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.CommunitySubscription"/> class.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.CommunitySubscription.#ctor(System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.DateTimeOffset,TwitchLib.Client.Models.UserDetail,System.String,TwitchLib.Client.Enums.UserType,System.Collections.Generic.Dictionary{System.String,System.String},TwitchLib.Client.Models.Goal,System.String,System.Int32,System.String,System.Int32,TwitchLib.Client.Enums.SubscriptionPlan)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.CommunitySubscription"/> class.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.CommunitySubscription.TrySet(System.Collections.Generic.KeyValuePair{System.String,System.String})">
+            <inheritdoc/>
+        </member>
+        <member name="T:TwitchLib.Client.Models.ConnectionCredentials">
+            <summary>Class used to store credentials used to connect to Twitch chat/whisper.</summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.ConnectionCredentials.GetUsernameCheckRegex">
+            <remarks>
+            Pattern:<br/>
+            <code>^([a-zA-Z0-9][a-zA-Z0-9_]{4,25})$</code><br/>
+            Explanation:<br/>
+            <code>
+            ○ Match if at the beginning of the string.<br/>
+            ○ 1st capture group.<br/>
+                ○ Match a character in the set [0-9A-Za-z].<br/>
+                ○ Match a character in the set [0-9A-Z_a-z] atomically at least 4 and at most 25 times.<br/>
+            ○ Match if at the end of the string or if before an ending newline.<br/>
+            </code>
+            </remarks>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ConnectionCredentials.TwitchOAuth">
+            <summary>Property representing bot's oauth.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ConnectionCredentials.TwitchUsername">
+            <summary>Property representing bot's username.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ConnectionCredentials.Capabilities">
+            <summary>Property representing capability requests sent to twitch.</summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.ConnectionCredentials.#ctor(System.String,System.String,System.Boolean,TwitchLib.Client.Models.Capabilities)">
+            <summary>Constructor for ConnectionCredentials object.</summary>
+        </member>
+        <member name="T:TwitchLib.Client.Models.Capabilities">
+            <summary>Class used to store capacity request settings used when connecting to Twitch</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.Capabilities.Membership">
+            <summary>Adds membership state event data. By default, we do not send this data to clients without this capability.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.Capabilities.Tags">
+            <summary>Adds IRC V3 message tags to several commands, if enabled with the commands capability.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.Capabilities.Commands">
+            <summary>Enables several Twitch-specific commands.</summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.Capabilities.#ctor(System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.Capabilities"/> class.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ContinuedGiftedSubscription.MsgParamPromoGiftTotal">
+            <summary>
+            The number of gifts the gifter has given during the promo indicated by <see cref="P:TwitchLib.Client.Models.ContinuedGiftedSubscription.MsgParamPromoName"/>.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ContinuedGiftedSubscription.MsgParamPromoName">
+            <summary>
+            The subscriptions promo, if any, that is ongoing (for example, Subtember 2018).
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ContinuedGiftedSubscription.MsgParamSenderLogin">
+            <summary>
+            The login name of the user who gifted the subscription.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ContinuedGiftedSubscription.MsgParamSenderName">
+            <summary>
+            The display name of the user who gifted the subscription.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.ContinuedGiftedSubscription.#ctor(TwitchLib.Client.Models.Internal.IrcMessage)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.ContinuedGiftedSubscription"/> class.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.ContinuedGiftedSubscription.#ctor(System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.DateTimeOffset,TwitchLib.Client.Models.UserDetail,System.String,TwitchLib.Client.Enums.UserType,System.Collections.Generic.Dictionary{System.String,System.String},System.Int32,System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.ContinuedGiftedSubscription"/> class.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.ContinuedGiftedSubscription.TrySet(System.Collections.Generic.KeyValuePair{System.String,System.String})">
+            <inheritdoc/>
+        </member>
+        <member name="T:TwitchLib.Client.Models.Emote">
+            <summary>
+            Object representing an emote in an EmoteSet in a chat message.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.Emote.Id">
+            <summary>Twitch-assigned emote Id.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.Emote.Name">
+            <summary>The name of the emote. For example, if the message was "This is Kappa test.", the name would be 'Kappa'.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.Emote.StartIndex">
+            <summary>Character starting index. For example, if the message was "This is Kappa test.", the start index would be 8 for 'Kappa'.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.Emote.EndIndex">
+            <summary>Character ending index. For example, if the message was "This is Kappa test.", the start index would be 12 for 'Kappa'.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.Emote.ImageUrl">
+            <summary>URL to Twitch hosted emote image.</summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.Emote.#ctor(System.String,System.String,System.Int32,System.Int32)">
+            <summary>
+            Emote constructor.
+            </summary>
+            <param name="emoteId"></param>
+            <param name="name"></param>
+            <param name="emoteStartIndex"></param>
+            <param name="emoteEndIndex"></param>
+        </member>
+        <member name="T:TwitchLib.Client.Models.EmoteSet">
+            <summary>Object representing emote set from a chat message.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.EmoteSet.Emotes">
+            <summary>List containing all emotes in the message.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.EmoteSet.RawEmoteSetString">
+            <summary>The raw emote set string obtained from Twitch, for legacy purposes.</summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.EmoteSet.#ctor(System.String,System.String)">
+            <summary>Constructor for ChatEmoteSet object.</summary>
+            <param name="rawEmoteSetString"></param>
+            <param name="message"></param>
+        </member>
+        <member name="M:TwitchLib.Client.Models.EmoteSet.#ctor(System.Collections.Generic.IEnumerable{TwitchLib.Client.Models.Emote},System.String)">
+            <summary>Constructor for ChatEmoteSet object.</summary>
+            <param name="emotes">Collection of Emote instances</param>
+            <param name="rawEmoteSetString">Original string from which emotes were created</param>
+        </member>
+        <member name="T:TwitchLib.Client.Models.ErrorEvent">
+            <summary>Class representing the error that the websocket encountered.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ErrorEvent.Message">
+            <summary>Message pertaining to the error.</summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.ErrorEvent.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.ErrorEvent"/> class.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.GiftedSubscription.MsgParamMonths">
+            <summary>
+            The total number of months the user has subscribed. 
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.GiftedSubscription.MsgParamRecipientDisplayName">
+            <summary>
+            The display name of the subscription gift recipient.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.GiftedSubscription.MsgParamRecipientId">
+            <summary>
+            The user ID of the subscription gift recipient.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.GiftedSubscription.MsgParamRecipientUserName">
+            <summary>
+            The user name of the subscription gift recipient.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.GiftedSubscription.MsgParamSubPlan">
+            <summary>
+            The type of subscription plan being used.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.GiftedSubscription.MsgParamSubPlanName">
+            <summary>
+            The display name of the subscription plan. This may be a default name or one created by the channel owner.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.GiftedSubscription.MsgParamMultiMonthGiftDuration">
+            <summary>
+            The number of months gifted as part of a single, multi-month gift.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.GiftedSubscription.#ctor(TwitchLib.Client.Models.Internal.IrcMessage)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.GiftedSubscription"/> class.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.GiftedSubscription.#ctor(System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.DateTimeOffset,TwitchLib.Client.Models.UserDetail,System.String,TwitchLib.Client.Enums.UserType,System.Collections.Generic.Dictionary{System.String,System.String},TwitchLib.Client.Models.Goal,System.String,System.String,System.String,System.String,System.Int32,TwitchLib.Client.Enums.SubscriptionPlan,System.String,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.GiftedSubscription"/> class.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.GiftedSubscription.TrySet(System.Collections.Generic.KeyValuePair{System.String,System.String})">
+            <inheritdoc/>
+        </member>
+        <member name="P:TwitchLib.Client.Models.Interfaces.IHexColorProperty.HexColor">
+            <summary>
+            Property representing HEX color
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.Interfaces.ISendOptions.SendsAllowedInPeriod">
+            <summary>
+            Number of Messages Allowed Per Instance of the <see cref="P:TwitchLib.Client.Models.Interfaces.ISendOptions.ThrottlingPeriod"/>.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.Interfaces.ISendOptions.SendDelay">
+            <summary>
+            Minimum time between sending items from the queue [in ms] (default 50ms).
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.Interfaces.ISendOptions.ThrottlingPeriod">
+            <summary>
+            Period Between each reset of the throttling instance window.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.Interfaces.ISendOptions.CacheItemTimeout">
+            <summary>
+            The amount of time an object can wait to be sent before it is considered dead, and should be skipped (default 30 minutes).
+            A dead item will be ignored and removed from the send queue when it is hit.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.Interfaces.ISendOptions.QueueCapacity">
+            <summary>
+            Maximum number of Queued outgoing messages (default 10_000).
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.Internal.IrcMessage.Channel">
+            <summary>
+            The channel the message was sent in
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.Internal.IrcMessage.Message">
+            <summary>
+            Message itself
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Client.Models.Internal.IrcMessage._parameters">
+            <summary>
+            Command parameters
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.Internal.IrcMessage.User">
+            <summary>
+            The user whose message it is
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.Internal.IrcMessage.Hostmask">
+            <summary>
+            Hostmask of the user
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.Internal.IrcMessage.Command">
+            <summary>
+            Raw Command
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.Internal.IrcMessage.Tags">
+            <summary>
+            IRCv3 tags
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.Internal.IrcMessage.#ctor(System.String)">
+            <summary>
+            Create an INCOMPLETE IrcMessage only carrying username
+            </summary>
+            <param name="user"></param>
+        </member>
+        <member name="M:TwitchLib.Client.Models.Internal.IrcMessage.#ctor(TwitchLib.Client.Enums.Internal.IrcCommand,System.String[],System.String,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Create an IrcMessage
+            </summary>
+            <param name="command">IRC Command</param>
+            <param name="parameters">Command params</param>
+            <param name="hostmask">User</param>
+            <param name="tags">IRCv3 tags</param>
+        </member>
+        <member name="M:TwitchLib.Client.Models.Internal.IrcMessage.#ctor(System.String,TwitchLib.Client.Enums.Internal.IrcCommand,System.String[],System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Create an IrcMessage, settings its raw string.
+            IrcParser *must* use this constructor, otherwise the raw string
+            will be re-generated each time it is parsed and then passed to handlers.
+            </summary>
+            <param name="raw">Raw IRC message</param>
+            <param name="command">IRC Command</param>
+            <param name="parameters">Command params</param>
+            <param name="user">User</param>
+            <param name="hostmask">Hostmask</param>
+            <param name="tags">IRCv3 tags</param>
+        </member>
+        <member name="M:TwitchLib.Client.Models.Internal.IrcMessage.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="M:TwitchLib.Client.Models.Internal.TagHelper.ToBadges(System.String)">
+            <summary>
+            Parses the badges field in GLOBALUSERSTATE, PRIVMSG, USERNOTICE, USERSTATE, etc
+            </summary>
+            <param name="badgesStr">The data.</param>
+            <returns>List of keyvalue pairs representing each badge and value associated</returns>
+        </member>
+        <member name="T:TwitchLib.Client.Models.JoinedChannel">
+            <summary>Class representing a joined channel.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.JoinedChannel.Channel">
+            <summary>The current channel the TwitcChatClient is connected to.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.JoinedChannel.PreviousMessage">
+            <summary>The most recent message received.</summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.JoinedChannel.#ctor(System.String)">
+            <summary>JoinedChannel object constructor.</summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.JoinedChannel.HandleMessage(TwitchLib.Client.Models.ChatMessage)">
+            <summary>Handles a message</summary>
+        </member>
+        <member name="T:TwitchLib.Client.Models.MessageEmote">
+            <summary>Class for maintaining emotes that may be substituted into messages.</summary>
+            <remarks>
+                Also contains helpers to aid in performing actual replacements.
+                Expected to be called from the context of <see cref="T:TwitchLib.Client.Models.ChatMessage"/> and <see cref="T:TwitchLib.Client.Models.WhisperMessage"/>.
+            </remarks>
+        </member>
+        <member name="T:TwitchLib.Client.Models.MessageEmote.ReplaceEmoteDelegate">
+            <summary>
+                Delegate allowing Emotes to handle their replacement text on a case-by-case basis.
+            </summary>
+            <returns>The string for the calling emote to be replaced with.</returns>
+        </member>
+        <member name="F:TwitchLib.Client.Models.MessageEmote.TwitchEmoteUrls">
+            <summary>
+                Collection of Composite Format Strings which will substitute an
+                emote ID to get a URL for an image from the Twitch CDN
+            </summary>
+            <remarks>
+                These are sorted such that the <see cref="T:TwitchLib.Client.Models.MessageEmote.EmoteSize"/> enum can be used as an index,
+                eg TwitchEmoteUrls[<see cref="F:TwitchLib.Client.Models.MessageEmote.EmoteSize.Small"/>]
+            </remarks>
+        </member>
+        <member name="F:TwitchLib.Client.Models.MessageEmote.FrankerFaceZEmoteUrls">
+            <summary>
+                Collection of Composite Format Strings which will substitute an
+                emote ID to get a URL for an image from the FFZ CDN
+            </summary>
+            <remarks>
+                These are sorted such that the <see cref="T:TwitchLib.Client.Models.MessageEmote.EmoteSize"/> enum can be used as an index,
+                eg FrankerFaceZEmoteUrls[<see cref="F:TwitchLib.Client.Models.MessageEmote.EmoteSize.Small"/>]
+                WARNING: FrankerFaceZ does not require users to submit all sizes,
+                so using something other than Small images may result in broken links!
+            </remarks>
+        </member>
+        <member name="F:TwitchLib.Client.Models.MessageEmote.BetterTwitchTvEmoteUrls">
+            <summary>
+                Collection of Composite Format Strings which will substitute
+                an emote ID to get a URL for an image from the BTTV CDN
+                </summary>
+            <remarks>
+                These are sorted such that the <see cref="T:TwitchLib.Client.Models.MessageEmote.EmoteSize"/> enum can be used as an index,
+                eg BetterTwitchTvEmoteUrls[<see cref="F:TwitchLib.Client.Models.MessageEmote.EmoteSize.Small"/>]
+            </remarks>
+        </member>
+        <member name="F:TwitchLib.Client.Models.MessageEmote.SevenTvEmoteUrls">
+            <summary>
+                Collection of Composite Format Strings which will substitute
+                an emote ID to get a URL for an image from the 7tv CDN
+                </summary>
+            <remarks>
+                These are sorted such that the <see cref="T:TwitchLib.Client.Models.MessageEmote.EmoteSize"/> enum can be used as an index,
+                eg SevenTvEmoteUrls[<see cref="F:TwitchLib.Client.Models.MessageEmote.EmoteSize.Small"/>]
+            </remarks>
+        </member>
+        <member name="M:TwitchLib.Client.Models.MessageEmote.SourceMatchingReplacementText(TwitchLib.Client.Models.MessageEmote)">
+            <summary>
+                A delegate which attempts to match the calling <see cref="T:TwitchLib.Client.Models.MessageEmote"/> with its
+                <see cref="T:TwitchLib.Client.Models.MessageEmote.EmoteSource"/> and pulls the <see cref="F:TwitchLib.Client.Models.MessageEmote.EmoteSize.Small">small</see> version
+                of the URL.
+            </summary>
+            <param name="caller"></param>
+            <returns></returns>
+        </member>
+        <member name="T:TwitchLib.Client.Models.MessageEmote.EmoteSource">
+            <summary> Enum supplying the supported sites which provide Emote images.</summary>
+        </member>
+        <member name="F:TwitchLib.Client.Models.MessageEmote.EmoteSource.Twitch">
+            <summary>Emotes hosted by Twitch.tv natively</summary>
+        </member>
+        <member name="F:TwitchLib.Client.Models.MessageEmote.EmoteSource.FrankerFaceZ">
+            <summary>Emotes hosted by FrankerFaceZ.com</summary>
+        </member>
+        <member name="F:TwitchLib.Client.Models.MessageEmote.EmoteSource.BetterTwitchTv">
+            <summary>Emotes hosted by BetterTTV.net</summary>
+        </member>
+        <member name="F:TwitchLib.Client.Models.MessageEmote.EmoteSource.SevenTv">
+            <summary>Emotes hosted by 7tv</summary>
+        </member>
+        <member name="T:TwitchLib.Client.Models.MessageEmote.EmoteSize">
+            <summary> Enum denoting the emote sizes</summary>
+        </member>
+        <member name="F:TwitchLib.Client.Models.MessageEmote.EmoteSize.Small">
+            <summary>
+                Best support
+                Small-sized emotes are the standard size used in the Twitch web chat.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Client.Models.MessageEmote.EmoteSize.Medium">
+            <summary>
+                Medium-sized emotes are not supported by all browsers, and
+                FrankerFaceZ does not require emotes to be submitted in this size
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Client.Models.MessageEmote.EmoteSize.Large">
+            <summary>
+                Large-sized emotes are not supported by all browsers, and
+                FrankerFaceZ does not require emotes to be submitted in this size
+                </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.MessageEmote.Id">
+            <summary>
+                Emote ID as used by the emote source. Will be provided as {0}
+                to be substituted into the indicated URL if needed.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.MessageEmote.Text">
+            <summary>
+                Emote text which appears in a message and is meant to be replaced by the emote image.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.MessageEmote.Source">
+            <summary>
+                The specified <see cref="T:TwitchLib.Client.Models.MessageEmote.EmoteSource"/> for this emote.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.MessageEmote.Size">
+            <summary>
+                The specified <see cref="T:TwitchLib.Client.Models.MessageEmote.EmoteSize"/> for this emote.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.MessageEmote.ReplacementString">
+            <summary>
+               The string to substitute emote text for.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.MessageEmote.ReplacementDelegate">
+            <summary>
+                The desired <see cref="T:TwitchLib.Client.Models.MessageEmote.ReplaceEmoteDelegate"/> to use for replacing text in a given emote.
+                Default: <see cref="M:TwitchLib.Client.Models.MessageEmote.SourceMatchingReplacementText(TwitchLib.Client.Models.MessageEmote)"/>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.MessageEmote.EscapedText">
+            <summary>
+                The emote text <see cref="M:System.Text.RegularExpressions.Regex.Escape(System.String)">regex-escaped</see>
+                so that it can be embedded into a regex pattern.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.MessageEmote.#ctor(System.String,System.String,TwitchLib.Client.Models.MessageEmote.EmoteSource,TwitchLib.Client.Models.MessageEmote.EmoteSize,TwitchLib.Client.Models.MessageEmote.ReplaceEmoteDelegate)">
+            <summary>
+                Constructor for a new MessageEmote instance.
+            </summary>
+            <param name="id">
+                The unique identifier which the emote provider uses to generate CDN URLs.
+            </param>
+            <param name="text">
+                The string which users type to create this emote in chat.
+            </param>
+            <param name="source">
+                An <see cref="T:TwitchLib.Client.Models.MessageEmote.EmoteSource"/> where an image can be found for this emote.
+                Default: <see cref="F:TwitchLib.Client.Models.MessageEmote.EmoteSource.Twitch"/>
+            </param>
+            <param name="size">
+                An <see cref="T:TwitchLib.Client.Models.MessageEmote.EmoteSize"/> to pull for this image.
+                Default: <see cref="F:TwitchLib.Client.Models.MessageEmote.EmoteSize.Small"/>
+            </param>
+            <param name="replacementDelegate">
+                A string (optionally Composite Format with "{0}" representing
+                <paramref name="id"/>) which will be used instead of any of the emote URLs.
+                Default: null
+            </param>
+        </member>
+        <member name="T:TwitchLib.Client.Models.MessageEmoteCollection">
+            <summary>
+                Helper class which maintains a collection of all emotes active for a given channel.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Client.Models.MessageEmoteCollection._currentPattern">
+            <summary> Do not access directly! Backing field for <see cref="P:TwitchLib.Client.Models.MessageEmoteCollection.CurrentPattern"/> </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.MessageEmoteCollection.CurrentPattern">
+            <summary>
+                Property so that we can be confident <see cref="P:TwitchLib.Client.Models.MessageEmoteCollection.PatternChanged"/>
+                always reflects changes to <see cref="P:TwitchLib.Client.Models.MessageEmoteCollection.CurrentPattern"/>.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.MessageEmoteCollection.#ctor">
+            <summary>
+                Default, empty constructor initializes the list and sets the preferred
+                <see cref="T:TwitchLib.Client.Models.MessageEmoteCollection.EmoteFilterDelegate"/> to <see cref="M:TwitchLib.Client.Models.MessageEmoteCollection.AllInclusiveEmoteFilter(TwitchLib.Client.Models.MessageEmote)"/>
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.MessageEmoteCollection.#ctor(TwitchLib.Client.Models.MessageEmoteCollection.EmoteFilterDelegate)">
+            <inheritdoc />
+            <summary>
+                Constructor which specifies a particular preferred <see cref="T:TwitchLib.Models.Client.MessageEmoteCollection.EmoteFilterDelegate" />
+            </summary>
+            <param name="preferredFilter"></param>
+        </member>
+        <member name="M:TwitchLib.Client.Models.MessageEmoteCollection.Add(TwitchLib.Client.Models.MessageEmote)">
+            <summary>
+                Adds an <see cref="T:TwitchLib.Client.Models.MessageEmote"/> to the collection. Duplicate emotes
+                (judged by <see cref="P:TwitchLib.Client.Models.MessageEmote.Text"/>) are ignored.
+            </summary>
+            <param name="emote">The <see cref="T:TwitchLib.Client.Models.MessageEmote"/> to add to the collection.</param>
+        </member>
+        <member name="M:TwitchLib.Client.Models.MessageEmoteCollection.Merge(System.Collections.Generic.IEnumerable{TwitchLib.Client.Models.MessageEmote})">
+            <summary>
+                Adds every <see cref="T:TwitchLib.Client.Models.MessageEmote"/> from an <see cref="T:System.Collections.Generic.IEnumerable`1">enumerable</see>
+                collection to the internal collection.
+                Duplicate emotes (judged by <see cref="P:TwitchLib.Client.Models.MessageEmote.Text"/>) are ignored.
+            </summary>
+            <param name="emotes">A collection of <see cref="T:TwitchLib.Client.Models.MessageEmote"/>s.</param>
+        </member>
+        <member name="M:TwitchLib.Client.Models.MessageEmoteCollection.Remove(TwitchLib.Client.Models.MessageEmote)">
+            <summary>
+                Removes the specified <see cref="T:TwitchLib.Client.Models.MessageEmote"/> from the collection.
+            </summary>
+            <param name="emote">The <see cref="T:TwitchLib.Client.Models.MessageEmote"/> to remove.</param>
+        </member>
+        <member name="M:TwitchLib.Client.Models.MessageEmoteCollection.RemoveAll">
+            <summary>
+                Removes all <see cref="T:TwitchLib.Client.Models.MessageEmote"/>s from the collection.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.MessageEmoteCollection.ReplaceEmotes(System.String,TwitchLib.Client.Models.MessageEmoteCollection.EmoteFilterDelegate,System.String,System.String)">
+            <summary>
+                Replaces all instances of all registered emotes passing the provided
+                <see cref="T:TwitchLib.Client.Models.MessageEmoteCollection.EmoteFilterDelegate"/> with their designated
+                <see cref="P:TwitchLib.Client.Models.MessageEmote.ReplacementString"/>s
+            </summary>
+            <param name="originalMessage">
+                The original message which needs to be processed for emotes.
+            </param>
+            <param name="del">
+                An <see cref="T:TwitchLib.Client.Models.MessageEmoteCollection.EmoteFilterDelegate"/> which returns true if its
+                received <see cref="T:TwitchLib.Client.Models.MessageEmote"/> is to be replaced.
+                Defaults to <see cref="P:TwitchLib.Client.Models.MessageEmoteCollection.CurrentEmoteFilter"/>.
+            </param>
+            <param name="prefix">
+                String providing additional detection capabilities for further processing
+            </param>
+            <param name="suffix">
+                String providing additional detection capabilities for further processing
+            </param>
+            <returns>
+                A string where all of the original emote text has been replaced with
+                its designated <see cref="P:TwitchLib.Client.Models.MessageEmote.ReplacementString"/>s
+            </returns>
+        </member>
+        <member name="T:TwitchLib.Client.Models.MessageEmoteCollection.EmoteFilterDelegate">
+            <summary>
+                A delegate function which, when given a <see cref="T:TwitchLib.Client.Models.MessageEmote"/>,
+                determines whether it should be replaced.
+            </summary>
+            <param name="emote">The <see cref="T:TwitchLib.Client.Models.MessageEmote"/> to be considered</param>
+            <returns>true if the <see cref="T:TwitchLib.Client.Models.MessageEmote"/> should be replaced.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Models.MessageEmoteCollection.AllInclusiveEmoteFilter(TwitchLib.Client.Models.MessageEmote)">
+            <summary>
+                The default emote filter includes every <see cref="T:TwitchLib.Client.Models.MessageEmote"/> registered on this list.
+            </summary>
+            <param name="emote">An emote which is ignored in this filter.</param>
+            <returns>true always</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Models.MessageEmoteCollection.TwitchOnlyEmoteFilter(TwitchLib.Client.Models.MessageEmote)">
+            <summary>
+                This emote filter includes only <see cref="T:TwitchLib.Client.Models.MessageEmote"/>s provided by Twitch.
+            </summary>
+            <param name="emote">
+                A <see cref="T:TwitchLib.Client.Models.MessageEmote"/> which will be replaced if its
+                <see cref="P:TwitchLib.Client.Models.MessageEmote.Source">Source</see> is <see cref="F:TwitchLib.Client.Models.MessageEmote.EmoteSource.Twitch"/>
+            </param>
+            <returns>true always</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Models.OutboundChatMessage.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.OutboundChatMessage"/> class.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.OutboundChatMessage.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="P:TwitchLib.Client.Models.PrimePaidSubscriber.MsgParamSubPlan">
+            <summary>
+            The type of subscription plan being used.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.PrimePaidSubscriber.ResubMessage">
+            <summary>
+            Property representing system message.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.PrimePaidSubscriber.#ctor(TwitchLib.Client.Models.Internal.IrcMessage)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.Announcement"/> class.
+            </summary>
+            <param name="ircMessage">The IRC message from Twitch to be processed.</param>
+        </member>
+        <member name="M:TwitchLib.Client.Models.PrimePaidSubscriber.#ctor(System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.DateTimeOffset,TwitchLib.Client.Models.UserDetail,System.String,TwitchLib.Client.Enums.UserType,System.Collections.Generic.Dictionary{System.String,System.String},TwitchLib.Client.Enums.SubscriptionPlan,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.Announcement"/> class.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.PrimePaidSubscriber.TrySet(System.Collections.Generic.KeyValuePair{System.String,System.String})">
+            <inheritdoc/>
+        </member>
+        <member name="P:TwitchLib.Client.Models.RaidNotification.MsgParamDisplayName">
+            <summary>
+            The display name of the broadcaster raiding this channel.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.RaidNotification.MsgParamLogin">
+            <summary>
+            The login name of the broadcaster raiding this channel.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.RaidNotification.MsgParamViewerCount">
+            <summary>
+            The number of viewers raiding this channel from the broadcaster’s channel.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.RaidNotification.#ctor(TwitchLib.Client.Models.Internal.IrcMessage)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.RaidNotification"/> class.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.RaidNotification.#ctor(System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.DateTimeOffset,TwitchLib.Client.Models.UserDetail,System.String,TwitchLib.Client.Enums.UserType,System.Collections.Generic.Dictionary{System.String,System.String},System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.RaidNotification"/> class.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.RaidNotification.TrySet(System.Collections.Generic.KeyValuePair{System.String,System.String})">
+            <inheritdoc/>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ReSubscriber.MsgParamCumulativeMonths">
+            <summary>
+            The total number of months the user has subscribed.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ReSubscriber.MsgParamShouldShareStreak">
+            <summary>
+            A Boolean value that indicates whether the user wants their streaks shared.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ReSubscriber.MsgParamStreakMonths">
+            <summary>
+            The number of consecutive months the user has subscribed.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ReSubscriber.MsgParamSubPlan">
+            <summary>
+            The type of subscription plan being used.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.ReSubscriber.MsgParamSubPlanName">
+            <summary>
+            The display name of the subscription plan. This may be a default name or one created by the channel owner.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.ReSubscriber.#ctor(TwitchLib.Client.Models.Internal.IrcMessage)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.ReSubscriber"/> class.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.ReSubscriber.#ctor(System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.DateTimeOffset,TwitchLib.Client.Models.UserDetail,System.String,TwitchLib.Client.Enums.UserType,System.Collections.Generic.Dictionary{System.String,System.String},System.Int32,System.Boolean,System.Int32,TwitchLib.Client.Enums.SubscriptionPlan,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.ReSubscriber"/> class.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.ReSubscriber.TrySet(System.Collections.Generic.KeyValuePair{System.String,System.String})">
+            <inheritdoc/>
+        </member>
+        <member name="P:TwitchLib.Client.Models.Ritual.MsgParamRitualName">
+            <summary>
+            The name of the ritual being celebrated.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.Ritual.#ctor(TwitchLib.Client.Models.Internal.IrcMessage)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.Ritual"/> class.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.Ritual.#ctor(System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.DateTimeOffset,TwitchLib.Client.Models.UserDetail,System.String,TwitchLib.Client.Enums.UserType,System.Collections.Generic.Dictionary{System.String,System.String},System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.Ritual"/> class.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.Ritual.TrySet(System.Collections.Generic.KeyValuePair{System.String,System.String})">
+            <inheritdoc/>
+        </member>
+        <member name="P:TwitchLib.Client.Models.SendOptions.SendsAllowedInPeriod">
+            <inheritdoc/>
+        </member>
+        <member name="P:TwitchLib.Client.Models.SendOptions.SendDelay">
+            <inheritdoc/>
+        </member>
+        <member name="P:TwitchLib.Client.Models.SendOptions.ThrottlingPeriod">
+            <inheritdoc/>
+        </member>
+        <member name="P:TwitchLib.Client.Models.SendOptions.QueueCapacity">
+            <inheritdoc/>
+        </member>
+        <member name="P:TwitchLib.Client.Models.SendOptions.CacheItemTimeout">
+            <inheritdoc/>
+        </member>
+        <member name="M:TwitchLib.Client.Models.SendOptions.#ctor(System.UInt32,System.UInt32,System.UInt32,System.UInt16)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.SendOptions"/> class.
+            </summary>
+            <param name="sendsAllowedInPeriod">
+                A <see langword="value"/> of zero means: 
+                <br></br>
+                all messages that are enqueued to send
+                are going to be throttled!
+                <br></br>
+                <inheritdoc cref="P:TwitchLib.Client.Models.SendOptions.SendsAllowedInPeriod"/>
+            </param>
+            <param name="queueCapacity">
+                <inheritdoc cref="P:TwitchLib.Client.Models.SendOptions.QueueCapacity"/>
+            </param>
+            <param name="cacheItemTimeoutInMinutes">
+                <inheritdoc cref="P:TwitchLib.Client.Models.SendOptions.CacheItemTimeout"/>
+            </param>
+            <param name="sendDelay">
+                <inheritdoc cref="P:TwitchLib.Client.Models.SendOptions.SendDelay"/>
+            </param>
+        </member>
+        <member name="T:TwitchLib.Client.Models.SentMessage">
+            <summary>Model representing a sent message.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.SentMessage.Badges">
+            <summary>Badges the sender has</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.SentMessage.Channel">
+            <summary>Channel the sent message was sent from.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.SentMessage.HexColor">
+            <summary>Sender's name color.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.SentMessage.DisplayName">
+            <summary>Display name of the sender.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.SentMessage.EmoteSet">
+            <summary>Emotes that appear in the sent message.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.SentMessage.IsModerator">
+            <summary>Whether or not the sender is a moderator.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.SentMessage.IsSubscriber">
+            <summary>Whether or not the sender is a subscriber.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.SentMessage.Message">
+            <summary>The message contents.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.SentMessage.UserType">
+            <summary>The type of user (admin, broadcaster, viewer, moderator)</summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.SentMessage.#ctor(TwitchLib.Client.Models.UserState,System.String)">
+            <summary>Model constructor.</summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.SentMessage.#ctor(System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,TwitchLib.Client.Enums.UserType,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.SentMessage"/> class.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.StandardPayForward.#ctor(TwitchLib.Client.Models.Internal.IrcMessage)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.StandardPayForward"/> class.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.StandardPayForward.#ctor(System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.DateTimeOffset,TwitchLib.Client.Models.UserDetail,System.String,TwitchLib.Client.Enums.UserType,System.Collections.Generic.Dictionary{System.String,System.String},System.Boolean,System.String,System.Int64,System.String,System.String,System.Nullable{System.Int64},System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.StandardPayForward"/> class.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.StandardPayForward.TrySet(System.Collections.Generic.KeyValuePair{System.String,System.String})">
+            <inheritdoc/>
+        </member>
+        <member name="P:TwitchLib.Client.Models.Subscriber.MsgParamCumulativeMonths">
+            <summary>
+            The total number of months the user has subscribed.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.Subscriber.MsgParamShouldShareStreak">
+            <summary>
+            A Boolean value that indicates whether the user wants their streaks shared.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.Subscriber.MsgParamStreakMonths">
+            <summary>
+            The number of consecutive months the user has subscribed.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.Subscriber.MsgParamSubPlan">
+            <summary>
+            The type of subscription plan being used.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.Subscriber.MsgParamSubPlanName">
+            <summary>
+            The display name of the subscription plan. This may be a default name or one created by the channel owner.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.Subscriber.#ctor(TwitchLib.Client.Models.Internal.IrcMessage)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.Subscriber"/> class.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.Subscriber.#ctor(System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.DateTimeOffset,TwitchLib.Client.Models.UserDetail,System.String,TwitchLib.Client.Enums.UserType,System.Collections.Generic.Dictionary{System.String,System.String},System.Int32,System.Boolean,System.Int32,TwitchLib.Client.Enums.SubscriptionPlan,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.Subscriber"/> class.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.Subscriber.TrySet(System.Collections.Generic.KeyValuePair{System.String,System.String})">
+            <inheritdoc/>
+        </member>
+        <member name="T:TwitchLib.Client.Models.TwitchLibMessage">
+            <summary>Class represents Message.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.TwitchLibMessage.Badges">
+            <summary>List of key-value pair badges.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.TwitchLibMessage.BotUsername">
+            <summary>Twitch username of the bot that received the message.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.TwitchLibMessage.HexColor">
+            <summary>Property representing HEX color as a System.Drawing.Color object.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.TwitchLibMessage.DisplayName">
+            <summary>Case-sensitive username of sender of chat message.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.TwitchLibMessage.EmoteSet">
+            <summary>Emote Ids that exist in message.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.TwitchLibMessage.UserId">
+            <summary>Twitch-unique integer assigned on per account basis.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.TwitchLibMessage.Username">
+            <summary>Username of sender of chat message.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.TwitchLibMessage.UserType">
+            <summary>User type can be viewer, moderator, global mod, admin, or staff</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.TwitchLibMessage.RawIrcMessage">
+            <summary>Raw IRC-style text received from Twitch.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.TwitchLibMessage.UndocumentedTags">
+            <summary>
+            Contains undocumented tags.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.UnraidNotification.#ctor(TwitchLib.Client.Models.Internal.IrcMessage)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.UnraidNotification"/> class.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.UnraidNotification.#ctor(System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.DateTimeOffset,TwitchLib.Client.Models.UserDetail,System.String,TwitchLib.Client.Enums.UserType,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.UnraidNotification"/> class.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.UnraidNotification.TrySet(System.Collections.Generic.KeyValuePair{System.String,System.String})">
+            <inheritdoc/>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserBan.Channel">
+            <summary>Channel that had ban event.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserBan.Username">
+            <summary>User that was banned.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserBan.RoomId">
+            <summary>Channel that had ban event. Id.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserBan.TargetUserId">
+            <summary>User that was banned. Id.</summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.UserBan.#ctor(TwitchLib.Client.Models.Internal.IrcMessage)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.UserBan"/> class.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.UserBan.#ctor(System.String,System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.UserBan"/> class.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.UserDetail.#ctor(TwitchLib.Client.Enums.UserDetails)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.UserDetail"/> class.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.UserDetail.#ctor(TwitchLib.Client.Enums.UserDetails,System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}})">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.UserDetail"/> class.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserDetail.IsModerator">
+            <summary>
+            A Boolean value that determines whether the user is a moderator.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserDetail.IsSubscriber">
+            <summary>
+            A Boolean value that determines whether the user is a subscriber.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserDetail.HasTurbo">
+            <summary>
+            A Boolean value that indicates whether the user has site-wide commercial free mode enabled.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserDetail.IsVip">
+            <summary>
+            Message is from channel VIP.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserDetail.IsPartner">
+            <summary>
+            Message is from a Twitch Partner.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserDetail.IsStaff">
+            <summary>
+            Message is from a Twitch Staff member.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.UserDetail.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserNoticeBase.BadgeInfo">
+            <summary>
+            Contains metadata related to the chat badges in the <see cref="P:TwitchLib.Client.Models.UserNoticeBase.Badges"/> tag.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserNoticeBase.Badges">
+            <summary>
+            List of chat badges.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserNoticeBase.HexColor">
+            <inheritdoc/>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserNoticeBase.DisplayName">
+            <summary>
+            The user’s display name, escaped as described in the IRCv3 spec.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserNoticeBase.Emotes">
+            <summary>
+             List of emotes and their positions in the message.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserNoticeBase.Id">
+            <summary>
+            An ID that uniquely identifies this message.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserNoticeBase.Login">
+            <summary>
+            The login name of the user whose action generated the message.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserNoticeBase.MsgId">
+            <summary>
+            The type of notice (not the ID).
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserNoticeBase.RoomId">
+            <summary>
+            An ID that identifies the chat room (channel).
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserNoticeBase.SystemMsg">
+            <summary>
+            The message Twitch shows in the chat room for this notice.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserNoticeBase.TmiSent">
+            <summary>
+            The time for when the Twitch IRC server received the message.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserNoticeBase.UserId">
+            <summary>
+            The user’s ID.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserNoticeBase.UserType">
+            <summary>
+            he type of user sending the whisper message.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.UserNoticeBase.#ctor(TwitchLib.Client.Models.Internal.IrcMessage)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.UserNoticeBase"/> class.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.UserNoticeBase.#ctor(System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.DateTimeOffset,TwitchLib.Client.Models.UserDetail,System.String,TwitchLib.Client.Enums.UserType,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.UserNoticeBase"/> class.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Models.UserState">
+            <summary>Class representing state of a specific user.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserState.Badges">
+            <summary>Properrty representing the chat badges a specific user has.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserState.BadgeInfo">
+            <summary>Metadata associated badgest</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserState.Channel">
+            <summary>Property representing channel.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserState.HexColor">
+            <summary>Properrty representing HEX user's name.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserState.DisplayName">
+            <summary>Property representing user's display name.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserState.EmoteSet">
+            <summary>Property representing emote sets available to user.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserState.Id">
+            <summary>Property representing the user's Id.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserState.IsModerator">
+            <summary>Property representing Turbo status.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserState.IsSubscriber">
+            <summary>Property representing subscriber status.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserState.Turbo">
+            <summary>
+            A Boolean value that indicates whether the user has site-wide commercial free mode enabled. 
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserState.UserType">
+            <summary>Property representing returned user type of user.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserState.UndocumentedTags">
+            <summary>
+            Contains undocumented tags.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.UserState.#ctor(TwitchLib.Client.Models.Internal.IrcMessage)">
+            <summary>
+            Constructor for UserState.
+            </summary>
+            <param name="ircMessage"></param>
+        </member>
+        <member name="M:TwitchLib.Client.Models.UserState.#ctor(System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.String,System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,TwitchLib.Client.Enums.UserType)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.UserState"/> class.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserTimeout.Channel">
+            <summary>Channel that had timeout event.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserTimeout.TimeoutDuration">
+            <summary>Duration of timeout</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserTimeout.Username">
+            <summary>Viewer that was timed out.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserTimeout.TargetUserId">
+            <summary>Id of Viewer that was timed out.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.UserTimeout.UndocumentedTags">
+            <summary>
+            Contains undocumented tags.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.UserTimeout.#ctor(TwitchLib.Client.Models.Internal.IrcMessage)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.UserTimeout"/> class.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.UserTimeout.#ctor(System.String,System.String,System.String,System.TimeSpan)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.UserTimeout"/> class.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Models.WhisperMessage">
+            <summary>Class representing a received whisper from TwitchWhisperClient</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.WhisperMessage.MessageId">
+            <summary>Property representing message identifier.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.WhisperMessage.ThreadId">
+            <summary>Property representing identifier of the message thread.</summary>
+        </member>
+        <member name="P:TwitchLib.Client.Models.WhisperMessage.Message">
+            <summary>Property representing identifier of the message thread.</summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.WhisperMessage.#ctor(System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.String,System.String,System.String,TwitchLib.Client.Models.EmoteSet,System.String,System.String,System.String,System.String,System.String,TwitchLib.Client.Models.UserDetail,TwitchLib.Client.Enums.UserType)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Models.WhisperMessage"/> class.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Models.WhisperMessage.#ctor(TwitchLib.Client.Models.Internal.IrcMessage,System.String)">
+            <summary>
+            WhisperMessage constructor.
+            </summary>
+            <param name="ircMessage">Received IRC string from Twitch server.</param>
+            <param name="botUsername">Active bot username receiving message.</param>
+        </member>
+        <member name="P:HypeChat.Amount">
+            <summary>
+            The value of the Hype Chat sent by the user.
+            </summary>
+        </member>
+        <member name="P:HypeChat.Currency">
+            <summary>
+            The ISO 4217 alphabetic currency code the user has sent the Hype Chat in.
+            </summary>
+        </member>
+        <member name="P:HypeChat.Exponent">
+            <summary>
+            Indicates how many decimal points this currency represents partial amounts in. Decimal points start from the right side of the value defined in pinned-chat-paid-amount.
+            </summary>
+        </member>
+        <member name="P:HypeChat.Level">
+            <summary>
+            The level of the Hype Chat, in English.Possible values are:
+            </summary>
+        </member>
+        <member name="P:HypeChat.IsSystemMessage">
+            <summary>
+            A Boolean value that determines if the message sent with the Hype Chat was filled in by the system.
+            </summary>
+            <remarks>
+            If true (1), the user entered no message and the body message was automatically filled in by the system.
+            If false (0), the user provided their own message to send with the Hype Chat.
+            </remarks>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.GetUsernameCheckRegex_0">
+            <summary>Custom <see cref="T:System.Text.RegularExpressions.Regex"/>-derived type for the GetUsernameCheckRegex method.</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.GetUsernameCheckRegex_0.Instance">
+            <summary>Cached, thread-safe singleton instance.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.GetUsernameCheckRegex_0.#ctor">
+            <summary>Initializes the instance.</summary>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.GetUsernameCheckRegex_0.RunnerFactory">
+            <summary>Provides a factory for creating <see cref="T:System.Text.RegularExpressions.RegexRunner"/> instances to be used by methods on <see cref="T:System.Text.RegularExpressions.Regex"/>.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.GetUsernameCheckRegex_0.RunnerFactory.CreateInstance">
+            <summary>Creates an instance of a <see cref="T:System.Text.RegularExpressions.RegexRunner"/> used by methods on <see cref="T:System.Text.RegularExpressions.Regex"/>.</summary>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.GetUsernameCheckRegex_0.RunnerFactory.Runner">
+            <summary>Provides the runner that contains the custom logic implementing the specified regular expression.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.GetUsernameCheckRegex_0.RunnerFactory.Runner.Scan(System.ReadOnlySpan{System.Char})">
+            <summary>Scan the <paramref name="inputSpan"/> starting from base.runtextstart for the next match.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.GetUsernameCheckRegex_0.RunnerFactory.Runner.TryFindNextPossibleStartingPosition(System.ReadOnlySpan{System.Char})">
+            <summary>Search <paramref name="inputSpan"/> starting from base.runtextpos for the next location a match could possibly start.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+            <returns>true if a possible match was found; false if no more matches are possible.</returns>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.GetUsernameCheckRegex_0.RunnerFactory.Runner.TryMatchAtCurrentPosition(System.ReadOnlySpan{System.Char})">
+            <summary>Determine whether <paramref name="inputSpan"/> at base.runtextpos is a match for the regular expression.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+            <returns>true if the regular expression matches at the current position; otherwise, false.</returns>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.Utilities">
+            <summary>Helper methods used by generated <see cref="T:System.Text.RegularExpressions.Regex"/>-derived implementations.</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_defaultTimeout">
+            <summary>Default timeout value set in <see cref="T:System.AppContext"/>, or <see cref="F:System.Text.RegularExpressions.Regex.InfiniteMatchTimeout"/> if none was set.</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_hasTimeout">
+            <summary>Whether <see cref="F:System.Text.RegularExpressions.Generated.Utilities.s_defaultTimeout"/> is non-infinite.</summary>
+        </member>
+    </members>
+</doc>

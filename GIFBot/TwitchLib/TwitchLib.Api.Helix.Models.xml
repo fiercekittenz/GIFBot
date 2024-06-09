@@ -1,0 +1,2554 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TwitchLib.Api.Helix.Models</name>
+    </assembly>
+    <members>
+        <member name="T:TwitchLib.Api.Helix.Models.Analytics.ExtensionAnalytics">
+            <summary>
+            <para>A analytic report for an extension.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Analytics.ExtensionAnalytics.ExtensionId">
+            <summary>
+            <para>An ID that identifies the extension that the analytic report was generated for.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Analytics.ExtensionAnalytics.Url">
+            <summary>
+            <para>The URL that you use to download the analytic report.</para>
+            <para><b>The URL is valid for 5 minutes.</b></para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Analytics.ExtensionAnalytics.Type">
+            <summary>
+            <para>The type of analytic report.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Analytics.ExtensionAnalytics.DateRange">
+            <summary>
+            <para>The reporting period’s start and end dates.</para>
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Analytics.GameAnalytics">
+            <summary>
+            <para></para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Analytics.GameAnalytics.GameId">
+            <summary>
+            <para>An ID that identifies the game that the analytic report was generated for.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Analytics.GameAnalytics.Url">
+            <summary>
+            <para>The URL that you use to download the analytic report.</para>
+            <para><b>The URL is valid for 5 minutes.</b></para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Analytics.GameAnalytics.Type">
+            <summary>
+            <para>The type of analytic report.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Analytics.GameAnalytics.DateRange">
+            <summary>
+            <para>The reporting period’s start and end dates.</para>
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Analytics.GetExtensionAnalyticsResponse">
+            <summary>
+            <para>The response for GetExtensionAnalytics that gets a list of analytic reports for one or more extensions.</para>
+            <para>The response contains the URLs used to download the reports (CSV files) and the URLs are only valid for 5 minutes.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Analytics.GetExtensionAnalyticsResponse.Data">
+            <summary>
+            <para>A list of analytic reports for the extensions.</para>
+            <para>The reports are returned in no particular order; however, the data within each report is in ascending order by date (newest first).</para>
+            <para>The report contains one row of data per day of the reporting window and only contains rows for the days that the extension was used.</para>
+            <para>The array is empty if there are no reports.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Analytics.GetExtensionAnalyticsResponse.Pagination">
+            <summary>
+            <para>Contains the information used to page through the list of results.</para>
+            <para>The object is empty if there are no more pages left to page through.</para>
+            <para>Use the cursor to set the GetExtensionAnalytics request’s after query parameter.</para>
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Analytics.GetGameAnalyticsResponse">
+            <summary>
+            <para>Response for GetGameAnalytics which gets gets a list of analytic reports for one or more games.</para>
+            <para>The response contains the URLs used to download the reports (CSV files) and the URLs are only valid for 5 minutes.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Analytics.GetGameAnalyticsResponse.Data">
+            <summary>
+            <para>A list of game analytics reports.</para>
+            <para>The reports are returned in no particular order; however, the data within each report is in ascending order by date (newest first).</para>
+            <para>The report contains one row of data per day of the reporting window and only contains rows the days that the game was used.</para>
+            <para>A report is available only if the game was broadcast for at least 5 hours over the reporting period.</para>
+            <para>The array is empty if there are no reports.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Analytics.GetGameAnalyticsResponse.Pagination">
+            <summary>
+            <para>Contains the information used to page through the list of results.</para>
+            <para>The object is empty if there are no more pages left to page through.</para>
+            <para>Use the cursor to set the GetGameAnalytics request’s after query parameter.</para>
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Bits.Cheermote">
+            <summary>
+            Cheermotes are animated emotes that viewers can assign Bits to and can be used in any Bits-enabled channel’s chat room.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Bits.Cheermote.Prefix">
+            <summary>
+            <para>The name portion of the Cheermote string that you use in chat to cheer Bits. 
+            The full Cheermote string is the concatenation of {prefix} + {number of Bits}.</para> 
+            For example, if the prefix is “Cheer” and you want to cheer 100 Bits, the full Cheermote string is Cheer100. 
+            When the Cheermote string is entered in chat, Twitch converts it to the image associated with the Bits tier that was cheered.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Bits.Cheermote.Tiers">
+            <summary>
+            <para>A list of tier levels that the Cheermote supports.</para>
+            <para>Each tier identifies the range of Bits that you can cheer at that tier level and an image that graphically identifies the tier level.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Bits.Cheermote.Type">
+            <summary>
+            <para>The type of Cheermote. Possible values are:</para>
+            <para>global_first_party - A Twitch-defined Cheermote that is shown in the Bits card.</para>
+            <para>global_third_party - A Twitch-defined Cheermote that is not shown in the Bits card. </para>
+            <para>channel_custom - A broadcaster-defined Cheermote.</para>
+            <para>display_only - Do not use; for internal use only.</para>
+            <para>sponsored - A sponsor-defined Cheermote. 
+            When used, the sponsor adds additional Bits to the amount that the user cheered. 
+            For example, if the user cheered Terminator100, the broadcaster might receive 110 Bits, which includes the sponsor's 10 Bits contribution.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Bits.Cheermote.Order">
+            <summary>
+            <para>The order that the Cheermotes are shown in the Bits card.</para>
+            <para>The numbers may not be consecutive. 
+            For example, the numbers may jump from 1 to 7 to 13.</para>
+            <para>The order numbers are unique within a Cheermote type (for example, global_first_party) 
+            but may not be unique amongst all Cheermotes in the response.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Bits.Cheermote.LastUpdated">
+            <summary>
+            The date and time when this Cheermote was last updated.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Bits.Cheermote.IsCharitable">
+            <summary>
+            A Boolean value that indicates whether this Cheermote provides a charitable contribution match during charity campaigns.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Bits.GetCheermotesResponse">
+            <summary>
+            Response from GetCheermotes which gets a list of Cheermotes that users can use to cheer Bits in any Bits-enabled channel’s chat room.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Bits.GetCheermotesResponse.Listings">
+            <summary>
+            The list of Cheermotes. The list is in ascending order by the order field’s value.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Bits.ImageList">
+            <summary>
+            <para>Animated and static image sets for a Cheermote.</para>
+            <para>Each set is a dictionary with the following sizes:  1, 1.5, 2, 3, and 4.</para>
+            The value of each size contains the URL to the image.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Bits.ImageList.Animated">
+            <summary>
+            <para>Animated image set for a Cheermote and include the following sizes: 1, 1.5, 2, 3, and 4</para>
+            The value of each size contains the URL to the image.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Bits.ImageList.Static">
+            <summary>
+            <para>Static image set for a Cheermote and include the following sizes: 1, 1.5, 2, 3, and 4</para>
+            The value of each size contains the URL to the image.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Bits.Images">
+             <summary>
+             <para>The dark and light themes of a Cheermote.</para>
+             <para>Each theme has static and animated formats of the Cheermote. Each format has a dictionary
+             containing multiple image sizes and associated image URLs.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Bits.Images.Dark">
+            <summary>
+            <para>Dark theme key for a Cheermote.</para>
+            <para>Contains the static and animated formats for the Cheermote. 
+            Each format has a dictionary containing multiple image sizes and associated image URLs.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Bits.Images.Light">
+            <summary>
+            <para>Light theme key for a Cheermote.</para>
+            <para>Contains the static and animated formats for the Cheermote. 
+            Each format has a dictionary containing multiple image sizes and associated image URLs.</para>
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Bits.Tier">
+            <summary>
+            <para>A list of tier levels that the Cheermote supports.</para> 
+            <para>Each tier identifies the range of Bits that you can cheer at that tier level and an image that graphically identifies the tier level.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Bits.Tier.MinBits">
+            <summary>
+            <para>The minimum number of Bits that you must cheer at this tier level.</para>
+            <para>The maximum number of Bits that you can cheer at this level is determined by the required minimum Bits of the next tier level minus 1. </para>
+            <para>For example, if min_bits is 1 and min_bits for the next tier is 100, the Bits range for this tier level is 1 through 99. </para>
+            The minimum Bits value of the last tier is the maximum number of Bits you can cheer using this Cheermote. For example, 10000.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Bits.Tier.Id">
+            <summary>
+            The tier level. Possible tiers are:<br/>
+            1 | 100 | 500 | 1,000 | 5,000 | 10,000 | 100,000
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Bits.Tier.Color">
+            <summary>
+            The hex code of the color associated with this tier level (for example, #979797).
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Bits.Tier.Images">
+            <summary>
+            <para>The animated and static image sets for the Cheermote - organized by theme, format, and size. </para>
+            The theme keys are dark and light. <br/>
+            Each theme is a dictionary of formats: animated and static. <br/>
+            Each format is a dictionary with the following sizes:  1, 1.5, 2, 3, and 4. <br/>
+            The value of each size contains the URL to the image.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Bits.Tier.CanCheer">
+            <summary>
+            A Boolean value that determines whether users can cheer at this tier level.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Bits.Tier.ShowInBitsCard">
+            <summary>
+            <para>A Boolean value that determines whether this tier level is shown in the Bits card. </para>
+            <para>Is true if this tier level is shown in the Bits card.</para>
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.ChannelPoints.CreateCustomReward.CreateCustomRewardsRequest">
+            <summary>
+            Creates a Custom Reward in the broadcaster’s channel. The maximum number of custom rewards per channel is 50, which includes both enabled and disabled rewards.
+            
+            Requires a user access token that includes the channel:manage:redemptions scope.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.CreateCustomReward.CreateCustomRewardsRequest.Title">
+            <summary>
+            The custom reward’s title. The title may contain a maximum of 45 characters and it must be unique amongst all of the broadcaster’s custom rewards.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.CreateCustomReward.CreateCustomRewardsRequest.Cost">
+            <summary>
+            The cost of the reward, in Channel Points. The minimum is 1 point.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.CreateCustomReward.CreateCustomRewardsRequest.Prompt">
+            <summary>
+            The prompt shown to the viewer when they redeem the reward. Specify a prompt if IsUserInputRequired is true. The prompt is limited to a maximum of 200 characters.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.CreateCustomReward.CreateCustomRewardsRequest.IsEnabled">
+            <summary>
+            A Boolean value that determines whether the reward is enabled. Viewers see only enabled rewards. The default is true.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.CreateCustomReward.CreateCustomRewardsRequest.BackgroundColor">
+            <summary>
+            The background color to use for the reward. Specify the color using Hex format (for example, #9147FF).
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.CreateCustomReward.CreateCustomRewardsRequest.IsUserInputRequired">
+            <summary>
+            A Boolean value that determines whether the user needs to enter information when redeeming the reward. See the Prompt field. The default is false. 
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.CreateCustomReward.CreateCustomRewardsRequest.IsMaxPerStreamEnabled">
+            <summary>
+            A Boolean value that determines whether to limit the maximum number of redemptions allowed per live stream (see the MaxPerStream field). The default is false. 
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.CreateCustomReward.CreateCustomRewardsRequest.MaxPerStream">
+            <summary>
+            The maximum number of redemptions allowed per live stream. Applied only if IsMaxPerStreamEnabled is true. The minimum value is 1. 
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.CreateCustomReward.CreateCustomRewardsRequest.IsMaxPerUserPerStreamEnabled">
+            <summary>
+            A Boolean value that determines whether to limit the maximum number of redemptions allowed per user per stream (see the MaxPerUserPerStream field). The default is false. 
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.CreateCustomReward.CreateCustomRewardsRequest.MaxPerUserPerStream">
+            <summary>
+            The maximum number of redemptions allowed per user per stream. Applied only if IsMaxPerUserPerStreamEnabled is true. The minimum value is 1.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.CreateCustomReward.CreateCustomRewardsRequest.IsGlobalCooldownEnabled">
+            <summary>
+            A Boolean value that determines whether to apply a cooldown period between redemptions (see the GlobalCooldownSeconds field for the duration of the cooldown period). The default is false. 
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.CreateCustomReward.CreateCustomRewardsRequest.GlobalCooldownSeconds">
+            <summary>
+            The cooldown period, in seconds. Applied only if the IsGlobalCooldownEnabled field is true. The minimum value is 1; however, the minimum value is 60 for it to be shown in the Twitch UX.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.CreateCustomReward.CreateCustomRewardsRequest.ShouldRedemptionsSkipRequestQueue">
+            <summary>
+            A Boolean value that determines whether redemptions should be set to FULFILLED status immediately when a reward is redeemed. If false, status is set to UNFULFILLED and follows the normal request queue process. The default is false. 
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.ChannelPoints.CreateCustomReward.CreateCustomRewardsResponse">
+            <summary>
+            The response for creating a Custom Reward in the broadcaster’s channel.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.CreateCustomReward.CreateCustomRewardsResponse.Data">
+            <summary>
+            A list that contains the single custom reward you created.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.ChannelPoints.CustomReward">
+            <summary>
+            Custom reward that the specified broadcaster created.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.CustomReward.BroadcasterId">
+            <summary>
+            The ID that uniquely identifies the broadcaster.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.CustomReward.BroadcasterLogin">
+            <summary>
+            The broadcaster’s login name. (Name is lowercase)
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.CustomReward.BroadcasterName">
+            <summary>
+            The broadcaster’s display name. (Name has capitalization)
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.CustomReward.Id">
+            <summary>
+            The ID that uniquely identifies this custom reward.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.CustomReward.Title">
+            <summary>
+            The title of the reward.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.CustomReward.Prompt">
+            <summary>
+            The prompt shown to the viewer when they redeem the reward if user input is required (see the IsUserInputRequired field).
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.CustomReward.Cost">
+            <summary>
+            The cost of the reward in Channel Points.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.CustomReward.Image">
+            <summary>
+            A set of custom images for the reward. This field is null if the broadcaster didn’t upload images.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.CustomReward.DefaultImage">
+            <summary>
+            A set of default images for the reward.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.CustomReward.BackgroundColor">
+            <summary>
+            The background color to use for the reward. The color is in Hex format (for example, #00E5CB).
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.CustomReward.IsEnabled">
+            <summary>
+            A Boolean value that determines whether the reward is enabled. Is true if enabled; otherwise, false. Disabled rewards aren’t shown to the user.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.CustomReward.IsUserInputRequired">
+            <summary>
+            A Boolean value that determines whether the user must enter information when redeeming the reward. Is true if the user is prompted.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.CustomReward.MaxPerStreamSetting">
+            <summary>
+            The settings used to determine whether to apply a maximum to the number of redemptions allowed per live stream.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.CustomReward.MaxPerUserPerStreamSetting">
+            <summary>
+            The settings used to determine whether to apply a maximum to the number of redemptions allowed per user per live stream.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.CustomReward.GlobalCooldownSetting">
+            <summary>
+            The settings used to determine whether to apply a cooldown period between redemptions and the length of the cooldown.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.CustomReward.IsPaused">
+            <summary>
+             A Boolean value that determines whether to pause the reward. Set to true to pause the reward. Viewers can’t redeem paused rewards, however the reward will still be visible with "Reward is temporarily unavailable. Check back for it soon." message. 
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.CustomReward.IsInStock">
+            <summary>
+            A Boolean value that determines whether the reward is currently in stock. Is true if the reward is in stock. Viewers can’t redeem out of stock rewards.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.CustomReward.ShouldRedemptionsSkipQueue">
+            <summary>
+            A Boolean value that determines whether redemptions should be set to FULFILLED status immediately when a reward is redeemed. If false, status is set to UNFULFILLED and follows the normal request queue process.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.CustomReward.RedemptionsRedeemedCurrentStream">
+            <summary>
+            The number of redemptions redeemed during the current live stream. The number counts against the MaxPerStreamSetting limit. This field is null if the broadcaster’s stream isn’t live or MaxPerStreamSetting isn’t enabled.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.CustomReward.CooldownExpiresAt">
+            <summary>
+            The timestamp of when the cooldown period expires. Is null if the reward isn’t in a cooldown state. See the GlobalCooldownSetting field.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.ChannelPoints.DefaultImage">
+            <summary>
+            A set of default images for the reward.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.DefaultImage.Url1x">
+            <summary>
+            The URL to a small version of the image.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.DefaultImage.Url2x">
+            <summary>
+            The URL to a medium version of the image.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.DefaultImage.Url4x">
+            <summary>
+            The URL to a large version of the image.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.ChannelPoints.GetCustomRewardRedemption.GetCustomRewardRedemptionResponse">
+            <summary>
+            The response for getting a list of redemptions for a custom reward.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.GetCustomRewardRedemption.GetCustomRewardRedemptionResponse.Data">
+            <summary>
+            The list of redemptions for the specified reward. The list is empty if there are no redemptions that match the redemption criteria.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.GetCustomRewardRedemption.GetCustomRewardRedemptionResponse.Pagination">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.ChannelPoints.GetCustomReward.GetCustomRewardsResponse">
+            <summary>
+            The response for getting a list of custom rewards that the specified broadcaster created.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.GetCustomReward.GetCustomRewardsResponse.Data">
+            <summary>
+            A list of custom rewards. The list is in ascending order by id. If the broadcaster hasn’t created custom rewards, the list is empty.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.ChannelPoints.GlobalCooldownSetting">
+            <summary>
+            The settings used to determine whether to apply a cooldown period between redemptions and the length of the cooldown.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.GlobalCooldownSetting.IsEnabled">
+            <summary>
+            A Boolean value that determines whether to apply a cooldown period. Is true if a cooldown period is enabled.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.GlobalCooldownSetting.GlobalCooldownSeconds">
+            <summary>
+            The cooldown period, in seconds.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.ChannelPoints.Image">
+            <summary>
+            A set of custom images for the reward. This field is null if the broadcaster didn’t upload images.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.Image.Url1x">
+            <summary>
+            The URL to a small version of the image.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.Image.Url2x">
+            <summary>
+            The URL to a medium version of the image.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.Image.Url4x">
+            <summary>
+            The URL to a large version of the image.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.ChannelPoints.MaxPerStreamSetting">
+            <summary>
+            The settings used to determine whether to apply a maximum to the number of redemptions allowed per live stream.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.MaxPerStreamSetting.IsEnabled">
+            <summary>
+            A Boolean value that determines whether the reward applies a limit on the number of redemptions allowed per live stream. Is true if the reward applies a limit.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.MaxPerStreamSetting.MaxPerStream">
+            <summary>
+            The maximum number of redemptions allowed per live stream.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.ChannelPoints.MaxPerUserPerStreamSetting">
+            <summary>
+            The settings used to determine whether to apply a maximum to the number of redemptions allowed per user per live stream.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.MaxPerUserPerStreamSetting.IsEnabled">
+            <summary>
+            A Boolean value that determines whether the reward applies a limit on the number of redemptions allowed per user per live stream. Is true if the reward applies a limit.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.MaxPerUserPerStreamSetting.MaxPerUserPerStream">
+            <summary>
+            The maximum number of redemptions allowed per user per live stream.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.ChannelPoints.Reward">
+            <summary>
+            The reward that the user redeemed.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.Reward.Id">
+            <summary>
+            The ID that uniquely identifies the redeemed reward.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.Reward.Title">
+            <summary>
+            The reward’s title.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.Reward.Prompt">
+            <summary>
+            The prompt displayed to the viewer if user input is required.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.Reward.Cost">
+            <summary>
+            The reward’s cost, in Channel Points.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.ChannelPoints.RewardRedemption">
+            <summary>
+            A redemption for a custom reward.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.RewardRedemption.BroadcasterId">
+            <summary>
+            The ID that uniquely identifies the broadcaster.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.RewardRedemption.BroadcasterLogin">
+            <summary>
+            The broadcaster’s login name. (Name is lowercase)
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.RewardRedemption.BroadcasterName">
+            <summary>
+            The broadcaster’s display name. (Name has capitalization)
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.RewardRedemption.Id">
+            <summary>
+            The ID that uniquely identifies this redemption.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.RewardRedemption.UserLogin">
+            <summary>
+            The user’s login name. (Name is lowercase)
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.RewardRedemption.UserId">
+            <summary>
+            The ID that uniquely identifies the user that redeemed the reward.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.RewardRedemption.UserName">
+            <summary>
+            The user’s display name. (Name has capitalization)
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.RewardRedemption.UserInput">
+            <summary>
+            The text that the user entered at the prompt when they redeemed the reward; otherwise, an empty string if user input was not required.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.RewardRedemption.Status">
+            <summary>
+            The state of the redemption. Possible values are: CANCELED, FULFILLED, UNFULFILLED
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.RewardRedemption.RedeemedAt">
+            <summary>
+            The date and time of when the reward was redeemed.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.RewardRedemption.Reward">
+            <summary>
+            The reward that the user redeemed.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.ChannelPoints.UpdateCustomReward.UpdateCustomRewardRequest">
+            <summary>
+            Updates a custom reward. The app used to create the reward is the only app that may update the reward.
+            
+            Requires a user access token that includes the channel:manage:redemptions scope.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.UpdateCustomReward.UpdateCustomRewardRequest.Title">
+            <summary>
+            The reward’s title. The title may contain a maximum of 45 characters and it must be unique amongst all of the broadcaster’s custom rewards.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.UpdateCustomReward.UpdateCustomRewardRequest.Prompt">
+            <summary>
+            The prompt shown to the viewer when they redeem the reward. Specify a prompt if IsUserInputRequired is true. The prompt is limited to a maximum of 200 characters.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.UpdateCustomReward.UpdateCustomRewardRequest.Cost">
+            <summary>
+            The cost of the reward, in channel points. The minimum is 1 point.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.UpdateCustomReward.UpdateCustomRewardRequest.BackgroundColor">
+            <summary>
+            The background color to use for the reward. Specify the color using Hex format (for example, #00E5CB).
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.UpdateCustomReward.UpdateCustomRewardRequest.IsEnabled">
+            <summary>
+            A Boolean value that indicates whether the reward is enabled. Set to true to enable the reward. Viewers see only enabled rewards.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.UpdateCustomReward.UpdateCustomRewardRequest.IsUserInputRequired">
+            <summary>
+            A Boolean value that determines whether users must enter information to redeem the reward. Set to true if user input is required. See the Prompt field.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.UpdateCustomReward.UpdateCustomRewardRequest.IsMaxPerStreamEnabled">
+            <summary>
+            A Boolean value that determines whether to limit the maximum number of redemptions allowed per live stream (see the MaxPerStream field). Set to true to limit redemptions.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.UpdateCustomReward.UpdateCustomRewardRequest.MaxPerStream">
+            <summary>
+             The maximum number of redemptions allowed per live stream. Applied only if IsMaxPerUserPerStreamEnabled is true. The minimum value is 1.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.UpdateCustomReward.UpdateCustomRewardRequest.IsMaxPerUserPerStreamEnabled">
+            <summary>
+            A Boolean value that determines whether to limit the maximum number of redemptions allowed per user per stream (see MaxPerUserPerStream). The minimum value is 1. Set to true to limit redemptions.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.UpdateCustomReward.UpdateCustomRewardRequest.MaxPerUserPerStream">
+            <summary>
+            The maximum number of redemptions allowed per user per stream. Applied only if IsMaxPerUserPerStreamEnabled is true.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.UpdateCustomReward.UpdateCustomRewardRequest.IsGlobalCooldownEnabled">
+            <summary>
+             A Boolean value that determines whether to apply a cooldown period between redemptions. Set to true to apply a cooldown period. For the duration of the cooldown period, see GlobalCooldownSeconds.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.UpdateCustomReward.UpdateCustomRewardRequest.GlobalCooldownSeconds">
+            <summary>
+            The cooldown period, in seconds. Applied only if IsGlobalCooldownEnabled is true. The minimum value is 1; however, for it to be shown in the Twitch UX, the minimum value is 60.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.UpdateCustomReward.UpdateCustomRewardRequest.IsPaused">
+            <summary>
+             A Boolean value that determines whether to pause the reward. Set to true to pause the reward. Viewers can’t redeem paused rewards, however the reward will still be visible with "Reward is temporarily unavailable. Check back for it soon." message. 
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.UpdateCustomReward.UpdateCustomRewardRequest.ShouldRedemptionsSkipRequestQueue">
+            <summary>
+            A Boolean value that determines whether redemptions should be set to FULFILLED status immediately when a reward is redeemed. If false, status is set to UNFULFILLED and follows the normal request queue process.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.ChannelPoints.UpdateCustomReward.UpdateCustomRewardResponse">
+            <summary>
+            The response for updating a custom reward.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.UpdateCustomReward.UpdateCustomRewardResponse.Data">
+            <summary>
+            The list contains the single reward that you updated.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.ChannelPoints.UpdateCustomRewardRedemptionStatus.UpdateCustomRewardRedemptionStatusRequest">
+            <summary>
+            The request for updating a redemption’s status.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.UpdateCustomRewardRedemptionStatus.UpdateCustomRewardRedemptionStatusRequest.Status">
+            <summary>
+            The status to set the redemption to. Possible values are: CANCELED, FULFILLED. Setting the status to CANCELED refunds the user’s channel points.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.ChannelPoints.UpdateRedemptionStatus.UpdateRedemptionStatusResponse">
+            <summary>
+            The response for updating a redemption’s status.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ChannelPoints.UpdateRedemptionStatus.UpdateRedemptionStatusResponse.Data">
+            <summary>
+            The state of the redemption. Possible values are: CANCELED, FULFILLED, UNFULFILLED
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Channels.GetAdSchedule.AdSchedule">
+            <summary>
+            <para>Contains information related to the channel’s ad schedule.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetAdSchedule.AdSchedule.SnoozeCount">
+            <summary>
+            <para>The number of snoozes available for the broadcaster.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetAdSchedule.AdSchedule.SnoozeRefreshAt">
+            <summary>
+            <para>The UTC timestamp when the broadcaster will gain an additional snooze, in RFC3339 format.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetAdSchedule.AdSchedule.NextAdAt">
+            <summary>
+            <para>The UTC timestamp of the broadcaster’s next scheduled ad, in RFC3339 format. Empty if the channel has no ad scheduled or is not live.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetAdSchedule.AdSchedule.Duration">
+            <summary>
+            <para>The length in seconds of the scheduled upcoming ad break.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetAdSchedule.AdSchedule.LastAdAt">
+            <summary>
+            <para>The UTC timestamp of the broadcaster’s last ad-break, in RFC3339 format. Empty if the channel has not run an ad or is not live.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetAdSchedule.AdSchedule.PrerollFreeTime">
+            <summary>
+            <para>The amount of pre-roll free time remaining for the channel in seconds. Returns 0 if they are currently not pre-roll free.</para>
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Channels.GetAdSchedule.GetAdScheduleResponse">
+            <summary>
+            <para>Response to getting ad schedule</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetAdSchedule.GetAdScheduleResponse.Data">
+            <summary>
+            <para>A list that contains information related to the channel’s ad schedule.</para>
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Channels.GetChannelEditors.ChannelEditor">
+            <summary>
+            <para>A user that is a channel editor for the broadcaster.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetChannelEditors.ChannelEditor.UserId">
+            <summary>
+            <para>An ID that uniquely identifies a user with editor permissions.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetChannelEditors.ChannelEditor.UserName">
+            <summary>
+            <para>The user’s display name.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetChannelEditors.ChannelEditor.CreatedAt">
+            <summary>
+            <para>The date and time when the user became one of the broadcaster’s editors.</para>
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Channels.GetChannelEditors.GetChannelEditorsResponse">
+            <summary>
+            <para>Response for GetChannelEditors that returns a list of the broadcaster's channels editors.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetChannelEditors.GetChannelEditorsResponse.Data">
+            <summary>
+            <para>A list of users that are editors for the specified broadcaster.</para>
+            <para>The list is empty if the broadcaster doesn’t have editors.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetChannelFollowers.ChannelFollower.UserId">
+            <summary>
+            An ID that uniquely identifies the user that’s following the broadcaster.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetChannelFollowers.ChannelFollower.UserLogin">
+            <summary>
+            The user’s login name.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetChannelFollowers.ChannelFollower.UserName">
+            <summary>
+            The user’s display name.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetChannelFollowers.ChannelFollower.FollowedAt">
+            <summary>
+            The UTC timestamp when the user started following the broadcaster.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetChannelFollowers.GetChannelFollowersResponse.Data">
+            <summary>
+            The list of users that follow the specified broadcaster.
+            <para>The list is in descending order by followed_at (with the most recent follower first).</para>
+            <para>The list is empty if nobody follows the broadcaster.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetChannelFollowers.GetChannelFollowersResponse.Pagination">
+            <summary>
+            Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetChannelFollowers.GetChannelFollowersResponse.Total">
+            <summary>
+            The total number of users that follow this broadcaster. As someone pages through the list, the number of users may change as users follow or unfollow the broadcaster.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Channels.GetChannelInformation.ChannelInformation">
+            <summary>
+            <para>Information about a channel</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetChannelInformation.ChannelInformation.BroadcasterId">
+            <summary>
+            <para>An ID that uniquely identifies the broadcaster.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetChannelInformation.ChannelInformation.BroadcasterLogin">
+            <summary>
+            <para>The broadcaster’s login name.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetChannelInformation.ChannelInformation.BroadcasterName">
+            <summary>
+            <para>The broadcaster’s display name.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetChannelInformation.ChannelInformation.GameId">
+            <summary>
+            <para>An ID that uniquely identifies the game that the broadcaster is playing or last played.</para> 
+            <para>The value is an empty string if the broadcaster has never played a game.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetChannelInformation.ChannelInformation.BroadcasterLanguage">
+            <summary>
+            <para>The broadcaster’s preferred language.</para>
+            <para>The value is an ISO 639-1 two-letter language code (for example, en for English). The value is set to “other” if the language is not a Twitch supported language.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetChannelInformation.ChannelInformation.GameName">
+            <summary>
+            <para> 	The name of the game that the broadcaster is playing or last played.</para>
+            <para>The value is an empty string if the broadcaster has never played a game.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetChannelInformation.ChannelInformation.Title">
+            <summary>
+            <para>The title of the stream that the broadcaster is currently streaming or last streamed.</para>
+            <para>The value is an empty string if the broadcaster has never streamed.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetChannelInformation.ChannelInformation.Delay">
+            <summary>
+            <para>The value of the broadcaster’s stream delay setting, in seconds.</para>
+            <para>This field’s value defaults to zero unless 1) the request specifies a user access token, 2) the ID in the broadcaster_id query parameter matches the user ID in the access token, and 3) the broadcaster has partner status and they set a non-zero stream delay value.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetChannelInformation.ChannelInformation.Tags">
+            <summary>
+            <para>The tags applied to the channel.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetChannelInformation.ChannelInformation.ContentClassificationLabels">
+            <summary>
+            <para>The Content Classification Labels (CCL) applied to the channel.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetChannelInformation.ChannelInformation.IsBrandedContent">
+            <summary>
+            <para>Boolean flag indicating if the channel has branded content.</para>
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Channels.GetChannelInformation.GetChannelInformationResponse">
+            <summary>
+            <para>Response for GetChannelInformation which returns information about one or more channels.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetChannelInformation.GetChannelInformationResponse.Data">
+            <summary>
+            <para>A list that contains information about the specified channels.</para>
+            <para>The list is empty if the specified channels weren’t found.</para>
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Channels.GetChannelVIPs.ChannelVIPsResponseModel">
+            <summary>
+            <para>A user that is a VIP in a broadcaster's channel.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetChannelVIPs.ChannelVIPsResponseModel.UserId">
+            <summary>
+            <para>An ID that uniquely identifies the VIP user.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetChannelVIPs.ChannelVIPsResponseModel.UserName">
+            <summary>
+            <para>The user’s display name. (Name has capitalization)</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetChannelVIPs.ChannelVIPsResponseModel.UserLogin">
+            <summary>
+            <para>The user’s login name. (Name is lowercase)</para>
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Channels.GetChannelVIPs.GetChannelVIPsResponse">
+            <summary>
+            <para>Response for GetVIPs that returns a list of the broadcaster's VIPs.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetChannelVIPs.GetChannelVIPsResponse.Data">
+            <summary>
+            <para>The list of VIPs.</para>
+            <para>The list is empty if the channel doesn’t have VIP users. The list does not include the broadcaster.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetChannelVIPs.GetChannelVIPsResponse.Pagination">
+            <summary>
+            <para>Contains the information used to page through the list of results.</para>
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Channels.GetFollowedChannels.FollowedChannel">
+            <summary>
+            <para>The broadcaster a user is following.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetFollowedChannels.FollowedChannel.BroadcasterId">
+            <summary>
+            <para>An ID that uniquely identifies the broadcaster that this user is following.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetFollowedChannels.FollowedChannel.BroadcasterLogin">
+            <summary>
+            <para>The broadcaster’s login name. (Name is lowercase)</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetFollowedChannels.FollowedChannel.BroadcasterName">
+            <summary>
+            <para>The broadcaster’s display name. (Name has capitalization)</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetFollowedChannels.FollowedChannel.FollowedAt">
+            <summary>
+            <para>The UTC timestamp when the user started following the broadcaster.</para>
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Channels.GetFollowedChannels.GetFollowedChannelsResponse">
+            <summary>
+            <para>The response for GetFollowedChannels that returns a list of broadcasters that the specified user follows.</para>
+            <para>This can also return whether a user follows a specific broadcaster.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetFollowedChannels.GetFollowedChannelsResponse.Data">
+            <summary>
+            <para>The list of broadcasters that the user follows.</para>
+            <para>The list is in descending order by followed_at, with the most recently followed broadcaster first.</para>
+            <para>The list is empty if the user doesn’t follow anyone.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetFollowedChannels.GetFollowedChannelsResponse.Pagination">
+            <summary>
+            <para>Contains the information used to page through the list of results.</para>
+            <para>The object is empty if there are no more pages left to page through.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.GetFollowedChannels.GetFollowedChannelsResponse.Total">
+            <summary>
+            <para>The total number of broadcasters that the user follows.</para>
+            <para>As someone pages through the list, the number may change as the user follows or unfollows broadcasters.</para>
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Channels.ModifyChannelInformation.ContentClassificationLabel">
+            <summary>
+            <para>Labels that can be set for the channel's Content Classification Labels</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.ModifyChannelInformation.ContentClassificationLabel.Id">
+            <summary>
+            <para>ID of the Content Classification Labels that must be added/removed from the channel.</para>
+            <para>Can be one of the following values:
+            DrugsIntoxication, SexualThemes, ViolentGraphic, Gambling, ProfanityVulgarity</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.ModifyChannelInformation.ContentClassificationLabel.IsEnabled">
+            <summary>
+            <para>Boolean flag indicating whether the label should be enabled (true) or disabled (false) for the channel.</para>
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Channels.ModifyChannelInformation.ModifyChannelInformationRequest">
+            <summary>
+            <para>A request to update a channel's properties</para>
+            <para>All fields are optional but you must specify at least one field.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.ModifyChannelInformation.ModifyChannelInformationRequest.GameId">
+            <summary>
+            <para>The ID of the game that the broadcaster will be playing.</para>
+            <para>The game will not updated if the ID is not a game ID that Twitch recognizes.</para>
+            <para>To unset this field, use “0” or “” (an empty string).</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.ModifyChannelInformation.ModifyChannelInformationRequest.BroadcasterLanguage">
+            <summary>
+            <para>The broadcaster’s preferred language.</para>
+            <para>Set the value to an ISO 639-1 two-letter language code - for example, en for English.</para>
+            <para>Set the value to “other” if the broadcaster’s preferred language is not a Twitch supported language.</para>
+            <para>The language will not updated if the language code is not a Twitch supported language.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.ModifyChannelInformation.ModifyChannelInformationRequest.Title">
+            <summary>
+            <para>The title of the broadcaster's stream.</para>
+            <para>You may not set this field to an empty string.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.ModifyChannelInformation.ModifyChannelInformationRequest.Delay">
+            <summary>
+            <para>The number of seconds you want your broadcast buffered before streaming it live. The delay helps ensure fairness during competitive play.</para>
+            <para>The maximum delay is 900 seconds (15 minutes).</para>
+            <para><b>Only users with Partner status may set this field.</b></para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.ModifyChannelInformation.ModifyChannelInformationRequest.Tags">
+            <summary>
+            <para>A list of channel-defined tags to apply to the channel. Tags help identify the content that the channel streams.</para>
+            <para>A channel may specify a maximum of 10 tags. Each tag is limited to a maximum of 25 characters and may not be an empty string or contain spaces or special characters. Tags are case insensitive. For readability, consider using camelCasing or PascalCasing.</para>
+            <para>To remove all tags from the channel, set tags to an empty array.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.ModifyChannelInformation.ModifyChannelInformationRequest.ContentClassificationLabels">
+            <summary>
+            <para>List of labels that should be set as the Channel’s Content Classificiation Labels (CCL).</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.ModifyChannelInformation.ModifyChannelInformationRequest.IsBrandedContent">
+            <summary>
+            <para>Boolean flag indicating if the channel has branded content.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.SendChatMessage.ChatMessageInfo.MessageId">
+            <summary>
+            The message id for the message that was sent.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.SendChatMessage.ChatMessageInfo.IsSent">
+            <summary>
+            If the message passed all checks and was sent.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.SendChatMessage.ChatMessageInfo.DropReason">
+            <summary>
+            	The reason the message was dropped, if any.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.SendChatMessage.DropReason.Code">
+            <summary>
+            	Code for why the message was dropped.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.SendChatMessage.DropReason.Message">
+            <summary>
+            Message for why the message was dropped.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.SendChatMessage.SendChatMessageResponse.Data">
+            <summary>
+            The data for the chat message
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Channels.SnoozeNextAd.SnoozeNextAd">
+            <summary>
+            <para>Contains information about the channel’s snoozes and next upcoming ad after successfully snoozing.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.SnoozeNextAd.SnoozeNextAd.SnoozeCount">
+            <summary>
+            <para>The number of snoozes available for the broadcaster.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.SnoozeNextAd.SnoozeNextAd.SnoozeRefreshAt">
+            <summary>
+            The UTC timestamp when the broadcaster will gain an additional snooze, in RFC3339 format.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.SnoozeNextAd.SnoozeNextAd.NextAdAt">
+            <summary>
+            The UTC timestamp of the broadcaster’s next scheduled ad, in RFC3339 format.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Channels.SnoozeNextAd.SnoozeNextAdResponse">
+            <summary>
+            <para>Response to attempting to snooze an ad.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.SnoozeNextAd.SnoozeNextAdResponse.Data">
+            <summary>
+            <para>A list that contains information about the channel’s snoozes and next upcoming ad after successfully snoozing.</para>
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Channels.StartCommercial.StartCommercialRequest">
+            <summary>
+            <para>Request Body for StartCommercial</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.StartCommercial.StartCommercialRequest.BroadcasterId">
+            <summary>
+            <para>The ID of the partner or affiliate broadcaster that wants to run the commercial.</para>
+            <para><b>This ID must match the user ID found in the OAuth token.</b></para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.StartCommercial.StartCommercialRequest.Length">
+            <summary>
+            <para> The length of the commercial to run, in seconds.</para>
+            <para> Twitch tries to serve a commercial that’s the requested length, but it may be shorter or longer. 
+            The maximum length you should request is 180 seconds.</para>
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Channels.StartCommercial.StartCommercialResponse">
+            <summary>
+            The response for starting a commercial on a specified channel.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.StartCommercial.StartCommercialResponse.Length">
+            <summary>
+            The length of the commercial you requested. 
+            If you request a commercial that’s longer than 180 seconds, the API uses 180 seconds.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.StartCommercial.StartCommercialResponse.Message">
+            <summary>
+            A message that indicates whether Twitch was able to serve an ad.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Channels.StartCommercial.StartCommercialResponse.RetryAfter">
+            <summary>
+             	The number of seconds you must wait before running another commercial.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Charity.Amount">
+            <summary>
+            <para></para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Charity.Amount.Value">
+            <summary>
+            <para>The monetary amount specified in the currency’s minor unit.</para>
+            <para>For example, the minor units for USD is cents, so if the amount is $5.50 USD, value is set to 550.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Charity.Amount.DecimalPlaces">
+            <summary>
+            <para>The number of decimal places used by the currency.<br/>
+            For example, USD uses two decimal places. </para>
+            <para>Use this number to translate value from minor units to major units by using the formula: value / 10^decimal_places</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Charity.Amount.Currency">
+            <summary>
+            <para>The ISO-4217 three-letter currency code that identifies the type of currency in value.</para>
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Charity.GetCharityCampaignDonations.CharityCampaignDonationsResponseModel">
+            <summary>
+            <para>Donations that users have made to the broadcaster's active charity campaign.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Charity.GetCharityCampaignDonations.CharityCampaignDonationsResponseModel.Id">
+            <summary>
+            <para>An ID that identifies the donation. The ID is unique across campaigns.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Charity.GetCharityCampaignDonations.CharityCampaignDonationsResponseModel.CampaignId">
+            <summary>
+            <para>An ID that identifies the charity campaign that the donation applies to.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Charity.GetCharityCampaignDonations.CharityCampaignDonationsResponseModel.UserId">
+            <summary>
+            <para>An ID that identifies a user that donated money to the campaign.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Charity.GetCharityCampaignDonations.CharityCampaignDonationsResponseModel.UserLogin">
+            <summary>
+            <para>The user’s login name. (Name is lowercase)</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Charity.GetCharityCampaignDonations.CharityCampaignDonationsResponseModel.UserName">
+            <summary>
+            <para>The user’s display name. (Name has capitalization)</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Charity.GetCharityCampaignDonations.CharityCampaignDonationsResponseModel.Amount">
+            <summary>
+            <para>An object that contains the amount of money that the user donated.</para>
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Charity.GetCharityCampaignDonations.GetCharityCampaignDonationsResponse">
+            <summary>
+            <para>The response for GetCharityCampaignDonations that returns a list of donations that 
+            users have made to the broadcaster's active charity campaign.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Charity.GetCharityCampaignDonations.GetCharityCampaignDonationsResponse.Data">
+            <summary>
+            <para>A list that contains the donations that users have made to the broadcaster’s charity campaign.</para>
+            <para>The list is empty if the broadcaster is not currently running a charity campaign.</para>
+            <para>The donation information is not available after the campaign ends.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Charity.GetCharityCampaignDonations.GetCharityCampaignDonationsResponse.Pagination">
+            <summary>
+            <para>Contains the information used to page through the list of results.</para>
+            <para>The object is empty if there are no more pages left to page through.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Charity.GetCharityCampaign.Amount.Value">
+            <summary>
+            The monetary amount. 
+            The amount is specified in the currency’s minor unit. 
+            For example, the minor units for USD is cents, so if the amount is $5.50 USD, value is set to 550.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Charity.GetCharityCampaign.Amount.DecimalPlaces">
+            <summary>
+            The number of decimal places used by the currency. 
+            For example, USD uses two decimal places. 
+            Use this number to translate value from minor units to major units by using the formula: value / 10^decimal_places
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Charity.GetCharityCampaign.Amount.Currency">
+            <summary>
+            The ISO-4217 three-letter currency code that identifies the type of currency in value.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Charity.GetCharityCampaign.CharityCampaignResponseModel">
+            <summary>
+            <para>The charity campaign a broadcaster is raising money for through their channel.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Charity.GetCharityCampaign.CharityCampaignResponseModel.Id">
+            <summary>
+            <para>An ID that uniquely identifies the charity campaign.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Charity.GetCharityCampaign.CharityCampaignResponseModel.BroadcasterId">
+            <summary>
+            <para>An ID that uniquely identifies the broadcaster that’s running the campaign.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Charity.GetCharityCampaign.CharityCampaignResponseModel.BroadcasterLogin">
+            <summary>
+            <para>The broadcaster’s login name. (Name is lowercase)</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Charity.GetCharityCampaign.CharityCampaignResponseModel.BroadcasterName">
+            <summary>
+            <para>The broadcaster’s display name. (Name has capitalization)</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Charity.GetCharityCampaign.CharityCampaignResponseModel.CharityName">
+            <summary>
+            <para>The charity’s name.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Charity.GetCharityCampaign.CharityCampaignResponseModel.CharityDescription">
+            <summary>
+            <para>A description of the charity.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Charity.GetCharityCampaign.CharityCampaignResponseModel.CharityLogo">
+            <summary>
+            <para>A URL to an image of the charity’s logo.<br/> 
+            The image’s type is PNG and its size is 100px X 100px.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Charity.GetCharityCampaign.CharityCampaignResponseModel.CharityWebsite">
+            <summary>
+            <para>A URL to the charity’s website.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Charity.GetCharityCampaign.CharityCampaignResponseModel.CurrentAmount">
+            <summary>
+            <para>An object that contains the current amount of donations that the campaign has received.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Charity.GetCharityCampaign.CharityCampaignResponseModel.TargetAmount">
+            <summary>
+            <para>An object that contains the amount of money that the campaign is trying to raise.</para>
+            <para>This field may be null if the broadcaster has not defined a target fundraising goal.</para>
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Charity.GetCharityCampaign.GetCharityCampaignResponse">
+            <summary>
+            <para>The response for the GetCharityCampaign that returns information about the charity campaign that a broadcaster is running.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Charity.GetCharityCampaign.GetCharityCampaignResponse.Data">
+            <summary>
+            <para>A list that contains the charity campaign that the broadcaster is currently running.</para>
+            <para>The array is empty if the broadcaster is not running a charity campaign.</para>
+            <para>The campaign information is no longer available as soon as the campaign ends.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Chat.Emotes.ChannelEmote.Images">
+            <summary>
+            Contains the image URLs for the emote.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Chat.Emotes.ChannelEmote.Tier">
+            <summary>
+            The subscriber tier at which the emote is unlocked.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Chat.Emotes.ChannelEmote.EmoteType">
+            <summary>
+            The type of emote.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Chat.Emotes.ChannelEmote.EmoteSetId">
+            <summary>
+            An ID that identifies the emote set that the emote belongs to.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Chat.Emotes.Emote.Id">
+            <summary>
+            An ID that identifies the emote.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Chat.Emotes.Emote.Name">
+            <summary>
+            The name of the emote. This is the name that viewers type in the chat window to get the emote to appear.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Chat.Emotes.Emote.Format">
+            <summary>
+            The formats that the emote is available in.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Chat.Emotes.Emote.Scale">
+            <summary>
+            The sizes that the emote is available in.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Chat.Emotes.Emote.ThemeMode">
+            <summary>
+            The background themes that the emote is available in.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Chat.Emotes.EmoteImages.Url1X">
+            <summary>
+            A URL to the small version (28px x 28px) of the emote.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Chat.Emotes.EmoteImages.Url2X">
+            <summary>
+            A URL to the medium version (56px x 56px) of the emote.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Chat.Emotes.EmoteImages.Url4X">
+            <summary>
+            A URL to the large version (112px x 112px) of the emote.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Chat.Emotes.EmoteSet.EmoteType">
+            <summary>
+            The type of emote. 
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Chat.Emotes.EmoteSet.EmoteSetId">
+            <summary>
+            An ID that identifies the emote set that the emote belongs to.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Chat.Emotes.EmoteSet.Images">
+            <summary>
+            Contains the image URLs for the emote.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Chat.Emotes.EmoteSet.OwnerId">
+            <summary>
+            The ID of the broadcaster who owns the emote.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Chat.Emotes.GlobalEmote.Images">
+            <summary>
+            Contains the image URLs for the emote.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Chat.Emotes.UserEmote.EmoteType">
+            <summary>
+            The type of emote. The possible values are:
+            none — No emote type was assigned to this emote.
+            - bitstier — A Bits tier emote.
+            - follower — A follower emote.
+            - subscriptions — A subscriber emote.
+            - channelpoints — An emote granted by using channel points.
+            - rewards — An emote granted to the user through a special event.
+            - hypetrain — An emote granted for participation in a Hype Train.
+            - prime — An emote granted for linking an Amazon Prime account.
+            - turbo — An emote granted for having Twitch Turbo.
+            - smilies — Emoticons supported by Twitch.
+            - globals — An emote accessible by everyone.
+            - owl2019 — Emotes related to Overwatch League 2019.
+            - twofactor — Emotes granted by enabling two-factor authentication on an account.
+            - limitedtime — Emotes that were granted for only a limited time.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Chat.Emotes.UserEmote.EmoteSetId">
+            <summary>
+            An ID that identifies the emote set that the emote belongs to.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Chat.Emotes.UserEmote.OwnerId">
+            <summary>
+            The ID of the broadcaster who owns the emote.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Chat.GetChatters.Chatter.UserId">
+            <summary>
+            The ID of a user that’s connected to the broadcaster’s chat room.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Chat.GetChatters.Chatter.UserLogin">
+            <summary>
+            The login name of a user that’s connected to the broadcaster’s chat room.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Chat.GetChatters.Chatter.UserName">
+            <summary>
+            The display name of a user that’s connected to the broadcaster’s chat room.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Chat.GetChatters.GetChattersResponse.Data">
+            <summary>
+            List of login names that are connected to the broadcaster’s chat room.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Chat.GetChatters.GetChattersResponse.Pagination">
+            <summary>
+            Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Chat.GetChatters.GetChattersResponse.Total">
+            <summary>
+            The total number of users that are connected to the broadcaster’s chat room.
+            <para>As you page through the list, the number of users may change as users join and leave the chat room.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Chat.GetUserChatColor.GetUserChatColorResponse.Data">
+            <summary>
+            The list of users and the color code that’s used for their name.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Chat.GetUserChatColor.UserChatColorResponseModel.UserId">
+            <summary>
+            The ID of the user.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Chat.GetUserChatColor.UserChatColorResponseModel.UserLogin">
+            <summary>
+            The user’s login name.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Chat.GetUserChatColor.UserChatColorResponseModel.UserName">
+            <summary>
+            The user’s display name.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Chat.GetUserChatColor.UserChatColorResponseModel.Color">
+            <summary>
+            The Hex color code that the user uses in chat for their name. If the user hasn’t specified a color in their settings, the string is empty.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Clips.CreateClip.CreatedClip">
+            <summary>
+            A Twitch clip created from CreateClip
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Clips.CreateClip.CreatedClip.EditUrl">
+            <summary>
+            <para>A URL that you can use to edit the clip’s title, identify the part of the clip to publish, and publish the clip.</para>
+            <para> The URL is valid for up to 24 hours or until the clip is published, whichever comes first.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Clips.CreateClip.CreatedClip.Id">
+            <summary>
+            An ID that uniquely identifies the clip.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Clips.CreateClip.CreatedClipResponse">
+            <summary>
+            Response for CreateClip which creates a clip from the broadcaster's stream.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Clips.CreateClip.CreatedClipResponse.CreatedClips">
+            <summary>
+            Contains clip's ID and edit_URL that can be used to edit the clip's title, identify the part of the clip to publish, and publish the clip.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Clips.GetClips.Clip">
+            <summary>
+            A clip that was created from a broadcaster's stream.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Clips.GetClips.Clip.Id">
+            <summary>
+            An ID that uniquely identifies the clip.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Clips.GetClips.Clip.Url">
+            <summary>
+            A URL to the clip.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Clips.GetClips.Clip.EmbedUrl">
+            <summary>
+            A URL that you can use in an iframe to embed the clip.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Clips.GetClips.Clip.BroadcasterId">
+            <summary>
+            An ID that identifies the broadcaster that the video was clipped from.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Clips.GetClips.Clip.BroadcasterName">
+            <summary>
+            The broadcaster’s display name.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Clips.GetClips.Clip.CreatorId">
+            <summary>
+            An ID that identifies the user that created the clip.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Clips.GetClips.Clip.CreatorName">
+            <summary>
+            The display name of the user that created the clip.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Clips.GetClips.Clip.VideoId">
+            <summary>
+            <para>An ID that identifies the video that the clip came from.</para>
+            <para>This field contains an empty string if the video is not available.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Clips.GetClips.Clip.GameId">
+            <summary>
+            The ID of the game that was being played when the clip was created.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Clips.GetClips.Clip.Language">
+            <summary>
+            <para>The ISO 639-1 two-letter language code that the broadcaster broadcasts in. For example, en for English.</para>
+            <para>The value is other if the broadcaster uses a language that Twitch doesn’t support.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Clips.GetClips.Clip.Title">
+            <summary>
+            The title of the clip.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Clips.GetClips.Clip.ViewCount">
+            <summary>
+            The number of times the clip has been viewed.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Clips.GetClips.Clip.CreatedAt">
+            <summary>
+            The date and time of when the clip was created. The date and time is in RFC3339 format.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Clips.GetClips.Clip.ThumbnailUrl">
+            <summary>
+            A URL to a thumbnail image of the clip.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Clips.GetClips.Clip.Duration">
+            <summary>
+            The length of the clip, in seconds. Precision is 0.1.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Clips.GetClips.Clip.VodOffset">
+            <summary>
+            <para>The zero-based offset, in seconds, to where the clip starts in the video (VOD).</para>
+            <para>Is null if the video is not available or hasn’t been created yet from the live stream (see video_id).</para>
+            <para>Note that there’s a delay between when a clip is created during a broadcast and when the offset is set. During the delay period, vod_offset is null. The delay is indeterminant but is typically minutes long.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Clips.GetClips.Clip.IsFeatured">
+            <summary>
+            A Boolean value that indicates if the clip is featured or not.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Clips.GetClips.GetClipsResponse">
+            <summary>
+            Response for GetClips which returns one or more video clips that were captured from streams.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Clips.GetClips.GetClipsResponse.Clips">
+            <summary>
+            <para>The list of video clips.</para>
+            <para>For clips returned by game_id or broadcaster_id, the list is in descending order by view count.</para>
+            <para>For lists returned by id, the list is in the same order as the input IDs.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Clips.GetClips.GetClipsResponse.Pagination">
+            <summary>
+            <para>The information used to page through the list of results.<br/>
+            The object is empty if there are no more pages left to page through.</para>
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Common.DateRange">
+            <summary>
+            <para>The reporting period's start and end dates</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Common.DateRange.StartedAt">
+            <summary>
+            <para>The reporting period's start date.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Common.DateRange.EndedAt">
+            <summary>
+            <para>The reporting period's end date.</para>
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Common.Pagination">
+            <summary>
+            <para><see href="https://dev.twitch.tv/docs/api/guide/#pagination">
+            Twitch Docs: Pagination</see></para>
+            <para>Contains the cusor for the page.</para>
+            <para>The object is empty if there are no more pages left to page through.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Common.Pagination.Cursor">
+            <summary>
+            <para>The cursor used to get the next page of results.</para>
+            <para>Use the cursor’s value to set the after or before query parameter depending on the direction you want to page.</para>
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.ContentClassificationLabels.ContentClassificationLabel">
+            <summary>
+            <para>The list of Content Classification Labels available.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ContentClassificationLabels.ContentClassificationLabel.ID">
+            <summary>
+            <para>Unique identifier for the Content Classification Labels.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ContentClassificationLabels.ContentClassificationLabel.Description">
+            <summary>
+            <para>Localized description of the Content Classification Labels.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ContentClassificationLabels.ContentClassificationLabel.Name">
+            <summary>
+            <para>Localized name of the Content Classification Labels.</para>
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.ContentClassificationLabels.GetContentClassificationLabelsResponse">
+            <summary>
+            Response from GetContentClassificationLabels which gets information about Twitch content classification labels.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.ContentClassificationLabels.GetContentClassificationLabelsResponse.Data">
+            <summary>
+            A list that contains information about the available content classification labels.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.Conduits.Conduit.Id">
+            <summary>
+            <para>Conduit ID.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.Conduits.Conduit.ShardCount">
+            <summary>
+            <para>Number of shards associated with this conduit.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.Conduits.CreateConduits.CreateConduitsRequest.ShardCount">
+            <summary>
+            <para>The number of shards to create for this conduit.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.Conduits.CreateConduits.CreateConduitsResponse.Data">
+            <summary>
+            <para>List of information about the client’s conduits.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.Conduits.GetConduits.GetConduitsResponse.Data">
+            <summary>
+            <para>List of information about the client’s conduits.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.Conduits.Shards.GetConduitShards.GetConduitShardsResponse.Shards">
+            <summary>
+            <para>List of information about a conduit's shards.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.Conduits.Shards.GetConduitShards.GetConduitShardsResponse.Pagination">
+            <summary>
+            <para>Contains information used to page through a list of results. The object is empty if there are no more pages left to page through.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.Conduits.Shards.Shard.Id">
+            <summary>
+            <para>Shard ID.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.Conduits.Shards.Shard.Status">
+            <summary>
+            <para>The shard status. The subscriber receives events only for enabled shards. Possible values are: </para>
+            <para>enabled, webhook_callback_verification_pending, webhook_callback_verification_failed, notification_failures_exceeded, websocket_disconnected, websocket_failed_ping_pong, websocket_received_inbound_traffic, websocket_internal_error, websocket_network_timeout, websocket_network_error</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.Conduits.Shards.Transport.Method">
+            <summary>
+            <para>The transport method. Possible values are:</para>
+            <para>webhook, websocket</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.Conduits.Shards.Transport.Callback">
+            <summary>
+            <para>The callback URL where the notifications are sent. Included only if method is set to webhook.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.Conduits.Shards.Transport.SessionId">
+            <summary>
+            <para>An ID that identifies the WebSocket that notifications are sent to. Included only if method is set to websocket.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.Conduits.Shards.Transport.ConnectedAt">
+            <summary>
+            <para>The UTC date and time that the WebSocket connection was established. Included only if method is set to websocket.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.Conduits.Shards.Transport.DisconnectedAt">
+            <summary>
+            <para>The UTC date and time that the WebSocket connection was lost. Included only if method is set to websocket.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.Conduits.Shards.UpdateConduitShards.Error.Id">
+            <summary>
+            <para>Shard ID.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.Conduits.Shards.UpdateConduitShards.Error.Message">
+            <summary>
+            <para>The error that occurred while updating the shard.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.Conduits.Shards.UpdateConduitShards.Error.Code">
+            <summary>
+            <para>Error codes used to represent a specific error condition while attempting to update shards.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.Conduits.Shards.UpdateConduitShards.ShardUpdate.Id">
+            <summary>
+            <para>Shard ID.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.Conduits.Shards.UpdateConduitShards.ShardUpdate.Transport">
+            <summary>
+            <para>The transport details that you want Twitch to use when sending you notifications.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.Conduits.Shards.UpdateConduitShards.TransportUpdate.Method">
+            <summary>
+            <para>The transport method. Possible values are:</para>
+            <para>webhook, websocket</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.Conduits.Shards.UpdateConduitShards.TransportUpdate.Callback">
+            <summary>
+            <para>The callback URL where the notifications are sent. The URL must use the HTTPS protocol and port 443. See Processing an event.Specify this field only if method is set to webhook.NOTE: Redirects are not followed.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.Conduits.Shards.UpdateConduitShards.TransportUpdate.Secret">
+            <summary>
+            <para>The secret used to verify the signature. The secret must be an ASCII string that’s a minimum of 10 characters long and a maximum of 100 characters long. For information about how the secret is used, see Verifying the event message.Specify this field only if method is set to webhook.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.Conduits.Shards.UpdateConduitShards.TransportUpdate.SessionId">
+            <summary>
+            <para>An ID that identifies the WebSocket to send notifications to. When you connect to EventSub using WebSockets, the server returns the ID in the Welcome message.Specify this field only if method is set to websocket.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.Conduits.Shards.UpdateConduitShards.UpdateConduitShardsRequest.ConduitId">
+            <summary>
+            <para>Conduit ID.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.Conduits.Shards.UpdateConduitShards.UpdateConduitShardsRequest.Shards">
+            <summary>
+            <para>List of shards to update.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.Conduits.Shards.UpdateConduitShards.UpdateConduitShardsResponse.Shards">
+            <summary>
+            <para>List of successful shard updates.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.Conduits.Shards.UpdateConduitShards.UpdateConduitShardsResponse.Errors">
+            <summary>
+            <para>List of unsuccessful updates.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.Conduits.UpdateConduits.UpdateConduitsRequest.Id">
+            <summary>
+            <para>Conduit ID.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.Conduits.UpdateConduits.UpdateConduitsRequest.ShardCount">
+            <summary>
+            <para>The new number of shards for this conduit.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.Conduits.UpdateConduits.UpdateConduitsResponse.Data">
+            <summary>
+            <para>List of information about the client’s conduits.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.EventSubSubscription.Id">
+            <summary>
+            An ID that identifies the subscription.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.EventSubSubscription.Status">
+            <summary>
+            The subscription’s status. Possible values: enable, webhook_callback_verification_pending, webhook_callback_verification_failed, notification_failures_exceeded, authorization_revoked, user_removed
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.EventSubSubscription.Type">
+            <summary>
+            The subscription’s type.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.EventSubSubscription.Version">
+            <summary>
+            The version of the subscription type.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.EventSubSubscription.Condition">
+            <summary>
+            The subscription’s parameter values.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.EventSubSubscription.CreatedAt">
+            <summary>
+            The RFC 3339 timestamp indicating when the subscription was created.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.EventSubSubscription.Transport">
+            <summary>
+            The transport details used to send you notifications.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.EventSubSubscription.Cost">
+            <summary>
+            The amount that the subscription counts against your limit.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.GetEventSubSubscriptionsResponse.Total">
+            <summary>
+            The total number of subscriptions you’ve created.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.GetEventSubSubscriptionsResponse.Subscriptions">
+            <summary>
+            An array of subscription objects. The list is empty if you don’t have any subscriptions.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.GetEventSubSubscriptionsResponse.TotalCost">
+            <summary>
+            The sum of all of your subscription costs.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.GetEventSubSubscriptionsResponse.MaxTotalCost">
+            <summary>
+            The maximum total cost that you’re allowed to incur for all subscriptions you create.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.EventSub.GetEventSubSubscriptionsResponse.Pagination">
+            <summary>
+            An object that contains the cursor used to get the next page of subscriptions.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.GuestStar.CreateGuestStarSession.CreateGuestStarSessionResponse.Data">
+            <summary>
+            <para>Summary of the session details.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.GuestStar.CreateGuestStarSession.EndGuestStarSessionResponse.Data">
+            <summary>
+            <para>Summary of the session details when the session was ended.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.GuestStar.GetChannelGuestStarSettings.GetChannelGuestStarSettingsResponse.Data">
+            <summary>
+            <para>A list that contains the channels guest star settings</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.GuestStar.GetChannelGuestStarSettings.GuestStarSettings.BrowserSourceToken">
+            <summary>
+            View only token to generate browser source URLs
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.GuestStar.GetGuestStarInvites.GetGuestStarInvitesResponse.Data">
+            <summary>
+            <para>A list of invite objects describing the invited user as well as their ready status.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.GuestStar.GetGuestStarInvites.GuestStarInvite.UserId">
+            <summary>
+            Twitch User ID corresponding to the invited guest
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.GuestStar.GetGuestStarInvites.GuestStarInvite.InvitedAt">
+            <summary>
+            Timestamp when this user was invited to the session.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.GuestStar.GetGuestStarInvites.GuestStarInvite.Status">
+            <summary>
+            Status representing the invited user’s join state. Can be one of the following:
+            <para>INVITED: The user has been invited to the session but has not acknowledged it.</para>
+            <para>ACCEPTED: The invited user has acknowledged the invite and joined the waiting room, but may still be setting up their media devices or otherwise preparing to join the call.</para>
+            <para>READY: The invited user has signaled they are ready to join the call from the waiting room.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.GuestStar.GetGuestStarInvites.GuestStarInvite.IsVideoEnabled">
+            <summary>
+            Flag signaling that the invited user has chosen to disable their local video device. The user has hidden themselves, but they may choose to reveal their video feed upon joining the session.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.GuestStar.GetGuestStarInvites.GuestStarInvite.IsAudioEnabled">
+            <summary>
+            Flag signaling that the invited user has chosen to disable their local audio device. The user has muted themselves, but they may choose to unmute their audio feed upon joining the session.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.GuestStar.GetGuestStarInvites.GuestStarInvite.IsVideoAvailable">
+            <summary>
+            Flag signaling that the invited user has chosen to disable their local video device. The user has hidden themselves, but they may choose to reveal their video feed upon joining the session.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.GuestStar.GetGuestStarInvites.GuestStarInvite.IsAudioAvailable">
+            <summary>
+            Flag signaling that the invited user has chosen to disable their local audio device. The user has muted themselves, but they may choose to unmute their audio feed upon joining the session.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.GuestStar.GetGuestStarSession.GetGuestStarSessionResponse.Data">
+            <summary>
+            <para>A list that contains the channels guest star sessions</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.GuestStar.GuestStarGuest.SlotId">
+            <summary>
+            ID representing this guest’s slot assignment.
+            <para>Host is always in slot "0"</para>
+            <para>Guests are assigned the following consecutive IDs (e.g, "1", "2", "3", etc)</para>
+            <para>Screen Share is represented as a special guest with the ID "SCREENSHARE"</para>
+            <para>The identifier here matches the ID referenced in browser source links used in broadcasting software.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.GuestStar.GuestStarGuest.IsLive">
+            <summary>
+            Flag determining whether or not the guest is visible in the browser source in the host’s streaming software.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.GuestStar.GuestStarGuest.UserId">
+            <summary>
+            User ID of the guest assigned to this slot.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.GuestStar.GuestStarGuest.UserDisplayName">
+            <summary>
+            Display name of the guest assigned to this slot.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.GuestStar.GuestStarGuest.UserLogin">
+            <summary>
+            Login of the guest assigned to this slot.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.GuestStar.GuestStarGuest.Volume">
+            <summary>
+            Value from 0 to 100 representing the host’s volume setting for this guest.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.GuestStar.GuestStarGuest.AssignedAt">
+            <summary>
+            Timestamp when this guest was assigned a slot in the session.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.GuestStar.GuestStarGuest.AudioSettings">
+            <summary>
+            Information about the guest’s audio settings
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.GuestStar.GuestStarGuest.VideoSettings">
+            <summary>
+            Information about the guest’s video settings
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.GuestStar.GuestStarMediaSettings.IsAvailable">
+            <summary>
+            Flag determining whether the guest has an appropriate audio/video device available to be transmitted to the session.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.GuestStar.GuestStarMediaSettings.IsHostEnabled">
+            <summary>
+            Flag determining whether the host is allowing the guest’s audio/video to be seen or heard within the session.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.GuestStar.GuestStarMediaSettings.IsGuestEnabled">
+            <summary>
+            Flag determining whether the guest is allowing their audio/video to be transmitted to the session.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.GuestStar.GuestStarSession.Id">
+            <summary>
+            ID uniquely representing the Guest Star session.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.GuestStar.GuestStarSession.Guests">
+            <summary>
+            List of guests currently interacting with the Guest Star session.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.GuestStar.GuestStarSettingsBase.IsModeratorSendLiveEnabled">
+            <summary>
+            Flag determining if Guest Star moderators have access to control whether a guest is live once assigned to a slot.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.GuestStar.GuestStarSettingsBase.SlotCount">
+            <summary>
+            Number of slots the Guest Star call interface will allow the host to add to a call. Required to be between 1 and 6.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.GuestStar.GuestStarSettingsBase.IsBrowserSourceAudioEnabled">
+            <summary>
+            Flag determining if Browser Sources subscribed to sessions on this channel should output audio
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.GuestStar.GuestStarSettingsBase.GroupLayout">
+            <summary>
+            This setting determines how the guests within a session should be laid out within the browser source. Can be one of the following values:
+            <para>TILED_LAYOUT: All live guests are tiled within the browser source with the same size.</para>
+            <para>SCREENSHARE_LAYOUT: All live guests are tiled within the browser source with the same size. If there is an active screen share, it is sized larger than the other guests.</para>
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.GuestStar.UpdateChannelGuestStarSettings.UpdateChannelGuestStarSettingsRequest">
+            <summary>
+            <para>Request to update guest star settings</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.GuestStar.UpdateChannelGuestStarSettings.UpdateChannelGuestStarSettingsRequest.RegenerateBrowserSources">
+            <summary>
+            Flag determining if Guest Star should regenerate the auth token associated with the channel’s browser sources.
+            <para>Providing a true value for this will immediately invalidate all browser sources previously configured in your streaming software.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.BanUser.BannedUser.BroadcasterId">
+            <summary>
+            The broadcaster whose chat room the user was banned from chatting in.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.BanUser.BannedUser.CreatedAt">
+            <summary>
+            The UTC date and time (in RFC3999 format) when the ban was created.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.BanUser.BannedUser.ModeratorId">
+            <summary>
+            The moderator that banned or put the user in the timeout.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.BanUser.BannedUser.UserId">
+            <summary>
+            The user that was banned or was put in a timeout.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.BanUser.BannedUser.EndTime">
+            <summary>
+            The UTC date and time (in RFC3339 format) that the timeout will end. Is null if the user was banned instead of put in a timeout.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.CheckAutoModStatus.AutoModResult.MsgId">
+            <summary>
+            The msg_id passed in the body of the POST message. Maps each message to its status.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.CheckAutoModStatus.AutoModResult.IsPermitted">
+            <summary>
+            Indicates if this message meets AutoMod requirements.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.CheckAutoModStatus.Message.MsgId">
+            <summary>
+            Developer-generated identifier for mapping messages to results.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.CheckAutoModStatus.Message.MsgText">
+            <summary>
+            Message text.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.GetBannedUsers.BannedUserEvent.UserId">
+            <summary>
+            	User ID of the banned user.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.GetBannedUsers.BannedUserEvent.UserLogin">
+            <summary>
+            Login of the banned user.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.GetBannedUsers.BannedUserEvent.UserName">
+            <summary>
+            Display name of the banned user.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.GetBannedUsers.BannedUserEvent.ExpiresAt">
+            <summary>
+            The UTC date and time (in RFC3999 format) when the timeout expires, or an empty string if the user is permanently banned.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.GetBannedUsers.BannedUserEvent.CreatedAt">
+            <summary>
+            The UTC date and time (in RFC3999 format) when the ban was created.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.GetBannedUsers.BannedUserEvent.Reason">
+            <summary>
+            The reason for the ban if provided by the moderator.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.GetBannedUsers.BannedUserEvent.ModeratorId">
+            <summary>
+            User ID of the moderator who initiated the ban.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.GetBannedUsers.BannedUserEvent.ModeratorLogin">
+            <summary>
+            	Login of the moderator who initiated the ban.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.GetBannedUsers.BannedUserEvent.ModeratorName">
+            <summary>
+            Display name of the moderator who initiated the ban.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.GetBannedUsers.GetBannedUsersResponse.Data">
+            <summary>
+            Banned and timed-out users for a channel.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.GetBannedUsers.GetBannedUsersResponse.Pagination">
+            <summary>
+            A cursor value, to be used in a subsequent request to specify the starting point of the next set of results.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.ShieldModeStatus.GetShieldModeStatus.GetShieldModeStatusResponse.Data">
+            <summary>
+            A list that contains a single object with the broadcaster’s Shield Mode status.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.ShieldModeStatus.ShieldModeStatus.IsActive">
+            <summary>
+            A Boolean value that determines whether Shield Mode is active.
+            Is true if the broadcaster activated Shield Mode; otherwise, false.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.ShieldModeStatus.ShieldModeStatus.ModeratorId">
+            <summary>
+            An ID that identifies the moderator that last activated Shield Mode.
+            Is an empty string if Shield Mode hasn’t been previously activated.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.ShieldModeStatus.ShieldModeStatus.ModeratorLogin">
+            <summary>
+            The moderator’s login name. Is an empty string if Shield Mode hasn’t been previously activated.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.ShieldModeStatus.ShieldModeStatus.ModeratorName">
+            <summary>
+            The moderator’s display name. Is an empty string if Shield Mode hasn’t been previously activated.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.ShieldModeStatus.ShieldModeStatus.LastActivatedAt">
+            <summary>
+            The UTC timestamp (in RFC3339 format) of when Shield Mode was last activated.
+            Is an empty string if Shield Mode hasn’t been previously activated.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.ShieldModeStatus.UpdateShieldModeStatus.ShieldModeStatusRequest.IsActive">
+            <summary>
+            A Boolean value that determines whether to activate Shield Mode.
+            Set to true to activate Shield Mode; otherwise, false to deactivate Shield Mode.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.ShieldModeStatus.UpdateShieldModeStatus.UpdateShieldModeStatusResponse.Data">
+            <summary>
+            A list that contains a single object with the broadcaster’s updated Shield Mode status.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.UnbanRequests.GetUnbanRequests.GetUnbanRequestsResponse.Data">
+            <summary>
+            A list that contains information about the channel's unban requests.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.UnbanRequests.GetUnbanRequests.GetUnbanRequestsResponse.Pagination">
+            <summary>
+            Contains information used to page through a list of results. The object is empty if there are no more pages left to page through.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.UnbanRequests.ResolveUnbanRequests.ResolveUnbanRequestsResponse.Data">
+            <summary>
+            Contains information about the channel's unban request.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Moderation.UnbanRequests.UnbanRequest">
+            <summary>
+            Contains information about the channel's unban request
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.UnbanRequests.UnbanRequest.Id">
+            <summary>
+            Unban request ID.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.UnbanRequests.UnbanRequest.BroadcasterName">
+            <summary>
+            The broadcaster's display name.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.UnbanRequests.UnbanRequest.BroadcasterLogin">
+            <summary>
+            The broadcaster's login name.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.UnbanRequests.UnbanRequest.BroadcasterId">
+            <summary>
+            User ID of broadcaster whose channel is receiving the unban request.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.UnbanRequests.UnbanRequest.ModeratorId">
+            <summary>
+            User ID of moderator who approved/denied the request.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.UnbanRequests.UnbanRequest.ModeratorLogin">
+            <summary>
+            The moderator's login name.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.UnbanRequests.UnbanRequest.ModeratorName">
+            <summary>
+            The moderator's display name.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.UnbanRequests.UnbanRequest.UserId">
+            <summary>
+            User ID of the requestor who is asking for an unban.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.UnbanRequests.UnbanRequest.UserLogin">
+            <summary>
+            The user's login name.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.UnbanRequests.UnbanRequest.UserName">
+            <summary>
+            The user's display name.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.UnbanRequests.UnbanRequest.Text">
+            <summary>
+            Text of the request from the requesting user.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.UnbanRequests.UnbanRequest.Status">
+            <summary>
+            Status of the request. One of: pending, approved, denied, acknowledged, canceled
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.UnbanRequests.UnbanRequest.CreatedAt">
+            <summary>
+            Timestamp of when the unban request was created.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.UnbanRequests.UnbanRequest.ResolvedAt">
+            <summary>
+            Timestamp of when moderator/broadcaster approved or denied the request.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Moderation.UnbanRequests.UnbanRequest.ResolutionText">
+            <summary>
+            Text input by the resolver (moderator) of the unban. request
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Polls.CreatePoll.CreatePollRequest.BitsVotingEnabled">
+            <summary> Removed - Ignored if included with call. Defaults to false</summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Polls.CreatePoll.CreatePollRequest.BitsPerVote">
+            <summary> Removed - Ignored if included with call. Defaults to 0</summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Soundtrack.Album">
+            <summary>
+            The album that includes the track.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Soundtrack.Album.Id">
+            <summary>
+            The album’s ASIN (Amazon Standard Identification Number).
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Soundtrack.Album.Name">
+            <summary>
+            The album’s name. If the album contains explicit content, the name will contain [Explicit] in the string. For example, Let It Die [Explicit].
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Soundtrack.Album.ImageUrl">
+            <summary>
+            A URL to the album’s cover art.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Soundtrack.Artist">
+            <summary>
+            The artists included on the track.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Soundtrack.Artist.Id">
+            <summary>
+            The artist’s ASIN (Amazon Standard Identification Number).
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Soundtrack.Artist.Name">
+            <summary>
+            The artist’s name. This can be the band’s name or the solo artist’s name.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Soundtrack.Artist.CreatorChannelId">
+            <summary>
+            The ID of the Twitch user that created the track. Is empty if a Twitch user didn’t create the track.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Soundtrack.GetCurrentTrack.CurrentTrack">
+            <summary>
+            Soundtrack track that the broadcaster is playing.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Soundtrack.GetCurrentTrack.CurrentTrack.Track">
+            <summary>
+            The track that’s currently playing.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Soundtrack.GetCurrentTrack.CurrentTrack.Source">
+            <summary>
+            The source of the track that’s currently playing. For example, a playlist or station.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Soundtrack.GetCurrentTrack.GetCurrentTrackResponse">
+            <summary>
+            Returns the Soundtrack track that the broadcaster is playing.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Soundtrack.GetCurrentTrack.GetCurrentTrackResponse.Data">
+            <summary>
+            A list that contains the Soundtrack track that the broadcaster is playing.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Soundtrack.GetPlaylists.GetPlaylistsResponse">
+            <summary>
+            Returns a list of Soundtrack playlists.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Soundtrack.GetPlaylists.GetPlaylistsResponse.Data">
+            <summary>
+            The list of Soundtrack playlists.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Soundtrack.GetPlaylists.GetPlaylistsResponse.Pagination">
+            <summary>
+            Contains the information used to page through a list of playlists. The object is empty if there are no more playlists to page through.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Soundtrack.GetPlaylists.PlaylistMetadata">
+            <summary>
+            Soundtrack playlist.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Soundtrack.GetPlaylists.PlaylistMetadata.Title">
+            <summary>
+            The playlist’s title.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Soundtrack.GetPlaylists.PlaylistMetadata.Id">
+            <summary>
+            The playlist’s ASIN (Amazon Standard Identification Number).
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Soundtrack.GetPlaylists.PlaylistMetadata.ImageUrl">
+            <summary>
+            A URL to the playlist’s image art. Is empty if the playlist doesn’t include art.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Soundtrack.GetPlaylists.PlaylistMetadata.Description">
+            <summary>
+            A short description about the music that the playlist includes.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Soundtrack.GetPlaylist.GetPlaylistResponse">
+            <summary>
+            Returned tracks of a Soundtrack playlist.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Soundtrack.GetPlaylist.GetPlaylistResponse.Data">
+            <summary>
+            The list of tracks in the playlist.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Soundtrack.GetPlaylist.GetPlaylistResponse.Pagination">
+            <summary>
+            Contains the information used to page through a list of tracks. The object is empty if there are no more tracks to page through.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Soundtrack.Source">
+            <summary>
+            The source of the track that’s currently playing. For example, a playlist or station.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Soundtrack.Source.Id">
+            <summary>
+            The playlist’s or station’s ASIN (Amazon Standard Identification Number).
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Soundtrack.Source.ContentType">
+            <summary>
+            The type of content that id maps to. Possible values are: PLAYLIST or STATION
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Soundtrack.Source.Title">
+            <summary>
+            The playlist’s or station’s title.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Soundtrack.Source.ImageUrl">
+            <summary>
+            A URL to the playlist’s or station’s image art.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Soundtrack.Source.SoundtrackUrl">
+            <summary>
+            A URL to the playlist on Soundtrack. The string is empty if content-type is STATION.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Soundtrack.Source.SpotifyUrl">
+            <summary>
+            A URL to the playlist on Spotify. The string is empty if content-type is STATION.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Soundtrack.Track">
+            <summary>
+            The track
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Soundtrack.Track.Artists">
+            <summary>
+            The artists included on the track.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Soundtrack.Track.Id">
+            <summary>
+            The track’s ASIN (Amazon Standard Identification Number).
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Soundtrack.Track.Duration">
+            <summary>
+            The duration of the track, in seconds.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Soundtrack.Track.Title">
+            <summary>
+            The track’s title. If the track contains explicit content, the title will contain [Explicit] in the string. For example, Let It Die [Explicit].
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Soundtrack.Track.Album">
+            <summary>
+            The album that includes the track.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Models.Soundtrack.Track.ISRC">
+            <summary>
+            The track’s ISRC (International Standard Recording Code).
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Models.Streams.GetStreams.GetStreamsType">
+            <summary>
+            Stream type to select when using GetStreamsAsync
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Helix.Models.Streams.GetStreams.GetStreamsType.All">
+            <summary>
+            Filters for all stream types.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Api.Helix.Models.Streams.GetStreams.GetStreamsType.Live">
+            <summary>
+            Filters for actual live streams.
+            </summary>
+        </member>
+    </members>
+</doc>

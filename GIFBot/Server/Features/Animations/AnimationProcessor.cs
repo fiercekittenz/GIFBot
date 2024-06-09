@@ -266,7 +266,7 @@ namespace GIFBot.Server.GIFBot
                   }
 
                   // Force this thread to sleep for N seconds between animations to give us a nice buffer.
-                  if (chainedAnimationIsNext)
+                  if (chainedAnimationIsNext || Bot.BonkersModeEnabled)
                   {
                      Thread.Sleep(skTimeBetweenChainedAnimationsMs);
                   }
