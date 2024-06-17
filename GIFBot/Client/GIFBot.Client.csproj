@@ -1,52 +1,53 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
-    <BlazorWebAssemblyEnableLinking>false</BlazorWebAssemblyEnableLinking>
-    <Platforms>AnyCPU;x64</Platforms>
-  </PropertyGroup>
+   <PropertyGroup>
+      <TargetFramework>net8.0</TargetFramework>
+      <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
+      <BlazorWebAssemblyEnableLinking>false</BlazorWebAssemblyEnableLinking>
+      <Platforms>AnyCPU;x64</Platforms>
+   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="wwwroot\media\**" />
-    <Compile Remove="wwwroot\_content\**" />
-    <Compile Remove="wwwroot\_framework\**" />
-    <Content Remove="wwwroot\media\**" />
-    <Content Remove="wwwroot\_content\**" />
-    <Content Remove="wwwroot\_framework\**" />
-    <EmbeddedResource Remove="wwwroot\media\**" />
-    <EmbeddedResource Remove="wwwroot\_content\**" />
-    <EmbeddedResource Remove="wwwroot\_framework\**" />
-    <None Remove="wwwroot\media\**" />
-    <None Remove="wwwroot\_content\**" />
-    <None Remove="wwwroot\_framework\**" />
-  </ItemGroup>
+   <ItemGroup>
+      <Compile Remove="wwwroot\media\**" />
+      <Compile Remove="wwwroot\_content\**" />
+      <Compile Remove="wwwroot\_framework\**" />
+      <Content Remove="wwwroot\media\**" />
+      <Content Remove="wwwroot\_content\**" />
+      <Content Remove="wwwroot\_framework\**" />
+      <EmbeddedResource Remove="wwwroot\media\**" />
+      <EmbeddedResource Remove="wwwroot\_content\**" />
+      <EmbeddedResource Remove="wwwroot\_framework\**" />
+      <None Remove="wwwroot\media\**" />
+      <None Remove="wwwroot\_content\**" />
+      <None Remove="wwwroot\_framework\**" />
+   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="bootstrap" Version="5.3.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.6" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.6" />
-    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="8.0.6" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Radzen.Blazor" Version="4.32.6" />
-    <PackageReference Include="System.Net.Http.Json" Version="8.0.0" />
-    <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
-    <PackageReference Include="Telerik.UI.for.Blazor" Version="6.0.2" />
-  </ItemGroup>
+   <ItemGroup>
+      <PackageReference Include="bootstrap" Version="5.3.3" />
+      <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.6" />
+      <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.6" />
+      <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="8.0.6" />
+      <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+      <PackageReference Include="Radzen.Blazor" Version="4.32.6" />
+      <PackageReference Include="System.Net.Http.Json" Version="8.0.0" />
+      <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
+      <PackageReference Include="Telerik.SvgIcons" Version="3.0.0" />
+      <PackageReference Include="Telerik.UI.for.Blazor" Version="6.0.2" />
+   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Shared\GIFBot.Shared.csproj" />
-  </ItemGroup>
+   <ItemGroup>
+      <ProjectReference Include="..\Shared\GIFBot.Shared.csproj" />
+   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="TwitchLib.Client.Enums">
-      <HintPath>..\TwitchLib\TwitchLib.Client.Enums.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
-  </ItemGroup>
+   <ItemGroup>
+      <ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
+   </ItemGroup>
+   
+   <ItemGroup>
+      <None Update="$(ProjectDir)wwwroot\**\*.*">
+         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+   </ItemGroup>
 
 </Project>
