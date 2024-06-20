@@ -182,7 +182,7 @@ namespace GIFBot.Server.Features.Giveaway
                isFollower = true;
             }
 
-            InternalAddEntrant(entrant, isFollower, message.ChatMessage.IsSubscriber, message.ChatMessage.IsVip, true);
+            InternalAddEntrant(entrant, isFollower, message.ChatMessage.UserDetail.IsSubscriber, message.ChatMessage.UserDetail.IsVip, true);
          }
       }
 

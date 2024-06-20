@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "TwitchLib.Client.Enums/4.0.0": {
+        "runtime": {
+          "TwitchLib.Client.Enums.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "TwitchLib.Client.Enums/4.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

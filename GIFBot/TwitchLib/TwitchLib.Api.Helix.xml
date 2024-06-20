@@ -1,0 +1,2134 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TwitchLib.Api.Helix</name>
+    </assembly>
+    <members>
+        <member name="T:TwitchLib.Api.Helix.Analytics">
+            <summary>
+            Analytics related APIs
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Analytics.#ctor(TwitchLib.Api.Core.Interfaces.IApiSettings,TwitchLib.Api.Core.Interfaces.IRateLimiter,TwitchLib.Api.Core.Interfaces.IHttpCallHandler)">
+            <summary>
+            Analytics related APIs
+            </summary>
+            <param name="settings"></param>
+            <param name="rateLimiter"></param>
+            <param name="http"></param>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Analytics.GetGameAnalyticsAsync(System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Int32,System.String,System.String,System.String)">
+            <summary>
+            <para><see href="https://dev.twitch.tv/docs/api/reference/#get-game-analytics">
+              Twitch Docs: Get Game Analytics</see></para>
+            <para>Gets a URL that game developers can use to download analytics reports (CSV files) for their games. The URL is valid for 5 minutes.</para>
+            <para><b>!! The user access token used to call this API must be from a member of the organization the game is registered to !!</b></para>
+            <para>Requires a user access token that includes the scope:<br/>
+              analytics:read:games</para>
+            </summary>
+            
+            <param name="gameId">
+            <para>The game’s client ID.</para>
+            <para>If specified, the response contains an analytics report for just the specified game.</para>
+            <para>If not specified, the response includes multiple URLs (paginated), pointing to separate analytics reports for each of the authenticated user’s games.</para>
+            </param>
+            
+            <param name="startedAt">
+            <para>The starting date for the analytic report time period.<br/>
+              (This is automtically converted to RFC3339 format)</para>
+            <para><b>If you specify a start date, you must also specify an end date in endedAt.</b></para>
+            <para>The start date must be within one year of today’s date.<br/>
+              If you specify an earlier date, the API ignores it and uses a date that’s one year prior to today’s date.<br/>
+              If you don’t specify a start and end date, the report includes all available data for the last 365 days from today.</para>
+            <para>The report contains one row of data for each day in the reporting window.</para>
+            </param>
+            
+            <param name="endedAt">
+            <para>The ending date for the analytic report time period.<br/>
+              (This is automatically converted to RFC3339 format)</para>
+            <para><b>Only specify an end date if you specified a start date.</b></para>
+            <para>Because it can take up to two days for the data to be available, you must specify an end date that’s earlier than today minus one to two days.
+              If not, the API ignores your end date and uses an end date that is today minus one to two days.</para>
+            </param>
+            
+            <param name="first">
+            <para>The maximum number of report URLs to return per page in the response.</para>
+             <para>Minimum page size: 1 URL per page<br/>
+              Maximum page size: 100 URLs per page.<br/>
+              Default page size: 20 URLs per page.</para>
+            <para>While you may specify a maximum value of 100, the response will contain at most 20 URLs per page.</para>
+            </param>
+            
+            <param name="after">
+            <para>Cursor for forward pagination: tells the server where to start fetching the next set of results, in a multi-page response.</para>
+            <para>This parameter is ignored if the game_id parameter is set.</para>
+            </param>
+            
+            <param name="type">
+            <para>Type of analytics report that is returned.</para>
+            <para>Currently, this field has no affect on the response as there is only one report type.</para>
+            <para>If additional types were added, using this field would return only the URL for the specified report.</para>
+            <para>Valid values: "overview_v2".</para>
+            </param>
+            
+            <param name="accessToken">
+            <para>Optional access token to override the use of the stored one in the TwitchAPI instance.</para>
+            </param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Analytics.GetGameAnalyticsResponse"></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Analytics.GetExtensionAnalyticsAsync(System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Int32,System.String,System.String,System.String)">
+            <summary>
+            <para><see href="https://dev.twitch.tv/docs/api/reference/#get-extension-analytics">
+            Twitch Docs: Get Extension Analytics</see></para>
+            <para>Gets a URL that Extension developers can use to download analytics reports (CSV files) for their Extensions. The URL is valid for 5 minutes.</para>
+            <para><b>!! The user access token used to call this API must be from a member of the organzation the extension is registered to or the Extension Developer !!</b></para>
+            <para>Requires a user access token that includes the analytics:read:extensions scope.</para>
+            </summary> 
+            
+            <param name="extensionId">
+            <para>Client ID value assigned to the extension when it is created.</para>
+            <para>If this is specified, the returned URL points to an analytics report for just the specified extension.</para>
+            <para>If this is not specified, the response includes multiple URLs (paginated), pointing to separate analytics reports for each of the authenticated user’s Extensions.</para>
+            </param>
+            
+            <param name="startedAt">
+            <para>The starting date for the analytic report time period.<br/>
+            (This is automtically converted to RFC3339 format)</para>
+            <para><b>If you specify a start date, you must also specify an end date in endedAt.</b></para>
+            <para>The start date must be on or after January 31, 2018.<br/>
+              If you specify an earlier date, the API ignores it and uses January 31, 2018.<br/> 
+              If you specify a start date, you must specify an end date.<br/> 
+              If you don’t specify a start and end date, the report includes all available data since January 31, 2018.</para>
+            <para>The report contains one row of data for each day in the reporting window.</para>
+            </param>
+            
+            <param name="endedAt">
+            <para>The ending date for the analytic report time period.<br/>
+            (This is automatically converted to RFC3339 format)</para>
+            <para><b>Only specify an end date if you specified a start date.</b></para>
+            <para>Because it can take up to two days for the data to be available, you must specify an end date that’s earlier than today minus one to two days.
+              If not, the API ignores your end date and uses an end date that is today minus one to two days.</para>
+            </param>
+            
+            <param name="first">
+            <para>The maximum number of report URLs to return per page in the response.</para>
+            <para>Minimum page size: 1 URL per page<br/>
+             Maximum page size: 100 URLs per page.<br/>
+             Default page size: 20 URLs per page.</para>
+            <para>Note: While you may specify a maximum value of 100, the response will contain at most 20 URLs per page.</para>
+            </param>
+            
+            <param name="after">
+            <para>Cursor for forward pagination: tells the server where to start fetching the next set of results, in a multi-page response.</para>
+            <para>This parameter is ignored if the extension_id parameter is set.</para>
+            </param>
+            
+            <param name="type">
+            <para>Type of analytics report that is returned.</para>
+            <para>Currently, this field has no affect on the response as there is only one report type.</para>
+            <para>If additional types were added, using this field would return only the URL for the specified report.</para>
+            <para>Valid values: "overview_v2".</para>
+            </param>
+            
+            <param name="accessToken">
+            <para>Optional access token to override the use of the stored one in the TwitchAPI instance.</para>
+            </param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Analytics.GetExtensionAnalyticsResponse"></returns>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Bits">
+            <summary>
+            Bits related APIs
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Bits.GetCheermotesAsync(System.String,System.String)">
+            <summary>
+            Retrieves the list of available Cheermotes, animated emotes to which viewers can assign Bits, to cheer in chat. Cheermotes returned are available throughout Twitch, in all Bits-enabled channels.
+            </summary>
+            <param name="broadcasterId">D for the broadcaster who might own specialized Cheermotes.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Bits.GetCheermotesResponse"></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Bits.GetBitsLeaderboardAsync(System.Int32,TwitchLib.Api.Core.Enums.BitsLeaderboardPeriodEnum,System.Nullable{System.DateTime},System.String,System.String)">
+            <summary>
+            Gets a ranked list of Bits leaderboard information for an authorized broadcaster.
+            <para>Required scope: bits:read</para>
+            </summary>
+            <param name="count">Number of results to be returned. Maximum: 100. Default: 10.</param>
+            <param name="period">
+            Time period over which data is aggregated (PST time zone). This parameter interacts with started_at. Default: "All".
+            <para>"Day" – 00:00:00 on the day specified in started_at, through 00:00:00 on the following day.</para>
+            <para>"Week" – 00:00:00 on Monday of the week specified in started_at, through 00:00:00 on the following Monday.</para>
+            <para>"Month" – 00:00:00 on the first day of the month specified in started_at, through 00:00:00 on the first day of the following month.</para>
+            <para>"Year" – 00:00:00 on the first day of the year specified in started_at, through 00:00:00 on the first day of the following year.</para>
+            <para>"All" – The lifetime of the broadcaster's channel. If this is specified (or used by default), started_at is ignored.</para>
+            </param>
+            <param name="startedAt">Timestamp for the period over which the returned data is aggregated. If this is not provided, data is aggregated over the current period; e.g., the current day/week/month/year. This value is ignored if period is "All".</param>
+            <param name="userid">
+            ID of the user whose results are returned; i.e., the person who paid for the Bits.
+            <para>As long as count is greater than 1, the returned data includes additional users, with Bits amounts above and below the user specified by user_id.</para>
+            <para>If user_id is not provided, the endpoint returns the Bits leaderboard data across top users (subject to the value of count).</para>
+            </param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Bits.GetBitsLeaderboardResponse"></returns>
+            <exception cref="T:System.ArgumentOutOfRangeException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Bits.GetExtensionBitsProductsAsync(System.Boolean,System.String)">
+            <summary>
+            Gets a list of Bits products that belongs to an Extension
+            <para>Requires App Access Token associated with the Extension client ID</para>
+            </summary>
+            <param name="shouldIncludeAll">Whether Bits products that are disabled/expired should be included in the response.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Bits.ExtensionBitsProducts.GetExtensionBitsProductsResponse"></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Bits.UpdateExtensionBitsProductAsync(TwitchLib.Api.Helix.Models.Bits.ExtensionBitsProducts.ExtensionBitsProduct,System.String)">
+            <summary>
+            Add or update a Bits products that belongs to an Extension.
+            <para>Requires App Access Token associated with the Extension client ID</para>
+            </summary>
+            <param name="extensionBitsProduct" cref="T:TwitchLib.Api.Helix.Models.Bits.ExtensionBitsProducts.ExtensionBitsProduct">Bits product to add/update</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Bits.ExtensionBitsProducts.UpdateExtensionBitsProductResponse"></returns>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.ChannelPoints">
+            <summary>
+            Channel Points related APIs
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.ChannelPoints.CreateCustomRewardsAsync(System.String,TwitchLib.Api.Helix.Models.ChannelPoints.CreateCustomReward.CreateCustomRewardsRequest,System.String)">
+            <summary>
+            Creates a Custom Reward on a channel.
+            <para>Required scope: channel:manage:redemptions</para>
+            <para>The maximum number of custom rewards per channel is 50, which includes both enabled and disabled rewards.</para>
+            </summary>
+            <param name="broadcasterId">
+            Broadcaster Id to create the reward for.
+            <para>Provided broadcaster_id must match the user_id in the user OAuth token.</para>
+            </param>
+            <param name="request" cref="T:TwitchLib.Api.Helix.Models.ChannelPoints.CreateCustomReward.CreateCustomRewardsRequest"></param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.ChannelPoints.CreateCustomReward.CreateCustomRewardsResponse"></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.ChannelPoints.DeleteCustomRewardAsync(System.String,System.String,System.String)">
+            <summary>
+            Deletes a Custom Reward on a channel.
+            <para>Required scope: channel:manage:redemptions</para>
+            <para>The Custom Reward specified by id must have been created by the ClientId attached to the OAuth token in order to be deleted.</para>
+            <para>Any UNFULFILLED Custom Reward Redemptions of the deleted Custom Reward will be updated to the FULFILLED status.</para>
+            </summary>
+            <param name="broadcasterId">
+            Broadcaster Id to delete the reward from.
+            <para>Provided broadcaster_id must match the user_id in the user OAuth token.</para>
+            </param>
+            <param name="rewardId">
+            ID of the Custom Reward to delete.
+            <para>Must match a Custom Reward on broadcaster_id’s channel.</para>
+            </param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.ChannelPoints.GetCustomRewardAsync(System.String,System.Collections.Generic.List{System.String},System.Boolean,System.String)">
+            <summary>
+            Returns a list of Custom Reward objects for the Custom Rewards on a channel.
+            <para>Required scope: channel:read:redemptions</para>
+            </summary>
+            <param name="broadcasterId">
+            Broadcaster Id to get the rewards for.
+            <para>Provided broadcaster_id must match the user_id in the user OAuth token.</para>
+            </param>
+            <param name="rewardIds">When used, this parameter filters the results and only returns reward objects for the Custom Rewards with matching ID. Maximum: 50</param>
+            <param name="onlyManageableRewards">When set to true, only returns custom rewards that the calling ClientId can manage. Default: false.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.ChannelPoints.GetCustomReward.GetCustomRewardsResponse"></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.ChannelPoints.UpdateCustomRewardAsync(System.String,System.String,TwitchLib.Api.Helix.Models.ChannelPoints.UpdateCustomReward.UpdateCustomRewardRequest,System.String)">
+            <summary>
+            Updates a Custom Reward created on a channel.
+            <para>The Custom Reward specified by id must have been created by the ClientId attached to the user OAuth token.</para>
+            <para>Required scope: channel:manage:redemptions</para>
+            </summary>
+            <param name="broadcasterId">
+            Broadcaster Id to update the reward for.
+            <para>Provided broadcaster_id must match the user_id in the user OAuth token.</para>
+            </param>
+            <param name="rewardId">ID of the Custom Reward to update. Must match a Custom Reward on the channel of the Broadcaster Id.</param>
+            <param name="request" cref="T:TwitchLib.Api.Helix.Models.ChannelPoints.UpdateCustomReward.UpdateCustomRewardRequest"></param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.ChannelPoints.UpdateCustomReward.UpdateCustomRewardResponse"></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.ChannelPoints.GetCustomRewardRedemptionAsync(System.String,System.String,System.Collections.Generic.List{System.String},System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Returns Custom Reward Redemption objects for a Custom Reward on a channel that was created by the same ClientId.
+            <para>Developers only have access to get and update redemptions for the rewards created programmatically by the same ClientId.</para>
+            <para>Required scope: channel:read:redemptions</para>
+            </summary>
+            <param name="broadcasterId">
+            Broadcaster Id to get the reward redemptions for.
+            <para>Provided broadcaster_id must match the user_id in the user OAuth token.</para>
+            </param>
+            <param name="rewardId">When ID is not provided, this parameter returns paginated Custom Reward Redemption objects for redemptions of the Custom Reward with ID RewardId.</param>
+            <param name="redemptionIds">When used, this param filters the results and only returns Custom Reward Redemption objects for the redemptions with matching IDs. Maximum: 50</param>
+            <param name="status">
+            When id is not provided, this param is required and filters the paginated Custom Reward Redemption objects for redemptions with the matching status.
+            <para>Can be one of UNFULFILLED, FULFILLED or CANCELED</para>
+            </param>
+            <param name="sort">
+            Sort order of redemptions returned when getting the paginated Custom Reward Redemption objects for a reward.
+            <para>One of: OLDEST, NEWEST. Default: OLDEST.</para>
+            </param>
+            <param name="after">
+            Cursor for forward pagination: tells the server where to start fetching the next set of results, in a multi-page response.
+            <para>This applies only to queries without ID. If an ID is specified, it supersedes any cursor/offset combinations.</para>
+            <para>The cursor value specified here is from the pagination response field of a prior query.</para>
+            </param>
+            <param name="first">Number of results to be returned when getting the paginated Custom Reward Redemption objects for a reward. Limit: 50. Default: 20.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.ChannelPoints.GetCustomRewardRedemption.GetCustomRewardRedemptionResponse"></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.ChannelPoints.UpdateRedemptionStatusAsync(System.String,System.String,System.Collections.Generic.List{System.String},TwitchLib.Api.Helix.Models.ChannelPoints.UpdateCustomRewardRedemptionStatus.UpdateCustomRewardRedemptionStatusRequest,System.String)">
+            <summary>
+            Updates a Custom Reward created on a channel.
+            <para>The Custom Reward specified by id must have been created by the ClientId attached to the user OAuth token.</para>
+            <para>Required scope: channel:manage:redemptions</para>
+            </summary>
+            <param name="broadcasterId">
+            Broadcaster Id to update the reward redemptions status for.
+            <para>Provided broadcaster_id must match the user_id in the user OAuth token.</para>
+            </param>
+            <param name="rewardId">ID of the Custom Reward the redemptions to be updated are for.</param>
+            <param name="redemptionIds">IDs of the Custom Reward Redemptions to update, must match a Custom Reward Redemption on BroadcasterId’s channel. Maximum: 50.</param>
+            <param name="request" cref="T:TwitchLib.Api.Helix.Models.ChannelPoints.UpdateCustomRewardRedemptionStatus.UpdateCustomRewardRedemptionStatusRequest"></param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.ChannelPoints.UpdateRedemptionStatus.UpdateRedemptionStatusResponse"></returns>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Channels">
+            <summary>
+            Channel related APIs
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Channels.GetChannelInformationAsync(System.String,System.String)">
+            <summary>
+            Gets channel information for given user.
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster whose channel you want to get.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Channels.GetChannelInformation.GetChannelInformationResponse"></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Channels.ModifyChannelInformationAsync(System.String,TwitchLib.Api.Helix.Models.Channels.ModifyChannelInformation.ModifyChannelInformationRequest,System.String)">
+            <summary>
+            Modifies channel information for given user.
+            <para>Required scope: channel:manage:broadcast</para>
+            </summary>
+            <param name="broadcasterId">ID of the channel to be updated</param>
+            <param name="request" cref="T:TwitchLib.Api.Helix.Models.Channels.ModifyChannelInformation.ModifyChannelInformationRequest"></param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Channels.GetChannelEditorsAsync(System.String,System.String)">
+            <summary>
+            Gets a list of users who have editor permissions for a specific channel.
+            <para>Required scope: channel:read:editors</para>
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster whose editors you want to get.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Channels.GetChannelEditors.GetChannelEditorsResponse"></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Channels.GetVIPsAsync(System.String,System.Collections.Generic.List{System.String},System.Int32,System.String,System.String)">
+            <summary>
+            Gets a list of the channel’s VIPs.
+            Requires a user access token that includes the channel:read:vips scope.
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster whose list of VIPs you want to get.</param>
+            <param name="userIds">Filters the list for specific VIPs. </param>
+            <param name="first">The maximum number of items to return per page in the response. Max 100</param>
+            <param name="after">The cursor used to get the next page of results.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Channels.GetChannelVIPs.GetChannelVIPsResponse"></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Channels.AddChannelVIPAsync(System.String,System.String,System.String)">
+            <summary>
+            Adds a VIP to the broadcaster’s chat room.
+            Rate Limits: The channel may add a maximum of 10 VIPs within a 10 seconds period.
+            Requires a user access token that includes the channel:manage:vips scope.
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster that’s granting VIP status to the user.</param>
+            <param name="userId">The ID of the user to add as a VIP in the broadcaster’s chat room.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Channels.RemoveChannelVIPAsync(System.String,System.String,System.String)">
+            <summary>
+            Removes a VIP from the broadcaster’s chat room.
+            Rate Limits: The channel may remove a maximum of 10 VIPs within a 10 seconds period.
+            Requires a user access token that includes the channel:manage:vips scope.
+            </summary>
+            <param name="broadcasterId">The ID of the user to remove as a VIP from the broadcaster’s chat room.</param>
+            <param name="userId">The ID of the broadcaster that’s removing VIP status from the user.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Channels.GetFollowedChannelsAsync(System.String,System.String,System.Int32,System.String,System.String)">
+            <summary>
+            Gets a list of broadcasters that the specified user follows.
+            <para>You can also use this endpoint to see whether a user follows a specific broadcaster.</para>
+            </summary>
+            <param name="userId">
+            A user’s ID. Returns the list of broadcasters that this user follows.
+            <para>This ID must match the user ID in the user OAuth token.</para>
+            </param>
+            <param name="broadcasterId">
+            A broadcaster’s ID. Use this parameter to see whether the user follows this broadcaster.
+            <para>If specified, the response contains this broadcaster if the user follows them.</para>
+            <para>If not specified, the response contains all broadcasters that the user follows.</para>
+            </param>
+            <param name="first"> The maximum number of items to return per page in the response. Min: 1, Max: 100, Default: 20.</param>
+            <param name="after">The cursor used to get the next page of results</param>
+            <param name="accessToken"> Optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Channels.GetFollowedChannels.GetFollowedChannelsResponse"></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Channels.GetChannelFollowersAsync(System.String,System.String,System.Int32,System.String,System.String)">
+            <summary>
+            Gets a list of users that follow the specified broadcaster.
+            <para>You can also use this endpoint to see whether a specific user follows the broadcaster.</para>
+            </summary>
+            <param name="broadcasterId">The broadcaster’s ID. Returns the list of users that follow this broadcaster.</param>
+            <param name="userId">
+            A users’s ID. Use this parameter to see whether the user follows this broadcaster.
+            <para>If specified, the response contains this user if they follow the broadcaster.</para>
+            <para>If not specified, the response contains all users follow the broadcaster</para>
+            </param>
+            <param name="first"> The maximum number of items to return per page in the response. Min: 1, Max: 100, Default: 20.</param>
+            <param name="after">The cursor used to get the next page of results</param>
+            <param name="accessToken"> Optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Channels.GetFollowedChannels.GetFollowedChannelsResponse"></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Channels.GetAdScheduleAsync(System.String,System.String)">
+            <summary>
+            Returns ad schedule related information, including snooze, when the last ad was run, when the next ad is scheduled, and if the channel is currently in pre-roll free time.
+            </summary>
+            <param name="broadcasterId">The broadcaster's ID. Ad schedule is relevant to this broadcaster, and so should the auth.</param>
+            <param name="accessToken"> Optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Channels.GetAdSchedule.GetAdScheduleResponse"></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Channels.SnoozeNextAd(System.String,System.String)">
+            <summary>
+            If available, pushes back the timestamp of the upcoming automatic mid-roll ad by 5 minutes. This endpoint duplicates the snooze functionality in the creator dashboard’s Ads Manager.
+            </summary>
+            <param name="broadcasterId">The broadcaster's ID. Ad snoozing is relevant to this broadcaster, and so should the auth.</param>
+            <param name="accessToken"> Optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Channels.SnoozeNextAd.SnoozeNextAdResponse"></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Channels.StartCommercialAsync(TwitchLib.Api.Helix.Models.Channels.StartCommercial.StartCommercialRequest,System.String)">
+            <summary>
+            <para><see href="https://dev.twitch.tv/docs/api/reference/#start-commercial">
+            Twitch Docs: Start Commercial</see></para>
+            <para>Starts a commercial on the specified channel.</para>
+            <para>Only partners and affiliates may run commercials and they must be streaming live at the time.
+            Only the broadcaster may start a commercial - the broadcaster’s editors and moderators may not start commercials on behalf of the broadcaster.</para>
+            <para><b>Requires a user access token that includes the channel:edit:commercial scope.</b></para>
+            </summary>
+            <param name="request" cref="T:TwitchLib.Api.Helix.Models.Channels.StartCommercial.StartCommercialRequest"></param>
+            <param name="accessToken">Optional access token to override the use of the stored one in the TwitchAPI instance.</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Channels.StartCommercial.StartCommercialResponse"></returns>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Charity">
+            <summary>
+            Charity related APIs
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Charity.GetCharityCampaignAsync(System.String,System.String)">
+            <summary>
+            Gets information about the charity campaign that a broadcaster is running, such as their fundraising goal and the amount that’s been donated so far.
+            Requires an user access token that includes the channel:read:charity scope. 
+            The ID in the broadcaster_id query parameter must match the user ID in the access token.
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster that’s actively running a charity campaign.</param>
+            <param name="accessToken">Optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Charity.GetCharityCampaign.GetCharityCampaignResponse">A list that contains the charity campaign that the broadcaster is currently running.</returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Charity.GetCharityCampaignDonationsAsync(System.String,System.Int32,System.String,System.String)">
+            <summary>
+            Gets the list of donations that users have made to the broadcaster’s active charity campaign.
+            Requires a user access token that includes the channel:read:charity scope.
+            The ID in the broadcaster_id query parameter must match the user ID in the access token.
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster that’s actively running a charity campaign.</param>
+            <param name="first">The maximum number of items to return per page in the response. The minimum page size is 1 item per page and the maximum is 100. The default is 20.</param>
+            <param name="after">The cursor used to get the next page of results. The Pagination object in the response contains the cursor’s value.</param>
+            <param name="accessToken">Optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Charity.GetCharityCampaign.GetCharityCampaignResponse">A list that contains the charity campaign that the broadcaster is currently running.</returns>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Chat">
+            <summary>
+            Chat related APIs
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Chat.GetChannelChatBadgesAsync(System.String,System.String)">
+            <summary>
+            Gets a list of custom chat badges that can be used in chat for the specified channel. This includes subscriber badges and Bit badges.
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster whose chat badges you want to get.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Chat.Badges.GetChannelChatBadges.GetChannelChatBadgesResponse"></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Chat.GetGlobalChatBadgesAsync(System.String)">
+            <summary>
+            Gets a list of chat badges that can be used in chat for any channel.
+            </summary>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Chat.Badges.GetGlobalChatBadges.GetGlobalChatBadgesResponse"></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Chat.GetChattersAsync(System.String,System.String,System.Int32,System.String,System.String)">
+            <summary>
+            Gets the list of users that are connected to the specified broadcaster’s chat session.
+            <para>Note that there is a delay between when users join and leave a chat and when the list is updated accordingly.</para>
+            <para>Requires a user access token that includes the moderator:read:chatters scope.</para>
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster whose list of chatters you want to get.</param>
+            <param name="moderatorId">
+            The ID of the moderator or the specified broadcaster that’s requesting the list of chatters.
+            <para>This ID must match the user ID associated with the user access token.</para>
+            </param>
+            <param name="first">
+            The maximum number of items to return per page in the response.
+            <para>The minimum page size is 1 item per page and the maximum is 1,000. The default is 100.</para>
+            </param>
+            <param name="after">The cursor used to get the next page of results. The Pagination object in the response contains the cursor’s value. </param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Chat.GetChatters.GetChattersResponse"></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Chat.GetChannelEmotesAsync(System.String,System.String)">
+            <summary>
+            Gets all emotes that the specified Twitch channel created. 
+            </summary>
+            <param name="broadcasterId">ID of the broadcaster to get the emotes from.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Chat.Emotes.GetChannelEmotes.GetChannelEmotesResponse"></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Chat.GetEmoteSetsAsync(System.Collections.Generic.List{System.String},System.String)">
+            <summary>
+            Gets emotes for one or more specified emote sets.
+            <para>An emote set groups emotes that have a similar context.</para>
+            <para>For example, Twitch places all the subscriber emotes that a broadcaster uploads for their channel in the same emote set.</para>
+            </summary>
+            <param name="emoteSetIds">
+            An ID that identifies the emote set
+            <para>You may specify a maximum of 25 IDs.</para>
+            </param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Chat.Emotes.GetEmoteSets.GetEmoteSetsResponse"></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Chat.GetGlobalEmotesAsync(System.String)">
+            <summary>
+            Gets all global emotes. Global emotes are Twitch-created emoticons that users can use in any Twitch chat.
+            </summary>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Chat.Emotes.GetGlobalEmotes.GetGlobalEmotesResponse"></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Chat.GetUserEmotesAsync(System.String,System.String,System.String,System.String)">
+            <summary>
+            Retrieves emotes available to the user across all channels.
+            </summary>
+            <param name="userId">The ID of the user. This ID must match the user ID in the user access token.</param>
+            <param name="after">The cursor used to get the next page of results. The Pagination object in the response contains the cursor’s value.</param>
+            <param name="broadcasterId">The User ID of a broadcaster you wish to get follower emotes of. Using this query parameter will guarantee inclusion of the broadcaster’s follower emotes in the response body.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Chat.Emotes.GetUserEmotes.GetUserEmotesResponse"></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Chat.GetChatSettingsAsync(System.String,System.String,System.String)">
+            <summary>
+            Gets the broadcaster’s chat settings.
+            <para>To include the non_moderator_chat_delay or non_moderator_chat_delay_duration settings in the response, you must specify a User access token with scope set to moderator:read:chat_settings.</para>
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster whose chat settings you want to get.</param>
+            <param name="moderatorId">
+            Required only to access the non_moderator_chat_delay or non_moderator_chat_delay_duration settings.
+            <para>The ID of a user that has permission to moderate the broadcaster’s chat room. This ID must match the user ID associated with the user OAuth token.</para>
+            <para>If the broadcaster wants to get their own settings (instead of having the moderator do it), set this parameter to the broadcaster’s ID, too.</para>
+            </param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Chat.ChatSettings.GetChatSettingsResponse"></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Chat.UpdateChatSettingsAsync(System.String,System.String,TwitchLib.Api.Helix.Models.Chat.ChatSettings.ChatSettings,System.String)">
+            <summary>
+            Updates the broadcaster’s chat settings.
+            <para>Requires a User access token with scope set to moderator:manage:chat_settings.</para>
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster whose chat settings you want to update.</param>
+            <param name="moderatorId">
+            The ID of a user that has permission to moderate the broadcaster’s chat room.
+            <para>This ID must match the user ID associated with the user OAuth token.</para>
+            <para>If the broadcaster is making the update, also set this parameter to the broadcaster’s ID.</para>
+            </param>
+            <param name="settings" cref="T:TwitchLib.Api.Helix.Models.Chat.ChatSettings.ChatSettings"></param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Chat.ChatSettings.UpdateChatSettingsResponse"></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Chat.SendChatAnnouncementAsync(System.String,System.String,System.String,TwitchLib.Api.Helix.Models.Chat.AnnouncementColors,System.String)">
+            <summary>
+            Sends an announcement to the broadcaster’s chat room.
+            Requires a user access token that includes the moderator:manage:announcements scope.
+            The ID in the moderator_id query parameter must match the user ID in the access token.
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster that owns the chat room to send the announcement to.</param>
+            <param name="moderatorId">The ID of a user who has permission to moderate the broadcaster’s chat room. This ID must match the user ID in the OAuth token, which can be a moderator or the broadcaster.</param>
+            <param name="message">The announcement to make in the broadcaster’s chat room.</param>
+            <param name="color">The color used to highlight the announcement. Possible case-sensitive values are: blue/green/orange/purple/primary(default)</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Chat.SendShoutoutAsync(System.String,System.String,System.String,System.String)">
+            <summary>
+            Sends a Shoutout to the specified broadcaster.
+            </summary>
+            <param name="fromBroadcasterId">The ID of the broadcaster that’s sending the Shoutout.</param>
+            <param name="toBroadcasterId"> 	The ID of the broadcaster that’s receiving the Shoutout.</param>
+            <param name="moderatorId">The ID of the broadcaster or a user that is one of the broadcaster’s moderators. This ID must match the user ID in the access token.</param>
+            <param name="accessToken"></param>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Chat.SendChatMessage(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Sends a message to a chat
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster whose chat room the message will be sent to.</param>
+            <param name="senderId">	The ID of the user sending the message. This ID must match the user ID in the user access token.</param>
+            <param name="message">	The message to send. The message is limited to a maximum of 500 characters. Chat messages can also include emoticons. To include emoticons, use the name of the emote. The names are case sensitive. Don’t include colons around the name (e.g., :bleedPurple:). If Twitch recognizes the name, Twitch converts the name to the emote before writing the chat message to the chat room</param>
+            <param name="replyParentMessageId">The ID of the chat message being replied to. If omitted, the message is not a reply</param>
+            <param name="accessToken"></param>
+            <returns></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Chat.UpdateUserChatColorAsync(System.String,TwitchLib.Api.Helix.Models.Chat.UserColors,System.String)">
+            <summary>
+            Updates the color used for the user’s name in chat from a selection of available colors.
+            </summary>
+            <param name="userId">The ID of the user whose chat color you want to update.</param>
+            <param name="color">The color to use for the user’s name in chat from UserColors selection.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Chat.UpdateUserChatColorAsync(System.String,System.String,System.String)">
+            <summary>
+            Updates the color used for the user’s name in chat from a HEX Code.
+            <para>Turbo or Prime Required</para>
+            </summary>
+            <param name="userId">The ID of the user whose chat color you want to update.</param>
+            <param name="colorHex">The color to use for the user’s name in chat in hex format.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Chat.GetUserChatColorAsync(System.Collections.Generic.List{System.String},System.String)">
+            <summary>
+            Gets the color used for the user(s)’s name in chat.
+            </summary>
+            <param name="userIds">The ID of the users whose color you want to get.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Chat.GetUserChatColor.GetUserChatColorResponse"></returns>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Clips">
+            <summary>
+            Clips related APIs
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Clips.GetClipsAsync(System.Collections.Generic.List{System.String},System.String,System.String,System.String,System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Boolean},System.Int32,System.String)">
+            <summary>
+            Gets clip information by clip ID (one or more), broadcaster ID (one only), or game ID (one only).
+            <para>Note: The clips service returns a maximum of 1000 clips.</para>
+            </summary>
+            <param name="clipIds">IDs of the clips to query. Limit: 100.</param>
+            <param name="gameId">
+            ID of the game for which clips are returned.
+            <para>The number of clips returned is determined by the first query-string parameter (default: 20).</para>
+            <para>Results are ordered by view count.</para>
+            </param>
+            <param name="broadcasterId">
+            ID of the broadcaster for which clips are returned.
+            <para>The number of clips returned is determined by the first query-string parameter (default: 20).</para>
+            <para>Results are ordered by view count.</para>
+            </param>
+            <param name="before">
+            Cursor for backward pagination: tells the server where to start fetching the next set of results, in a multi-page response.
+            <para>This applies only to queries specifying broadcaster_id or game_id</para>
+            </param>
+            <param name="after">
+            Cursor for forward pagination: tells the server where to start fetching the next set of results, in a multi-page response.
+            <para>This applies only to queries specifying broadcaster_id or game_id</para>
+            </param>
+            <param name="startedAt">
+            Starting date/time for returned clips, in RFC3339 format. (The seconds value is ignored.)
+            <para>If this is specified, ended_at also should be specified; otherwise, the ended_at date/time will be 1 week after the started_at value.</para>
+            </param>
+            <param name="endedAt">
+            Ending date/time for returned clips, in RFC3339 format. (Note that the seconds value is ignored.)
+            <para>If this is specified, started_at also must be specified; otherwise, the time period is ignored.</para>
+            </param>
+            <param name="isFeatured">
+            A Boolean value that determines whether the response includes featured clips.
+            <para>If true, returns only clips that are featured. If false, returns only clips that aren’t featured. All clips are returned if this parameter is not present.</para>
+            </param>
+            <param name="first">Maximum number of objects to return. Maximum: 100. Default: 20.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Clips.GetClips.GetClipsResponse"></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Clips.CreateClipAsync(System.String,System.String)">
+            <summary>
+            Creates a clip programmatically. This returns both an ID and an edit URL for the new clip.
+            <para>Clip creation takes time. We recommend that you query Get Clips, with the clip ID that is returned here.</para>
+            <para>If Get Clips returns a valid clip, your clip creation was successful.</para>
+            <para>If, after 15 seconds, you still have not gotten back a valid clip from Get Clips, assume that the clip was not created and retry Create Clip.</para>
+            <para>This endpoint has a global rate limit, across all callers.</para>
+            <para>Required scope: clips:edit</para>
+            </summary>
+            <param name="broadcasterId">ID of the stream from which the clip will be made.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Clips.CreateClip.CreatedClipResponse"></returns>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.ContentClassificationLabels">
+            <summary>
+            <para>ContentClassificationLabels related APIs</para>
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.ContentClassificationLabels.#ctor(TwitchLib.Api.Core.Interfaces.IApiSettings,TwitchLib.Api.Core.Interfaces.IRateLimiter,TwitchLib.Api.Core.Interfaces.IHttpCallHandler)">
+            <summary>
+            <para></para>
+            </summary>
+            <param name="settings"></param>
+            <param name="rateLimiter"></param>
+            <param name="http"></param>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.ContentClassificationLabels.GetContentClassificationLabelsAsync(System.String,System.String)">
+            <summary>
+            <para><see href="https://dev.twitch.tv/docs/api/reference/#get-content-classification-labels">
+            TwitchAPI Docs: Get Content Classification Labels </see></para>
+            <para>Gets information about Twitch content classification labels.</para>
+            <para><b>Requires an app access token or user access token.</b></para>
+            </summary>
+            <param name="locale"></param>
+            <param name="accessToken"></param>
+            <returns></returns>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Entitlements">
+            <summary>
+            Entitlements related APIs
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Entitlements.GetDropsEntitlementsAsync(System.String,System.String,System.String,System.String,System.Int32,System.String)">
+            <summary>
+            Gets a list of entitlements for a given organization that have been granted to a game, user, or both.
+            <para>The client ID associated with the access token must have ownership of the game:</para>
+            </summary>
+            <param name="id">Unique identifier of the entitlement.</param>
+            <param name="userId">A Twitch user ID to filter by.</param>
+            <param name="gameId">A Twitch game ID to filter by.</param>
+            <param name="after">The cursor used to fetch the next page of data.</param>
+            <param name="first">Maximum number of entitlements to return. Default: 20 Max: 1000</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Entitlements.GetDropsEntitlements.GetDropsEntitlementsResponse"></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Entitlements.UpdateDropsEntitlementsAsync(System.String[],TwitchLib.Api.Core.Enums.FulfillmentStatus,System.String)">
+            <summary>
+            Updates the fulfillment status on a set of Drops entitlements, specified by their entitlement IDs.
+            <para>The client ID associated with the access token must have ownership of the game</para>
+            </summary>
+            <param name="entitlementIds">An array of unique identifiers of the entitlements to update. Maximum: 100.</param>
+            <param name="fulfillmentStatus">What fulfillment status to set to. Valid values are "CLAIMED" or "FULFILLED"</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Entitlements.UpdateDropsEntitlements.UpdateDropsEntitlementsResponse"></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.EventSub.CreateEventSubSubscriptionAsync(System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String},TwitchLib.Api.Core.Enums.EventSubTransportMethod,System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Creates an EventSub subscription.
+            </summary>
+            <param name="type">The type of subscription to create.</param>
+            <param name="version">The version of the subscription type used in this request.</param>
+            <param name="condition">The parameter values that are specific to the specified subscription type.</param>
+            <param name="method">The transport method. Supported values: Webhook, Websocket.</param>
+            <param name="websocketSessionId">The session Id of a websocket connection that you want to subscribe to an event for. Only needed if method is Websocket</param>
+            <param name="conduitId">The conduit Id of a EventSub conduit. Only needed if method is Conduit.</param>
+            <param name="webhookCallback">The callback URL where the Webhook notification should be sent. Only needed if method is Webhook</param>
+            <param name="webhookSecret">The secret used for verifying a Webhooks signature. Only needed if method is Webhook</param>
+            <param name="clientId">optional Client ID to override the use of the stored one in the TwitchAPI instance</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.EventSub.CreateEventSubSubscriptionResponse"></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.EventSub.GetEventSubSubscriptionsAsync(System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Gets a list of your EventSub subscriptions. The list is paginated and ordered by the oldest subscription first.
+            </summary>
+            <param name="status">Filter subscriptions by its status.</param>
+            <param name="type">Filter subscriptions by subscription type (e.g., channel.update).</param>
+            <param name="userId">Filter subscriptions by user ID.</param>
+            <param name="after">The cursor used to get the next page of results.</param>
+            <param name="clientId">optional Client ID to override the use of the stored one in the TwitchAPI instance</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.EventSub.GetEventSubSubscriptionsResponse">Returns a list of your EventSub subscriptions.</returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.EventSub.DeleteEventSubSubscriptionAsync(System.String,System.String,System.String)">
+            <summary>
+            Deletes an EventSub subscription.
+            </summary>
+            <param name="id">The ID of the subscription to delete.</param>
+            <param name="clientId">optional Client ID to override the use of the stored one in the TwitchAPI instance</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns>True: If successfully deleted; False: If delete failed</returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.EventSub.GetConduits(System.String,System.String)">
+            <summary>
+            Gets the conduits for a client ID.
+            </summary>
+            <param name="clientId">optional Client ID to override the use of the stored one in the TwitchAPI instance</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.EventSub.Conduits.GetConduits.GetConduitsResponse">Returns a list of your conduits.</returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.EventSub.CreateConduits(TwitchLib.Api.Helix.Models.EventSub.Conduits.CreateConduits.CreateConduitsRequest,System.String,System.String)">
+            <summary>
+            Creates a new conduit.
+            </summary>
+            <param name="request">Request body parameters identifying conduit details</param>
+            <param name="clientId">optional Client ID to override the use of the stored one in the TwitchAPI instance</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.EventSub.Conduits.CreateConduits.CreateConduitsResponse">Returns a list of your conduits.</returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.EventSub.UpdateConduits(TwitchLib.Api.Helix.Models.EventSub.Conduits.UpdateConduits.UpdateConduitsRequest,System.String,System.String)">
+            <summary>
+            Updates a conduit’s shard count. To delete shards, update the count to a lower number, and the shards above the count will be deleted. For example, if the existing shard count is 100, by resetting shard count to 50, shards 50-99 are disabled.
+            </summary>
+            <param name="request">Request body parameters identifying conduit details</param>
+            <param name="clientId">optional Client ID to override the use of the stored one in the TwitchAPI instance</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.EventSub.Conduits.UpdateConduits.UpdateConduitsResponse">Returns a list of your conduits.</returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.EventSub.DeleteConduit(System.String,System.String,System.String)">
+            <summary>
+            Deletes a conduit.
+            </summary>
+            <param name="id">The ID of the conduit to delete.</param>
+            <param name="clientId">optional Client ID to override the use of the stored one in the TwitchAPI instance</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns>True: If successfully deleted; False: If delete failed</returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.EventSub.GetConduitShards(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Gets a lists of all shards for a conduit.
+            </summary>
+            <param name="conduit_id">Conduit ID.</param>
+            <param name="status">Status to filter by.</param>
+            <param name="after">The cursor used to get the next page of results. The pagination object in the response contains the cursor’s value.</param>
+            <param name="clientId">optional Client ID to override the use of the stored one in the TwitchAPI instance</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.EventSub.Conduits.Shards.GetConduitShards.GetConduitShardsResponse">Returns a list shards owned by the specified conduit.</returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.EventSub.UpdateConduitShards(TwitchLib.Api.Helix.Models.EventSub.Conduits.Shards.UpdateConduitShards.UpdateConduitShardsRequest,System.String,System.String)">
+            <summary>
+            Updates shard(s) for a conduit.
+            </summary>
+            <param name="request">Request body parameters for updating conduit shards</param>
+            <param name="clientId">optional Client ID to override the use of the stored one in the TwitchAPI instance</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.EventSub.Conduits.Shards.UpdateConduitShards.UpdateConduitShardsResponse">Returns a list of successfully and errored conduit shard updates</returns>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Extensions">
+            <summary>
+            Extensions related APIs
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Extensions.GetExtensionTransactionsAsync(System.String,System.Collections.Generic.List{System.String},System.String,System.Int32,System.String)">
+            <summary>
+            Gets the list of Extension transactions for a given Extension.
+            </summary>
+            <param name="extensionId">ID of the Extension to list transactions for.</param>
+            <param name="ids">Transaction IDs to look up. Maximum: 100.</param>
+            <param name="after">
+            The cursor used to fetch the next page of data. This only applies to queries without ID. If an ID is specified, it supersedes the cursor.
+            </param>
+            <param name="first">Maximum number of objects to return. Maximum: 100. Default: 20.</param>
+            <param name="applicationAccessToken">optional app access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Extensions.Transactions.GetExtensionTransactionsResponse"></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Extensions.GetExtensionLiveChannelsAsync(System.String,System.Int32,System.String,System.String)">
+            <summary>
+            Returns live channels that have installed or activated a specific Extension
+            <para>A channel that recently went live may take a few minutes to appear in this list, and a channel may continue to appear on this list for a few minutes after it stops broadcasting.</para>
+            </summary>
+            <param name="extensionId">ID of the Extension to search for.</param>
+            <param name="first">Maximum number of objects to return. Maximum: 100. Default: 20.</param>
+            <param name="after">The cursor used to fetch the next page of data.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Extensions.LiveChannels.GetExtensionLiveChannelsResponse"></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Extensions.GetReleasedExtensionsAsync(System.String,System.String,System.String)">
+            <summary>
+            Gets information about a released Extension; either the current version or a specified version.
+            </summary>
+            <param name="extensionId">ID of the Extension.</param>
+            <param name="extensionVersion">The specific version of the Extension to return. If not provided, the current version is returned.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Extensions.ReleasedExtensions.GetReleasedExtensionsResponse"></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Games">
+            <summary>
+            Games related APIs
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Games.GetGamesAsync(System.Collections.Generic.List{System.String},System.Collections.Generic.List{System.String},System.Collections.Generic.List{System.String},System.String)">
+            <summary>
+            Gets game information by game ID or name.
+            <para>For a query to be valid, name and/or id must be specified.</para>
+            </summary>
+            <param name="gameIds">List of Game IDs. At most 100 id values can be specified.</param>
+            <param name="gameNames">
+            List of Game names.
+            <para>The name must be an exact match. For example, “Pokemon” will not return a list of Pokemon games; instead, query any specific Pokemon games in which you are interested.</para>
+            <para>At most 100 name values can be specified.</para>
+            </param>
+            <param name="igdbIds">List of IGDB Game Ids. At most 100 id values can be specified.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Games.GetGamesResponse"></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Games.GetTopGamesAsync(System.String,System.String,System.Int32,System.String)">
+            <summary>
+            Gets games sorted by number of current viewers on Twitch, most popular first.
+            </summary>
+            <param name="before">Cursor for backward pagination: tells the server where to start fetching the next set of results, in a multi-page response. </param>
+            <param name="after">Cursor for forward pagination: tells the server where to start fetching the next set of results, in a multi-page response. </param>
+            <param name="first">Maximum number of objects to return. Maximum: 100. Default: 20.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Games.GetTopGamesResponse"></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Goals">
+            <summary>
+            Creator Goals related APIs
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Goals.GetCreatorGoalsAsync(System.String,System.String)">
+            <summary>
+            Gets the broadcaster’s list of active goals. Use this to get the current progress of each goal.
+            <para>Requires a user OAuth access token with scope set to channel:read:goals. </para>
+            <para>The ID in the broadcasterId query parameter must match the user ID associated with the user OAuth token.</para>
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster that created the goals.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Goals.GetCreatorGoalsResponse"></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.GuestStar.GetChannelGuestStarSettingsAsync(System.String,System.String,System.String)">
+            <summary>
+            <para><see href="https://dev.twitch.tv/docs/api/reference/#get-channel-guest-star-settings">
+            Twitch Docs: Get Channel Guest Star Settings</see></para>
+            <para>Gets the channel settings for configuration of the Guest Star feature for a particular host.</para>
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster you want to get guest star settings for.</param>
+            <param name="moderatorId">The ID of the broadcaster or a user that has permission to moderate the broadcaster’s chat room. This ID must match the user ID in the user access token.</param>
+            <param name="accessToken">Optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.GuestStar.GetChannelGuestStarSettings.GetChannelGuestStarSettingsResponse"></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.GuestStar.UpdateChannelGuestStarSettingsAsync(System.String,TwitchLib.Api.Helix.Models.GuestStar.UpdateChannelGuestStarSettings.UpdateChannelGuestStarSettingsRequest,System.String)">
+            <summary>
+            <para><see href="https://dev.twitch.tv/docs/api/reference/#update-channel-guest-star-settings">
+            Twitch Docs: Update Channel Guest Star Settings</see></para>
+            <para>Mutates the channel settings for configuration of the Guest Star feature for a particular host.</para>
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster you want to update Guest Star settings for.</param>
+            <param name="newSettings">The new settings you want to apply</param>
+            <param name="accessToken">Optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.GuestStar.GetGuestStarSessionAsync(System.String,System.String,System.String)">
+            <summary>
+            <para><see href="https://dev.twitch.tv/docs/api/reference/#get-guest-star-session">
+            Twitch Docs: Get Guest Star Session</see></para>
+            <para>Gets information about an ongoing Guest Star session for a particular channel.</para>
+            </summary>
+            <param name="broadcasterId">ID for the user hosting the Guest Star session.</param>
+            <param name="moderatorId">The ID of the broadcaster or a user that has permission to moderate the broadcaster’s chat room. This ID must match the user ID in the user access token.</param>
+            <param name="accessToken">Optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.GuestStar.GetGuestStarSession.GetGuestStarSessionResponse"></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.GuestStar.CreateGuestStarSession(System.String,System.String)">
+            <summary>
+            <para><see href="https://dev.twitch.tv/docs/api/reference/#create-guest-star-session">
+            Twitch Docs: Create Guest Star Session</see></para>
+            <para>Programmatically creates a Guest Star session on behalf of the broadcaster. Requires the broadcaster to be present in the call interface, or the call will be ended automatically.</para>
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster you want to create a Guest Star session for. Provided broadcaster_id must match the user_id in the auth token.</param>
+            <param name="accessToken">Optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.GuestStar.CreateGuestStarSession.CreateGuestStarSessionResponse"></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.GuestStar.EndGuestStarSession(System.String,System.String,System.String)">
+            <summary>
+            <para><see href="https://dev.twitch.tv/docs/api/reference/#end-guest-star-session">
+            Twitch Docs: End Guest Star Session</see></para>
+            <para>A Programmatically ends a Guest Star session on behalf of the broadcaster. Performs the same action as if the host clicked the “End Call” button in the Guest Star UI.</para>
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster you want to end a Guest Star session for. Provided broadcaster_id must match the user_id in the auth token.</param>
+            <param name="sessionId">ID for the session to end on behalf of the broadcaster.</param>
+            <param name="accessToken">Optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.GuestStar.CreateGuestStarSession.EndGuestStarSessionResponse"></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.GuestStar.GetGuestStarInvitesAsync(System.String,System.String,System.String,System.String)">
+            <summary>
+            <para><see href="https://dev.twitch.tv/docs/api/reference/#get-guest-star-invites">
+            Twitch Docs: Get Guest Star Invites</see></para>
+            <para>Provides the caller with a list of pending invites to a Guest Star session, including the invitee’s ready status while joining the waiting room.</para>
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster running the Guest Star session.</param>
+            <param name="moderatorId">The ID of the broadcaster or a user that has permission to moderate the broadcaster’s chat room. This ID must match the user ID in the user access token.</param>
+            <param name="sessionId">The session ID to query for invite status.</param>
+            <param name="accessToken">Optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.GuestStar.GetGuestStarSession.GetGuestStarSessionResponse"></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.GuestStar.SendGuestStarInvitesAsync(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            <para><see href="https://dev.twitch.tv/docs/api/reference/#send-guest-star-invite">
+            Twitch Docs: Send Guest Star Invite</see></para>
+            <para>Sends an invite to a specified guest on behalf of the broadcaster for a Guest Star session in progress.</para>
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster running the Guest Star session.</param>
+            <param name="moderatorId">The ID of the broadcaster or a user that has permission to moderate the broadcaster’s chat room. This ID must match the user ID in the user access token.</param>
+            <param name="sessionId">The session ID for the invite to be sent on behalf of the broadcaster.</param>
+            <param name="guestId">Twitch User ID for the guest to invite to the Guest Star session.</param>
+            <param name="accessToken">Optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.GuestStar.DeleteGuestStarInvitesAsync(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            <para><see href="https://dev.twitch.tv/docs/api/reference/#delete-guest-star-invite">
+            Twitch Docs: Delete Guest Star Invite</see></para>
+            <para>Revokes a previously sent invite for a Guest Star session.</para>
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster running the Guest Star session.</param>
+            <param name="moderatorId">The ID of the broadcaster or a user that has permission to moderate the broadcaster’s chat room. This ID must match the user ID in the user access token.</param>
+            <param name="sessionId">The ID of the session for the invite to be revoked on behalf of the broadcaster.</param>
+            <param name="guestId">Twitch User ID for the guest to revoke the Guest Star session invite from.</param>
+            <param name="accessToken">Optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.GuestStar.AssignGuestStarSlotAsync(System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            <para><see href="https://dev.twitch.tv/docs/api/reference/#assign-guest-star-slot">
+            Twitch Docs: Assign Guest Star Slot</see></para>
+            <para>Allows a previously invited user to be assigned a slot within the active Guest Star session, once that guest has indicated they are ready to join.</para>
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster running the Guest Star session.</param>
+            <param name="moderatorId">The ID of the broadcaster or a user that has permission to moderate the broadcaster’s chat room. This ID must match the user ID in the user access token.</param>
+            <param name="sessionId">The ID of the Guest Star session in which to assign the slot.</param>
+            <param name="guestId">The Twitch User ID corresponding to the guest to assign a slot in the session. This user must already have an invite to this session, and have indicated that they are ready to join.</param>
+            <param name="slotId">The slot assignment to give to the user. Must be a numeric identifier between “1” and “N” where N is the max number of slots for the session. Max number of slots allowed for the session is reported by Get Channel Guest Star Settings.</param>
+            <param name="accessToken">Optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.GuestStar.UpdateGuestStarSlotAsync(System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            <para><see href="https://dev.twitch.tv/docs/api/reference/#update-guest-star-slot">
+            Twitch Docs: Update Guest Star Slot</see></para>
+            <para>Allows a user to update the assigned slot for a particular user within the active Guest Star session.</para>
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster running the Guest Star session.</param>
+            <param name="moderatorId">The ID of the broadcaster or a user that has permission to moderate the broadcaster’s chat room. This ID must match the user ID in the user access token.</param>
+            <param name="sessionId">The ID of the Guest Star session in which to update slot settings.</param>
+            <param name="sourceSlotId">The slot assignment previously assigned to a user.</param>
+            <param name="destinationSlotId">The slot to move this user assignment to. If the destination slot is occupied, the user assigned will be swapped into source_slot_id.</param>
+            <param name="accessToken">Optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.GuestStar.DeleteGuestStarSlotAsync(System.String,System.String,System.String,System.String,System.Nullable{System.Boolean},System.String)">
+            <summary>
+            <para><see href="https://dev.twitch.tv/docs/api/reference/#delete-guest-star-slot">
+            Twitch Docs: Delete Guest Star Slot</see></para>
+            <para>Allows a caller to remove a slot assignment from a user participating in an active Guest Star session. This revokes their access to the session immediately and disables their access to publish or subscribe to media within the session.</para>
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster running the Guest Star session.</param>
+            <param name="moderatorId">The ID of the broadcaster or a user that has permission to moderate the broadcaster’s chat room. This ID must match the user ID in the user access token.</param>
+            <param name="sessionId">The ID of the Guest Star session in which to remove the slot assignment.</param>
+            <param name="slotId">The slot ID representing the slot assignment to remove from the session.</param>
+            <param name="shouldReinviteGuest">Optional Flag signaling that the guest should be reinvited to the session, sending them back to the invite queue.</param>
+            <param name="accessToken">Optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.GuestStar.UpdateGuestStarSlotSettingsAsync(System.String,System.String,System.String,System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Int32},System.String)">
+            <summary>
+            <para><see href="https://dev.twitch.tv/docs/api/reference/#update-guest-star-slot-settings">
+            Twitch Docs: Update Guest Star Slot Settings</see></para>
+            <para>Allows a user to update slot settings for a particular guest within a Guest Star session, such as allowing the user to share audio or video within the call as a host. These settings will be broadcasted to all subscribers which control their view of the guest in that slot. One or more of the optional parameters to this API can be specified at any time.</para>
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster running the Guest Star session.</param>
+            <param name="moderatorId">The ID of the broadcaster or a user that has permission to moderate the broadcaster’s chat room. This ID must match the user ID in the user access token.</param>
+            <param name="sessionId">The ID of the Guest Star session in which to update a slot’s settings.</param>
+            <param name="slotId">The slot assignment that has previously been assigned to a user.</param>
+            <param name="isAudioEnabled">Optional Flag indicating whether the slot is allowed to share their audio with the rest of the session. If false, the slot will be muted in any views containing the slot.</param>
+            <param name="isVideoEnabled">Optional Flag indicating whether the slot is allowed to share their video with the rest of the session. If false, the slot will have no video shared in any views containing the slot.</param>
+            <param name="isLive">Optional Flag indicating whether the user assigned to this slot is visible/can be heard from any public subscriptions. Generally, this determines whether or not the slot is enabled in any broadcasting software integrations.</param>
+            <param name="volume">Optional Value from 0-100 that controls the audio volume for shared views containing the slot.</param>
+            <param name="accessToken">Optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Helix">
+            <summary>
+            Contains APIs under the /helix API namespace
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Helix.Settings">
+            <summary>
+            API Settings like the ClientId, Client Secret and so on
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Helix.Analytics">
+            <summary>
+            Analytics related Helix APIs
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Helix.Bits">
+            <summary>
+            Bits related Helix APIs
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Helix.Chat">
+            <summary>
+            Chat related Helix APIs
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Helix.Channels">
+            <summary>
+            Channel related Helix APIs
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Helix.ChannelPoints">
+            <summary>
+            Channel Points related Helix APIs
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Helix.Charity">
+            <summary>
+            Charity related Helix APIs
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Helix.Clips">
+            <summary>
+            Clips related Helix APIs
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Helix.Entitlements">
+            <summary>
+            Entitlements related Helix APIs
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Helix.ContentClassificationLabels">
+            <summary>
+            ContentClassificationLabels related Helix APIs
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Helix.EventSub">
+            <summary>
+            EventSub related Helix APIs
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Helix.Extensions">
+            <summary>
+            Extensions related Helix APIs
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Helix.Games">
+            <summary>
+            Games related Helix APIs
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Helix.Goals">
+            <summary>
+            Creator Goals related Helix APIs
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Helix.GuestStar">
+            <summary>
+            GuestStar related Helix APIs
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Helix.HypeTrain">
+            <summary>
+            HypeTrain related Helix APIs
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Helix.Moderation">
+            <summary>
+            Moderation related Helix APIs
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Helix.Polls">
+            <summary>
+            Polls related Helix APIs
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Helix.Predictions">
+            <summary>
+            Prediction related Helix APIs
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Helix.Raids">
+            <summary>
+            Raids related Helix APIs
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Helix.Schedule">
+            <summary>
+            Schedule related Helix APIs
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Helix.Search">
+            <summary>
+            Search related Helix APIs
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Helix.Streams">
+            <summary>
+            Stream related Helix APIs
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Helix.Subscriptions">
+            <summary>
+            Subscription related Helix APIs
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Helix.Tags">
+            <summary>
+            Tag related Helix APIs
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Helix.Teams">
+            <summary>
+            Stream Team related Helix APIs
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Helix.Videos">
+            <summary>
+            Video/VOD related Helix APIs
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Helix.Users">
+            <summary>
+            User related Helix APIs
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Api.Helix.Helix.Whispers">
+            <summary>
+            Whisper related Helix APIs
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Helix.#ctor(Microsoft.Extensions.Logging.ILoggerFactory,TwitchLib.Api.Core.Interfaces.IRateLimiter,TwitchLib.Api.Core.Interfaces.IApiSettings,TwitchLib.Api.Core.Interfaces.IHttpCallHandler)">
+            <summary>
+            Creates an Instance of the Helix Class.
+            </summary>
+            <param name="loggerFactory">Instance Of LoggerFactory, otherwise no logging is used. </param>
+            <param name="rateLimiter">Instance Of RateLimiter, otherwise no ratelimiter is used.</param>
+            <param name="settings">Instance of ApiSettings, otherwise defaults used. (Can be changed later)</param>
+            <param name="http">Instance of HttpCallHandler, otherwise default handler used.</param>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.HypeTrain">
+            <summary>
+            HypeTrain related APIs
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.HypeTrain.GetHypeTrainEventsAsync(System.String,System.Int32,System.String,System.String)">
+            <summary>
+            Gets the information of the most recent Hype Train of the given channel ID.
+            <para>When there is currently an active Hype Train, it returns information about that Hype Train. </para>
+            <para>When there is currently no active Hype Train, it returns information about the most recent Hype Train.</para>
+            <para>After 5 days, if no Hype Train has been active, the endpoint will return an empty response.</para>
+            <para>Required scope: channel:read:hype_train</para>
+            </summary>
+            <param name="broadcasterId">User ID of the broadcaster. Must match the User ID in the Access Token.</param>
+            <param name="first">Maximum number of objects to return. Maximum: 100. Default: 1.</param>
+            <param name="cursor">Cursor for forward pagination: tells the server where to start fetching the next set of results in a multi-page response.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.HypeTrain.GetHypeTrainResponse"></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Moderation">
+            <summary>
+            Moderation related APIs
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Moderation.ManageHeldAutoModMessagesAsync(System.String,System.String,TwitchLib.Api.Core.Enums.ManageHeldAutoModMessageActionEnum,System.String)">
+            <summary>
+            Allow or deny a message that was held for review by AutoMod.
+            <para>Required Scope: moderator:manage:automod</para>
+            </summary>
+            <param name="userId">The moderator who is approving or rejecting the held message. Must match the user_id in the user OAuth token.</param>
+            <param name="msgId">ID of the message to be allowed or denied.</param>
+            <param name="action">
+            The action to take for the message.
+            <para>Must be "ALLOW" or "DENY".</para>
+            </param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Moderation.CheckAutoModStatusAsync(System.Collections.Generic.List{TwitchLib.Api.Helix.Models.Moderation.CheckAutoModStatus.Message},System.String,System.String)">
+            <summary>
+            Determines whether a string message meets the channel’s AutoMod requirements.
+            <para>Rate Limits: Rates are limited per channel based on the account type rather than per access token.</para>
+            <para>Normal: 5 per Minute / 50 per hour</para>
+            <para>Affiliate: 10 per Minute / 100 per hour</para>
+            <para>Partner: 30 per Minute / 300 per hour</para>
+            <para>Required Scope: moderation:read</para>
+            </summary>
+            <param name="messages" cref="T:TwitchLib.Api.Helix.Models.Moderation.CheckAutoModStatus.Message">List of messages to check</param>
+            <param name="broadcasterId">BroadcasterId to test against. Provided broadcasterId must match the userId in the auth token.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Moderation.CheckAutoModStatus.CheckAutoModStatusResponse"></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Moderation.GetBannedUsersAsync(System.String,System.Collections.Generic.List{System.String},System.Int32,System.String,System.String,System.String)">
+            <summary>
+            Returns all banned and timed-out users for a channel.
+            <para>Required scope: moderation:read</para>
+            </summary>
+            <param name="broadcasterId">BroadcasterId to get banned users for. Provided broadcaster_id must match the user_id in the OAuth token.</param>
+            <param name="userIds">Filters the results and only returns a status object for users who are banned in the channel and have a matching user_id.</param>
+            <param name="first">Maximum number of objects to return. 1 - 100. Default 1</param>
+            <param name="after">Cursor for forward pagination.</param>
+            <param name="before">Cursor for backward pagination.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Moderation.GetBannedUsers.GetBannedUsersResponse"></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Moderation.GetModeratorsAsync(System.String,System.Collections.Generic.List{System.String},System.Int32,System.String,System.String)">
+            <summary>
+            Returns all moderators in a channel.
+            <para>Note: This endpoint does not return the broadcaster in the response, as broadcasters are channel owners and have all permissions of moderators implicitly.</para>
+            <para>Requires a user access token that includes the moderation:read scope.</para>
+            <para>The ID in the broadcaster_id query parameter must match the user ID in the access token.</para>
+            </summary>
+            <param name="broadcasterId">Broadcaster to get the moderators for</param>
+            <param name="userIds">
+            Filters the results and only returns a status object for users who are moderators in this channel and have a matching user_id.
+            <para>Maximum: 100</para>
+            </param>
+            <param name="first">Maximum number of objects to return. Maximum: 100. Default: 20.</param>
+            <param name="after">Cursor for forward pagination: tells the server where to start fetching the next set of results in a multi-page response.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Moderation.GetModerators.GetModeratorsResponse"></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Moderation.BanUserAsync(System.String,System.String,TwitchLib.Api.Helix.Models.Moderation.BanUser.BanUserRequest,System.String)">
+            <summary>
+            Ban or Timeout an user from chat. If a duration is specified it is treated as a timeout, if you omit a duration is a permanent ban.
+            <para>Requires a User access token with scope set to moderator:manage:banned_users.</para>
+            </summary>
+            <param name="broadcasterId">Id of the broadcaster channel from which you want to ban/timeout somebody</param>
+            <param name="moderatorId">Id of the moderator that wants to ban/timeout somebody (if you use the broadcaster account this has to be the broadcasterId)</param>
+            <param name="banUserRequest">request object containing the information about the ban like the userId of the user to ban, the reason and optional duration</param>
+            <param name="accessToken">optional access token to override the one used while creating the TwitchAPI object</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Moderation.BanUser.BanUserResponse"></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Moderation.UnbanUserAsync(System.String,System.String,System.String,System.String)">
+            <summary>
+            Removes the ban or timeout that was placed on the specified user
+            <para>Requires a User access token with scope set to moderator:manage:banned_users.</para>
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster whose chat room the user is banned from chatting in.</param>
+            <param name="moderatorId">
+            The ID of a user that has permission to moderate the broadcaster’s chat room.
+            <para>This ID must match the user ID associated with the user OAuth token.</para>
+            </param>
+            <param name="userId">The ID of the user to remove the ban or timeout from.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Moderation.GetAutomodSettingsAsync(System.String,System.String,System.String)">
+            <summary>
+            Gets the broadcaster’s AutoMod settings, which are used to automatically block inappropriate or harassing messages from appearing in the broadcaster’s chat room.
+            <para>Requires a User access token with scope set to moderator:read:automod_settings.</para>
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster whose AutoMod settings you want to get.</param>
+            <param name="moderatorId">
+            The ID of a user that has permission to moderate the broadcaster’s chat room.
+            <para>This ID must match the user ID associated with the user OAuth token.</para>
+            <para>If the broadcaster wants to get their own AutoMod settings (instead of having the moderator do it), set this parameter to the broadcaster’s ID, too.</para>
+            </param>
+            <param name="accessToken">optional access token to override the one used while creating the TwitchAPI object</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Moderation.AutomodSettings.GetAutomodSettingsResponse"></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Moderation.UpdateAutomodSettingsAsync(System.String,System.String,TwitchLib.Api.Helix.Models.Moderation.AutomodSettings.AutomodSettings,System.String)">
+            <summary>
+            Updates the broadcaster’s AutoMod settings, which are used to automatically block inappropriate or harassing messages from appearing in the broadcaster’s chat room.
+            <para>Requires a User access token with scope set to moderator:manage:automod_settings.</para>
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster whose AutoMod settings you want to update.</param>
+            <param name="moderatorId">
+            The ID of a user that has permission to moderate the broadcaster’s chat room.
+            <para>This ID must match the user ID associated with the user OAuth token.</para>
+            <para>If the broadcaster wants to update their own AutoMod settings (instead of having the moderator do it), set this parameter to the broadcaster’s ID, too.</para>
+            </param>
+            <param name="settings" cref="T:TwitchLib.Api.Helix.Models.Moderation.AutomodSettings.AutomodSettings"></param>
+            <param name="accessToken">optional access token to override the one used while creating the TwitchAPI object</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Moderation.AutomodSettings.UpdateAutomodSettingsResponse"></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Moderation.GetBlockedTermsAsync(System.String,System.String,System.String,System.Int32,System.String)">
+            <summary>
+            Gets the broadcaster’s list of non-private, blocked words or phrases.
+            <para>These are the terms that the broadcaster or moderator added manually, or that were denied by AutoMod.</para>
+            <para>Requires a User access token with scope set to moderator:read:blocked_terms.</para>
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster whose blocked terms you’re getting.</param>
+            <param name="moderatorId">
+            The ID of a user that has permission to moderate the broadcaster’s chat room.
+            <para>This ID must match the user ID associated with the user OAuth token.</para>
+            <para>If the broadcaster wants to get their own block terms (instead of having the moderator do it), set this parameter to the broadcaster’s ID, too.</para>
+            </param>
+            <param name="after">The cursor used to get the next page of results. </param>
+            <param name="first">
+            The maximum number of blocked terms to return per page in the response.
+            <para>The minimum page size is 1 blocked term per page and the maximum is 100. The default is 20.</para>
+            </param>
+            <param name="accessToken">optional access token to override the one used while creating the TwitchAPI object</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Moderation.BlockedTerms.GetBlockedTermsResponse"></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Moderation.AddBlockedTermAsync(System.String,System.String,System.String,System.String)">
+            <summary>
+            Adds a word or phrase to the broadcaster’s list of blocked terms.
+            <para>Requires a User access token with scope set to moderator:manage:blocked_terms.</para>
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster that owns the list of blocked terms.</param>
+            <param name="moderatorId">
+            The ID of a user that has permission to moderate the broadcaster’s chat room.
+            <para>This ID must match the user ID associated with the user OAuth token.</para>
+            <para>If the broadcaster wants to add the blocked term (instead of having the moderator do it), set this parameter to the broadcaster’s ID, too.</para>
+            </param>
+            <param name="term">
+            The word or phrase to block from being used in the broadcaster’s chat room.
+            <para>The term must contain a minimum of 2 characters and may contain up to a maximum of 500 characters.</para>
+            <para>Terms can use a wildcard character (*).</para>
+            <para>The wildcard character must appear at the beginning or end of a word, or set of characters. For example, *foo or foo*.</para>
+            </param>
+            <param name="accessToken">optional access token to override the one used while creating the TwitchAPI object</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Moderation.BlockedTerms.AddBlockedTermResponse"></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Moderation.DeleteBlockedTermAsync(System.String,System.String,System.String,System.String)">
+            <summary>
+            Removes the word or phrase that the broadcaster is blocking users from using in their chat room.
+            <para>Requires a User access token with scope set to moderator:manage:blocked_terms.</para>
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster that owns the list of blocked terms.</param>
+            <param name="moderatorId">
+            The ID of the broadcaster or a user that has permission to moderate the broadcaster’s chat room.
+            <para>This ID must match the user ID associated with the user OAuth token.</para>
+            </param>
+            <param name="termId">The ID of the blocked term you want to delete.</param>
+            <param name="accessToken">optional access token to override the one used while creating the TwitchAPI object</param>
+            <returns></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Moderation.DeleteChatMessagesAsync(System.String,System.String,System.String,System.String)">
+            <summary>
+            Removes a single chat message or all chat messages from the broadcaster’s chat room.
+            <para>!!! If no messageId is specified, the request removes all messages in the broadcaster’s chat room. !!!</para>
+            <para>The message must have been created within the last 6 hours.</para>
+            <para>The message must not belong to the broadcaster.</para>
+            <para>The message must not belong to another moderator.</para>
+            <para>Requires a user access token that includes the moderator:manage:chat_messages scope. </para>
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster that owns the chat room to remove messages from.</param>
+            <param name="moderatorId">The ID of a user that has permission to moderate the broadcaster’s chat room. This ID must match the user ID in the OAuth token.</param>
+            <param name="messageId">
+            The ID of the message to remove.
+            <para>!!! If not specified, the request removes all messages in the broadcaster’s chat room. !!!</para>
+            </param>
+            <param name="accessToken">optional access token to override the one used while creating the TwitchAPI object</param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Moderation.AddChannelModeratorAsync(System.String,System.String,System.String)">
+            <summary>
+            Adds a moderator to the broadcaster’s chat room.
+            Rate Limits: The channel may add a maximum of 10 moderators within a 10 seconds period.
+            Requires a user access token that includes the channel:manage:moderators scope.
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster that owns the chat room.</param>
+            <param name="userId">The ID of the user to add as a moderator in the broadcaster’s chat room.</param>
+            <param name="accessToken">optional access token to override the one used while creating the TwitchAPI object</param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Moderation.DeleteChannelModeratorAsync(System.String,System.String,System.String)">
+            <summary>
+            Removes a moderator from the broadcaster’s chat room.
+            Rate Limits: The channel may remove a maximum of 10 moderators within a 10 seconds period.
+            Requires a user access token that includes the channel:manage:moderators scope.
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster that owns the chat room.</param>
+            <param name="userId">The ID of the user to remove as a moderator from the broadcaster’s chat room.</param>
+            <param name="accessToken">optional access token to override the one used while creating the TwitchAPI object</param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Moderation.GetShieldModeStatusAsync(System.String,System.String,System.String)">
+            <summary>
+            Gets the broadcaster’s Shield Mode activation status.
+            Requires a user access token that includes the moderator:read:shield_mode or moderator:manage:shield_mode scope.
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster whose Shield Mode activation status you want to get.</param>
+            <param name="moderatorId">The ID of the broadcaster or a user that is one of the broadcaster’s moderators. This ID must match the user ID in the access token.</param>
+            <param name="accessToken">optional access token to override the one used while creating the TwitchAPI object</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Moderation.ShieldModeStatus.GetShieldModeStatus.GetShieldModeStatusResponse"></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Moderation.UpdateShieldModeStatusAsync(System.String,System.String,TwitchLib.Api.Helix.Models.Moderation.ShieldModeStatus.UpdateShieldModeStatus.ShieldModeStatusRequest,System.String)">
+            <summary>
+            Activates or deactivates the broadcaster’s Shield Mode.
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster whose Shield Mode activation status you want to get.</param>
+            <param name="moderatorId">The ID of the broadcaster or a user that is one of the broadcaster’s moderators. This ID must match the user ID in the access token.</param>
+            <param name="request">ShieldModeStatusRequest Model to request</param>
+            <param name="accessToken">optional access token to override the one used while creating the TwitchAPI object</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Moderation.ShieldModeStatus.ShieldModeStatus"></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Moderation.GetUnbanRequestsAsync(System.String,System.String,System.String,System.String,System.String,System.Int32,System.String)">
+            <summary>
+            Gets a list of unban requests for a broadcaster’s channel.
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster whose channel is receiving unban requests.</param>
+            <param name="moderatorId">The ID of the broadcaster or a user that has permission to moderate the broadcaster’s unban requests. This ID must match the user ID in the user access token.</param>
+            <param name="status">Filter by a status: pending, approved, denied, acknowledged, canceled</param>
+            <param name="userId">The ID used to filter what unban requests are returned.</param>
+            <param name="after">Cursor used to get next page of results. Pagination object in response contains cursor value.</param>
+            <param name="first">The maximum number of items to return per page in response</param>
+            <param name="accessToken">optional access token to override the one used while creating the TwitchAPI object</param>
+            <returns></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Moderation.ResolveUnbanRequestsAsync(System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Resolves an unban request by approving or denying it.
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster whose channel is approving or denying the unban request.</param>
+            <param name="moderatorId">	The ID of the broadcaster or a user that has permission to moderate the broadcaster’s unban requests. This ID must match the user ID in the user access token.</param>
+            <param name="unbanRequestId">The ID of the broadcaster or a user that has permission to moderate the broadcaster’s unban requests. This ID must match the user ID in the user access token.</param>
+            <param name="status">Resolution status: approved, denied</param>
+            <param name="resolutionText">Message supplied by the unban request resolver. The message is limited to a maximum of 500 characters.</param>
+            <param name="accessToken">optional access token to override the one used while creating the TwitchAPI object</param>
+            <returns></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Moderation.GetModeratedChannelsAsync(System.String,System.Int32,System.String,System.String)">
+            <summary>
+            Gets a list of channels that the specified user has moderator privileges in.
+            <para>Requires a user access token that includes the user:read:moderated_channels scope.</para>
+            <para>The ID in the broadcaster_id query parameter must match the user ID in the access token.</para>
+            </summary>
+            <param name="userId"> Id of the user you want the list of channels that this user has moderator privileges in.</param>
+            <param name="first">Maximum number of objects to return. Maximum: 100. Default: 20.</param>
+            <param name="after">Cursor for forward pagination: tells the server where to start fetching the next set of results in a multi-page response.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Moderation.GetModeratedChannels.GetModeratedChannelsResponse"></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Polls.GetPollsAsync(System.String,System.Collections.Generic.List{System.String},System.String,System.Int32,System.String)">
+            <summary>
+            Get information about all polls or specific polls for a Twitch channel. Poll information is available for 90 days.
+            <para>Required scope: channel:read:polls</para>
+            </summary>
+            <param name="broadcasterId">The broadcaster running polls. Provided broadcaster_id must match the user_id in the user OAuth token.</param>
+            <param name="ids">
+            IDs polls. Filters results to one or more specific polls.
+            <para>Not providing one or more IDs will return the full list of polls for the authenticated channel.</para>
+            <para>Maximum: 100</para>
+            </param>
+            <param name="after">Cursor for forward pagination: tells the server where to start fetching the next set of results in a multi-page response.</param>
+            <param name="first">Maximum number of objects to return. Maximum: 20. Default: 20.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Polls.CreatePollAsync(TwitchLib.Api.Helix.Models.Polls.CreatePoll.CreatePollRequest,System.String)">
+            <summary>
+            Create a poll for a specific Twitch channel.
+            <para>Required scope: channel:manage:polls</para>
+            </summary>
+            <param name="request" cref="T:TwitchLib.Api.Helix.Models.Polls.CreatePoll.CreatePollRequest"></param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Polls.CreatePoll.CreatePollResponse"></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Polls.EndPollAsync(System.String,System.String,TwitchLib.Api.Core.Enums.PollStatusEnum,System.String)">
+            <summary>
+            End a poll that is currently active.
+            <para>Required scope: channel:manage:polls</para>
+            </summary>
+            <param name="broadcasterId">The broadcaster running polls. Provided broadcaster_id must match the user_id in the user OAuth token.</param>
+            <param name="id">ID of the poll to end.</param>
+            <param name="status" cref="T:TwitchLib.Api.Core.Enums.PollStatusEnum">
+            The poll status to be set. Valid values:
+            <para>TERMINATED: End the poll manually, but allow it to be viewed publicly.</para>
+            <para>ARCHIVED: End the poll manually and do not allow it to be viewed publicly.</para>
+            </param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns></returns>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Predictions">
+            <summary>
+            Predictions related APIs
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Predictions.GetPredictionsAsync(System.String,System.Collections.Generic.List{System.String},System.String,System.Int32,System.String)">
+            <summary>
+            Get information about all Channel Points Predictions or specific Channel Points Predictions for a Twitch channel.
+            <para>Results are ordered by most recent, so it can be assumed that the currently active or locked Prediction will be the first item.</para>
+            <para>Required scope: channel:read:predictions</para>
+            </summary>
+            <param name="broadcasterId">The broadcaster running Predictions. Provided broadcaster_id must match the user_id in the user OAuth token.</param>
+            <param name="ids">
+            IDs of Predictions.
+            <para>Filters results to one or more specific Predictions.</para>
+            <para>Not providing one or more IDs will return the full list of Predictions for the authenticated channel.</para>
+            <para>Maximum: 100</para>
+            </param>
+            <param name="after">Cursor for forward pagination: tells the server where to start fetching the next set of results in a multi-page response.</param>
+            <param name="first">Maximum number of objects to return. Maximum: 20. Default: 20.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Predictions.GetPredictions.GetPredictionsResponse"></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Predictions.CreatePredictionAsync(TwitchLib.Api.Helix.Models.Predictions.CreatePrediction.CreatePredictionRequest,System.String)">
+            <summary>
+            Create a Channel Points Prediction for a specific Twitch channel.
+            <para>Required scope: channel:manage:predictions</para>
+            </summary>
+            <param name="request" cref="T:TwitchLib.Api.Helix.Models.Predictions.CreatePrediction.CreatePredictionRequest"></param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Predictions.CreatePrediction.CreatePredictionResponse"></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Predictions.EndPredictionAsync(System.String,System.String,TwitchLib.Api.Core.Enums.PredictionEndStatus,System.String,System.String)">
+            <summary>
+            Lock, resolve, or cancel a Channel Points Prediction.
+            <para>Active Predictions can be updated to be “locked,” “resolved,” or “canceled.” </para>
+            <para>Locked Predictions can be updated to be “resolved” or “canceled.”</para>
+            <para>Required scope: channel:manage:predictions</para>
+            </summary>
+            <param name="broadcasterId">The broadcaster running prediction events. Provided broadcaster_id must match the user_id in the user OAuth token.</param>
+            <param name="id">ID of the Prediction to update/end.</param>
+            <param name="status" cref="T:TwitchLib.Api.Core.Enums.PredictionEndStatus">
+            The Prediction status to be set. Valid values:
+            <para>RESOLVED: A winning outcome has been chosen and the Channel Points have been distributed to the users who predicted the correct outcome.</para>
+            <para>CANCELED: The Prediction has been canceled and the Channel Points have been refunded to participants.</para>
+            <para>LOCKED: The Prediction has been locked and viewers can no longer make predictions.</para>
+            </param>
+            <param name="winningOutcomeId">
+            ID of the winning outcome for the Prediction.
+            <para>This parameter is required if status is being set to RESOLVED.</para>
+            </param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Predictions.EndPrediction.EndPredictionResponse"></returns>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Raids">
+            <summary>
+            Raids related APIs
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Raids.StartRaidAsync(System.String,System.String,System.String)">
+            <summary>
+            Raid another channel by sending the broadcaster’s viewers to the targeted channel.
+            <para>Rate Limit: The limit is 10 requests within a 10-minute window.</para>
+            <para>Requires a user access token that includes the channel:manage:raids scope.</para>
+            <para>The ID in the from_broadcaster_id query parameter must match the user ID in the OAuth token.</para>
+            </summary>
+            <param name="fromBroadcasterId">The ID of the broadcaster that’s sending the raiding party.</param>
+            <param name="toBroadcasterId">	The ID of the broadcaster to raid.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Raids.StartRaid.StartRaidResponse"></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Raids.CancelRaidAsync(System.String,System.String)">
+            <summary>
+            Cancel a pending raid.
+            <para>You can cancel a raid at any point up until the broadcaster clicks Raid Now in the Twitch UX or the 90 seconds countdown expires.</para>
+            <para>Rate Limit: The limit is 10 requests within a 10-minute window.</para>
+            <para>Requires a user access token that includes the channel:manage:raids scope.</para>
+            <para>The ID in the broadcaster_id query parameter must match the user ID in the OAuth token.</para>
+            </summary>
+            <param name="broadcasterId">The ID of the broadcaster that sent the raiding party.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Schedule">
+            <summary>
+            Schedule related APIs
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Schedule.GetChannelStreamScheduleAsync(System.String,System.Collections.Generic.List{System.String},System.String,System.String,System.Int32,System.String,System.String)">
+            <summary>
+            Gets all scheduled broadcasts or specific scheduled broadcasts from a channel’s stream schedule.
+            <para>Scheduled broadcasts are defined as “stream segments” in the API.</para>
+            </summary>
+            <param name="broadcasterId">User ID of the broadcaster who owns the channel streaming schedule.</param>
+            <param name="segmentIds">
+            The IDs of the stream segment to return.
+            <para>Maximum: 100.</para>
+            </param>
+            <param name="startTime">
+            A timestamp in RFC3339 format to start returning stream segments from.
+            <para>If not specified, the current date and time is used.</para>
+            </param>
+            <param name="utcOffset">
+            A timezone offset for the requester specified in minutes.
+            <para>This is recommended to ensure stream segments are returned for the correct week.</para>
+            <para>For example, a timezone that is +4 hours from GMT would be “240.” </para>
+            <para>If not specified, “0” is used for GMT.</para>
+            </param>
+            <param name="first">
+            Maximum number of stream segments to return.
+            <para>Maximum: 25. Default: 20.</para>
+            </param>
+            <param name="after">Cursor for forward pagination: tells the server where to start fetching the next set of results in a multi-page response.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Schedule.GetChannelStreamSchedule.GetChannelStreamScheduleResponse"></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Schedule.UpdateChannelStreamScheduleAsync(System.String,System.Nullable{System.Boolean},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.String,System.String)">
+            <summary>
+            Update the settings for a channel’s stream schedule.
+            <para>This can be used for setting vacation details.</para>
+            <para>Provided broadcasterId must match the user_id in the user OAuth token.</para>
+            <para>Required scope: channel:manage:schedule</para>
+            </summary>
+            <param name="broadcasterId">User ID of the broadcaster who owns the channel streaming schedule. </param>
+            <param name="isVacationEnabled">
+            Indicates if Vacation Mode is enabled.
+            <para>Set to true to add a vacation or false to remove vacation from the channel streaming schedule.</para>
+            </param>
+            <param name="vacationStartTime">
+            Start time for vacation specified in RFC3339 format.
+            <para>Required if isVacationEnabled is set to true.</para>
+            </param>
+            <param name="vacationEndTime">
+            End time for vacation specified in RFC3339 format.
+            <para>Required if isVacationEnabled is set to true.</para>
+            </param>
+            <param name="timezone">
+            The timezone for when the vacation is being scheduled using the IANA time zone database format.
+            <para>Required if isVacationEnabled is set to true.</para>
+            </param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Schedule.CreateChannelStreamScheduleSegmentAsync(System.String,TwitchLib.Api.Helix.Models.Schedule.CreateChannelStreamSegment.CreateChannelStreamSegmentRequest,System.String)">
+            <summary>
+            Create a single scheduled broadcast or a recurring scheduled broadcast for a channel’s stream schedule.
+            <para>Provided broadcasterId must match the user_id in the user OAuth token.</para>
+            <para>Required scope: channel:manage:schedule</para>
+            </summary>
+            <param name="broadcasterId">User ID of the broadcaster who owns the channel streaming schedule. </param>
+            <param name="payload" cref="T:TwitchLib.Api.Helix.Models.Schedule.CreateChannelStreamSegment.CreateChannelStreamSegmentRequest"></param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Schedule.CreateChannelStreamSegment.CreateChannelStreamSegmentResponse"></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Schedule.UpdateChannelStreamScheduleSegmentAsync(System.String,System.String,TwitchLib.Api.Helix.Models.Schedule.UpdateChannelStreamSegment.UpdateChannelStreamSegmentRequest,System.String)">
+            <summary>
+            Update a single scheduled broadcast or a recurring scheduled broadcast for a channel’s stream schedule.
+            <para>Provided broadcasterId must match the user_id in the user OAuth token.</para>
+            <para>Required scope: channel:manage:schedule</para>
+            </summary>
+            <param name="broadcasterId">User ID of the broadcaster who owns the channel streaming schedule.</param>
+            <param name="segmentId">The ID of the streaming segment to update.</param>
+            <param name="payload" cref="T:TwitchLib.Api.Helix.Models.Schedule.UpdateChannelStreamSegment.UpdateChannelStreamSegmentRequest"></param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Schedule.UpdateChannelStreamSegment.UpdateChannelStreamSegmentResponse"></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Schedule.DeleteChannelStreamScheduleSegmentAsync(System.String,System.String,System.String)">
+            <summary>
+            Delete a single scheduled broadcast or a recurring scheduled broadcast for a channel’s stream schedule.
+            <para>Provided broadcasterId must match the user_id in the user OAuth token.</para>
+            <para>Required scope: channel:manage:schedule</para>
+            </summary>
+            <param name="broadcasterId">User ID of the broadcaster who owns the channel streaming schedule.</param>
+            <param name="segmentId">The ID of the streaming segment to delete.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Schedule.GetChanneliCalendarAsync(System.String)">
+            <summary>
+            Gets all scheduled broadcasts from a channel’s stream schedule as an iCalendar.
+            </summary>
+            <param name="broadcasterId">User ID of the broadcaster who owns the channel streaming schedule.</param>
+            <returns></returns>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Search">
+            <summary>
+            Search related APIs
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Search.SearchCategoriesAsync(System.String,System.String,System.Int32,System.String)">
+            <summary>
+            Returns a list of games or categories that match the query via name either entirely or partially.
+            </summary>
+            <param name="encodedSearchQuery">URl encoded search query</param>
+            <param name="after">Cursor for forward pagination: tells the server where to start fetching the next set of results, in a multi-page response.</param>
+            <param name="first">
+            Maximum number of objects to return.
+            <para>Default: 20. Maximum: 100.</para>
+            </param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Search.SearchCategoriesResponse"></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Search.SearchChannelsAsync(System.String,System.Boolean,System.String,System.Int32,System.String)">
+            <summary>
+            Returns a list of channels (users who have streamed within the past 6 months) that match the query via channel name or description either entirely or partially.
+            <para>Results include both live and offline channels.</para>
+            <para> Online channels will have additional metadata (e.g. started_at, tag_ids).</para>
+            </summary>
+            <param name="encodedSearchQuery">URl encoded search query</param>
+            <param name="liveOnly">	Filter results for live streams only. Default: false</param>
+            <param name="after">Cursor for forward pagination: tells the server where to start fetching the next set of results, in a multi-page response.</param>
+            <param name="first">
+            Maximum number of objects to return.
+            <para>Default: 20. Maximum: 100.</para>
+            </param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Streams">
+            <summary>
+            Streams related APIs
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Streams.GetStreamsAsync(System.String,System.Int32,System.Collections.Generic.List{System.String},System.Collections.Generic.List{System.String},System.Collections.Generic.List{System.String},System.Collections.Generic.List{System.String},System.String,System.String)">
+            <summary>
+            Gets information about active streams.
+            <para>Streams are returned sorted by number of current viewers, in descending order.</para>
+            <para>Across multiple pages of results, there may be duplicate or missing streams, as viewers join and leave streams.</para>
+            </summary>
+            <param name="after">Cursor for forward pagination: tells the server where to start fetching the next set of results, in a multi-page response.</param>
+            <param name="first">Maximum number of objects to return. Maximum: 100. Default: 20.</param>
+            <param name="gameIds">Returns streams broadcasting a specified game ID. You can specify up to 100 IDs.</param>
+            <param name="languages">
+            Filter by Stream language.
+            <para>You can specify up to 100 languages.</para>
+            <para>A language value must be either the ISO 639-1 two-letter code for a supported stream language or “other”.</para>
+            </param>
+            <param name="userIds">Returns streams broadcast by one or more specified user IDs. You can specify up to 100 IDs.</param>
+            <param name="userLogins">Returns streams broadcast by one or more specified user login names. You can specify up to 100 names.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Streams.GetStreams.GetStreamsResponse"></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Streams.GetStreamTagsAsync(System.String,System.String)">
+            <summary>
+            Gets the list of stream tags that are set on the specified channel.
+            </summary>
+            <param name="broadcasterId">The user ID of the channel to get the tags from.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Streams.GetStreamTags.GetStreamTagsResponse"></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Streams.GetStreamKeyAsync(System.String,System.String)">
+            <summary>
+            Gets the channel stream key for a user.
+            <para>Required scope: channel:read:stream_key</para>
+            </summary>
+            <param name="broadcasterId">User ID of the broadcaster</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Streams.GetStreamKey.GetStreamKeyResponse"></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Streams.CreateStreamMarkerAsync(TwitchLib.Api.Helix.Models.Streams.CreateStreamMarker.CreateStreamMarkerRequest,System.String)">
+            <summary>
+            Creates a marker in the stream of a user specified by user ID
+            <para>A marker is an arbitrary point in a stream that the broadcaster wants to mark; e.g., to easily return to later. </para>
+            <para>Markers can be created by the stream owner or editors. </para>
+            Required scope: channel:manage:broadcast
+            </summary>
+            <param name="request" cref="T:TwitchLib.Api.Helix.Models.Streams.CreateStreamMarker.CreateStreamMarkerRequest"></param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Streams.CreateStreamMarker.CreateStreamMarkerResponse"></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Streams.GetStreamMarkersAsync(System.String,System.String,System.Int32,System.String,System.String)">
+            <summary>
+            Gets a list of markers for either a specified user’s most recent stream or a specified VOD/video (stream), ordered by recency.
+            <para>A marker is an arbitrary point in a stream that the broadcaster wants to mark; e.g., to easily return to later.</para>
+            <para>The only markers returned are those created by the user identified by the Bearer token.</para>
+            <para>Only one of userId and videoId must be specified.</para>
+            <para>Required scope: user:read:broadcast</para>
+            </summary>
+            <param name="userId">
+            ID of the broadcaster from whose stream markers are returned.
+            <para>Only one of userId and videoId must be specified.</para>
+            </param>
+            <param name="videoId">
+            ID of the VOD/video whose stream markers are returned.
+            <para>Only one of userId and videoId must be specified.</para>
+            </param>
+            <param name="first">Number of values to be returned when getting videos by user or game ID. Limit: 100. Default: 20.</param>
+            <param name="after">Cursor for forward pagination: tells the server where to start fetching the next set of results, in a multi-page response.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Streams.GetStreamMarkers.GetStreamMarkersResponse"></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Streams.GetFollowedStreamsAsync(System.String,System.Int32,System.String,System.String)">
+            <summary>
+            Gets information about active streams belonging to channels that the authenticated user follows.
+            <para>Streams are returned sorted by number of current viewers, in descending order.</para>
+            <para>Across multiple pages of results, there may be duplicate or missing streams, as viewers join and leave streams.</para>
+            <para>userId must match the User ID in the bearer token.</para>
+            <para>Required scope: user:read:follows</para>
+            </summary>
+            <param name="userId">Results will only include active streams from the channels that this Twitch user follows.</param>
+            <param name="first">Maximum number of objects to return. Maximum: 100. Default: 100.</param>
+            <param name="after">Cursor for forward pagination: tells the server where to start fetching the next set of results, in a multi-page response.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Streams.GetFollowedStreams.GetFollowedStreamsResponse"></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Subscriptions">
+            <summary>
+            Subscriptions related APIs
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Subscriptions.CheckUserSubscriptionAsync(System.String,System.String,System.String)">
+            <summary>
+            Checks if a specific user (userId) is subscribed to a specific channel (broadcasterId).
+            <para>Requires User access token with scope user:read:subscriptions</para>
+            <para>Or requires App access token if the user has authorized your application with scope user:read:subscriptions</para>
+            </summary>
+            <param name="broadcasterId">User ID of an Affiliate or Partner broadcaster.</param>
+            <param name="userId">User ID of a Twitch viewer.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Subscriptions.CheckUserSubscriptionResponse"></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Subscriptions.GetUserSubscriptionsAsync(System.String,System.Collections.Generic.List{System.String},System.String)">
+            <summary>
+            Gets a list of users that subscribe to the specified broadcaster filtered by a list of UserIds.
+            <para>Required scope: channel:read:subscriptions</para>
+            </summary>
+            <param name="broadcasterId">User ID of the broadcaster. Must match the User ID in the Bearer token.</param>
+            <param name="userIds">Filters the list to include only the specified subscribers. You may specify a maximum of 100 subscribers.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Subscriptions.GetUserSubscriptionsResponse"></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Subscriptions.GetBroadcasterSubscriptionsAsync(System.String,System.Int32,System.String,System.String)">
+            <summary>
+            Gets a list of users that subscribe to the specified broadcaster.
+            <para>Required scope: channel:read:subscriptions</para>
+            </summary>
+            <param name="broadcasterId">User ID of the broadcaster. Must match the User ID in the Bearer token.</param>
+            <param name="first">Maximum number of objects to return. Maximum: 100. Default: 20.</param>
+            <param name="after">Cursor for forward pagination: tells the server where to start fetching the next set of results in a multi-page response.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Subscriptions.GetBroadcasterSubscriptionsResponse"></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Tags">
+            <summary>
+            Tags related APIs
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Tags.GetAllStreamTagsAsync(System.String,System.Int32,System.Collections.Generic.List{System.String},System.String)">
+            <summary>
+            Gets the list of all stream tags that Twitch defines. You can also filter the list by one or more tag IDs.
+            </summary>
+            <param name="after">The cursor used to get the next page of results.</param>
+            <param name="first">The maximum number of tags to return per page. Maximum: 100. Default: 20.</param>
+            <param name="tagIds">List of tag IDs to query. You may specify a maximum of 100 IDs.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Tags.GetAllStreamTagsResponse"></returns>
+            <exception cref="T:System.ArgumentOutOfRangeException"></exception>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Teams">
+            <summary>
+            Teams related APIs
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Teams.GetChannelTeamsAsync(System.String,System.String)">
+            <summary>
+            Retrieves a list of Twitch Teams of which the specified channel/broadcaster is a member.
+            </summary>
+            <param name="broadcasterId">User ID for a Twitch user.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Teams.GetChannelTeamsResponse"></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Teams.GetTeamsAsync(System.String,System.String,System.String)">
+            <summary>
+            Gets information for a specific Twitch Team.
+            </summary>
+            <param name="teamId">Team ID to lookup.</param>
+            <param name="teamName">Team name to lookup.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Teams.GetTeamsResponse"></returns>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Users">
+            <summary>
+            User related APIs
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Users.GetUserBlockListAsync(System.String,System.Int32,System.String,System.String)">
+            <summary>
+            Gets a specified user’s block list.
+            <para>The list is sorted by when the block occurred in descending order (i.e. most recent block first).</para>
+            <para>Required scope: user:read:blocked_users</para>
+            </summary>
+            <param name="broadcasterId">User ID for a Twitch user.</param>
+            <param name="first">Maximum number of objects to return. Maximum: 100. Default: 20.</param>
+            <param name="after">Cursor for forward pagination: tells the server where to start fetching the next set of results, in a multi-page response. </param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Users.GetUserBlockList.GetUserBlockListResponse"></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Users.BlockUserAsync(System.String,System.Nullable{TwitchLib.Api.Core.Enums.BlockUserSourceContextEnum},System.Nullable{TwitchLib.Api.Core.Enums.BlockUserReasonEnum},System.String)">
+            <summary>
+            Blocks the specified user on behalf of the authenticated user.
+            <para>Required scope: user:manage:blocked_users</para>
+            </summary>
+            <param name="targetUserId">User ID of the user to be blocked.</param>
+            <param name="sourceContext">Source context for blocking the user.</param>
+            <param name="reason">Reason for blocking the user. </param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Users.UnblockUserAsync(System.String,System.String)">
+            <summary>
+            Unblocks the specified user on behalf of the authenticated user.
+            <para>Required scope: user:manage:blocked_users</para>
+            </summary>
+            <param name="targetUserId">User ID of the user to be unblocked.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Users.GetUsersAsync(System.Collections.Generic.List{System.String},System.Collections.Generic.List{System.String},System.String)">
+            <summary>
+            Gets information about one or more specified Twitch users.
+            <para>Users are identified by optional user IDs and/or login name.</para>
+            <para>If neither a user ID nor a login name is specified, the user is looked up by Bearer token.</para>
+            <para>OAuth token with user:read:email scope required to include the user’s verified email address in response.</para>
+            </summary>
+            <param name="ids">
+            UserIds to query. Maximum: 100.
+            <para>The limit of 100 IDs and login names is the total limit.</para>
+            <para>You can request, for example, 50 of each or 100 of one of them. You cannot request 100 of both.</para>
+            </param>
+            <param name="logins">
+            UserLogins to query. Maximum: 100.
+            <para>The limit of 100 IDs and login names is the total limit.</para>
+            <para>You can request, for example, 50 of each or 100 of one of them. You cannot request 100 of both.</para>
+            </param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Users.GetUsers.GetUsersResponse"></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Users.GetUsersFollowsAsync(System.String,System.String,System.Int32,System.String,System.String,System.String)">
+            <summary>
+            Gets information on follow relationships between two Twitch users.
+            <para>This can return information like “who is X following,” “who is following X,” or “is user X following user Y.”</para>
+            <para>Information returned is sorted in order, most recent follow first.</para>
+            </summary>
+            <param name="after">Cursor for forward pagination: tells the server where to start fetching the next set of results, in a multi-page response. </param>
+            <param name="before"></param>
+            <param name="first">Maximum number of objects to return. Maximum: 100. Default: 20.</param>
+            <param name="fromId">User ID. The request returns information about users who are being followed by the from_id user.</param>
+            <param name="toId">User ID. The request returns information about users who are following the to_id user.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Users.GetUserFollows.GetUsersFollowsResponse"></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Users.UpdateUserAsync(System.String,System.String)">
+            <summary>
+            Updates the description of a user specified by the bearer token.
+            <para>Note that the description parameter is optional should other updatable parameters become available in the future.</para>
+            <para> If the description parameter is not provided, no update will occur.</para>
+            <para>Required scope: user:edit</para>
+            </summary>
+            <param name="description">User’s account description</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Users.GetUserExtensionsAsync(System.String)">
+            <summary>
+            Gets a list of all extensions (both active and inactive) for a specified user, identified by a Bearer token.
+            <para>Required scope: user:read:broadcast or user:edit:broadcast</para>
+            </summary>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Users.GetUserExtensions.GetUserExtensionsResponse"></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Users.GetUserActiveExtensionsAsync(System.String,System.String)">
+            <summary>
+            Gets information about active extensions installed by a specified user, identified by a user ID or Bearer token.
+            <para>Required scope: user:read:broadcast or user:edit:broadcast</para>
+            </summary>
+            <param name="userid"></param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Users.UpdateUserExtensionsAsync(System.Collections.Generic.IEnumerable{TwitchLib.Api.Helix.Models.Users.Internal.ExtensionSlot},System.String)">
+            <summary>
+            Updates the activation state, extension ID, and/or version number of installed extensions for a specified user, identified by a Bearer token.
+            <para>If you try to activate a given extension under multiple extension types, the last write wins (and there is no guarantee of write order).</para>
+            <para>Required scope: user:edit:broadcast</para>
+            </summary>
+            <param name="userExtensionStates" cref="T:TwitchLib.Api.Helix.Models.Users.Internal.ExtensionSlot"></param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Users.GetUserActiveExtensions.GetUserActiveExtensionsResponse"></returns>
+            <exception cref="T:System.ArgumentOutOfRangeException"></exception>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Videos">
+            <summary>
+            Videos related APIs
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Videos.DeleteVideosAsync(System.Collections.Generic.List{System.String},System.String)">
+            <summary>
+            Deletes one or more videos. Videos are past broadcasts, Highlights, or uploads.
+            <para>Invalid Video IDs will be ignored (i.e. IDs provided that do not have a video associated with it).</para>
+            <para>If the OAuth user token does not have permission to delete even one of the valid Video IDs, no videos will be deleted and the response will return a 401.</para>
+            <para>Required scope: channel:manage:videos</para>
+            </summary>
+            <param name="videoIds">ID of the video(s) to be deleted. Maximum: 5</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns cref="T:TwitchLib.Api.Helix.Models.Videos.DeleteVideos.DeleteVideosResponse"></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Videos.GetVideosAsync(System.Collections.Generic.List{System.String},System.String,System.String,System.String,System.String,System.Int32,System.String,TwitchLib.Api.Core.Enums.Period,TwitchLib.Api.Core.Enums.VideoSort,TwitchLib.Api.Core.Enums.VideoType,System.String)">
+            <summary>
+            Gets video information by one or more video IDs, user ID, or game ID.
+            <para>For lookup by user or game, several filters are available that can be specified as query parameters.</para>
+            <para>Each request must specify one or more videoIds, one userId, or one gameId.</para>
+            </summary>
+            <param name="videoIds">IDs of the videos to query. Maximum: 100.</param>
+            <param name="userId">ID of the user who owns the video.</param>
+            <param name="gameId">ID of the game the video is of. </param>
+            <param name="after">Cursor for forward pagination: tells the server where to start fetching the next set of results, in a multi-page response.</param>
+            <param name="before">Cursor for backward pagination: tells the server where to start fetching the next set of results, in a multi-page response.</param>
+            <param name="first">Number of values to be returned when getting videos by user or game ID. Maximum: 100. Default: 20.</param>
+            <param name="language">Language of the video being queried. A language value must be either the ISO 639-1 two-letter code for a supported stream language or “other”.</param>
+            <param name="period">Period during which the video was created.</param>
+            <param name="sort">Sort order of the videos.</param>
+            <param name="type">Type of video.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+            <returns></returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadParameterException"></exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"></exception>
+        </member>
+        <member name="T:TwitchLib.Api.Helix.Whispers">
+            <summary>
+            Whispers related APIs
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Api.Helix.Whispers.SendWhisperAsync(System.String,System.String,System.String,System.Boolean,System.String)">
+            <summary>
+            Sends a whisper message to the specified user.
+            <para>The ID in the fromUserId parameter must match the user ID in the access token.</para>
+            <para>Requires an user access token that includes the user:manage:whispers scope.</para>
+            </summary>
+            <param name="fromUserId">The ID of the user sending the whisper. This user must have a verified phone number.</param>
+            <param name="toUserId">The ID of the user to receive the whisper.</param>
+            <param name="message">The whisper message to send. 500 characters for new recipient, otherwise 10,000 characters</param>
+            <param name="newRecipient">If this is a new recipient to adjust max characters allowed in the message.</param>
+            <param name="accessToken">optional access token to override the use of the stored one in the TwitchAPI instance</param>
+        </member>
+    </members>
+</doc>

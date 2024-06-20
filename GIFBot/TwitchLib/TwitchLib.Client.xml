@@ -1,0 +1,2761 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TwitchLib.Client</name>
+    </assembly>
+    <members>
+        <member name="T:TwitchLib.Client.Events.NoticeEventArgs">
+            <summary>
+            EventArgs representing a NOTICE.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Events.NoticeEventArgs.Message">
+            <summary>
+            Property representing message send with the NOTICE
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Events.NoticeEventArgs.Channel">
+            <summary>
+            Property representing channel bot is connected to.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.NoticeEventArgs.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.NoticeEventArgs"/> class.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Events.OnAnnouncementArgs">
+            <summary>
+            Args representing a USERNOTICE notifying the client that an announcemet was posted
+            Implements the <see cref="T:System.EventArgs" />
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+            <inheritdoc />
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnAnnouncementArgs.Announcement">
+            <summary>
+            Property representing the announcement send with the USERNOTICE
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnAnnouncementArgs.Channel">
+            <summary>
+            Property representing channel bot is connected to.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.OnAnnouncementArgs.#ctor(System.String,TwitchLib.Client.Models.Announcement)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.OnAnnouncementArgs"/> class.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnAnonGiftPaidUpgradeArgs.Channel">
+            <summary>
+            The channel
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnAnonGiftPaidUpgradeArgs.AnonGiftPaidUpgrade">
+            <summary>
+            The AnonGiftPaidUpgrade
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.OnAnonGiftPaidUpgradeArgs.#ctor(System.String,TwitchLib.Client.Models.AnonGiftPaidUpgrade)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.OnBitsBadgeTierArgs"/> class.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnBitsBadgeTierArgs.Channel">
+            <summary>
+            The channel
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnBitsBadgeTierArgs.BitsBadgeTier">
+            <summary>
+            The BitsBadgeTier
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.OnBitsBadgeTierArgs.#ctor(System.String,TwitchLib.Client.Models.BitsBadgeTier)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.OnBitsBadgeTierArgs"/> class.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Events.OnChannelStateChangedArgs">
+            <summary>
+            Args representing on channel state changed event.
+            Implements the <see cref="T:System.EventArgs" />
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+            <inheritdoc />
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnChannelStateChangedArgs.ChannelState">
+            <summary>
+            Property representing the current channel state.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnChannelStateChangedArgs.Channel">
+            <summary>
+            Property representing the channel received state from.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.OnChannelStateChangedArgs.#ctor(System.String,TwitchLib.Client.Models.ChannelState)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.OnChannelStateChangedArgs"/> class.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Events.OnChatClearedArgs">
+            <summary>
+            Args representing a cleared chat event.
+            Implements the <see cref="T:System.EventArgs" />
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+            <inheritdoc />
+        </member>
+        <member name="F:TwitchLib.Client.Events.OnChatClearedArgs.Channel">
+            <summary>
+            Channel that had chat cleared event.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.OnChatClearedArgs.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.OnChatClearedArgs"/> class.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Events.OnChatCommandReceivedArgs">
+            <summary>
+            Args representing chat command received event.
+            Implements the <see cref="T:System.EventArgs" />
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+            <inheritdoc />
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnChatCommandReceivedArgs.Command">
+            <summary>
+            Property representing received command.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.OnChatCommandReceivedArgs.#ctor(TwitchLib.Client.Models.ChatMessage,TwitchLib.Client.Models.CommandInfo)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.OnChatCommandReceivedArgs"/> class.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnCommunityPayForwardArgs.Channel">
+            <summary>
+            The channel
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnCommunityPayForwardArgs.CommunityPayForward">
+            <summary>
+            The CommunityPayForward
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.OnCommunityPayForwardArgs.#ctor(System.String,TwitchLib.Client.Models.CommunityPayForward)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.OnCommunityPayForwardArgs"/> class.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Events.OnCommunitySubscriptionArgs">
+            <summary>
+            Args representing community subscription received event.
+            Implements the <see cref="T:System.EventArgs" />
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+            <inheritdoc />
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnCommunitySubscriptionArgs.GiftedSubscription">
+            <summary>
+            Property representing the information of the community subscription.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnCommunitySubscriptionArgs.Channel">
+            <summary>
+            Property representing the Twitch channel this event fired from.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.OnCommunitySubscriptionArgs.#ctor(System.String,TwitchLib.Client.Models.CommunitySubscription)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.OnCommunitySubscriptionArgs"/> class.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Events.OnConnectedEventArgs">
+            <summary>
+            Args representing on connected event.
+            Implements the <see cref="T:System.EventArgs" />
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnConnectedEventArgs.BotUsername">
+            <summary>
+            Property representing bot username.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.OnConnectedEventArgs.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.OnConnectedEventArgs"/> class.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Events.OnConnectionErrorArgs">
+            <summary>
+            Args representing client connection error event.
+            Implements the <see cref="T:System.EventArgs" />
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+            <inheritdoc />
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnConnectionErrorArgs.Error">
+            <summary>
+            The error
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnConnectionErrorArgs.BotUsername">
+            <summary>
+            Username of the bot that suffered connection error.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.OnConnectionErrorArgs.#ctor(System.String,TwitchLib.Client.Models.ErrorEvent)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.OnConnectionErrorArgs"/> class.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Events.OnContinuedGiftedSubscriptionArgs">
+            <summary>
+            Class OnContinuedGiftedSubscriptionArgs.
+            Implements the <see cref="T:System.EventArgs" />
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnContinuedGiftedSubscriptionArgs.ContinuedGiftedSubscription">
+            <summary>
+            Property representing the information of the subscription that was originally gifted, and is now continued by the user.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnContinuedGiftedSubscriptionArgs.Channel">
+            <summary>
+            Property representing the Twitch channel this event fired from.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.OnContinuedGiftedSubscriptionArgs.#ctor(System.String,TwitchLib.Client.Models.ContinuedGiftedSubscription)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.OnContinuedGiftedSubscriptionArgs"/> class.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Events.OnDisconnectedArgs">
+            <summary>
+            Args representing client disconnect event.
+            Implements the <see cref="T:System.EventArgs" />
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+            <inheritdoc />
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnDisconnectedArgs.BotUsername">
+            <summary>
+            Username of the bot that was disconnected.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.OnDisconnectedArgs.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.OnDisconnectedArgs"/> class.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Events.OnExistingUsersDetectedArgs">
+            <summary>
+            Args representing existing user(s) detected event.
+            Implements the <see cref="T:System.EventArgs" />
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+            <inheritdoc />
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnExistingUsersDetectedArgs.Users">
+            <summary>
+            Property representing string list of existing users.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnExistingUsersDetectedArgs.Channel">
+            <summary>
+            Property representing channel bot is connected to.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.OnExistingUsersDetectedArgs.#ctor(System.String,System.Collections.Generic.List{System.String})">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.OnExistingUsersDetectedArgs"/> class.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Events.OnFailureToReceiveJoinConfirmationArgs">
+            <summary>
+            Class OnFailureToReceiveJoinConfirmationArgs.
+            Implements the <see cref="T:System.EventArgs" />
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+        </member>
+        <member name="F:TwitchLib.Client.Events.OnFailureToReceiveJoinConfirmationArgs.Exception">
+            <summary>
+            The exception
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.OnFailureToReceiveJoinConfirmationArgs.#ctor(TwitchLib.Client.Exceptions.FailureToReceiveJoinConfirmationException)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.OnFailureToReceiveJoinConfirmationArgs"/> class.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Events.OnGiftedSubscriptionArgs">
+            <summary>
+            Class OnGiftedSubscriptionArgs.
+            Implements the <see cref="T:System.EventArgs" />
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnGiftedSubscriptionArgs.GiftedSubscription">
+            <summary>
+            Property representing the information of the gifted subscription.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnGiftedSubscriptionArgs.Channel">
+            <summary>
+            Property representing the Twitch channel this event fired from.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.OnGiftedSubscriptionArgs.#ctor(System.String,TwitchLib.Client.Models.GiftedSubscription)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.OnGiftedSubscriptionArgs"/> class.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Events.OnIncorrectLoginArgs">
+            <summary>
+            Args representing an incorrect login event.
+            Implements the <see cref="T:System.EventArgs" />
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+            <inheritdoc />
+        </member>
+        <member name="F:TwitchLib.Client.Events.OnIncorrectLoginArgs.Exception">
+            <summary>
+            Property representing exception object.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.OnIncorrectLoginArgs.#ctor(TwitchLib.Client.Exceptions.ErrorLoggingInException)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.OnIncorrectLoginArgs"/> class.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Events.OnJoinedChannelArgs">
+            <summary>
+            Args representing on channel joined event.
+            Implements the <see cref="T:System.EventArgs" />
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+            <inheritdoc />
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnJoinedChannelArgs.BotUsername">
+            <summary>
+            Property representing bot username.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnJoinedChannelArgs.Channel">
+            <summary>
+            Property representing the channel that was joined.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.OnJoinedChannelArgs.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.OnJoinedChannelArgs"/> class.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Events.OnLeftChannelArgs">
+            <summary>
+            Args representing the client left a channel event.
+            Implements the <see cref="T:System.EventArgs" />
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+            <inheritdoc />
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnLeftChannelArgs.BotUsername">
+            <summary>
+            The username of the bot that left the channel.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnLeftChannelArgs.Channel">
+            <summary>
+            Channel that bot just left (parted).
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.OnLeftChannelArgs.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.OnLeftChannelArgs"/> class.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Events.OnMessageClearedArgs">
+            <summary>
+            Args representing a cleared message event.
+            Implements the <see cref="T:System.EventArgs" />
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+            <inheritdoc />
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnMessageClearedArgs.Channel">
+            <summary>
+            Channel that had message cleared event.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnMessageClearedArgs.Message">
+            <summary>
+            Message contents that received clear message
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnMessageClearedArgs.TargetMessageId">
+            <summary>
+            Message ID representing the message that was cleared
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnMessageClearedArgs.TmiSent">
+            <summary>
+            Timestamp of when message was sent
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.OnMessageClearedArgs.#ctor(System.String,System.String,System.String,System.DateTimeOffset)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.OnMessageClearedArgs"/> class.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Events.OnMessageReceivedArgs">
+            <summary>
+            Args representing message received event.
+            Implements the <see cref="T:System.EventArgs" />
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+            <inheritdoc />
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnMessageReceivedArgs.ChatMessage">
+            <summary>
+            Property representing received chat message.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.OnMessageReceivedArgs.#ctor(TwitchLib.Client.Models.ChatMessage)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.OnMessageReceivedArgs"/> class.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Events.OnMessageSentArgs">
+            <summary>
+            Args representing message sent event.
+            Implements the <see cref="T:System.EventArgs" />
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+            <inheritdoc />
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnMessageSentArgs.SentMessage">
+            <summary>
+            Property representing a chat message that was just sent (check null on properties before using).
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.OnMessageSentArgs.#ctor(TwitchLib.Client.Models.SentMessage)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.OnMessageSentArgs"/> class.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Events.OnNewSubscriberArgs">
+            <summary>
+            Args representing new subscriber event.
+            Implements the <see cref="T:System.EventArgs" />
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+            <inheritdoc />
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnNewSubscriberArgs.Subscriber">
+            <summary>
+            Property representing subscriber object.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnNewSubscriberArgs.Channel">
+            <summary>
+            Property representing the Twitch channel this event fired from.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.OnNewSubscriberArgs.#ctor(System.String,TwitchLib.Client.Models.Subscriber)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.OnPrimePaidSubscriberArgs"/> class.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Events.OnPrimePaidSubscriberArgs">
+            <summary>
+            Args representing prime gaming sub -> paid sub event.
+            Implements the <see cref="T:System.EventArgs" />
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+            <inheritdoc />
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnPrimePaidSubscriberArgs.PrimePaidSubscriber">
+            <summary>
+            Property representing prime gaming -> paid subscriber object.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnPrimePaidSubscriberArgs.Channel">
+            <summary>
+            Property representing the Twitch channel this event fired from.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.OnPrimePaidSubscriberArgs.#ctor(System.String,TwitchLib.Client.Models.PrimePaidSubscriber)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.OnPrimePaidSubscriberArgs"/> class.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Events.OnRaidNotificationArgs">
+            <summary>
+            Class OnRaidNotificationArgs.
+            Implements the <see cref="T:System.EventArgs" />
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnRaidNotificationArgs.RaidNotification">
+            <summary>
+            The raid notification
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnRaidNotificationArgs.Channel">
+            <summary>
+            The channel
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.OnRaidNotificationArgs.#ctor(System.String,TwitchLib.Client.Models.RaidNotification)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.OnRaidNotificationArgs"/> class.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Events.OnReSubscriberArgs">
+            <summary>
+            Args representing resubscriber event.
+            Implements the <see cref="T:System.EventArgs" />
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+            <inheritdoc />
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnReSubscriberArgs.ReSubscriber">
+            <summary>
+            Property representing resubscriber object.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnReSubscriberArgs.Channel">
+            <summary>
+            Property representing the Twitch channel this event fired from.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.OnReSubscriberArgs.#ctor(System.String,TwitchLib.Client.Models.ReSubscriber)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.OnReSubscriberArgs"/> class.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnRitualArgs.Channel">
+            <summary>
+            The channel
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnRitualArgs.Ritual">
+            <summary>
+            The ritual
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.OnRitualArgs.#ctor(System.String,TwitchLib.Client.Models.Ritual)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.OnRitualArgs"/> class.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Events.OnSendReceiveDataArgs">
+            <summary>
+            Args representing on channel state changed event.
+            Implements the <see cref="T:System.EventArgs" />
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+            <inheritdoc />
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnSendReceiveDataArgs.Direction">
+            <summary>
+            Property representing the direction of the data.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnSendReceiveDataArgs.Data">
+            <summary>
+            Property representing the data that was either sent or received.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.OnSendReceiveDataArgs.#ctor(TwitchLib.Client.Enums.SendReceiveDirection,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.OnSendReceiveDataArgs"/> class.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnStandardPayForwardArgs.Channel">
+            <summary>
+            The channel
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnStandardPayForwardArgs.StandardPayForward">
+            <summary>
+            The StandardPayForward
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.OnStandardPayForwardArgs.#ctor(System.String,TwitchLib.Client.Models.StandardPayForward)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.OnRaidNotificationArgs"/> class.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Events.OnUnaccountedForArgs">
+            <summary>
+            Class OnUnaccountedForArgs.
+            Implements the <see cref="T:System.EventArgs" />
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnUnaccountedForArgs.RawIRC">
+            <summary>
+            Gets or sets the raw irc.
+            </summary>
+            <value>The raw irc.</value>
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnUnaccountedForArgs.Location">
+            <summary>
+            Gets or sets the location.
+            </summary>
+            <value>The location.</value>
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnUnaccountedForArgs.BotUsername">
+            <summary>
+            Gets or sets the bot username.
+            </summary>
+            <value>The bot username.</value>
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnUnaccountedForArgs.Channel">
+            <summary>
+            Gets or sets the channel.
+            </summary>
+            <value>The channel.</value>
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnUnraidNotificationArgs.Channel">
+            <summary>
+            The channel
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnUnraidNotificationArgs.RaidNotification">
+            <summary>
+            The unraid notification
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.OnUnraidNotificationArgs.#ctor(System.String,TwitchLib.Client.Models.UnraidNotification)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.OnUnraidNotificationArgs"/> class.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Events.OnUserBannedArgs">
+            <summary>
+            Args representing a user was banned event.
+            Implements the <see cref="T:System.EventArgs" />
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+            <inheritdoc />
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnUserBannedArgs.UserBan">
+            <summary>
+            The user ban
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.OnUserBannedArgs.#ctor(TwitchLib.Client.Models.UserBan)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.OnUserBannedArgs"/> class.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Events.OnUserIntroArgs">
+            <summary>
+            Args representing a PRIVMSG that represents a User Intro
+            Implements the <see cref="T:System.EventArgs" />
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+            <inheritdoc />
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnUserIntroArgs.ChatMessage">
+            <summary>
+            Property representing the PRIVMSG
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.OnUserIntroArgs.#ctor(TwitchLib.Client.Models.ChatMessage)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.OnUserIntroArgs"/> class.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Events.OnUserJoinedArgs">
+            <summary>
+            Args representing viewer joined event.
+            Implements the <see cref="T:System.EventArgs" />
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+            <inheritdoc />
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnUserJoinedArgs.Username">
+            <summary>
+            Property representing username of joined viewer.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnUserJoinedArgs.Channel">
+            <summary>
+            Property representing channel bot is connected to.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.OnUserJoinedArgs.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.OnUserJoinedArgs"/> class.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Events.OnUserLeftArgs">
+            <summary>
+            Args representing viewer left event.
+            Implements the <see cref="T:System.EventArgs" />
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+            <inheritdoc />
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnUserLeftArgs.Username">
+            <summary>
+            Property representing username of user that left.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnUserLeftArgs.Channel">
+            <summary>
+            Property representing channel bot is connected to.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.OnUserLeftArgs.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.OnUserLeftArgs"/> class.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Events.OnUserStateChangedArgs">
+            <summary>
+            Args representing on user state changed event.
+            Implements the <see cref="T:System.EventArgs" />
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+            <inheritdoc />
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnUserStateChangedArgs.UserState">
+            <summary>
+            Property representing user state object.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.OnUserStateChangedArgs.#ctor(TwitchLib.Client.Models.UserState)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.OnUserStateChangedArgs"/> class.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Events.OnUserTimedoutArgs">
+            <summary>
+            Args representing a user was timed out event.
+            Implements the <see cref="T:System.EventArgs" />
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+            <inheritdoc />
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnUserTimedoutArgs.UserTimeout">
+            <summary>
+            The user timeout
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.OnUserTimedoutArgs.#ctor(TwitchLib.Client.Models.UserTimeout)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.OnUserTimedoutArgs"/> class.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Events.OnWhisperCommandReceivedArgs">
+            <summary>
+            Args representing whisper command received event.
+            Implements the <see cref="T:System.EventArgs" />
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+            <inheritdoc />
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnWhisperCommandReceivedArgs.Command">
+            <summary>
+            Property representing received command.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.OnWhisperCommandReceivedArgs.#ctor(TwitchLib.Client.Models.WhisperMessage,TwitchLib.Client.Models.CommandInfo)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.OnWhisperCommandReceivedArgs"/> class.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Events.OnWhisperReceivedArgs">
+            <summary>
+            Class OnWhisperReceivedArgs.
+            Implements the <see cref="T:System.EventArgs" />
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+            <inheritdoc />
+        </member>
+        <member name="P:TwitchLib.Client.Events.OnWhisperReceivedArgs.WhisperMessage">
+            <summary>
+            The whisper message
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Events.OnWhisperReceivedArgs.#ctor(TwitchLib.Client.Models.WhisperMessage)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Events.OnWhisperReceivedArgs"/> class.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Exceptions.BadStateException">
+            <summary>
+            Exception thrown when the state of the client cannot allow an operation to be run.
+            Implements the <see cref="T:System.Exception" />
+            </summary>
+            <seealso cref="T:System.Exception" />
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.Client.Exceptions.BadStateException.#ctor(System.String)">
+            <summary>
+            Exception constructor
+            </summary>
+            <param name="details">The details.</param>
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.Client.Exceptions.ClientNotConnectedException">
+            <summary>
+            Exception thrown when attempting to perform an actino that is only available when the client is connected.
+            Implements the <see cref="T:System.Exception" />
+            </summary>
+            <seealso cref="T:System.Exception" />
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.Client.Exceptions.ClientNotConnectedException.#ctor(System.String)">
+            <summary>
+            Exception constructor
+            </summary>
+            <param name="description">The description.</param>
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.Client.Exceptions.ClientNotInitializedException">
+            <summary>
+            Exception thrown when attempting to assign a variable with a different value that is not allowed.
+            Implements the <see cref="T:System.Exception" />
+            </summary>
+            <seealso cref="T:System.Exception" />
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.Client.Exceptions.ClientNotInitializedException.#ctor(System.String)">
+            <summary>
+            Exception constructor
+            </summary>
+            <param name="description">The description.</param>
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.Client.Exceptions.ErrorLoggingInException">
+            <summary>
+            Exception representing credentials provided for logging in were bad.
+            Implements the <see cref="T:System.Exception" />
+            </summary>
+            <seealso cref="T:System.Exception" />
+            <inheritdoc />
+        </member>
+        <member name="P:TwitchLib.Client.Exceptions.ErrorLoggingInException.Username">
+            <summary>
+            Exception representing username associated with bad login.
+            </summary>
+            <value>The username.</value>
+        </member>
+        <member name="M:TwitchLib.Client.Exceptions.ErrorLoggingInException.#ctor(System.String,System.String)">
+            <summary>
+            Exception construtor.
+            </summary>
+            <param name="ircData">The irc data.</param>
+            <param name="twitchUsername">The twitch username.</param>
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.Client.Exceptions.FailureToReceiveJoinConfirmationException">
+            <summary>
+            Class FailureToReceiveJoinConfirmationException.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Exceptions.FailureToReceiveJoinConfirmationException.Channel">
+            <summary>
+            Exception representing failure of client to receive JOIN confirmation.
+            </summary>
+            <value>The channel.</value>
+        </member>
+        <member name="P:TwitchLib.Client.Exceptions.FailureToReceiveJoinConfirmationException.Details">
+            <summary>
+            Extra details regarding this exception (not always set)
+            </summary>
+            <value>The details.</value>
+        </member>
+        <member name="M:TwitchLib.Client.Exceptions.FailureToReceiveJoinConfirmationException.#ctor(System.String,System.String)">
+            <summary>
+            Exception construtor.
+            </summary>
+            <param name="channel">The channel.</param>
+            <param name="details">The details.</param>
+        </member>
+        <member name="T:TwitchLib.Client.Exceptions.IllegalAssignmentException">
+            <summary>
+            Exception thrown when attempting to assign a variable with a different value that is not allowed.
+            Implements the <see cref="T:System.Exception" />
+            </summary>
+            <seealso cref="T:System.Exception" />
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.Client.Exceptions.IllegalAssignmentException.#ctor(System.String)">
+            <summary>
+            Exception constructor
+            </summary>
+            <param name="description">The description.</param>
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.Client.Extensions.EventInvocationExtensions">
+            <summary>
+            Extends logic for handling events.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Extensions.EventInvocationExtensions.TryInvoke``1(TwitchLib.Communication.Events.AsyncEventHandler{``0},System.Object,``0)">
+            <summary>
+            Invokes the event handler when it is not null. Returns a completed task otherwise.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Extensions.SplitExtensions.SplitFirst(System.String,System.Char)">
+            <summary>
+            Splits the string into two parts at the first occurrence of a separator.
+            If the separator is not found, Segment will be the entire span and Remainder will be empty.
+            </summary>
+            <param name="source">Source span to split</param>
+            <param name="separator">Separator value</param>
+            <returns>A split pair of Segment and Remainder, deconstructible with tuple pattern.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Extensions.SplitExtensions.SplitFirst``1(System.ReadOnlySpan{``0},``0)">
+            <summary>
+            Splits the span into two parts at the first occurrence of a separator.
+            If the separator is not found, Segment will be the entire span and Remainder will be empty.
+            </summary>
+            <typeparam name="T">Span element type</typeparam>
+            <param name="source">Source span to split</param>
+            <param name="separator">Separator value</param>
+            <returns>A split pair of Segment and Remainder, deconstructible with tuple pattern.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Extensions.SplitExtensions.SplitLast(System.String,System.Char)">
+            <summary>
+            Splits the string into two parts at the last occurrence of a separator.
+            If the separator is not found, Segment will be the entire span and Remainder will be empty.
+            </summary>
+            <param name="source">Source span to split</param>
+            <param name="separator">Separator value</param>
+            <returns>A split pair of Segment and Remainder, deconstructible with tuple pattern.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Extensions.SplitExtensions.SplitLast``1(System.ReadOnlySpan{``0},``0)">
+            <summary>
+            Splits the span into two parts at the last occurrence of a separator.
+            If the separator is not found, Segment will be the entire span and Remainder will be empty.
+            </summary>
+            <typeparam name="T">Span element type</typeparam>
+            <param name="source">Source span to split</param>
+            <param name="separator">Separator value</param>
+            <returns>A split pair of Segment and Remainder, deconstructible with tuple pattern.</returns>
+        </member>
+        <member name="T:TwitchLib.Client.Interfaces.ITwitchClient">
+            <summary>
+            Interface ITwitchClient
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Interfaces.ITwitchClient.ChannelEmotes">
+            <summary>
+            Gets the channel emotes.
+            </summary>
+            <value>The channel emotes.</value>
+        </member>
+        <member name="P:TwitchLib.Client.Interfaces.ITwitchClient.ConnectionCredentials">
+            <summary>
+            Gets the connection credentials.
+            </summary>
+            <value>The connection credentials.</value>
+        </member>
+        <member name="P:TwitchLib.Client.Interfaces.ITwitchClient.DisableAutoPong">
+            <summary>
+            Gets or sets a value indicating whether [disable automatic pong].
+            </summary>
+            <value><c>true</c> if [disable automatic pong]; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:TwitchLib.Client.Interfaces.ITwitchClient.IsConnected">
+            <summary>
+            Gets a value indicating whether this instance is connected.
+            </summary>
+            <value><c>true</c> if this instance is connected; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:TwitchLib.Client.Interfaces.ITwitchClient.IsInitialized">
+            <summary>
+            Gets a value indicating whether this instance is initialized.
+            </summary>
+            <value><c>true</c> if this instance is initialized; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:TwitchLib.Client.Interfaces.ITwitchClient.JoinedChannels">
+            <summary>
+            Gets the joined channels.
+            </summary>
+            <value>The joined channels.</value>
+        </member>
+        <member name="P:TwitchLib.Client.Interfaces.ITwitchClient.PreviousWhisper">
+            <summary>
+            Gets the previous whisper.
+            </summary>
+            <value>The previous whisper.</value>
+        </member>
+        <member name="P:TwitchLib.Client.Interfaces.ITwitchClient.TwitchUsername">
+            <summary>
+            Gets the twitch username.
+            </summary>
+            <value>The twitch username.</value>
+        </member>
+        <member name="P:TwitchLib.Client.Interfaces.ITwitchClient.WillReplaceEmotes">
+            <summary>
+            Gets or sets a value indicating whether [will replace emotes].
+            </summary>
+            <value><c>true</c> if [will replace emotes]; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:TwitchLib.Client.Interfaces.ITwitchClient.ChatCommandIdentifiers">
+            <summary>
+            The chat command identifiers
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.Interfaces.ITwitchClient.WhisperCommandIdentifiers">
+            <summary>
+            The whisper command identifiers
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnAnnouncement">
+            <summary>
+            Fires when an Announcement is received
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnConnected">
+            <summary>
+            Fires when client connects to Twitch.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnJoinedChannel">
+            <summary>
+            Fires when client joins a channel.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnIncorrectLogin">
+            <summary>
+            Fires on logging in with incorrect details, returns ErrorLoggingInException.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnChannelStateChanged">
+            <summary>
+            Fires when connecting and channel state is changed, returns ChannelState.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnUserStateChanged">
+            <summary>
+            Fires when a user state is received, returns UserState.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnMessageReceived">
+            <summary>
+            Fires when a new chat message arrives, returns ChatMessage.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnWhisperReceived">
+            <summary>
+            Fires when a new whisper arrives, returns WhisperMessage.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnMessageSent">
+            <summary>
+            Fires when a chat message is sent, returns username, channel and message.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnChatCommandReceived">
+            <summary>
+            Fires when command (uses custom chat command identifier) is received, returns channel, command, ChatMessage, arguments as string, arguments as list.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnWhisperCommandReceived">
+            <summary>
+            Fires when command (uses custom whisper command identifier) is received, returns command, Whispermessage.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnUserJoined">
+            <summary>
+            Fires when a new viewer/chatter joined the channel's chat room, returns username and channel.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnMessageCleared">
+            <summary>
+            Fires when a message gets deleted in chat.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnNewSubscriber">
+            <summary>
+            Fires when new subscriber is announced in chat, returns Subscriber.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnReSubscriber">
+            <summary>
+            Fires when current subscriber renews subscription, returns ReSubscriber.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnPrimePaidSubscriber">
+            <summary>
+            Fires when a current Prime gaming subscriber converts to a paid subscription.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnExistingUsersDetected">
+            <summary>
+            Fires when Twitch notifies client of existing users in chat.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnUserLeft">
+            <summary>
+            Fires when a PART message is received from Twitch regarding a particular viewer
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnDisconnected">
+            <summary>
+            Fires when bot has disconnected.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnConnectionError">
+            <summary>
+            Forces when bot suffers connection error.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnChatCleared">
+            <summary>
+            Fires when a channel's chat is cleared.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnUserTimedout">
+            <summary>
+            Fires when a viewer gets timedout by any moderator.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnLeftChannel">
+            <summary>
+            Fires when client successfully leaves a channel.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnUserBanned">
+            <summary>
+            Fires when a viewer gets banned by any moderator.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnSendReceiveData">
+            <summary>
+            Fires when data is either received or sent.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnRaidNotification">
+            <summary>
+            Fires when a raid notification is detected in chat
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnGiftedSubscription">
+            <summary>
+            Fires when a subscription is gifted and announced in chat
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnCommunitySubscription">
+            <summary>
+            Fires when a community subscription is announced in chat
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnContinuedGiftedSubscription">
+            <summary>
+            Fires when a gifted subscription is continued and announced in chat
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnMessageThrottled">
+            <summary>
+            Fires when a Message has been throttled.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnError">
+            <summary>
+            Occurs when an Error is thrown in the protocol client
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnReconnected">
+            <summary>
+            Occurs when a reconnection occurs.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnRequiresVerifiedEmail">
+            <summary>
+            Occurs when chatting in a channel that requires a verified email without a verified email attached to the account.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnRequiresVerifiedPhoneNumber">
+            <summary>
+            Occurs when chatting in a channel that requires a verified phone number without a verified phone number attached to the account.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnRateLimit">
+            <summary>
+            Occurs when send message rate limit has been applied to the client in a specific channel by Twitch
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnDuplicate">
+            <summary>
+            Occurs when sending duplicate messages and user is not permitted to do so
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnBannedEmailAlias">
+            <summary>
+            Occurs when chatting in a channel that the user is banned in bcs of an already banned alias with the same Email
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnSelfRaidError">
+            <summary>
+            Fires when TwitchClient attempts to host a channel it is in.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnNoPermissionError">
+            <summary>
+            Fires when TwitchClient receives generic no permission error from Twitch.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnRaidedChannelIsMatureAudience">
+            <summary>
+            Fires when newly raided channel is mature audience only.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnFailureToReceiveJoinConfirmation">
+            <summary>
+            Fires when the client was unable to join a channel.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnFollowersOnly">
+            <summary>
+            Fires when the client attempts to send a message to a channel in followers only mode, as a non-follower
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnSubsOnly">
+            <summary>
+            Fires when the client attempts to send a message to a channel in subs only mode, as a non-sub
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnEmoteOnly">
+            <summary>
+            Fires when the client attempts to send a non-emote message to a channel in emotes only mode
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnSuspended">
+            <summary>
+            Fires when the client attempts to send a message to a channel that has been suspended
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnBanned">
+            <summary>
+            Fires when the client attempts to send a message to a channel they're banned in
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnSlowMode">
+            <summary>
+            Fires when the client attempts to send a message in a channel with slow mode enabled, without cooldown expiring
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnR9kMode">
+            <summary>
+            Fires when the client attempts to send a message in a channel with r9k mode enabled, and message was not permitted
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnUserIntro">
+            <summary>
+            Fires when the client receives a PRIVMSG tagged as an user-intro
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Client.Interfaces.ITwitchClient.OnUnaccountedFor">
+            <summary>
+            Fires when data is received from Twitch that is not able to be parsed.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Interfaces.ITwitchClient.Initialize(TwitchLib.Client.Models.ConnectionCredentials,System.String)">
+            <summary>
+            Initializes the specified credentials.
+            </summary>
+            <param name="credentials">The credentials.</param>
+            <param name="channel">The channel.</param>
+        </member>
+        <member name="M:TwitchLib.Client.Interfaces.ITwitchClient.Initialize(TwitchLib.Client.Models.ConnectionCredentials,System.Collections.Generic.List{System.String})">
+            <summary>
+            Initializes the specified credentials.
+            </summary>
+            <param name="credentials">The credentials.</param>
+            <param name="channels">The channels to join once connected.</param>
+        </member>
+        <member name="M:TwitchLib.Client.Interfaces.ITwitchClient.SetConnectionCredentials(TwitchLib.Client.Models.ConnectionCredentials)">
+            <summary>
+            Sets the connection credentials.
+            </summary>
+            <param name="credentials">The credentials.</param>
+        </member>
+        <member name="M:TwitchLib.Client.Interfaces.ITwitchClient.ConnectAsync">
+            <summary>
+            Connects this instance.
+            </summary>
+            <returns>bool representing Connect() result</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Interfaces.ITwitchClient.DisconnectAsync">
+            <summary>
+            Disconnects this instance.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Interfaces.ITwitchClient.ReconnectAsync">
+            <summary>
+            Reconnects this instance.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Interfaces.ITwitchClient.GetJoinedChannel(System.String)">
+            <summary>
+            Gets the joined channel.
+            </summary>
+            <param name="channel">The channel.</param>
+            <returns>JoinedChannel.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Interfaces.ITwitchClient.JoinChannelAsync(System.String,System.Boolean)">
+            <summary>
+            Joins the channel.
+            </summary>
+            <param name="channel">The channel.</param>
+            <param name="overrideCheck">if set to <c>true</c> [override check].</param>
+        </member>
+        <member name="M:TwitchLib.Client.Interfaces.ITwitchClient.LeaveChannelAsync(TwitchLib.Client.Models.JoinedChannel)">
+            <summary>
+            Leaves the channel.
+            </summary>
+            <param name="channel">The channel.</param>
+        </member>
+        <member name="M:TwitchLib.Client.Interfaces.ITwitchClient.LeaveChannelAsync(System.String)">
+            <summary>
+            Leaves the channel.
+            </summary>
+            <param name="channel">The channel.</param>
+        </member>
+        <member name="M:TwitchLib.Client.Interfaces.ITwitchClient.OnReadLineTestAsync(System.String)">
+            <summary>
+            Called when [read line test].
+            </summary>
+            <param name="rawIrc">The raw irc.</param>
+        </member>
+        <member name="M:TwitchLib.Client.Interfaces.ITwitchClient.SendMessageAsync(TwitchLib.Client.Models.JoinedChannel,System.String,System.Boolean)">
+            <summary>
+            Sends the message.
+            </summary>
+            <param name="channel">The channel.</param>
+            <param name="message">The message.</param>
+            <param name="dryRun">if set to <c>true</c> [dry run].</param>
+        </member>
+        <member name="M:TwitchLib.Client.Interfaces.ITwitchClient.SendMessageAsync(System.String,System.String,System.Boolean)">
+            <summary>
+            Sends the message.
+            </summary>
+            <param name="channel">The channel.</param>
+            <param name="message">The message.</param>
+            <param name="dryRun">if set to <c>true</c> [dry run].</param>
+        </member>
+        <member name="M:TwitchLib.Client.Interfaces.ITwitchClient.SendReplyAsync(TwitchLib.Client.Models.JoinedChannel,System.String,System.String,System.Boolean)">
+            <summary>
+            Sends a formatted Twitch chat message reply.
+            </summary>
+            <param name="channel">Channel to send Twitch chat reply to</param>
+            <param name="replyToId">The message id that is being replied to</param>
+            <param name="message">Reply contents</param>
+            <param name="dryRun">if set to <c>true</c> [dry run]</param>
+        </member>
+        <member name="M:TwitchLib.Client.Interfaces.ITwitchClient.SendReplyAsync(System.String,System.String,System.String,System.Boolean)">
+            <summary>
+            SendReply wrapper that accepts channel in string form.
+            </summary>
+            <param name="channel">Channel to send Twitch chat reply to</param>
+            <param name="replyToId">The message id that is being replied to</param>
+            <param name="message">Reply contents</param>
+            <param name="dryRun">if set to <c>true</c> [dry run]</param>
+        </member>
+        <member name="M:TwitchLib.Client.Interfaces.ITwitchClient.SendQueuedItemAsync(System.String)">
+            <summary>
+            Sends the queued item.
+            </summary>
+            <param name="message">The message.</param>
+        </member>
+        <member name="M:TwitchLib.Client.Interfaces.ITwitchClient.SendRawAsync(System.String)">
+            <summary>
+            Sends the raw.
+            </summary>
+            <param name="message">The message.</param>
+        </member>
+        <member name="T:TwitchLib.Client.Internal.Rfc2812">
+            <summary>
+            Class detailing Rfc2812 specifications
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.GetNicknameRegex">
+            <summary>
+            The nickname regex
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.IsValidNickname(System.String)">
+            <summary>
+            Checks if the passed nickname is valid according to the RFC
+            Use with caution, many IRC servers are not conform with this!
+            </summary>
+            <param name="nickname">The nickname.</param>
+            <returns><c>true</c> if [is valid nickname] [the specified nickname]; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Pass(System.String)">
+            <summary>
+            Pass message.
+            </summary>
+            <param name="password">The password.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Nick(System.String)">
+            <summary>
+            Nick message.
+            </summary>
+            <param name="nickname">The nickname.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.User(System.String,System.Int32,System.String)">
+            <summary>
+            User message.
+            </summary>
+            <param name="username">The username.</param>
+            <param name="usermode">The usermode.</param>
+            <param name="realname">The realname.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Oper(System.String,System.String)">
+            <summary>
+            Oper message.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="password">The password.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Privmsg(System.String,System.String)">
+            <summary>
+            Privmsg message.
+            </summary>
+            <param name="destination">The destination.</param>
+            <param name="message">The message.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Notice(System.String,System.String)">
+            <summary>
+            Notice message.
+            </summary>
+            <param name="destination">The destination.</param>
+            <param name="message">The message.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Join(System.String)">
+            <summary>
+            Join message.
+            </summary>
+            <param name="channel">The channel.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Join(System.String[])">
+            <summary>
+            Join message.
+            </summary>
+            <param name="channels">The channels.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Join(System.String,System.String)">
+            <summary>
+            Join message.
+            </summary>
+            <param name="channel">The channel.</param>
+            <param name="key">The key.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Join(System.String[],System.String[])">
+            <summary>
+            Join message.
+            </summary>
+            <param name="channels">The channels.</param>
+            <param name="keys">The keys.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Part(System.String)">
+            <summary>
+            Part message.
+            </summary>
+            <param name="channel">The channel.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Part(System.String[])">
+            <summary>
+            Part message.
+            </summary>
+            <param name="channels">The channels.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Part(System.String,System.String)">
+            <summary>
+            Part message.
+            </summary>
+            <param name="channel">The channel.</param>
+            <param name="partmessage">The partmessage.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Part(System.String[],System.String)">
+            <summary>
+            Part message.
+            </summary>
+            <param name="channels">The channels.</param>
+            <param name="partmessage">The partmessage.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Kick(System.String,System.String)">
+            <summary>
+            Kick message.
+            </summary>
+            <param name="channel">The channel.</param>
+            <param name="nickname">The nickname.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Kick(System.String,System.String,System.String)">
+            <summary>
+            Kick message.
+            </summary>
+            <param name="channel">The channel.</param>
+            <param name="nickname">The nickname.</param>
+            <param name="comment">The comment.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Kick(System.String[],System.String)">
+            <summary>
+            Kick message.
+            </summary>
+            <param name="channels">The channels.</param>
+            <param name="nickname">The nickname.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Kick(System.String[],System.String,System.String)">
+            <summary>
+            Kick message.
+            </summary>
+            <param name="channels">The channels.</param>
+            <param name="nickname">The nickname.</param>
+            <param name="comment">The comment.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Kick(System.String,System.String[])">
+            <summary>
+            Kick message.
+            </summary>
+            <param name="channel">The channel.</param>
+            <param name="nicknames">The nicknames.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Kick(System.String,System.String[],System.String)">
+            <summary>
+            Kick message.
+            </summary>
+            <param name="channel">The channel.</param>
+            <param name="nicknames">The nicknames.</param>
+            <param name="comment">The comment.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Kick(System.String[],System.String[])">
+            <summary>
+            Kick message.
+            </summary>
+            <param name="channels">The channels.</param>
+            <param name="nicknames">The nicknames.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Kick(System.String[],System.String[],System.String)">
+            <summary>
+            Kick message.
+            </summary>
+            <param name="channels">The channels.</param>
+            <param name="nicknames">The nicknames.</param>
+            <param name="comment">The comment.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Motd">
+            <summary>
+            Motd message.
+            </summary>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Motd(System.String)">
+            <summary>
+            Motd message.
+            </summary>
+            <param name="target">The target.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Lusers">
+            <summary>
+            Luser message.
+            </summary>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Lusers(System.String)">
+            <summary>
+            Luser message.
+            </summary>
+            <param name="mask">The mask.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Lusers(System.String,System.String)">
+            <summary>
+            Lusers
+            </summary>
+            <param name="mask">The mask.</param>
+            <param name="target">The target.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Version">
+            <summary>
+            Version message.
+            </summary>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Version(System.String)">
+            <summary>
+            Version message.
+            </summary>
+            <param name="target">The target.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Stats">
+            <summary>
+            Stats message.
+            </summary>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Stats(System.String)">
+            <summary>
+            Stats message.
+            </summary>
+            <param name="query">The query.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Stats(System.String,System.String)">
+            <summary>
+            Stats message.
+            </summary>
+            <param name="query">The query.</param>
+            <param name="target">The target.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Links">
+            <summary>
+            Links message.
+            </summary>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Links(System.String)">
+            <summary>
+            Links message.
+            </summary>
+            <param name="servermask">The servermask.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Links(System.String,System.String)">
+            <summary>
+            Links message.
+            </summary>
+            <param name="remoteserver">The remoteserver.</param>
+            <param name="servermask">The servermask.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Time">
+            <summary>
+            Time message.
+            </summary>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Time(System.String)">
+            <summary>
+            Time message.
+            </summary>
+            <param name="target">The target.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Connect(System.String,System.String)">
+            <summary>
+            Connect message.
+            </summary>
+            <param name="targetserver">The targetserver.</param>
+            <param name="port">The port.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Connect(System.String,System.String,System.String)">
+            <summary>
+            Connect message.
+            </summary>
+            <param name="targetserver">The targetserver.</param>
+            <param name="port">The port.</param>
+            <param name="remoteserver">The remoteserver.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Trace">
+            <summary>
+            Trace message.
+            </summary>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Trace(System.String)">
+            <summary>
+            Trace message.
+            </summary>
+            <param name="target">The target.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Admin">
+            <summary>
+            Admin message.
+            </summary>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Admin(System.String)">
+            <summary>
+            Admin message.
+            </summary>
+            <param name="target">The target.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Info">
+            <summary>
+            Info message.
+            </summary>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Info(System.String)">
+            <summary>
+            Info message.
+            </summary>
+            <param name="target">The target.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Servlist">
+            <summary>
+            Servlist message.
+            </summary>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Servlist(System.String)">
+            <summary>
+            Servlist message.
+            </summary>
+            <param name="mask">The mask.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Servlist(System.String,System.String)">
+            <summary>
+            Servlist message.
+            </summary>
+            <param name="mask">The mask.</param>
+            <param name="type">The type.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Squery(System.String,System.String)">
+            <summary>
+            Squery message.
+            </summary>
+            <param name="servicename">The servicename.</param>
+            <param name="servicetext">The servicetext.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.List">
+            <summary>
+            List message.
+            </summary>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.List(System.String)">
+            <summary>
+            List message.
+            </summary>
+            <param name="channel">The channel.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.List(System.String[])">
+            <summary>
+            List message.
+            </summary>
+            <param name="channels">The channels.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.List(System.String,System.String)">
+            <summary>
+            List message.
+            </summary>
+            <param name="channel">The channel.</param>
+            <param name="target">The target.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.List(System.String[],System.String)">
+            <summary>
+            List message.
+            </summary>
+            <param name="channels">The channels.</param>
+            <param name="target">The target.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Names">
+            <summary>
+            Names message
+            </summary>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Names(System.String)">
+            <summary>
+            Names message.
+            </summary>
+            <param name="channel">The channel.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Names(System.String[])">
+            <summary>
+            Names message.
+            </summary>
+            <param name="channels">The channels.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Names(System.String,System.String)">
+            <summary>
+            Names message.
+            </summary>
+            <param name="channel">The channel.</param>
+            <param name="target">The target.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Names(System.String[],System.String)">
+            <summary>
+            Names message.
+            </summary>
+            <param name="channels">The channels.</param>
+            <param name="target">The target.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Topic(System.String)">
+            <summary>
+            Topic message.
+            </summary>
+            <param name="channel">The channel.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Topic(System.String,System.String)">
+            <summary>
+            Topic message.
+            </summary>
+            <param name="channel">The channel.</param>
+            <param name="newtopic">The newtopic.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Mode(System.String)">
+            <summary>
+            Mode message.
+            </summary>
+            <param name="target">The target.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Mode(System.String,System.String)">
+            <summary>
+            Mode message.
+            </summary>
+            <param name="target">The target.</param>
+            <param name="newmode">The newmode.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Mode(System.String,System.String[],System.String[])">
+            <summary>
+            Mode message.
+            </summary>
+            <param name="target">The target.</param>
+            <param name="newModes">The new modes.</param>
+            <param name="newModeParameters">The new mode parameters.</param>
+            <returns>System.String.</returns>
+            <exception cref="T:System.ArgumentNullException">newModes
+            or
+            newModeParameters</exception>
+            <exception cref="T:System.ArgumentException">newModes and newModeParameters must have the same size.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">Length - Mode change list is too large (&gt; {maxModeChanges}</exception>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Service(System.String,System.String,System.String)">
+            <summary>
+            Service message.
+            </summary>
+            <param name="nickname">The nickname.</param>
+            <param name="distribution">The distribution.</param>
+            <param name="info">The information.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Invite(System.String,System.String)">
+            <summary>
+            Invite message.
+            </summary>
+            <param name="nickname">The nickname.</param>
+            <param name="channel">The channel.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Who">
+            <summary>
+            Who message.
+            </summary>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Who(System.String)">
+            <summary>
+            Who message.
+            </summary>
+            <param name="mask">The mask.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Who(System.String,System.Boolean)">
+            <summary>
+            Who message.
+            </summary>
+            <param name="mask">The mask.</param>
+            <param name="ircop">if set to <c>true</c> [ircop].</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Whois(System.String)">
+            <summary>
+            Whois message.
+            </summary>
+            <param name="mask">The mask.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Whois(System.String[])">
+            <summary>
+            Whois message.
+            </summary>
+            <param name="masks">The masks.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Whois(System.String,System.String)">
+            <summary>
+            Whois message.
+            </summary>
+            <param name="target">The target.</param>
+            <param name="mask">The mask.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Whois(System.String,System.String[])">
+            <summary>
+            Whois message.
+            </summary>
+            <param name="target">The target.</param>
+            <param name="masks">The masks.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Whowas(System.String)">
+            <summary>
+            Whowas message.
+            </summary>
+            <param name="nickname">The nickname.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Whowas(System.String[])">
+            <summary>
+            Whowas message.
+            </summary>
+            <param name="nicknames">The nicknames.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Whowas(System.String,System.String)">
+            <summary>
+            Whowas message.
+            </summary>
+            <param name="nickname">The nickname.</param>
+            <param name="count">The count.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Whowas(System.String[],System.String)">
+            <summary>
+            Whowas message.
+            </summary>
+            <param name="nicknames">The nicknames.</param>
+            <param name="count">The count.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Whowas(System.String,System.String,System.String)">
+            <summary>
+            Whowas message.
+            </summary>
+            <param name="nickname">The nickname.</param>
+            <param name="count">The count.</param>
+            <param name="target">The target.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Whowas(System.String[],System.String,System.String)">
+            <summary>
+            Whowas message.
+            </summary>
+            <param name="nicknames">The nicknames.</param>
+            <param name="count">The count.</param>
+            <param name="target">The target.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Kill(System.String,System.String)">
+            <summary>
+            Kill message.
+            </summary>
+            <param name="nickname">The nickname.</param>
+            <param name="comment">The comment.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Ping(System.String)">
+            <summary>
+            Ping message.
+            </summary>
+            <param name="server">The server.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Ping(System.String,System.String)">
+            <summary>
+            Ping message.
+            </summary>
+            <param name="server">The server.</param>
+            <param name="server2">The server2.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Pong(System.String)">
+            <summary>
+            Pong message.
+            </summary>
+            <param name="server">The server.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Pong(System.String,System.String)">
+            <summary>
+            Pong message.
+            </summary>
+            <param name="server">The server.</param>
+            <param name="server2">The server2.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Error(System.String)">
+            <summary>
+            Error message.
+            </summary>
+            <param name="errormessage">The errormessage.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Away">
+            <summary>
+            Away message.
+            </summary>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Away(System.String)">
+            <summary>
+            Away message.
+            </summary>
+            <param name="awaytext">The awaytext.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Rehash">
+            <summary>
+            Rehash message
+            </summary>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Die">
+            <summary>
+            Die message.
+            </summary>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Restart">
+            <summary>
+            Restart message.
+            </summary>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Summon(System.String)">
+            <summary>
+            Summon message.
+            </summary>
+            <param name="user">The user.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Summon(System.String,System.String)">
+            <summary>
+            Summon message.
+            </summary>
+            <param name="user">The user.</param>
+            <param name="target">The target.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Summon(System.String,System.String,System.String)">
+            <summary>
+            Summon message.
+            </summary>
+            <param name="user">The user.</param>
+            <param name="target">The target.</param>
+            <param name="channel">The channel.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Users">
+            <summary>
+            Users message.
+            </summary>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Users(System.String)">
+            <summary>
+            Users message.
+            </summary>
+            <param name="target">The target.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Wallops(System.String)">
+            <summary>
+            Wallops message.
+            </summary>
+            <param name="wallopstext">The wallopstext.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Userhost(System.String)">
+            <summary>
+            Userhost message.
+            </summary>
+            <param name="nickname">The nickname.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Userhost(System.String[])">
+            <summary>
+            Userhost message.
+            </summary>
+            <param name="nicknames">The nicknames.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Ison(System.String)">
+            <summary>
+            Ison message.
+            </summary>
+            <param name="nickname">The nickname.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Ison(System.String[])">
+            <summary>
+            Ison message.
+            </summary>
+            <param name="nicknames">The nicknames.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Quit">
+            <summary>
+            Quit message.
+            </summary>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Quit(System.String)">
+            <summary>
+            Quit message.
+            </summary>
+            <param name="quitmessage">The quitmessage.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Internal.Rfc2812.Squit(System.String,System.String)">
+            <summary>
+            Squit message.
+            </summary>
+            <param name="server">The server.</param>
+            <param name="comment">The comment.</param>
+            <returns>System.String.</returns>
+        </member>
+        <member name="T:TwitchLib.Client.Manager.JoinedChannelManager">
+            <summary>
+            Class JoinedChannelManager.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Client.Manager.JoinedChannelManager._joinedChannels">
+            <summary>
+            The joined channels
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Manager.JoinedChannelManager.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Client.Manager.JoinedChannelManager" /> class.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Manager.JoinedChannelManager.AddJoinedChannel(TwitchLib.Client.Models.JoinedChannel)">
+            <summary>
+            Adds the joined channel.
+            </summary>
+            <param name="joinedChannel">The joined channel.</param>
+        </member>
+        <member name="M:TwitchLib.Client.Manager.JoinedChannelManager.GetJoinedChannel(System.String)">
+            <summary>
+            Gets the joined channel.
+            </summary>
+            <param name="channel">The channel.</param>
+            <returns>JoinedChannel.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Manager.JoinedChannelManager.GetJoinedChannels">
+            <summary>
+            Gets the joined channels.
+            </summary>
+            <returns>IReadOnlyList&lt;JoinedChannel&gt;.</returns>
+        </member>
+        <member name="M:TwitchLib.Client.Manager.JoinedChannelManager.RemoveJoinedChannel(System.String)">
+            <summary>
+            Removes the joined channel.
+            </summary>
+            <param name="channel">The channel.</param>
+        </member>
+        <member name="M:TwitchLib.Client.Manager.JoinedChannelManager.Clear">
+            <summary>
+            Clears this instance.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Parsing.IrcParser">
+            <summary>
+            Twitch IRCv3 message parser.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.Parsing.IrcParser.ParseMessage(System.String)">
+            <summary>
+            Parses a raw Twitch IRCv3 message line into an IrcMessage object.
+            </summary>
+            <param name="rawMessage">Raw IRC message</param>
+            <returns><see cref="T:TwitchLib.Client.Models.Internal.IrcMessage"/> that can be consumed by a variety of TwitchLib.Client types.</returns>
+            <exception cref="T:System.FormatException">Thrown if the message is invalid.</exception>
+            <exception cref="T:System.IndexOutOfRangeException">Thrown if the message is invalid.</exception>
+        </member>
+        <member name="M:TwitchLib.Client.Throttling.Throttler.ShouldThrottle">
+            <returns>
+                <see langword="false"/>, if the current item may be sent
+                <see langword="true"/>, if the current item <b>has to be throttled/may not be sent</b>
+            </returns>
+        </member>
+        <member name="M:TwitchLib.Client.Throttling.ThrottlingService.Enqueue(TwitchLib.Client.Models.OutboundChatMessage)">
+            <summary>
+                enqueues the given <paramref name="message"/>
+            </summary>
+            <param name="message">
+                <see cref="T:TwitchLib.Client.Models.OutboundChatMessage"/>
+            </param>
+            <returns>
+                <see langword="true"/>, if its enqueued
+                <br></br>
+                <see langword="false"/> otherwise
+            </returns>
+        </member>
+        <member name="T:TwitchLib.Client.TwitchClient">
+            <summary>
+            Represents a client connected to a Twitch channel.
+            Implements the <see cref="T:TwitchLib.Client.Interfaces.ITwitchClient" />
+            </summary>
+            <seealso cref="T:TwitchLib.Client.Interfaces.ITwitchClient" />
+        </member>
+        <member name="F:TwitchLib.Client.TwitchClient._client">
+            <summary>
+            The client
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Client.TwitchClient._joinChannelQueue">
+            <summary>
+            The join channel queue
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Client.TwitchClient._logger">
+            <summary>
+            The logger
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Client.TwitchClient._protocol">
+            <summary>
+            The protocol
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Client.TwitchClient._currentlyJoiningChannels">
+            <summary>
+            The currently joining channels
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Client.TwitchClient._joinTimer">
+            <summary>
+            The join timer
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Client.TwitchClient._awaitingJoins">
+            <summary>
+            The awaiting joins
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Client.TwitchClient._joinedChannelManager">
+            <summary>
+            The joined channel manager
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Client.TwitchClient._hasSeenJoinedChannels">
+            <summary>
+            The has seen joined channels
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Client.TwitchClient._lastMessageSent">
+            <summary>
+            The last message sent
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.TwitchClient.ChatCommandIdentifiers">
+            <inheritdoc/>
+        </member>
+        <member name="P:TwitchLib.Client.TwitchClient.WhisperCommandIdentifiers">
+            <inheritdoc/>
+        </member>
+        <member name="P:TwitchLib.Client.TwitchClient.IsInitialized">
+            <inheritdoc/>
+        </member>
+        <member name="P:TwitchLib.Client.TwitchClient.JoinedChannels">
+            <inheritdoc/>
+        </member>
+        <member name="P:TwitchLib.Client.TwitchClient.TwitchUsername">
+            <inheritdoc/>
+        </member>
+        <member name="P:TwitchLib.Client.TwitchClient.PreviousWhisper">
+            <inheritdoc/>
+        </member>
+        <member name="P:TwitchLib.Client.TwitchClient.IsConnected">
+            <inheritdoc/>
+        </member>
+        <member name="P:TwitchLib.Client.TwitchClient.ChannelEmotes">
+            <inheritdoc/>
+            <remarks>
+            Twitch-handled emotes are automatically added to this collection (which also accounts for
+            managing user emote permissions such as sub-only emotes). Third-party emotes will have to be manually
+            added according to the availability rules defined by the third-party.
+            </remarks>
+        </member>
+        <member name="P:TwitchLib.Client.TwitchClient.DisableAutoPong">
+            <inheritdoc/>
+        </member>
+        <member name="P:TwitchLib.Client.TwitchClient.WillReplaceEmotes">
+            <inheritdoc/>
+        </member>
+        <member name="P:TwitchLib.Client.TwitchClient.ReplacedEmotesPrefix">
+            <summary>
+            Adds to replaced Emotes their prefix. Defaults to empty string.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.TwitchClient.ReplacedEmotesSuffix">
+            <summary>
+            Adds to replaced Emotes their suffix. Defaults to empty string.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Client.TwitchClient.ConnectionCredentials">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnAnnouncement">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnConnected">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnJoinedChannel">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnIncorrectLogin">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnChannelStateChanged">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnUserStateChanged">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnMessageReceived">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnWhisperReceived">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnMessageSent">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnChatCommandReceived">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnWhisperCommandReceived">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnUserJoined">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnMessageCleared">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnNewSubscriber">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnReSubscriber">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnPrimePaidSubscriber">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnExistingUsersDetected">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnUserLeft">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnDisconnected">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnConnectionError">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnChatCleared">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnUserTimedout">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnLeftChannel">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnUserBanned">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnSendReceiveData">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnRaidNotification">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnGiftedSubscription">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnCommunitySubscription">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnContinuedGiftedSubscription">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnMessageThrottled">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnError">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnReconnected">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnRequiresVerifiedEmail">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnRequiresVerifiedPhoneNumber">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnRateLimit">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnDuplicate">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnBannedEmailAlias">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnSelfRaidError">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnNoPermissionError">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnRaidedChannelIsMatureAudience">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnFailureToReceiveJoinConfirmation">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnFollowersOnly">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnSubsOnly">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnEmoteOnly">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnSuspended">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnBanned">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnSlowMode">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnR9kMode">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnUserIntro">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnUnaccountedFor">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnAnonGiftPaidUpgrade">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnUnraidNotification">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnRitual">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnBitsBadgeTier">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnCommunityPayForward">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Client.TwitchClient.OnStandardPayForward">
+            <inheritdoc/>
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.#ctor(TwitchLib.Communication.Interfaces.IClient,TwitchLib.Client.Enums.ClientProtocol,TwitchLib.Client.Models.Interfaces.ISendOptions,Microsoft.Extensions.Logging.ILoggerFactory)">
+            <summary>
+            Initializes the TwitchChatClient class.
+            </summary>
+            <param name="client">Protocol Client to use for connection from TwitchLib.Communication. Possible Options Are the TcpClient client or WebSocket client.</param>
+            <param name="protocol">The protocol.</param>
+            <param name="sendOptions">Send options with throttling settings.</param>
+            <param name="loggerFactory">Optional ILoggerFactory instance to enable logging</param>
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.Initialize(TwitchLib.Client.Models.ConnectionCredentials,System.String)">
+            <inheritdoc/>
+            <remarks>
+            If <see cref="P:TwitchLib.Client.TwitchClient.ChatCommandIdentifiers"/> or <see cref="P:TwitchLib.Client.TwitchClient.WhisperCommandIdentifiers"/> dont have any command identifier the '!' is added.
+            </remarks>
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.Initialize(TwitchLib.Client.Models.ConnectionCredentials,System.Collections.Generic.List{System.String})">
+            <inheritdoc/>
+            <remarks>
+            If <see cref="P:TwitchLib.Client.TwitchClient.ChatCommandIdentifiers"/> or <see cref="P:TwitchLib.Client.TwitchClient.WhisperCommandIdentifiers"/> dont have any command identifier the '!' is added.
+            </remarks>
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.InitializationHelper(TwitchLib.Client.Models.ConnectionCredentials,System.Collections.Generic.List{System.String})">
+            <summary>
+            Runs initialization logic that is shared by the overriden Initialize methods.
+            </summary>
+            <remarks>
+            If <see cref="P:TwitchLib.Client.TwitchClient.ChatCommandIdentifiers"/> or <see cref="P:TwitchLib.Client.TwitchClient.WhisperCommandIdentifiers"/> dont have any command identifier the '!' is added.
+            </remarks>
+            <param name="credentials">The credentials to use to log in.</param>
+            <param name="channels">List of channels to join when connected</param>
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.InitializeClient">
+            <summary>
+            Initializes the client.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.SendRawAsync(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.SendMessageAsync(TwitchLib.Client.Models.JoinedChannel,System.String,System.Boolean)">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.SendMessageAsync(System.String,System.String,System.Boolean)">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.SendReplyAsync(TwitchLib.Client.Models.JoinedChannel,System.String,System.String,System.Boolean)">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.SendReplyAsync(System.String,System.String,System.String,System.Boolean)">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.ConnectAsync">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.DisconnectAsync">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.ReconnectAsync">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.SetConnectionCredentials(TwitchLib.Client.Models.ConnectionCredentials)">
+            <inheritdoc/>
+            <exception cref="T:TwitchLib.Client.Exceptions.IllegalAssignmentException">While the client is connected, you are unable to change the connection credentials. Please disconnect first and then change them.</exception>
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.JoinChannelAsync(System.String,System.Boolean)">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.GetJoinedChannel(System.String)">
+            <inheritdoc/>
+            <exception cref="T:TwitchLib.Client.Exceptions.BadStateException">Must be connected to at least one channel.</exception>
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.LeaveChannelAsync(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.LeaveChannelAsync(TwitchLib.Client.Models.JoinedChannel)">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.OnReadLineTestAsync(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient._client_OnFatality(System.Object,TwitchLib.Communication.Events.OnFatalErrorEventArgs)">
+            <summary>
+            Handles the OnFatality event of the _client control.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The <see cref="T:TwitchLib.Communication.Events.OnFatalErrorEventArgs" /> instance containing the event data.</param>
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient._client_OnDisconnected(System.Object,TwitchLib.Communication.Events.OnDisconnectedEventArgs)">
+            <summary>
+            Handles the OnDisconnected event of the _client control.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The <see cref="T:TwitchLib.Communication.Events.OnDisconnectedEventArgs" /> instance containing the event data.</param>
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient._client_OnReconnected(System.Object,TwitchLib.Communication.Events.OnConnectedEventArgs)">
+            <summary>
+            Handles the OnReconnected event of the _client control.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The <see cref="T:TwitchLib.Communication.Events.OnConnectedEventArgs" /> instance containing the event data.</param>
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient._client_OnMessage(System.Object,TwitchLib.Communication.Events.OnMessageEventArgs)">
+            <summary>
+            Handles the OnMessage event of the _client control.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The <see cref="T:TwitchLib.Communication.Events.OnMessageEventArgs" /> instance containing the event data.</param>
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient._client_OnConnectedAsync(System.Object,System.EventArgs)">
+            <summary>
+            Clients the on connected.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The e.</param>
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.SendHandshake">
+            <summary>
+            Send the handshake for the connection.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.QueueingJoinCheckAsync">
+            <summary>
+            Queueings the join check.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.StartJoinedChannelTimer(System.String)">
+            <summary>
+            Starts the joined channel timer.
+            </summary>
+            <param name="channel">The channel.</param>
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.JoinChannelTimeout(System.Object,System.Timers.ElapsedEventArgs)">
+            <summary>
+            Joins the channel timeout.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:System.Timers.ElapsedEventArgs" /> instance containing the event data.</param>
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.HandleIrcMessageAsync(TwitchLib.Client.Models.Internal.IrcMessage)">
+            <summary>
+            Handles the irc message.
+            </summary>
+            <param name="ircMessage">The irc message.</param>
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.HandlePrivMsg(TwitchLib.Client.Models.Internal.IrcMessage)">
+            <summary>
+            Handles the priv MSG.
+            </summary>
+            <param name="ircMessage">The irc message.</param>
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.HandleNotice(TwitchLib.Client.Models.Internal.IrcMessage)">
+            <summary>
+            Handles the notice.
+            </summary>
+            <param name="ircMessage">The irc message.</param>
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.HandleChannelSuspended(TwitchLib.Client.Models.Internal.IrcMessage)">
+            <summary>
+            Handles the channel suspended message
+            </summary>
+            <param name="ircMessage">The irc message.</param>
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.HandleJoin(TwitchLib.Client.Models.Internal.IrcMessage)">
+            <summary>
+            Handles the join.
+            </summary>
+            <param name="ircMessage">The irc message.</param>
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.HandlePart(TwitchLib.Client.Models.Internal.IrcMessage)">
+            <summary>
+            Handles the part.
+            </summary>
+            <param name="ircMessage">The irc message.</param>
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.HandleClearChat(TwitchLib.Client.Models.Internal.IrcMessage)">
+            <summary>
+            Handles the clear chat.
+            </summary>
+            <param name="ircMessage">The irc message.</param>
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.HandleClearMsg(TwitchLib.Client.Models.Internal.IrcMessage)">
+            <summary>
+            Handles the clear MSG.
+            </summary>
+            <param name="ircMessage">The irc message.</param>
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.HandleUserState(TwitchLib.Client.Models.Internal.IrcMessage)">
+            <summary>
+            Handles the state of the user.
+            </summary>
+            <param name="ircMessage">The irc message.</param>
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.Handle004">
+            <summary>
+            Handle004s this instance.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.Handle353(TwitchLib.Client.Models.Internal.IrcMessage)">
+            <summary>
+            Handle353s the specified irc message.
+            </summary>
+            <param name="ircMessage">The irc message.</param>
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.Handle366">
+            <summary>
+            Handle366s this instance.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.HandleWhisper(TwitchLib.Client.Models.Internal.IrcMessage)">
+            <summary>
+            Handles the whisper.
+            </summary>
+            <param name="ircMessage">The irc message.</param>
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.HandleRoomState(TwitchLib.Client.Models.Internal.IrcMessage)">
+            <summary>
+            Handles the state of the room.
+            </summary>
+            <param name="ircMessage">The irc message.</param>
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.HandleUserNotice(TwitchLib.Client.Models.Internal.IrcMessage)">
+            <summary>
+            Handles the user notice.
+            </summary>
+            <param name="ircMessage">The irc message.</param>
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.HandleCap(TwitchLib.Client.Models.Internal.IrcMessage)">
+            <summary>
+            Handles the Cap
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.SendQueuedItemAsync(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.HandleNotInitialized">
+            <summary>
+            Handles the not initialized.
+            </summary>
+            <exception cref="T:TwitchLib.Client.Exceptions.ClientNotInitializedException">The twitch client has not been initialized and cannot be used. Please call Initialize();</exception>
+        </member>
+        <member name="M:TwitchLib.Client.TwitchClient.HandleNotConnected">
+            <summary>
+            Handles the not connected.
+            </summary>
+            <exception cref="T:TwitchLib.Client.Exceptions.ClientNotConnectedException">In order to perform this action, the client must be connected to Twitch. To confirm connection, try performing this action in or after the OnConnected event has been fired.</exception>
+        </member>
+    </members>
+</doc>

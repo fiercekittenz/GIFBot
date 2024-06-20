@@ -1,0 +1,293 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TwitchLib.Api.Core</name>
+    </assembly>
+    <members>
+        <member name="T:TwitchLib.Api.Core.Common.Helpers">
+            <summary>Static class of helper functions used around the project.</summary>
+        </member>
+        <member name="M:TwitchLib.Api.Core.Common.Helpers.FormatOAuth(System.String)">
+            <summary>
+            Function that extracts just the token for consistency
+            </summary>
+            <param name="token">Full token string</param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchLib.Api.Core.Common.Helpers.AuthScopesToString(TwitchLib.Api.Core.Enums.AuthScopes)">
+            <summary>
+            Converts AuthScope enum to Twitch scope string
+            </summary>
+            <param name="scope">Scope as AuthScope Enum</param>
+            <returns>Twitch scope string</returns>
+        </member>
+        <member name="M:TwitchLib.Api.Core.Common.Helpers.StringToScope(System.String)">
+            <summary>
+            Converts Twitch string to AuthScope enum.
+            </summary>
+            <param name="scope">Scope as twitch string</param>
+            <returns>Twitch scope as AuthScope</returns>
+        </member>
+        <member name="M:TwitchLib.Api.Core.Common.Helpers.Base64Encode(System.String)">
+            <summary>
+            Helper for Base64 encoding a given input
+            </summary>
+            <param name="plainText">plain UTF8 string</param>
+            <returns>input as Base64 string</returns>
+        </member>
+        <member name="T:TwitchLib.Api.Core.Exceptions.BadGatewayException">
+            <inheritdoc />
+            <summary>Exception representing a 502 Http Statuscode</summary>
+        </member>
+        <member name="M:TwitchLib.Api.Core.Exceptions.BadGatewayException.#ctor(System.String,System.Net.Http.HttpResponseMessage)">
+            <inheritdoc />
+            <summary>Exception constructor</summary>
+        </member>
+        <member name="T:TwitchLib.Api.Core.Exceptions.BadParameterException">
+            <inheritdoc />
+            <summary>Exception representing an invalid resource</summary>
+        </member>
+        <member name="M:TwitchLib.Api.Core.Exceptions.BadParameterException.#ctor(System.String)">
+            <inheritdoc />
+            <summary>Exception constructor</summary>
+        </member>
+        <member name="T:TwitchLib.Api.Core.Exceptions.BadRequestException">
+            <inheritdoc />
+            <summary>Exception representing a request that doesn't have a clientid attached.</summary>
+        </member>
+        <member name="M:TwitchLib.Api.Core.Exceptions.BadRequestException.#ctor(System.String,System.Net.Http.HttpResponseMessage)">
+            <inheritdoc />
+            <summary>Exception constructor</summary>
+        </member>
+        <member name="T:TwitchLib.Api.Core.Exceptions.BadResourceException">
+            <inheritdoc />
+            <summary>Exception representing an invalid resource</summary>
+        </member>
+        <member name="M:TwitchLib.Api.Core.Exceptions.BadResourceException.#ctor(System.String,System.Net.Http.HttpResponseMessage)">
+            <inheritdoc />
+            <summary>Exception constructor</summary>
+        </member>
+        <member name="T:TwitchLib.Api.Core.Exceptions.BadScopeException">
+            <inheritdoc />
+            <summary>Exception representing a provided scope was not permitted.</summary>
+        </member>
+        <member name="M:TwitchLib.Api.Core.Exceptions.BadScopeException.#ctor(System.String,System.Net.Http.HttpResponseMessage)">
+            <inheritdoc />
+            <summary>Exception constructor</summary>
+        </member>
+        <member name="T:TwitchLib.Api.Core.Exceptions.BadTokenException">
+            <inheritdoc />
+            <summary>Exception representing a token not correctly associated with the given user.</summary>
+        </member>
+        <member name="M:TwitchLib.Api.Core.Exceptions.BadTokenException.#ctor(System.String,System.Net.Http.HttpResponseMessage)">
+            <inheritdoc />
+            <summary>Exception constructor</summary>
+        </member>
+        <member name="T:TwitchLib.Api.Core.Exceptions.ClientIdAndOAuthTokenRequired">
+            <inheritdoc />
+            <summary>Exception representing a Helix request sent without an OAuth access token</summary>
+        </member>
+        <member name="M:TwitchLib.Api.Core.Exceptions.ClientIdAndOAuthTokenRequired.#ctor(System.String)">
+            <inheritdoc />
+            <summary>Exception constructor</summary>
+        </member>
+        <member name="T:TwitchLib.Api.Core.Exceptions.GatewayTimeoutException">
+            <inheritdoc />
+            <summary>Exception representing a 504 Http Statuscode</summary>
+        </member>
+        <member name="M:TwitchLib.Api.Core.Exceptions.GatewayTimeoutException.#ctor(System.String,System.Net.Http.HttpResponseMessage)">
+            <inheritdoc />
+            <summary>Exception constructor</summary>
+        </member>
+        <member name="P:TwitchLib.Api.Core.Exceptions.HttpResponseException.HttpResponse">
+            <summary>
+            Null if using <see cref="T:TwitchLib.Api.Core.HttpCallHandlers.TwitchWebRequest"/> or <see cref="T:TwitchLib.Api.Core.Undocumented.Undocumented"/>
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Api.Core.Exceptions.InternalServerErrorException">
+            <inheritdoc />
+            <summary>Exception representing a 500 Http Statuscode</summary>
+        </member>
+        <member name="M:TwitchLib.Api.Core.Exceptions.InternalServerErrorException.#ctor(System.String,System.Net.Http.HttpResponseMessage)">
+            <inheritdoc />
+            <summary>Exception constructor</summary>
+        </member>
+        <member name="T:TwitchLib.Api.Core.Exceptions.InvalidCredentialException">
+            <inheritdoc />
+            <summary>Exception representing a detection that sent credentials were invalid.</summary>
+        </member>
+        <member name="M:TwitchLib.Api.Core.Exceptions.InvalidCredentialException.#ctor(System.String)">
+            <inheritdoc />
+            <summary>Exception constructor</summary>
+        </member>
+        <member name="T:TwitchLib.Api.Core.Exceptions.TokenExpiredException">
+            <inheritdoc />
+            <summary>Exception representing a detection that the OAuth token expired</summary>
+        </member>
+        <member name="M:TwitchLib.Api.Core.Exceptions.TokenExpiredException.#ctor(System.String,System.Net.Http.HttpResponseMessage)">
+            <inheritdoc />
+            <summary>Exception constructor</summary>
+        </member>
+        <member name="T:TwitchLib.Api.Core.Exceptions.TooManyRequestsException">
+            <inheritdoc />
+            <summary>Exception representing a 429 Http Statuscode</summary>
+        </member>
+        <member name="M:TwitchLib.Api.Core.Exceptions.TooManyRequestsException.#ctor(System.String,System.String,System.Net.Http.HttpResponseMessage)">
+            <inheritdoc />
+            <summary>
+            Constructor that allows a reset time to be added
+            </summary>
+            <param name="data">This is the exception message as a string</param>
+            <param name="resetTime">This is the reset time from twitch as a linux timestamp</param>
+        </member>
+        <member name="T:TwitchLib.Api.Core.Exceptions.UnexpectedResponseException">
+            <inheritdoc />
+            <summary>Exception representing a response received from Twitch that is not expected by the library</summary>
+        </member>
+        <member name="M:TwitchLib.Api.Core.Exceptions.UnexpectedResponseException.#ctor(System.String,System.Net.Http.HttpResponseMessage)">
+            <inheritdoc />
+            <summary>Exception constructor</summary>
+        </member>
+        <member name="T:TwitchLib.Api.Core.Extensions.System.DateTimeExtensions">
+            <summary>
+            Extension methods for the DateTime type
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Api.Core.Extensions.System.DateTimeExtensions.ToRfc3339String(System.DateTime)">
+            <summary>
+            Converts a .NET DateTime type to a RFC3339 string
+            </summary>
+            <param name="dateTime">Time as .NET DateTime</param>
+            <returns>Time as RFC3339 string</returns>
+        </member>
+        <member name="T:TwitchLib.Api.Core.Extensions.System.IEnumerableExtensions">
+            <summary>
+            Enumerable Extension methods
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Api.Core.Extensions.System.IEnumerableExtensions.AddTo``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.List{``0})">
+            <summary>
+            Adds an Enumerable of Type T to a List of Type T
+            </summary>
+            <typeparam name="T">Type of the Enumerable and List</typeparam>
+            <param name="source">Source IEnumerable to be added to the destination list</param>
+            <param name="destination">Destination List that the source IEnumerable shall be added to</param>
+        </member>
+        <member name="T:TwitchLib.Api.Core.HttpCallHandlers.TwitchHttpClient">
+            <summary>
+            Main HttpClient used to call the Twitch API
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Api.Core.HttpCallHandlers.TwitchHttpClient.#ctor(Microsoft.Extensions.Logging.ILogger{TwitchLib.Api.Core.HttpCallHandlers.TwitchHttpClient})">
+            <summary>
+            Creates an Instance of the TwitchHttpClient Class.
+            </summary>
+            <param name="logger">Instance Of Logger, otherwise no logging is used,  </param>
+        </member>
+        <member name="M:TwitchLib.Api.Core.HttpCallHandlers.TwitchHttpClient.PutBytesAsync(System.String,System.Byte[])">
+            <summary>
+            PUT Request with a byte array body
+            </summary>
+            <param name="url">URL to direct the PUT request at</param>
+            <param name="payload">Payload to send with the request</param>
+            <returns>Task for the request</returns>
+        </member>
+        <member name="M:TwitchLib.Api.Core.HttpCallHandlers.TwitchHttpClient.GeneralRequestAsync(System.String,System.String,System.String,TwitchLib.Api.Core.Enums.ApiVersion,System.String,System.String)">
+            <summary>
+            Used to make API calls to the Twitch API varying by Method, URL and payload
+            </summary>
+            <param name="url">URL to call</param>
+            <param name="method">HTTP Method to use for the API call</param>
+            <param name="payload">Payload to send with the API call</param>
+            <param name="api">Which API version is called</param>
+            <param name="clientId">Twitch ClientId</param>
+            <param name="accessToken">Twitch AccessToken linked to the ClientId</param>
+            <returns>KeyValuePair with the key being the returned StatusCode and the Value being the ResponseBody as string</returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.InvalidCredentialException"></exception>
+        </member>
+        <member name="M:TwitchLib.Api.Core.HttpCallHandlers.TwitchWebRequest.#ctor(Microsoft.Extensions.Logging.ILogger{TwitchLib.Api.Core.HttpCallHandlers.TwitchWebRequest})">
+            <summary>
+            Creates an Instance of the TwitchHttpClient Class.
+            </summary>
+            <param name="logger">Instance Of Logger, otherwise no logging is used,  </param>
+        </member>
+        <member name="T:TwitchLib.Api.Core.Internal.TwitchHttpClientHandler">
+            <summary>
+            Custom HttpClientHandler that can be used to log requests made and their duration
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Api.Core.Internal.TwitchHttpClientHandler.#ctor(Microsoft.Extensions.Logging.ILogger{TwitchLib.Api.Core.Interfaces.IHttpCallHandler})">
+            <summary>
+            Creates a new TwitchHttpClientHandler
+            </summary>
+            <param name="logger">Logger to use for logging</param>
+        </member>
+        <member name="M:TwitchLib.Api.Core.Internal.TwitchHttpClientHandler.SendAsync(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
+            <summary>
+            Overrides the HttpClient SendAsync method to hook into the request pipeline and log the http call
+            </summary>
+            <param name="request">The HttpRequest that is to be sent</param>
+            <param name="cancellationToken">CancellationToken to cancel the HTTP Request</param>
+            <returns></returns>
+        </member>
+        <member name="T:TwitchLib.Api.Core.RateLimiter.PersistentCountByIntervalAwaitableConstraint">
+            <summary>
+            <see cref="T:TwitchLib.Api.Core.RateLimiter.CountByIntervalAwaitableConstraint"/> that is able to save own state.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Api.Core.RateLimiter.PersistentCountByIntervalAwaitableConstraint.#ctor(System.Int32,System.TimeSpan,System.Action{System.DateTime},System.Collections.Generic.IEnumerable{System.DateTime},TwitchLib.Api.Core.Interfaces.ITime)">
+            <summary>
+            Create an instance of <see cref="T:TwitchLib.Api.Core.RateLimiter.PersistentCountByIntervalAwaitableConstraint"/>.
+            </summary>
+            <param name="count">Maximum actions allowed per time interval.</param>
+            <param name="timeSpan">Time interval limits are applied for.</param>
+            <param name="saveStateAction">Action is used to save state.</param>
+            <param name="initialTimeStamps">Initial timestamps.</param>
+        </member>
+        <member name="M:TwitchLib.Api.Core.RateLimiter.PersistentCountByIntervalAwaitableConstraint.OnEnded(System.DateTime)">
+            <summary>
+            Save state
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Api.Core.RateLimiter.TimeLimiter.GetPersistentTimeLimiter(System.Int32,System.TimeSpan,System.Action{System.DateTime})">
+            <summary>
+            Create <see cref="T:TwitchLib.Api.Core.RateLimiter.TimeLimiter"/> that will save state using action passed through <paramref name="saveStateAction"/> parameter.
+            </summary>
+            <param name="maxCount">Maximum actions allowed per time interval.</param>
+            <param name="timeSpan">Time interval limits are applied for.</param>
+            <param name="saveStateAction">Action is used to save state.</param>
+            <returns><see cref="T:TwitchLib.Api.Core.RateLimiter.TimeLimiter"/> instance with <see cref="T:TwitchLib.Api.Core.RateLimiter.PersistentCountByIntervalAwaitableConstraint"/>.</returns>
+        </member>
+        <member name="M:TwitchLib.Api.Core.RateLimiter.TimeLimiter.GetPersistentTimeLimiter(System.Int32,System.TimeSpan,System.Action{System.DateTime},System.Collections.Generic.IEnumerable{System.DateTime})">
+            <summary>
+            Create <see cref="T:TwitchLib.Api.Core.RateLimiter.TimeLimiter"/> with initial timestamps that will save state using action passed through <paramref name="saveStateAction"/> parameter.
+            </summary>
+            <param name="maxCount">Maximum actions allowed per time interval.</param>
+            <param name="timeSpan">Time interval limits are applied for.</param>
+            <param name="saveStateAction">Action is used to save state.</param>
+            <param name="initialTimeStamps">Initial timestamps.</param>
+            <returns><see cref="T:TwitchLib.Api.Core.RateLimiter.TimeLimiter"/> instance with <see cref="T:TwitchLib.Api.Core.RateLimiter.PersistentCountByIntervalAwaitableConstraint"/>.</returns>
+        </member>
+        <member name="T:TwitchLib.Api.Core.Undocumented.Undocumented">
+            <summary>
+            Undocumented Endpoints of the Twitch API, that generally are not for Third Party use and may break at any time without prior warning.
+            <para>So its best to not rely on them and use official and documented Third Party APIs if possible!</para>
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Api.Core.Undocumented.Undocumented.GetChattersAsync(System.String)">
+            <summary>
+            Gets a list of chatters of a channel
+            </summary>
+            <param name="channelName">channel login/channel name to get the chatters list for</param>
+            <returns>List of Chatters, grouped by UserType</returns>
+        </member>
+        <member name="M:TwitchLib.Api.Core.Undocumented.Undocumented.IsUsernameAvailableAsync(System.String)">
+            <summary>
+            Checks if a given username is available or already in use
+            </summary>
+            <param name="username">username to check</param>
+            <returns>true: if username is available; false: if username is already taken</returns>
+            <exception cref="T:TwitchLib.Api.Core.Exceptions.BadResourceException"></exception>
+        </member>
+    </members>
+</doc>

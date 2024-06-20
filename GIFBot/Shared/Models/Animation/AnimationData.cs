@@ -128,9 +128,9 @@ namespace GIFBot.Shared
                         chatMessage.RoomId,
                         chatMessage.Bits,
                         chatMessage.IsBroadcaster,
-                        chatMessage.IsSubscriber,
-                        chatMessage.IsVip,
-                        chatMessage.IsModerator);
+                        chatMessage.UserDetail.IsSubscriber,
+                        chatMessage.UserDetail.IsVip,
+                        chatMessage.UserDetail.IsModerator);
       }
 
       /// <summary>

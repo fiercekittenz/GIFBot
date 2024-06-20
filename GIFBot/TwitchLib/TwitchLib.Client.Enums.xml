@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TwitchLib.Client.Enums</name>
+    </assembly>
+    <members>
+        <member name="T:TwitchLib.Client.Enums.BadgeColor">
+            <summary>Color enum representing color based on cheer amount.</summary>
+        </member>
+        <member name="F:TwitchLib.Client.Enums.BadgeColor.Red">
+            <summary>Red = 10000+</summary>
+        </member>
+        <member name="F:TwitchLib.Client.Enums.BadgeColor.Blue">
+            <summary>Blue = 5000 -> 9999</summary>
+        </member>
+        <member name="F:TwitchLib.Client.Enums.BadgeColor.Green">
+            <summary>Green = 1000 -> 4999</summary>
+        </member>
+        <member name="F:TwitchLib.Client.Enums.BadgeColor.Purple">
+            <summary>Purple = 100 -> 999</summary>
+        </member>
+        <member name="F:TwitchLib.Client.Enums.BadgeColor.Gray">
+            <summary>Gray = 1 -> 99</summary>
+        </member>
+        <member name="T:TwitchLib.Client.Enums.PaidLevel">
+            <summary>
+            The level of the Hype Chat.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Client.Enums.SendReceiveDirection">
+            <summary>Enum to show which direction the message was detected from.</summary>
+        </member>
+        <member name="F:TwitchLib.Client.Enums.SendReceiveDirection.Sent">
+            <summary>Used for logging, direction of data.</summary>
+        </member>
+        <member name="F:TwitchLib.Client.Enums.SendReceiveDirection.Received">
+            <summary>Used for logging, direction of data.</summary>
+        </member>
+        <member name="T:TwitchLib.Client.Enums.UserType">
+            <summary>Enum representing various user-types.</summary>
+        </member>
+        <member name="F:TwitchLib.Client.Enums.UserType.Viewer">
+            <summary>The standard user-type representing a standard viewer.</summary>
+        </member>
+        <member name="F:TwitchLib.Client.Enums.UserType.Moderator">
+            <summary>User-type representing viewers with channel-specific moderation powers.</summary>
+        </member>
+        <member name="F:TwitchLib.Client.Enums.UserType.GlobalModerator">
+            <summary>User-type representing viewers with Twitch-wide moderation powers.</summary>
+        </member>
+        <member name="F:TwitchLib.Client.Enums.UserType.Broadcaster">
+            <summary>User-type representing the broadcaster of the channel</summary>
+        </member>
+        <member name="F:TwitchLib.Client.Enums.UserType.Admin">
+            <summary>User-type representing viewers with Twitch-wide moderation powers that are paid.</summary>
+        </member>
+        <member name="F:TwitchLib.Client.Enums.UserType.Staff">
+            <summary>User-type representing viewers that are Twitch employees.</summary>
+        </member>
+    </members>
+</doc>

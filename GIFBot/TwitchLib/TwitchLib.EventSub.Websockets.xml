@@ -1,0 +1,1064 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TwitchLib.EventSub.Websockets</name>
+    </assembly>
+    <members>
+        <member name="T:TwitchLib.EventSub.Websockets.Client.WebsocketClient">
+            <summary>
+            Websocket client to connect to variable websocket servers
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Client.WebsocketClient.IsConnected">
+            <summary>
+            Determines if the Client is still connected based on WebsocketState
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Client.WebsocketClient.IsFaulted">
+            <summary>
+            Determines if the Client has encountered an unrecoverable issue based on WebsocketState
+            </summary>
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Client.WebsocketClient.#ctor(Microsoft.Extensions.Logging.ILogger{TwitchLib.EventSub.Websockets.Client.WebsocketClient})">
+            <summary>
+            Constructor to create a new Websocket client with a logger
+            </summary>
+            <param name="logger">Logger used by the websocket client to print various state info</param>
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Client.WebsocketClient.ConnectAsync(System.Uri)">
+            <summary>
+            Connects the websocket client to a given Websocket Server
+            </summary>
+            <param name="url">Websocket Server URL to connect to</param>
+            <returns>true: if the connection is already open or was successful false: if the connection failed to be established</returns>
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Client.WebsocketClient.DisconnectAsync">
+            <summary>
+            Disconnect the Websocket client from its currently connected server
+            </summary>
+            <returns>true: if the disconnect was successful without errors false: if the client encountered an issue during the disconnect</returns>
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Client.WebsocketClient.ProcessDataAsync">
+            <summary>
+            Background operation to process incoming data via the websocket
+            </summary>
+            <returns>Task representing the background operation</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException"></exception>
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Client.WebsocketClient.Dispose">
+            <summary>
+            Cleanup of any unused resources as per IDisposable guidelines
+            </summary>
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Core.Handler.INotificationHandler">
+            <summary>
+            Interface describing a NotificationHandler for Twitch EventSub notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Core.Handler.INotificationHandler.SubscriptionType">
+            <summary>
+            Type of subscription the handler handles
+            </summary>
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Core.Handler.INotificationHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <summary>
+            Handles incoming notifications that the Handler is designed to handle as described by the SubscriptionType property of the Handler
+            </summary>
+            <param name="client">EventSubWebsocketClient that received the notification</param>
+            <param name="jsonString">Message as json string received by the EventSubWebsocketClient</param>
+            <param name="serializerOptions">Options to configure the JsonSerializer</param>
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.EventSubWebsocketClient">
+            <summary>
+            EventSubWebsocketClient used to subscribe to EventSub notifications via Websockets
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.WebsocketConnected">
+            <summary>
+            Event that triggers when the websocket was successfully connected
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.WebsocketDisconnected">
+            <summary>
+            Event that triggers when the websocket disconnected
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ErrorOccurred">
+            <summary>
+            Event that triggers when an error occurred on the websocket
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.WebsocketReconnected">
+            <summary>
+            Event that triggers when the websocket was successfully reconnected
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelAdBreakBegin">
+            <summary>
+            Event that triggers on "channel.ad_break.begin" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelBan">
+            <summary>
+            Event that triggers on "channel.ban" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelCharityCampaignStart">
+            <summary>
+            Event that triggers on "channel.charity_campaign.start" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelCharityCampaignDonate">
+            <summary>
+            Event that triggers on "channel.charity_campaign.donate" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelCharityCampaignProgress">
+            <summary>
+            Event that triggers on "channel.charity_campaign.progress" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelCharityCampaignStop">
+            <summary>
+            Event that triggers on "channel.charity_campaign.stop" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelChatMessage">
+            <summary>
+            Event that triggers on channel.chat.message notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelCheer">
+            <summary>
+            Event that triggers on "channel.cheer" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelFollow">
+            <summary>
+            Event that triggers on "channel.follow" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelGoalBegin">
+            <summary>
+            Event that triggers on "channel.goal.begin" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelGoalEnd">
+            <summary>
+            Event that triggers on "channel.goal.end" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelGoalProgress">
+            <summary>
+            Event that triggers on "channel.goal.progress" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelGuestStarGuestUpdate">
+            <summary>
+            Event that triggers on "channel.guest_star_guest.update" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelGuestStarSessionBegin">
+            <summary>
+            Event that triggers on "channel.guest_star_session.begin" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelGuestStarSessionEnd">
+            <summary>
+            Event that triggers on "channel.guest_star_guest.update" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelGuestStarSettingsUpdate">
+            <summary>
+            Event that triggers on "channel.guest_star_settings.update" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelGuestStarSlotUpdate">
+            <summary>
+            Event that triggers on "channel.guest_star_slot.update" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelHypeTrainBegin">
+            <summary>
+            Event that triggers on "channel.hype_train.begin" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelHypeTrainEnd">
+            <summary>
+            Event that triggers on "channel.hype_train.end" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelHypeTrainProgress">
+            <summary>
+            Event that triggers on "channel.hype_train.progress" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelModeratorAdd">
+            <summary>
+            Event that triggers on "channel.moderator.add" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelModeratorRemove">
+            <summary>
+            Event that triggers on "channel.moderator.remove" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelVipAdd">
+            <summary>
+            Event that triggers on "channel.vip.add" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelVipRemove">
+            <summary>
+            Event that triggers on "channel.vip.remove" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelPointsCustomRewardAdd">
+            <summary>
+            Event that triggers on "channel.channel_points_custom_reward.add" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelPointsCustomRewardRemove">
+            <summary>
+            Event that triggers on "channel.channel_points_custom_reward.remove" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelPointsCustomRewardUpdate">
+            <summary>
+            Event that triggers on "channel.channel_points_custom_reward.update" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelPointsCustomRewardRedemptionAdd">
+            <summary>
+            Event that triggers on "channel.channel_points_custom_reward_redemption.add" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelPointsCustomRewardRedemptionUpdate">
+            <summary>
+            Event that triggers on "channel.channel_points_custom_reward_redemption.update" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelPollBegin">
+            <summary>
+            Event that triggers on "channel.poll.begin" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelPollEnd">
+            <summary>
+            Event that triggers on "channel.poll.end" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelPollProgress">
+            <summary>
+            Event that triggers on "channel.poll.progress" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelPredictionBegin">
+            <summary>
+            Event that triggers on "channel.prediction.begin" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelPredictionEnd">
+            <summary>
+            Event that triggers on "channel.prediction.end" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelPredictionLock">
+            <summary>
+            Event that triggers on "channel.prediction.lock" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelPredictionProgress">
+            <summary>
+            Event that triggers on "channel.prediction.progress" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelRaid">
+            <summary>
+            Event that triggers on "channel.raid" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelShieldModeBegin">
+            <summary>
+            Event that triggers on "channel.shield_mode.begin" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelShieldModeEnd">
+            <summary>
+            Event that triggers on "channel.shield_mode.end" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelShoutoutCreate">
+            <summary>
+            Event that triggers on "channel.shoutout.create" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelShoutoutReceive">
+            <summary>
+            Event that triggers on "channel.shoutout.receive" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelSubscribe">
+            <summary>
+            Event that triggers on "channel.subscribe" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelSubscriptionEnd">
+            <summary>
+            Event that triggers on "channel.subscription.end" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelSubscriptionGift">
+            <summary>
+            Event that triggers on "channel.subscription.gift" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelSubscriptionMessage">
+            <summary>
+            Event that triggers on "channel.subscription.message" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelSuspiciousUserMessage">
+            <summary>
+            Event that triggers on "channel.suspicious_user.message" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelSuspiciousUserUpdate">
+            <summary>
+            Event that triggers on "channel.suspicious_user.update" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelUnban">
+            <summary>
+            Event that triggers on "channel.unban" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelUpdate">
+            <summary>
+            Event that triggers on "channel.update" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.StreamOffline">
+            <summary>
+            Event that triggers on "stream.offline" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.StreamOnline">
+            <summary>
+            Event that triggers on "stream.online" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.UserUpdate">
+            <summary>
+            Event that triggers on "user.update" notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.SessionId">
+            <summary>
+            Id associated with the Websocket Session. Needed for creating subscriptions for the socket.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.#ctor(Microsoft.Extensions.Logging.ILogger{TwitchLib.EventSub.Websockets.EventSubWebsocketClient},System.Collections.Generic.IEnumerable{TwitchLib.EventSub.Websockets.Core.Handler.INotificationHandler},System.IServiceProvider,TwitchLib.EventSub.Websockets.Client.WebsocketClient)">
+            <summary>
+            Instantiates an EventSubWebsocketClient used to subscribe to EventSub notifications via Websockets.
+            </summary>
+            <param name="logger">Logger for the EventSubWebsocketClient</param>
+            <param name="handlers">Enumerable of SubscriptionType handlers</param>
+            <param name="serviceProvider">DI Container to resolve other dependencies dynamically</param>
+            <param name="websocketClient">Underlying Websocket client to connect to connect to EventSub Websocket service</param>
+            <exception cref="T:System.ArgumentNullException">Throws ArgumentNullException if a dependency is null</exception>
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.#ctor(Microsoft.Extensions.Logging.ILoggerFactory)">
+            <summary>
+            Instantiates an EventSubWebsocketClient used to subscribe to EventSub notifications via Websockets.
+            </summary>
+            <param name="loggerFactory">LoggerFactory used to construct Loggers for the EventSubWebsocketClient and underlying classes</param>
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ConnectAsync(System.Uri)">
+            <summary>
+            Connect to Twitch EventSub Websockets
+            </summary>
+            <param name="url">Optional url param to be able to connect to reconnect urls provided by Twitch or test servers</param>
+            <returns>true: Connection successful false: Connection failed</returns>
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.DisconnectAsync">
+            <summary>
+            Disconnect from Twitch EventSub Websockets
+            </summary>
+            <returns>true: Disconnect successful false: Disconnect failed</returns>
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ReconnectAsync">
+            <summary>
+            Reconnect to Twitch EventSub Websockets with a Twitch given Url
+            </summary>
+            <returns>true: Reconnect successful false: Reconnect failed</returns>
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ReconnectAsync(System.Uri)">
+            <summary>
+            Reconnect to Twitch EventSub Websockets with a Twitch given Url
+            </summary>
+            <param name="url">New Websocket Url to connect to, to preserve current session and topics</param>
+            <returns>true: Reconnect successful false: Reconnect failed</returns>
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.PrepareHandlers(System.Collections.Generic.IEnumerable{TwitchLib.EventSub.Websockets.Core.Handler.INotificationHandler})">
+            <summary>
+            Setup handlers for all supported subscription types
+            </summary>
+            <param name="handlers">Enumerable of handlers that are responsible for acting on a specified subscription type</param>
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ConnectionCheckAsync">
+            <summary>
+            Background operation checking the client health based on the last received message and the Twitch specified minimum frequency + a 20% grace period.
+            <para>E.g. a Twitch specified 10 seconds minimum frequency would result in 12 seconds used by the client to honor network latencies and so on.</para>
+            </summary>
+            <returns>a Task that represents the background operation</returns>
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.OnDataReceived(System.Object,TwitchLib.EventSub.Websockets.Core.EventArgs.DataReceivedArgs)">
+            <summary>
+            AsyncEventHandler for the DataReceived event from the underlying websocket. This is where every notification that gets in gets handled"/>
+            </summary>
+            <param name="sender">Sender of the event. In this case <see cref="T:TwitchLib.EventSub.Websockets.Client.WebsocketClient"/></param>
+            <param name="e">EventArgs send with the event. <see cref="T:TwitchLib.EventSub.Websockets.Core.EventArgs.DataReceivedArgs"/></param>
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.OnErrorOccurred(System.Object,TwitchLib.EventSub.Websockets.Core.EventArgs.ErrorOccuredArgs)">
+            <summary>
+            AsyncEventHandler for the ErrorOccurred event from the underlying websocket. This handler only serves as a relay up to the user code"/>
+            </summary>
+            <param name="sender">Sender of the event. In this case <see cref="T:TwitchLib.EventSub.Websockets.Client.WebsocketClient"/></param>
+            <param name="e">EventArgs send with the event. <see cref="T:TwitchLib.EventSub.Websockets.Core.EventArgs.ErrorOccuredArgs"/></param>
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.HandleReconnect(System.String)">
+            <summary>
+            Handles 'session_reconnect' notifications
+            </summary>
+            <param name="message">notification message received from Twitch EventSub</param>
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.HandleWelcome(System.String)">
+            <summary>
+            Handles 'session_welcome' notifications
+            </summary>
+            <param name="message">notification message received from Twitch EventSub</param>
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.HandleDisconnect(System.String)">
+            <summary>
+            Handles 'session_disconnect' notifications
+            </summary>
+            <param name="message">notification message received from Twitch EventSub</param>
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.HandleKeepAlive(System.String)">
+            <summary>
+            Handles 'session_keepalive' notifications
+            </summary>
+            <param name="message">notification message received from Twitch EventSub</param>
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.HandleNotification(System.String,System.String)">
+            <summary>
+            Handles 'notification' notifications
+            </summary>
+            <param name="message">notification message received from Twitch EventSub</param>
+            <param name="subscriptionType">subscription type received from Twitch EventSub</param>
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.HandleRevocation(System.String)">
+            <summary>
+            Handles 'revocation' notifications
+            </summary>
+            <param name="message">notification message received from Twitch EventSub</param>
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.RaiseEvent(System.String,System.Object)">
+            <summary>
+            Raises an event from this class from a handler by reflection
+            </summary>
+            <param name="eventName">name of the event to raise</param>
+            <param name="args">args to pass with the event</param>
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Extensions.ServiceCollectionExtensions">
+            <summary>
+            Static class containing extension methods for the IServiceCollection of the DI Container
+            </summary>
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Extensions.ServiceCollectionExtensions.AddNotificationHandlers(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Type[])">
+            <summary>
+            
+            </summary>
+            <param name="services">ServiceCollection of the DI Container</param>
+            <param name="scanMarkers">Array of types in which assemblies to search for NotificationHandlers</param>
+            <returns>the IServiceCollection to enable further fluent additions to it</returns>
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Extensions.ServiceCollectionExtensions.AddTwitchLibEventSubWebsockets(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Add TwitchLib EventSub Websockets and its needed parts to the DI container
+            </summary>
+            <param name="services">ServiceCollection of the DI Container</param>
+            <returns>the IServiceCollection to enable further fluent additions to it</returns>
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.Ads.AdBreakBeginHandler">
+            <summary>
+            Handler for 'channel.ad_break.begin' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.Ads.AdBreakBeginHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.Ads.AdBreakBeginHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.ChannelPoints.CustomReward.ChannelPointsCustomRewardAddHandler">
+            <summary>
+            Handler for 'channel.channel_points_custom_reward.add' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.ChannelPoints.CustomReward.ChannelPointsCustomRewardAddHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.ChannelPoints.CustomReward.ChannelPointsCustomRewardAddHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.ChannelPoints.CustomReward.ChannelPointsCustomRewardRemoveHandler">
+            <summary>
+            Handler for 'channel.channel_points_custom_reward.remove' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.ChannelPoints.CustomReward.ChannelPointsCustomRewardRemoveHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.ChannelPoints.CustomReward.ChannelPointsCustomRewardRemoveHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.ChannelPoints.CustomReward.ChannelPointsCustomRewardUpdateHandler">
+            <summary>
+            Handler for 'channel.channel_points_custom_reward.update' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.ChannelPoints.CustomReward.ChannelPointsCustomRewardUpdateHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.ChannelPoints.CustomReward.ChannelPointsCustomRewardUpdateHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.ChannelPoints.Redemptions.ChannelPointsCustomRewardRedemptionAddHandler">
+            <summary>
+            Handler for 'channel.channel_points_custom_reward_redemption.add' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.ChannelPoints.Redemptions.ChannelPointsCustomRewardRedemptionAddHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.ChannelPoints.Redemptions.ChannelPointsCustomRewardRedemptionAddHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.ChannelPoints.Redemptions.ChannelPointsCustomRewardRedemptionUpdate">
+            <summary>
+            Handler for 'channel.channel_points_custom_reward_redemption.update' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.ChannelPoints.Redemptions.ChannelPointsCustomRewardRedemptionUpdate.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.ChannelPoints.Redemptions.ChannelPointsCustomRewardRedemptionUpdate.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.ChannelUpdateHandler">
+            <summary>
+            Handler for 'channel.update' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.ChannelUpdateHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.ChannelUpdateHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.Charity.ChannelCharityCampaignDonateHandler">
+            <summary>
+            Handler for 'channel.charity_campaign.donate' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.Charity.ChannelCharityCampaignDonateHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.Charity.ChannelCharityCampaignDonateHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.Charity.ChannelCharityCampaignProgressHandler">
+            <summary>
+            Handler for 'channel.charity_campaign.progress' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.Charity.ChannelCharityCampaignProgressHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.Charity.ChannelCharityCampaignProgressHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.Charity.ChannelCharityCampaignStartHandler">
+            <summary>
+            Handler for 'channel.charity_campaign.start' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.Charity.ChannelCharityCampaignStartHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.Charity.ChannelCharityCampaignStartHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.Charity.ChannelCharityCampaignStopHandler">
+            <summary>
+            Handler for 'channel.charity_campaign.stop' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.Charity.ChannelCharityCampaignStopHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.Charity.ChannelCharityCampaignStopHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.Cheers.ChannelCheerHandler">
+            <summary>
+            Handler for 'channel.cheer' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.Cheers.ChannelCheerHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.Cheers.ChannelCheerHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.Follows.ChannelFollowHandler">
+            <summary>
+            Handler for 'channel.follow' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.Follows.ChannelFollowHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.Follows.ChannelFollowHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.Goals.ChannelGoalBeginHandler">
+            <summary>
+            Handler for 'channel.goal.begin' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.Goals.ChannelGoalBeginHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.Goals.ChannelGoalBeginHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.Goals.ChannelGoalEndHandler">
+            <summary>
+            Handler for 'channel.goal.end' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.Goals.ChannelGoalEndHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.Goals.ChannelGoalEndHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.Goals.ChannelGoalProgressHandler">
+            <summary>
+            Handler for 'channel.goal.progress' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.Goals.ChannelGoalProgressHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.Goals.ChannelGoalProgressHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.GuestStar.ChannelGuestStarGuestUpdateHandler">
+            <summary>
+            Handler for 'channel.guest_star_guest.update' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.GuestStar.ChannelGuestStarGuestUpdateHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.GuestStar.ChannelGuestStarGuestUpdateHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.GuestStar.ChannelGuestStarSessionBeginHandler">
+            <summary>
+            Handler for 'channel.guest_star_session.begin' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.GuestStar.ChannelGuestStarSessionBeginHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.GuestStar.ChannelGuestStarSessionBeginHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.GuestStar.ChannelGuestStarSessionEndHandler">
+            <summary>
+            Handler for 'channel.guest_star_session.end' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.GuestStar.ChannelGuestStarSessionEndHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.GuestStar.ChannelGuestStarSessionEndHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.GuestStar.ChannelGuestStarSettingsUpdateHandler">
+            <summary>
+            Handler for 'channel.guest_star_slot.update' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.GuestStar.ChannelGuestStarSettingsUpdateHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.GuestStar.ChannelGuestStarSettingsUpdateHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.GuestStar.ChannelGuestStarSlotUpdateHandler">
+            <summary>
+            Handler for 'channel.guest_star_slot.update' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.GuestStar.ChannelGuestStarSlotUpdateHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.GuestStar.ChannelGuestStarSlotUpdateHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.HypeTrains.ChannelHypeTrainBeginHandler">
+            <summary>
+            Handler for 'channel.hype_train.begin' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.HypeTrains.ChannelHypeTrainBeginHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.HypeTrains.ChannelHypeTrainBeginHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.HypeTrains.ChannelHypeTrainEndHandler">
+            <summary>
+            Handler for 'channel.hype_train.end' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.HypeTrains.ChannelHypeTrainEndHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.HypeTrains.ChannelHypeTrainEndHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.HypeTrains.ChannelHypeTrainProgressHandler">
+            <summary>
+            Handler for 'channel.hype_train.progress' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.HypeTrains.ChannelHypeTrainProgressHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.HypeTrains.ChannelHypeTrainProgressHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.Moderation.ChannelBanHandler">
+            <summary>
+            Handler for 'channel.ban' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.Moderation.ChannelBanHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.Moderation.ChannelBanHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.Moderation.ChannelUnbanHandler">
+            <summary>
+            Handler for 'channel.unban' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.Moderation.ChannelUnbanHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.Moderation.ChannelUnbanHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.Moderators.ChannelModeratorAddHandler">
+            <summary>
+            Handler for 'channel.moderator.add' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.Moderators.ChannelModeratorAddHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.Moderators.ChannelModeratorAddHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.Moderators.ChannelModeratorRemoveHandler">
+            <summary>
+            Handler for 'channel.moderator.remove' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.Moderators.ChannelModeratorRemoveHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.Moderators.ChannelModeratorRemoveHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.Polls.ChannelPollBeginHandler">
+            <summary>
+            Handler for 'channel.poll.begin' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.Polls.ChannelPollBeginHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.Polls.ChannelPollBeginHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.Polls.ChannelPollEndHandler">
+            <summary>
+            Handler for 'channel.poll.end' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.Polls.ChannelPollEndHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.Polls.ChannelPollEndHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.Polls.ChannelPollProgressHandler">
+            <summary>
+            Handler for 'channel.poll.progress' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.Polls.ChannelPollProgressHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.Polls.ChannelPollProgressHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.Predictions.ChannelPredictionBeginHandler">
+            <summary>
+            Handler for 'channel.prediction.begin' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.Predictions.ChannelPredictionBeginHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.Predictions.ChannelPredictionBeginHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.Predictions.ChannelPredictionEndHandler">
+            <summary>
+            Handler for 'channel.prediction.end' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.Predictions.ChannelPredictionEndHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.Predictions.ChannelPredictionEndHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.Predictions.ChannelPredictionLockBeginHandler">
+            <summary>
+            Handler for 'channel.prediction.lock' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.Predictions.ChannelPredictionLockBeginHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.Predictions.ChannelPredictionLockBeginHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.Predictions.ChannelPredictionProgressHandler">
+            <summary>
+            Handler for 'channel.prediction.progress' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.Predictions.ChannelPredictionProgressHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.Predictions.ChannelPredictionProgressHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.Raids.ChannelRaidHandler">
+            <summary>
+            Handler for 'channel.raid' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.Raids.ChannelRaidHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.Raids.ChannelRaidHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.ShieldMode.ChannelShieldModeBeginHandler">
+            <summary>
+            Handler for 'channel.shield_mode.begin' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.ShieldMode.ChannelShieldModeBeginHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.ShieldMode.ChannelShieldModeBeginHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.ShieldMode.ChannelShieldModeEndHandler">
+            <summary>
+            Handler for 'channel.shield_mode.end' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.ShieldMode.ChannelShieldModeEndHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.ShieldMode.ChannelShieldModeEndHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.Shoutouts.ChannelShoutoutCreateHandler">
+            <summary>
+            Handler for 'channel.shoutout.create' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.Shoutouts.ChannelShoutoutCreateHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.Shoutouts.ChannelShoutoutCreateHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.Shoutouts.ChannelShoutoutReceiveHandler">
+            <summary>
+            Handler for 'channel.shoutout.receive' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.Shoutouts.ChannelShoutoutReceiveHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.Subscription.ChannelSubscribeHandler">
+            <summary>
+            Handler for 'channel.subscribe' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.Subscription.ChannelSubscribeHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.Subscription.ChannelSubscribeHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.Subscription.ChannelSubscriptionEndHandler">
+            <summary>
+            Handler for 'channel.subscription.end' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.Subscription.ChannelSubscriptionEndHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.Subscription.ChannelSubscriptionEndHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.Subscription.ChannelSubscriptionGiftHandler">
+            <summary>
+            Handler for 'channel.subscription.gift' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.Subscription.ChannelSubscriptionGiftHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.Subscription.ChannelSubscriptionGiftHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.Subscription.ChannelSubscriptionMessageHandler">
+            <summary>
+            Handler for 'channel.subscription.message' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.Subscription.ChannelSubscriptionMessageHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.Subscription.ChannelSubscriptionMessageHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.SuspiciousUser.ChannelSuspiciousUserMessageHandler">
+            <summary>
+            Handler for 'channel.suspicious_user.message' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.SuspiciousUser.ChannelSuspiciousUserMessageHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.SuspiciousUser.ChannelSuspiciousUserMessageHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.SuspiciousUser.ChannelSuspiciousUserUpdateHandler">
+            <summary>
+            Handler for 'channel.suspicious_user.update' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.SuspiciousUser.ChannelSuspiciousUserUpdateHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.SuspiciousUser.ChannelSuspiciousUserUpdateHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.Vips.ChannelVipAddHandler">
+            <summary>
+            Handler for 'channel.vip.add' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.Vips.ChannelVipAddHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.Vips.ChannelVipAddHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.Vips.ChannelVipRemoveHandler">
+            <summary>
+            Handler for 'channel.vip.remove' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.Vips.ChannelVipRemoveHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.Vips.ChannelVipRemoveHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.RevocationHandler">
+            <summary>
+            Handler for 'revocation' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.RevocationHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.RevocationHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Stream.StreamOfflineHandler">
+            <summary>
+            Handler for 'stream.offline' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Stream.StreamOfflineHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Stream.StreamOfflineHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Stream.StreamOnlineHandler">
+            <summary>
+            Handler for 'stream.online' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Stream.StreamOnlineHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Stream.StreamOnlineHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.User.UserUpdateHandler">
+            <summary>
+            Handler for 'user.update' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.User.UserUpdateHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.User.UserUpdateHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>

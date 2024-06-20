@@ -540,12 +540,12 @@ namespace GIFBot.Server.GIFBot
             mBotTwitchClient.OnUnaccountedFor -= TwitchClient_OnUnaccountedFor;
             mBotTwitchClient.OnWhisperReceived -= TwitchClient_OnWhisperReceived;
 
-            mBotTwitchClient.Disconnect();
+            _ = mBotTwitchClient.DisconnectAsync();
          }
 
          if (mStreamerTwitchClient != null)
          {
-            mStreamerTwitchClient.Disconnect();
+            _ = mStreamerTwitchClient.DisconnectAsync();
          }
 
          // Initialize the Twitch API.
@@ -557,11 +557,7 @@ namespace GIFBot.Server.GIFBot
          {
             ConnectionCredentials connectionCredentials = new ConnectionCredentials(BotSettings.BotName.Trim(), BotSettings.BotOauthToken.Trim());
 
-            var clientOptions = new ClientOptions {
-               MessagesAllowedInPeriod = 750,
-               ThrottlingPeriod = TimeSpan.FromSeconds(30)
-            };
-            WebSocketClient customClient = new WebSocketClient(clientOptions);
+            WebSocketClient customClient = new WebSocketClient();
 
             mBotTwitchClient = new TwitchClient(customClient);
             mBotTwitchClient.Initialize(connectionCredentials, BotSettings.ChannelName.Trim());
@@ -578,7 +574,7 @@ namespace GIFBot.Server.GIFBot
             mBotTwitchClient.OnUnaccountedFor += TwitchClient_OnUnaccountedFor;
             mBotTwitchClient.OnWhisperReceived += TwitchClient_OnWhisperReceived;
 
-            mBotTwitchClient.Connect();
+            _ = mBotTwitchClient.ConnectAsync();
          }
 
          // Setup the STREAMER Twitch Client
@@ -586,16 +582,12 @@ namespace GIFBot.Server.GIFBot
          {
             ConnectionCredentials connectionCredentials = new ConnectionCredentials(BotSettings.ChannelName.Trim(), BotSettings.StreamerOauthToken.Trim());
 
-            var clientOptions = new ClientOptions {
-               MessagesAllowedInPeriod = 750,
-               ThrottlingPeriod = TimeSpan.FromSeconds(30)
-            };
-            WebSocketClient customClient = new WebSocketClient(clientOptions);
+            WebSocketClient customClient = new WebSocketClient();
 
             mStreamerTwitchClient = new TwitchClient(customClient);
             mStreamerTwitchClient.Initialize(connectionCredentials, BotSettings.ChannelName.Trim());
 
-            mStreamerTwitchClient.Connect();
+            _ = mStreamerTwitchClient.ConnectAsync();
          }
 
          // Reset the user channel list and fetch the latest if the channel name has changed.
@@ -652,7 +644,7 @@ namespace GIFBot.Server.GIFBot
       //   }
       //}
 
-      private void TwitchClient_OnWhisperReceived(object sender, TwitchLib.Client.Events.OnWhisperReceivedArgs e)
+      private Task TwitchClient_OnWhisperReceived(object sender, TwitchLib.Client.Events.OnWhisperReceivedArgs e)
       {
          if (e.WhisperMessage.Username.Equals(BotSettings.ChannelName, StringComparison.OrdinalIgnoreCase))
          {
@@ -662,9 +654,11 @@ namespace GIFBot.Server.GIFBot
                AnimationManager.ForceQueueAnimation(animation, e.WhisperMessage.Username, "0");
             }
          }
+
+         return Task.CompletedTask;
       }
 
-      private void TwitchClient_OnUnaccountedFor(object sender, TwitchLib.Client.Events.OnUnaccountedForArgs e)
+      private Task TwitchClient_OnUnaccountedFor(object sender, TwitchLib.Client.Events.OnUnaccountedForArgs e)
       {
          string[] splits = e.RawIRC.Split(';');
 
@@ -733,27 +727,33 @@ namespace GIFBot.Server.GIFBot
          {
             _ = SendLogMessage($"Unaccounted: {e.RawIRC}");
          }
+
+         return Task.CompletedTask;
       }
 
       public void SendChatMessage(string message)
       {
          if (!String.IsNullOrEmpty(mBotSettings.ChannelName) && mBotTwitchClient != null && mBotTwitchClient.JoinedChannels.Count != 0)
          {
-            mBotTwitchClient.SendMessage(mBotSettings.ChannelName.Trim(), message);
+            _ = mBotTwitchClient.SendMessageAsync(mBotSettings.ChannelName.Trim(), message);
          }
       }
 
-      private void TwitchClient_OnMessageReceived(object sender, TwitchLib.Client.Events.OnMessageReceivedArgs e)
+      private Task TwitchClient_OnMessageReceived(object sender, TwitchLib.Client.Events.OnMessageReceivedArgs e)
       {
          QueueTwitchMessage(new TwitchMessage(this, e));
+
+         return Task.CompletedTask;
       }
 
-      private void TwitchClient_OnDisconnected(object sender, TwitchLib.Communication.Events.OnDisconnectedEventArgs e)
+      private Task TwitchClient_OnDisconnected(object sender, TwitchLib.Client.Events.OnDisconnectedArgs e)
       {
          _ = SendLogMessage("Disconnected from Twitch.");
+
+         return Task.CompletedTask;
       }
 
-      private void TwitchClient_OnConnected(object sender, TwitchLib.Client.Events.OnConnectedArgs e)
+      private Task TwitchClient_OnConnected(object sender, TwitchLib.Client.Events.OnConnectedEventArgs e)
       {
          _ = SendLogMessage("Connected to Twitch!");
 
@@ -771,16 +771,20 @@ namespace GIFBot.Server.GIFBot
          ApiSettings apiSettings = new ApiSettings() {
             AccessToken = BotSettings.BotOauthToken,
             ClientId = Common.skTwitchClientId,
-            Scopes = new List<TwitchLib.Api.Core.Enums.AuthScopes>() { TwitchLib.Api.Core.Enums.AuthScopes.Any, TwitchLib.Api.Core.Enums.AuthScopes.Chat_Moderate, TwitchLib.Api.Core.Enums.AuthScopes.Chat_Edit, TwitchLib.Api.Core.Enums.AuthScopes.Chat_Read, TwitchLib.Api.Core.Enums.AuthScopes.Channel_Read, TwitchLib.Api.Core.Enums.AuthScopes.Channel_Subscriptions }
+            Scopes = new List<TwitchLib.Api.Core.Enums.AuthScopes>() { TwitchLib.Api.Core.Enums.AuthScopes.Any, TwitchLib.Api.Core.Enums.AuthScopes.Channel_Read_Redemptions, TwitchLib.Api.Core.Enums.AuthScopes.Chat_Edit, TwitchLib.Api.Core.Enums.AuthScopes.Chat_Read, TwitchLib.Api.Core.Enums.AuthScopes.Channel_Read_VIPs, TwitchLib.Api.Core.Enums.AuthScopes.Channel_Read_Subscriptions }
          };
+
+         return Task.CompletedTask;
       }
 
-      private void TwitchClient_OnJoinedChannel(object sender, TwitchLib.Client.Events.OnJoinedChannelArgs e)
+      private Task TwitchClient_OnJoinedChannel(object sender, TwitchLib.Client.Events.OnJoinedChannelArgs e)
       {
          _ = SendLogMessage($"Joined channel {e.Channel} as {e.BotUsername}");
+
+         return Task.CompletedTask;
       }
 
-      private void TwitchClient_OnRaidNotification(object sender, TwitchLib.Client.Events.OnRaidNotificationArgs e)
+      private Task TwitchClient_OnRaidNotification(object sender, TwitchLib.Client.Events.OnRaidNotificationArgs e)
       {
          AnimationData animation = null;                  
          var allRaidAnimations = AnimationManager.GetAllAnimations(AnimationManager.FetchType.EnabledOnly).Where(a => a.IsRaidAlert).ToList();
@@ -833,31 +837,41 @@ namespace GIFBot.Server.GIFBot
             _ = SendLogMessage($"Sticker placed for raid from [{e.RaidNotification.DisplayName}].");
             _ = StickersManager.PlaceASticker();
          }
+
+         return Task.CompletedTask;
       }
 
-      private void TwitchClient_OnNewSubscriber(object sender, TwitchLib.Client.Events.OnNewSubscriberArgs e)
+      private Task TwitchClient_OnNewSubscriber(object sender, TwitchLib.Client.Events.OnNewSubscriberArgs e)
       {
          _ = SendLogMessage($"{e.Subscriber.DisplayName} is a new sub!");
-         HandleSubscriptionEvent(e.Subscriber.DisplayName, 0, e.Subscriber.SubscriptionPlan, 0, false);
+         HandleSubscriptionEvent(e.Subscriber.DisplayName, 0, e.Subscriber.MsgParamSubPlan, 0, false);
+
+         return Task.CompletedTask;
       }
 
-      private void TwitchClient_OnReSubscriber(object sender, TwitchLib.Client.Events.OnReSubscriberArgs e)
+      private Task TwitchClient_OnReSubscriber(object sender, TwitchLib.Client.Events.OnReSubscriberArgs e)
       {
-         _ = SendLogMessage($"{e.ReSubscriber.DisplayName} just resubscribed {e.ReSubscriber.SubscriptionPlan} for {e.ReSubscriber.Months}!");
-         HandleSubscriptionEvent(e.ReSubscriber.DisplayName, e.ReSubscriber.Months, e.ReSubscriber.SubscriptionPlan, 0, false);
+         _ = SendLogMessage($"{e.ReSubscriber.DisplayName} just resubscribed {e.ReSubscriber.MsgParamSubPlan} for {e.ReSubscriber.MsgParamCumulativeMonths}!");
+         HandleSubscriptionEvent(e.ReSubscriber.DisplayName, e.ReSubscriber.MsgParamCumulativeMonths, e.ReSubscriber.MsgParamSubPlan, 0, false);
+
+         return Task.CompletedTask;
       }
 
-      private void TwitchClient_OnGiftedSubscription(object sender, TwitchLib.Client.Events.OnGiftedSubscriptionArgs e)
+      private Task TwitchClient_OnGiftedSubscription(object sender, TwitchLib.Client.Events.OnGiftedSubscriptionArgs e)
       {
          //Kittenztodo: Appears to be bugged on the TwitchLib end of things.
          //_ = SendLogMessage($"{e.GiftedSubscription.DisplayName} was gifted subscription!");
          //HandleSubscriptionEvent(e.GiftedSubscription.DisplayName, 0, e.GiftedSubscription.MsgParamSubPlan, 1, true);
+
+         return Task.CompletedTask;
       }
 
-      private void TwitchClient_OnCommunitySubscription(object sender, TwitchLib.Client.Events.OnCommunitySubscriptionArgs e)
+      private Task TwitchClient_OnCommunitySubscription(object sender, TwitchLib.Client.Events.OnCommunitySubscriptionArgs e)
       {
          _ = SendLogMessage($"{e.GiftedSubscription.DisplayName} gifted {e.GiftedSubscription.MsgParamMassGiftCount} subs!");
          HandleSubscriptionEvent(e.GiftedSubscription.DisplayName, 0, e.GiftedSubscription.MsgParamSubPlan, e.GiftedSubscription.MsgParamMassGiftCount, true);
+
+         return Task.CompletedTask;
       }
 
       public void HandleSubscriptionEvent(string viewerName, int subAlertMonths, SubscriptionPlan tier, int giftedCount, bool isGifted)

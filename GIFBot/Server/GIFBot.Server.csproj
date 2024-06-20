@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
    <PropertyGroup>
       <TargetFramework>net6.0</TargetFramework>
@@ -33,16 +33,66 @@
       <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="6.0.8" />
       <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.8" />
       <PackageReference Include="Microsoft.CognitiveServices.Speech" Version="1.23.0" />
+      <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
       <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.8" />
-      <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-      <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+      <PackageReference Include="System.Drawing.Common" Version="8.0.6" />
+      <PackageReference Include="System.Net.Http" Version="4.3.4" />
       <PackageReference Include="System.Speech" Version="6.0.0" />
-      <PackageReference Include="TwitchLib" Version="3.5.3" />
    </ItemGroup>
 
    <ItemGroup>
       <ProjectReference Include="..\Client\GIFBot.Client.csproj" />
       <ProjectReference Include="..\Shared\GIFBot.Shared.csproj" />
+   </ItemGroup>
+
+   <ItemGroup>
+     <Reference Include="TwitchLib.Api">
+       <HintPath>..\TwitchLib\TwitchLib.Api.dll</HintPath>
+     </Reference>
+     <Reference Include="TwitchLib.Api.Core">
+       <HintPath>..\TwitchLib\TwitchLib.Api.Core.dll</HintPath>
+     </Reference>
+     <Reference Include="TwitchLib.Api.Core.Enums">
+       <HintPath>..\TwitchLib\TwitchLib.Api.Core.Enums.dll</HintPath>
+     </Reference>
+     <Reference Include="TwitchLib.Api.Core.Interfaces">
+       <HintPath>..\TwitchLib\TwitchLib.Api.Core.Interfaces.dll</HintPath>
+     </Reference>
+     <Reference Include="TwitchLib.Api.Core.Models">
+       <HintPath>..\TwitchLib\TwitchLib.Api.Core.Models.dll</HintPath>
+     </Reference>
+     <Reference Include="TwitchLib.Api.Helix">
+       <HintPath>..\TwitchLib\TwitchLib.Api.Helix.dll</HintPath>
+     </Reference>
+     <Reference Include="TwitchLib.Api.Helix.Models">
+       <HintPath>..\TwitchLib\TwitchLib.Api.Helix.Models.dll</HintPath>
+     </Reference>
+     <Reference Include="TwitchLib.Client">
+       <HintPath>..\TwitchLib\TwitchLib.Client.dll</HintPath>
+     </Reference>
+     <Reference Include="TwitchLib.Client.Enums">
+       <HintPath>..\TwitchLib\TwitchLib.Client.Enums.dll</HintPath>
+     </Reference>
+     <Reference Include="TwitchLib.Client.Models">
+       <HintPath>..\TwitchLib\TwitchLib.Client.Models.dll</HintPath>
+     </Reference>
+     <Reference Include="TwitchLib.Communication">
+       <HintPath>..\TwitchLib\TwitchLib.Communication.dll</HintPath>
+     </Reference>
+     <Reference Include="TwitchLib.EventSub.Core">
+       <HintPath>..\TwitchLib\TwitchLib.EventSub.Core.dll</HintPath>
+     </Reference>
+     <Reference Include="TwitchLib.EventSub.Webhooks">
+       <HintPath>..\TwitchLib\TwitchLib.EventSub.Webhooks.dll</HintPath>
+     </Reference>
+     <Reference Include="TwitchLib.EventSub.Websockets">
+       <HintPath>..\TwitchLib\TwitchLib.EventSub.Websockets.dll</HintPath>
+     </Reference>
+     <Reference Include="TwitchLib.PubSub">
+       <HintPath>..\TwitchLib\TwitchLib.PubSub.dll</HintPath>
+     </Reference>
    </ItemGroup>
 
 

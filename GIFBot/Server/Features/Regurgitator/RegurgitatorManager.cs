@@ -191,7 +191,7 @@ namespace GIFBot.Server.Features.Regurgitator
                   break;
                case AnimationEnums.AccessType.Moderator:
                   {
-                     if (!message.ChatMessage.IsModerator)
+                     if (!message.ChatMessage.UserDetail.IsModerator)
                      {
                         return;
                      }
@@ -199,7 +199,7 @@ namespace GIFBot.Server.Features.Regurgitator
                   break;
                case AnimationEnums.AccessType.Subscriber:
                   {
-                     if (!message.ChatMessage.IsSubscriber)
+                     if (!message.ChatMessage.UserDetail.IsSubscriber)
                      {
                         return;
                      }
@@ -207,7 +207,7 @@ namespace GIFBot.Server.Features.Regurgitator
                   break;
                case AnimationEnums.AccessType.VIP:
                   {
-                     if (!message.ChatMessage.IsVip)
+                     if (!message.ChatMessage.UserDetail.IsVip)
                      {
                         return;
                      }
@@ -222,7 +222,7 @@ namespace GIFBot.Server.Features.Regurgitator
                         return;
                      }
 
-                     if (qualifyingPackage.Settings.RestrictedUserMustBeSub && !message.ChatMessage.IsSubscriber)
+                     if (qualifyingPackage.Settings.RestrictedUserMustBeSub && !message.ChatMessage.UserDetail.IsSubscriber)
                      {
                         return;
                      }
