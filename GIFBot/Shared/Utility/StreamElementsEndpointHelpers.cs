@@ -1,5 +1,4 @@
 ﻿using GIFBot.Shared.Models.StreamElements;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,6 +6,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace GIFBot.Shared.Utility
@@ -29,10 +30,10 @@ namespace GIFBot.Shared.Utility
             if (response.IsSuccessStatusCode)
             {
                string jsonData = response.Content.ReadAsStringAsync().Result;
-               dynamic responseData = JsonConvert.DeserializeObject<object>(jsonData);
+               JsonObject responseData = JsonSerializer.Deserialize<JsonObject>(jsonData);
                if (responseData != null && responseData["_id"] != null)
                {
-                  return responseData["_id"];
+                  return responseData["_id"].ToString();
                }
             }
          }
@@ -55,18 +56,18 @@ namespace GIFBot.Shared.Utility
             if (response.IsSuccessStatusCode)
             {
                string jsonData = response.Content.ReadAsStringAsync().Result;
-               dynamic responseData = JsonConvert.DeserializeObject<object>(jsonData);
+               JsonObject responseData = JsonSerializer.Deserialize<JsonObject>(jsonData);
                if (responseData != null && responseData["docs"] != null)
                {
                   List<StreamElementsTipData> tips = new List<StreamElementsTipData>();
 
-                  foreach (var rawTipData in responseData["docs"])
+                  foreach (var rawTipData in responseData["docs"].AsArray())
                   {
                      StreamElementsTipData tip = new StreamElementsTipData() {
-                        Id = rawTipData["_id"],
-                        TipperName = rawTipData["donation"]["user"]["username"],
-                        Message = rawTipData["donation"]["message"],
-                        Amount = rawTipData["donation"]["amount"],
+                        Id = rawTipData["_id"].ToString(),
+                        TipperName = rawTipData["donation"]["user"]["username"].ToString(),
+                        Message = rawTipData["donation"]["message"].ToString(),
+                        Amount = Double.Parse(rawTipData["donation"]["amount"].ToString()),
                         TimeTipped = DateTime.Parse(rawTipData["createdAt"].ToString())
                      };
 

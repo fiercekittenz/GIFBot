@@ -6,7 +6,7 @@ using GIFBot.Shared.Models.GIFBot;
 using GIFBot.Shared.Utility;
 using Microsoft.CognitiveServices.Speech;
 using Microsoft.CognitiveServices.Speech.Audio;
-using Newtonsoft.Json;
+using System.Text.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -58,7 +58,7 @@ namespace GIFBot.Server.Features.Regurgitator
          if (!String.IsNullOrEmpty(DataFilePath) && File.Exists(DataFilePath))
          {
             string fileData = File.ReadAllText(DataFilePath);
-            mData = JsonConvert.DeserializeObject<RegurgitatorData>(fileData);
+            mData = JsonSerializer.Deserialize<RegurgitatorData>(fileData);
 
             if (mData.Version == 0)
             {
@@ -106,7 +106,7 @@ namespace GIFBot.Server.Features.Regurgitator
          {
             Directory.CreateDirectory(Path.GetDirectoryName(DataFilePath));
 
-            var jsonData = JsonConvert.SerializeObject(mData);
+            var jsonData = JsonSerializer.Serialize(mData);
             File.WriteAllText(DataFilePath, jsonData);
 
             _ = Bot?.SendLogMessage("Regurgitator data saved.");

@@ -3,7 +3,7 @@ using GIFBot.Shared.Models.Animation;
 using GIFBot.Shared.Models.Features;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.SignalR.Client;
-using Newtonsoft.Json;
+using System.Text.Json;
 using Radzen;
 using System;
 using System.Collections.Generic;
@@ -86,7 +86,7 @@ namespace GIFBot.Client.Pages.Features
       private async Task GetGiveawayDataFromHub()
       {
          string rawData = await mHubConnection.InvokeAsync<string>("GetGiveawayData");
-         Data = JsonConvert.DeserializeObject<GiveawayData>(rawData);
+         Data = JsonSerializer.Deserialize<GiveawayData>(rawData);
          mAccessSelection = (int)Data.Access;
          mEntryBehaviorSelection = (int)Data.EntryBehavior;
       }
@@ -94,7 +94,7 @@ namespace GIFBot.Client.Pages.Features
       private async Task GetAnimationOptions()
       {
          string rawData = await mHubConnection.InvokeAsync<string>("GetAnimationOptions");
-         AnimationOptions = JsonConvert.DeserializeObject<List<AnimationSelectorItem>>(rawData);
+         AnimationOptions = JsonSerializer.Deserialize<List<AnimationSelectorItem>>(rawData);
       }
 
       private async Task OnStartGiveaway()
@@ -220,7 +220,7 @@ namespace GIFBot.Client.Pages.Features
 
       private async Task OnSaveChanges()
       {
-         await mHubConnection.InvokeAsync("UpdateGiveawayData", JsonConvert.SerializeObject(Data));
+         await mHubConnection.InvokeAsync("UpdateGiveawayData", JsonSerializer.Serialize(Data));
          await GetGiveawayDataFromHub();
          NotificationService.Notify(NotificationSeverity.Success, "Save Successful", "The giveaway data has been saved.", 5000);
          await InvokeAsync(() => { StateHasChanged(); });

@@ -23,6 +23,13 @@ namespace GIFBot.Shared
       #region Public Methods
 
       /// <summary>
+      /// Empty Constructor for Json
+      /// </summary>
+      public AnimationData() : this(string.Empty)
+      {
+      }
+
+      /// <summary>
       /// Constructor
       /// </summary>
       /// <param name="command"></param>
@@ -77,40 +84,40 @@ namespace GIFBot.Shared
          // Verify access points that are limited by username inclusivity.
          switch (Access)
          {
-            case AnimationEnums.AccessType.SpecificViewer:
-               {
-                  if (!String.IsNullOrEmpty(userTriggering) && 
-                      !String.IsNullOrEmpty(RestrictedToUser) && 
-                      !userTriggering.Equals(RestrictedToUser, StringComparison.OrdinalIgnoreCase))
-                  {
-                     return false;
-                  }
-               }
-               break;
-            case AnimationEnums.AccessType.UserGroup:
-               {
-                  if (!String.IsNullOrEmpty(userTriggering))
-                  {
-                     UserGroup group = settings.UserGroups.FirstOrDefault(g => g.Id == RestrictedToUserGroup);
-                     if (group == null)
-                     {
-                        // Group doesn't exist.
-                        return false;
-                     }
-
-                     UserEntry qualifiedUser = group.UserEntries.FirstOrDefault(u => u.Name.Equals(userTriggering, StringComparison.OrdinalIgnoreCase));
-                     if (qualifiedUser == null)
-                     {
-                        // Not in the group.
-                        return false;
-                     }
-                  }
-               }
-               break;
-            case AnimationEnums.AccessType.BotExecuteOnly:
+         case AnimationEnums.AccessType.SpecificViewer:
+            {
+               if (!String.IsNullOrEmpty(userTriggering) &&
+                   !String.IsNullOrEmpty(RestrictedToUser) &&
+                   !userTriggering.Equals(RestrictedToUser, StringComparison.OrdinalIgnoreCase))
                {
                   return false;
                }
+            }
+            break;
+         case AnimationEnums.AccessType.UserGroup:
+            {
+               if (!String.IsNullOrEmpty(userTriggering))
+               {
+                  UserGroup group = settings.UserGroups.FirstOrDefault(g => g.Id == RestrictedToUserGroup);
+                  if (group == null)
+                  {
+                     // Group doesn't exist.
+                     return false;
+                  }
+
+                  UserEntry qualifiedUser = group.UserEntries.FirstOrDefault(u => u.Name.Equals(userTriggering, StringComparison.OrdinalIgnoreCase));
+                  if (qualifiedUser == null)
+                  {
+                     // Not in the group.
+                     return false;
+                  }
+               }
+            }
+            break;
+         case AnimationEnums.AccessType.BotExecuteOnly:
+            {
+               return false;
+            }
          }
 
          return true;
@@ -170,45 +177,45 @@ namespace GIFBot.Shared
          // Username-specific filters are handled in the CanBeTriggeredByChat message.
          switch (Access)
          {
-            case AnimationEnums.AccessType.Subscriber:
+         case AnimationEnums.AccessType.Subscriber:
+            {
+               if (!isSubscriber)
                {
-                  if (!isSubscriber)
-                  {
-                     return false;
-                  }
+                  return false;
                }
-               break;
-            case AnimationEnums.AccessType.VIP:
+            }
+            break;
+         case AnimationEnums.AccessType.VIP:
+            {
+               if (!isVIP)
                {
-                  if (!isVIP)
-                  {
-                     return false;
-                  }
+                  return false;
                }
-               break;
-            case AnimationEnums.AccessType.Moderator:
+            }
+            break;
+         case AnimationEnums.AccessType.Moderator:
+            {
+               if (!isModerator)
                {
-                  if (!isModerator)
-                  {
-                     return false;
-                  }
+                  return false;
                }
-               break;
-            case AnimationEnums.AccessType.SpecificViewer:
+            }
+            break;
+         case AnimationEnums.AccessType.SpecificViewer:
+            {
+               if (!String.IsNullOrEmpty(displayName) &&
+                   !String.IsNullOrEmpty(RestrictedToUser) &&
+                   !displayName.Equals(RestrictedToUser, StringComparison.OrdinalIgnoreCase))
                {
-                  if (!String.IsNullOrEmpty(displayName) &&
-                      !String.IsNullOrEmpty(RestrictedToUser) && 
-                      !displayName.Equals(RestrictedToUser, StringComparison.OrdinalIgnoreCase))
-                  {
-                     return false;
-                  }
-                  
-                  if (RestrictedUserMustBeSub && !isSubscriber)
-                  {
-                     return false;
-                  }
+                  return false;
                }
-               break;
+
+               if (RestrictedUserMustBeSub && !isSubscriber)
+               {
+                  return false;
+               }
+            }
+            break;
          }
 
          return true;
@@ -274,7 +281,7 @@ namespace GIFBot.Shared
                foreach (var variant in Variants)
                {
                   variant.HasPlayedOnce = false;
-               }               
+               }
 
                // Reset the original too.
                HasPlayedOriginalOnce = false;
@@ -310,7 +317,7 @@ namespace GIFBot.Shared
                if (originalVariant != null)
                {
                   originalVariant.HasPlayedOnce = true;
-               }                            
+               }
 
                return originalVariant;
             }

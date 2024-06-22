@@ -3,7 +3,7 @@
 @using GIFBot.Shared
 @using GIFBot.Shared.Models.Base
 @using GIFBot.Shared.Models.Visualization
-@using Newtonsoft.Json
+@using System.Text.Json
 @using Microsoft.AspNetCore.Http.Connections
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JSRuntime
@@ -45,7 +45,7 @@
       mHubConnection.On<string>("UpdateTime", (data) =>
       {
          mCountdownTimerVisible = true;
-         mCaptionData = JsonConvert.DeserializeObject<CaptionData>(data);
+         mCaptionData = JsonSerializer.Deserialize<CaptionData>(data);
          Console.WriteLine($"Caption: {mCaptionData.Text}");
          StateHasChanged();
       });

@@ -1,6 +1,4 @@
-﻿using GIFBot.Client.Pages;
-using GIFBot.Client.Pages.Features;
-using GIFBot.Server.Features.Backdrop;
+﻿using GIFBot.Server.Features.Backdrop;
 using GIFBot.Server.Features.ChannelPoints;
 using GIFBot.Server.Features.CountdownTimer;
 using GIFBot.Server.Features.Giveaway;
@@ -14,41 +12,34 @@ using GIFBot.Server.Hubs;
 using GIFBot.Server.Interfaces;
 using GIFBot.Server.Models;
 using GIFBot.Shared;
-using GIFBot.Shared.Models.Animation;
 using GIFBot.Shared.Models.Features;
 using GIFBot.Shared.Models.GIFBot;
 using GIFBot.Shared.Models.Tiltify;
 using GIFBot.Shared.Models.Twitch;
 using GIFBot.Shared.Utility;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Web;
 using TwitchLib.Api;
 using TwitchLib.Api.Core;
-using TwitchLib.Api.Core.Models.Undocumented.Chatters;
 using TwitchLib.Api.Helix.Models.Chat.GetChatters;
-using TwitchLib.Api.Services;
 using TwitchLib.Client;
 using TwitchLib.Client.Enums;
-using TwitchLib.Client.Events;
-using TwitchLib.Client.Extensions;
 using TwitchLib.Client.Models;
 using TwitchLib.Communication.Clients;
-using TwitchLib.Communication.Models;
-using TwitchLib.PubSub;
 using static GIFBot.Shared.AnimationEnums;
 using static GIFBot.Shared.Utility.Enumerations;
 
@@ -218,7 +209,7 @@ namespace GIFBot.Server.GIFBot
             SendChatMessage(prePlayFormatted);
          }
 
-         await GIFBotHub.Clients.All.SendAsync("PlayAnimation", JsonConvert.SerializeObject(animationRequest));
+         await GIFBotHub.Clients.All.SendAsync("PlayAnimation", JsonSerializer.Serialize(animationRequest));
 
          if (!animationRequest.ManuallyTriggeredByStreamer)
          {
@@ -404,7 +395,7 @@ namespace GIFBot.Server.GIFBot
          if (!String.IsNullOrEmpty(Configuration["BotSettingsFile"]) && File.Exists(Path.Combine(settingsDir, Configuration["BotSettingsFile"])))
          {
             string fileData = File.ReadAllText(Path.Combine(settingsDir, Configuration["BotSettingsFile"]));
-            mBotSettings = JsonConvert.DeserializeObject<BotSettings>(fileData);
+            mBotSettings = JsonSerializer.Deserialize<BotSettings>(fileData);
             BumpSettingsVersion();
 
             return true;
@@ -442,7 +433,7 @@ namespace GIFBot.Server.GIFBot
             string settingsDir = Path.Combine(System.Environment.CurrentDirectory, kSettingsDirectoryName);
             Directory.CreateDirectory(settingsDir);
 
-            var jsonData = JsonConvert.SerializeObject(mBotSettings);
+            var jsonData = JsonSerializer.Serialize(mBotSettings);
             File.WriteAllText(Path.Combine(settingsDir, Configuration["BotSettingsFile"]), jsonData);
 
             _ = SendLogMessage("Bot settings saved.");
@@ -472,7 +463,7 @@ namespace GIFBot.Server.GIFBot
             groupNames.Add(group.Name);
          }
 
-         return JsonConvert.SerializeObject(groupNames);
+         return JsonSerializer.Serialize(groupNames);
       }
 
       public string GetUserGroupNameById(Guid groupId)
@@ -568,16 +559,6 @@ namespace GIFBot.Server.GIFBot
             mStreamerTwitchClient.Initialize(connectionCredentials, BotSettings.ChannelName.Trim());
 
             _ = mStreamerTwitchClient.ConnectAsync();
-         }
-
-         // Reset the user channel list and fetch the latest if the channel name has changed.
-         if (channelHasChanged)
-         {
-            lock (UsersInChannelMutex)
-            {
-               UsersInChannel.Clear();
-               UsersInChannel.UnionWith(TwitchEndpointHelpers.GetUserList(HttpClientFactory.CreateClient(Common.skHttpClientName), BotSettings.BotOauthToken, BotSettings.ChannelName.ToLower()));
-            }
          }
       }
 
@@ -989,9 +970,6 @@ namespace GIFBot.Server.GIFBot
          // See: https://discuss.dev.twitch.tv/t/get-hype-train-events-via-app-token/31727/6
          //_ = InitializeHypeTrainTask();
 
-         // Initialize the user monitor pulse task.
-         _ = InitializeUserMonitorTask();
-
          // Initialize feature managers AFTER the connection to Twitch. Many of them will try to send
          // chat messages up front.
          InitializeFeatureManagers();
@@ -1062,21 +1040,6 @@ namespace GIFBot.Server.GIFBot
          catch (TaskCanceledException)
          {
             // Do Nothing. At this point, there is no UI to display a log anyway.
-         }
-      }
-
-      private async Task InitializeUserMonitorTask()
-      {
-         mUserMonitorTaskCancellationToken = new CancellationTokenSource();
-
-         try
-         {
-            Task processor = UserMonitorPulse(mUserMonitorTaskCancellationToken.Token);
-            await processor;
-         }
-         catch (TaskCanceledException)
-         {
-            // Do Nothing.
          }
       }
 
@@ -1262,54 +1225,6 @@ namespace GIFBot.Server.GIFBot
 
       #endregion
 
-      #region Chat User Monitoring and Management
-
-      private Task UserMonitorPulse(CancellationToken cancellationToken)
-      {
-         Task task = null;
-
-         task = Task.Run(() =>
-         {
-            while (true)
-            {
-               if (BotSettings != null &&
-                   !String.IsNullOrEmpty(BotSettings.BotOauthToken) &&
-                   !String.IsNullOrEmpty(BotSettings.ChannelName))
-               {
-                  List<string> usersInChat = TwitchEndpointHelpers.GetUserList(HttpClientFactory.CreateClient(Common.skHttpClientName), BotSettings.BotOauthToken, BotSettings.ChannelName.ToLower());
-
-                  lock (UsersInChannelMutex)
-                  {
-                     UsersInChannel.UnionWith(usersInChat);
-                  }
-
-                  if (cancellationToken.IsCancellationRequested)
-                  {
-                     throw new TaskCanceledException(task);
-                  }
-
-                  Thread.Sleep(60000);
-               }
-               else
-               {
-                  Thread.Sleep(1000);
-               }
-            }
-         });
-
-         return task;
-      }
-
-      public void AddUserToChannelList(string username)
-      {
-         lock (UsersInChannelMutex)
-         {
-            UsersInChannel.Add(username);
-         }
-      }
-
-      #endregion
-
       #region Hype Train Handling
 
       private Task HypeTrainPulse(CancellationToken cancellationToken)
@@ -1487,9 +1402,6 @@ namespace GIFBot.Server.GIFBot
 
       public ChannelPointRedemptionManager ChannelPointManager { get; private set; }
 
-      public HashSet<string> UsersInChannel { get; private set; } = new HashSet<string>();
-      public object UsersInChannelMutex = new object();
-
       public List<string> LogMessages { get; set; } = new List<string>();
 
       public object LogMutex { get; set; } = new object();
@@ -1541,11 +1453,6 @@ namespace GIFBot.Server.GIFBot
       /// Task: The cancellation token for the hype train pulse.
       /// </summary>
       private CancellationTokenSource mHypeTrainTaskCancellationToken;
-
-      /// <summary>
-      /// Task: The cancellation token for the user monitor pulse.
-      /// </summary>
-      private CancellationTokenSource mUserMonitorTaskCancellationToken;
 
       /// <summary>
       /// Tracks the event ids sent by streamlabs to prevent duplicates from playing.

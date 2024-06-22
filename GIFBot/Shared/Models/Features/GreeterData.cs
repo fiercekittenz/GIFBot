@@ -8,6 +8,9 @@ namespace GIFBot.Shared.Models.Features
 {
    public class GreeterData
    {
+      // For S.T.J.
+      public GreeterData() { }
+
       public List<GreeterEntry> Entries { get; set; } = new List<GreeterEntry>();
    }
 }

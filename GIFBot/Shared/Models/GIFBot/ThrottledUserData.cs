@@ -9,6 +9,9 @@ namespace GIFBot.Shared.Models.GIFBot
 {
    public class ThrottledUserData
    {
+      // For S.T.J.
+      public ThrottledUserData() { }
+
       public string Name { get; set; } = String.Empty;
 
       [Range(0, 999999)]

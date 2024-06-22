@@ -5,6 +5,7 @@
 @using GIFBot.Shared.Utility
 @using GIFBot.Shared.Models.Twitch
 @using Microsoft.AspNetCore.Http.Connections
+@using System.Text.Json
 @inject NavigationManager NavigationManager
 @inject GIFBot.Client.Utility.ClientAppData ClientAppData
 @inject HttpClient Http
@@ -27,7 +28,7 @@
       string botSettingsJson = await mHubConnection.InvokeAsync<string>("GetBotSettings");
       if (!String.IsNullOrEmpty(botSettingsJson))
       {
-         botSettings = Newtonsoft.Json.JsonConvert.DeserializeObject<BotSettings>(botSettingsJson);
+         botSettings = JsonSerializer.Deserialize<BotSettings>(botSettingsJson);
       }
 
       if (botSettings == null)
@@ -63,7 +64,7 @@
                errorCode = "BotInvalid";
             }
 
-            await mHubConnection.InvokeAsync("UpdateBotSettings", Newtonsoft.Json.JsonConvert.SerializeObject(botSettings), false);
+            await mHubConnection.InvokeAsync("UpdateBotSettings", JsonSerializer.Serialize(botSettings), false);
          }
          else if (botSettings.CurrentSetupStep == SetupStep.StreamerOauth)
          {
@@ -83,7 +84,7 @@
                errorCode = "StreamerInvalid";
             }
 
-            await mHubConnection.InvokeAsync("UpdateBotSettings", Newtonsoft.Json.JsonConvert.SerializeObject(botSettings), true);
+            await mHubConnection.InvokeAsync("UpdateBotSettings", JsonSerializer.Serialize(botSettings), true);
          }
          else
          {

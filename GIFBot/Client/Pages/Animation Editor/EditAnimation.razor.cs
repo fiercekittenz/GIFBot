@@ -7,7 +7,7 @@ using GIFBot.Shared.Models.Animation;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.JSInterop;
-using Newtonsoft.Json;
+using System.Text.Json;
 using Radzen;
 using Microsoft.AspNetCore.Http.Connections;
 using Telerik.Blazor;
@@ -47,7 +47,7 @@ namespace GIFBot.Client.Pages.Animation_Editor
          string userGroupsRaw = await mHubConnection.InvokeAsync<string>("GetUserGroupList");
          if (!String.IsNullOrEmpty(userGroupsRaw))
          {
-            mUserGroupNames = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(userGroupsRaw);
+            mUserGroupNames = JsonSerializer.Deserialize<List<string>>(userGroupsRaw);
             mUserGroupNames.Sort();
          }
 
@@ -91,7 +91,7 @@ namespace GIFBot.Client.Pages.Animation_Editor
          string animationData = await mHubConnection.InvokeAsync<string>("GetAnimationById", id);
          if (!String.IsNullOrEmpty(animationData))
          {
-            mSelectedAnimation = Newtonsoft.Json.JsonConvert.DeserializeObject<AnimationData>(animationData);
+            mSelectedAnimation = JsonSerializer.Deserialize<AnimationData>(animationData);
             if (mSelectedAnimation != null)
             {
                // Map the animation's user group to the name.
@@ -112,7 +112,7 @@ namespace GIFBot.Client.Pages.Animation_Editor
             bool confirmed = await Dialogs.ConfirmAsync($"Are you sure you want to delete {mSelectedAnimation.Command}?", "Delete Animation?");
             if (confirmed)
             { 
-               bool results = await mHubConnection.InvokeAsync<bool>("DeleteAnimations", JsonConvert.SerializeObject(new List<Guid>(){ mSelectedAnimation.Id }));
+               bool results = await mHubConnection.InvokeAsync<bool>("DeleteAnimations", JsonSerializer.Serialize(new List<Guid>(){ mSelectedAnimation.Id }));
                if (results)
                {
                   NavigationManager.NavigateTo("/animationseditor");
@@ -133,7 +133,7 @@ namespace GIFBot.Client.Pages.Animation_Editor
             mIsDisplayTestMode = false;
             await mHubConnection.InvokeAsync("SetDisplayTestMode", false, Guid.Empty);
 
-            await mHubConnection.InvokeAsync("TestAnimation", Newtonsoft.Json.JsonConvert.SerializeObject(mSelectedAnimation));
+            await mHubConnection.InvokeAsync("TestAnimation", JsonSerializer.Serialize(mSelectedAnimation));
             NotificationService.Notify(NotificationSeverity.Info, "Info", $"{mSelectedAnimation.Command} has been queued for testing with local changes.", 5000);
             await InvokeAsync(() => { StateHasChanged(); });
          }
@@ -149,7 +149,7 @@ namespace GIFBot.Client.Pages.Animation_Editor
             string dimensionsData = await mHubConnection.InvokeAsync<string>("GetVisualDimensions", mSelectedAnimation.Visual);
             if (!String.IsNullOrEmpty(dimensionsData))
             {
-               Tuple<int, int> dimensions = Newtonsoft.Json.JsonConvert.DeserializeObject<Tuple<int, int>>(dimensionsData);
+               Tuple<int, int> dimensions = JsonSerializer.Deserialize<Tuple<int, int>>(dimensionsData);
                mSelectedAnimation.Placement.Width = dimensions.Item1;
                mSelectedAnimation.Placement.Height = dimensions.Item2;
             }
@@ -329,7 +329,7 @@ namespace GIFBot.Client.Pages.Animation_Editor
             mIsDisplayTestMode = false;
             await mHubConnection.InvokeAsync("SetDisplayTestMode", false, Guid.Empty);
 
-            await mHubConnection.InvokeAsync("SaveAnimation", Newtonsoft.Json.JsonConvert.SerializeObject(mSelectedAnimation));
+            await mHubConnection.InvokeAsync("SaveAnimation", JsonSerializer.Serialize(mSelectedAnimation));
             await UpdateAnimationData(model.Id);
             NotificationService.Notify(NotificationSeverity.Success, "Success", $"{mSelectedAnimation.Command} was saved!", 5000);
             await InvokeAsync(() => { StateHasChanged(); });

@@ -3,7 +3,7 @@
 @using GIFBot.Shared
 @using GIFBot.Shared.Models.Features
 @using GIFBot.Shared.Models.Visualization
-@using Newtonsoft.Json
+@using System.Text.Json
 @using Microsoft.AspNetCore.Http.Connections
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JSRuntime
@@ -46,7 +46,7 @@
 
       mHubConnection.On<string>("UpdateTestVisual", async (data) =>
       {
-         TestVisualRequest testVisualRequest = JsonConvert.DeserializeObject<TestVisualRequest>(data);
+         TestVisualRequest testVisualRequest = JsonSerializer.Deserialize<TestVisualRequest>(data);
          await UpdateTestVisual(testVisualRequest);
       });
 
@@ -58,7 +58,7 @@
 
       mHubConnection.On<string>("SendAllPlacedStickers", async (data) =>
       {
-         List<PlacedSticker> placedStickers = JsonConvert.DeserializeObject<List<PlacedSticker>>(data);
+         List<PlacedSticker> placedStickers = JsonSerializer.Deserialize<List<PlacedSticker>>(data);
          PlacedStickers = new List<PlacedSticker>(placedStickers);
          StateHasChanged();
          await Task.CompletedTask;
@@ -66,7 +66,7 @@
 
       mHubConnection.On<string>("PlaceSticker", async (data) =>
       {
-         PlacedSticker sticker = JsonConvert.DeserializeObject<PlacedSticker>(data);
+         PlacedSticker sticker = JsonSerializer.Deserialize<PlacedSticker>(data);
          await PlaceSticker(sticker);
       });
 

@@ -6,17 +6,26 @@ namespace GIFBot.Shared.Models.Twitch
 {
    public class TwitchHypeTrainEvent
    {
+      // For S.T.J.
+      public TwitchHypeTrainEvent() { }
+
       public Data[] data { get; set; }
       public Pagination pagination { get; set; }
    }
 
    public class Pagination
    {
+      // For S.T.J.
+      public Pagination() { }
+
       public string cursor { get; set; }
    }
 
    public class Data
    {
+      // For S.T.J.
+      public Data() { }
+
       public string id { get; set; }
       public string event_type { get; set; }
       public DateTime event_timestamp { get; set; }
@@ -26,6 +35,9 @@ namespace GIFBot.Shared.Models.Twitch
 
    public class Event_Data
    {
+      // For S.T.J.
+      public Event_Data() { }
+
       public string broadcaster_id { get; set; }
       public string cooldown_end_time { get; set; }
       public string expires_at { get; set; }
@@ -40,6 +52,9 @@ namespace GIFBot.Shared.Models.Twitch
 
    public class Last_Contribution
    {
+      // For S.T.J.
+      public Last_Contribution() { }
+
       public int total { get; set; }
       public string type { get; set; }
       public string user { get; set; }
@@ -47,6 +62,9 @@ namespace GIFBot.Shared.Models.Twitch
 
    public class Top_Contributions
    {
+      // For S.T.J.
+      public Top_Contributions() { }
+
       public int total { get; set; }
       public string type { get; set; }
       public string user { get; set; }

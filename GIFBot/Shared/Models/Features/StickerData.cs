@@ -1,12 +1,13 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace GIFBot.Shared.Models.Features
 {
    public class StickerData
    {
+      // For S.T.J.
+      public StickerData() { }
+
       /// <summary>
       /// Feature enabled or not.
       /// </summary>

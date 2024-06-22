@@ -9,6 +9,9 @@ namespace GIFBot.Shared
 {
    public class RegurgitatorData
    {
+      // For S.T.J.
+      public RegurgitatorData() { }
+
       /// <summary>
       /// This is the current version of the data. When a different version number
       /// is detected on data load, we need to perform migration tasks to ensure
@@ -80,6 +83,9 @@ namespace GIFBot.Shared
 
    public class RegurgitatorSettings : ICloneable
    {
+      // For S.T.J.
+      public RegurgitatorSettings() { }
+
       public bool Enabled { get; set; } = false;
 
       [Required]
@@ -161,6 +167,9 @@ namespace GIFBot.Shared
 
    public class RegurgitatorEntry : ICloneable
    {
+      // For S.T.J.
+      public RegurgitatorEntry() { }
+
       public RegurgitatorEntry(string value)
       {
          Id = Guid.NewGuid();

@@ -1,6 +1,6 @@
 ﻿using GIFBot.Shared;
 using GIFBot.Shared.Models.Features;
-using Newtonsoft.Json;
+using System.Text.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -77,7 +77,7 @@ namespace GIFBot.Server.Features.ChannelPoints
 
       private void TwitchPubSub_OnChannelPointsRewardRedeemed(object sender, TwitchLib.PubSub.Events.OnChannelPointsRewardRedeemedArgs e)
       {
-         _ = Bot.SendLogMessage($"REWARD DETAILS: {JsonConvert.SerializeObject(e)}");
+         _ = Bot.SendLogMessage($"REWARD DETAILS: {JsonSerializer.Serialize(e)}");
 
          if (e.RewardRedeemed == null ||
              e.RewardRedeemed.Redemption == null)

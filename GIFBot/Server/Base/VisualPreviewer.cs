@@ -8,7 +8,7 @@ using GIFBot.Shared.Models.Animation;
 using GIFBot.Shared.Models.Base;
 using GIFBot.Shared.Models.Visualization;
 using Microsoft.AspNetCore.SignalR;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace GIFBot.Server.Base
 {
@@ -29,7 +29,7 @@ namespace GIFBot.Server.Base
                // Get the visual and set it up on the front-end. Always use the primary animations hub, as it's required.
                mDisplayTestVisual = visual;
                mDisplayTestVisualPlacement = new AnimationPlacement(mDisplayTestVisual.Placement);
-               await clients.All.SendAsync("UpdateTestVisual", JsonConvert.SerializeObject(new TestVisualRequest(mDisplayTestVisual.Visual, visual.IsMirrored, mDisplayTestVisualPlacement, layer)));
+               await clients.All.SendAsync("UpdateTestVisual", JsonSerializer.Serialize(new TestVisualRequest(mDisplayTestVisual.Visual, visual.IsMirrored, mDisplayTestVisualPlacement, layer)));
             }
             else
             {
@@ -50,7 +50,7 @@ namespace GIFBot.Server.Base
             mDisplayTestVisualPlacement.Top = top;
             mDisplayTestVisualPlacement.Left = left;
 
-            await clients.All.SendAsync("UpdateTestVisual", JsonConvert.SerializeObject(new TestVisualRequest(mDisplayTestVisual.Visual, mDisplayTestVisual.IsMirrored, mDisplayTestVisualPlacement, layer)));
+            await clients.All.SendAsync("UpdateTestVisual", JsonSerializer.Serialize(new TestVisualRequest(mDisplayTestVisual.Visual, mDisplayTestVisual.IsMirrored, mDisplayTestVisualPlacement, layer)));
          }
       }
 
@@ -64,7 +64,7 @@ namespace GIFBot.Server.Base
             mDisplayTestVisualPlacement.Width = width;
             mDisplayTestVisualPlacement.Height = height;
 
-            await clients.All.SendAsync("UpdateTestVisual", JsonConvert.SerializeObject(new TestVisualRequest(mDisplayTestVisual.Visual, mDisplayTestVisual.IsMirrored, mDisplayTestVisualPlacement, layer)));
+            await clients.All.SendAsync("UpdateTestVisual", JsonSerializer.Serialize(new TestVisualRequest(mDisplayTestVisual.Visual, mDisplayTestVisual.IsMirrored, mDisplayTestVisualPlacement, layer)));
          }
       }
 

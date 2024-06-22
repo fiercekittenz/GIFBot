@@ -3,7 +3,7 @@
 @using GIFBot.Shared.Models.Features
 @using GIFBot.Shared.Models.Visualization
 @using GIFBot.Client.Components
-@using Newtonsoft.Json
+@using System.Text.Json
 @using Microsoft.AspNetCore.Http.Connections
 @inject NavigationManager NavigationManager
 @inject NotificationService NotificationService
@@ -327,7 +327,7 @@
 
       mHubConnection.On<string>("GoalBarDataUpdated", (data) =>
       {
-         mGoalBarData = JsonConvert.DeserializeObject<GoalBarData>(data);
+         mGoalBarData = JsonSerializer.Deserialize<GoalBarData>(data);
          StateHasChanged();
       });
 
@@ -355,7 +355,7 @@
    private async Task GetGoalBarDataFromHub()
    {
       string rawData = await mHubConnection.InvokeAsync<string>("GetGoalBarData");
-      mGoalBarData = JsonConvert.DeserializeObject<GoalBarData>(rawData);
+      mGoalBarData = JsonSerializer.Deserialize<GoalBarData>(rawData);
       mCaptionFontSelection = (int)mGoalBarData.Settings.Caption.FontFamily;
       UpdateCaptionPreview(null);
    }
@@ -489,7 +489,7 @@
 
    private async Task OnSaveChanges()
    {
-      await mHubConnection.InvokeAsync("UpdateGoalBarData", JsonConvert.SerializeObject(mGoalBarData));
+      await mHubConnection.InvokeAsync("UpdateGoalBarData", JsonSerializer.Serialize(mGoalBarData));
       await GetGoalBarDataFromHub();
       NotificationService.Notify(NotificationSeverity.Success, "Save Successful", "The goal bar data has been saved.", 5000);
       await InvokeAsync(() => { StateHasChanged(); });

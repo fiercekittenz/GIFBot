@@ -177,7 +177,7 @@ namespace GIFBot.Shared
       /// <summary>
       /// A list of animations, organized by category.
       /// </summary>
-      public List<AnimationCategory> Categories = new List<AnimationCategory>();
+      public List<AnimationCategory> Categories { get; set; } = new List<AnimationCategory>();
 
       /// <summary>
       /// The name of the folder where media will be uploaded and stored.

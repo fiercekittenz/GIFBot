@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using System.IO;
 using TwitchLib.Api.Helix.Models.Channels;
 using GIFBot.Shared.Models.Twitch;
-using Newtonsoft.Json.Linq;
 using System.Text;
 using System.Net.Http;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace GIFBot.Shared.Utility
 {
@@ -38,10 +38,10 @@ namespace GIFBot.Shared.Utility
             if (response.IsSuccessStatusCode)
             {
                string jsonData = response.Content.ReadAsStringAsync().Result;
-               dynamic responseData = JsonConvert.DeserializeObject<object>(jsonData);
+               JsonObject responseData = JsonSerializer.Deserialize<JsonObject>(jsonData);
                if (responseData["data"][0]["id"] != null)
                {
-                  return responseData["data"][0]["id"];
+                  return UInt32.Parse(responseData["data"][0]["id"].ToString());
                }
             }
          }
@@ -72,7 +72,7 @@ namespace GIFBot.Shared.Utility
             max_per_user_per_stream = maxUsesAllowed
          };
 
-         string channelPointRewardJson = JsonConvert.SerializeObject(channelPointRewardCreationData);
+         string channelPointRewardJson = JsonSerializer.Serialize(channelPointRewardCreationData);
          byte[] channelPointRewardRaw = Encoding.ASCII.GetBytes(channelPointRewardJson);
          request.Content = new ByteArrayContent(channelPointRewardRaw);
 
@@ -80,7 +80,7 @@ namespace GIFBot.Shared.Utility
          if (response.IsSuccessStatusCode)
          {
             string jsonData = response.Content.ReadAsStringAsync().Result;
-            dynamic responseData = JsonConvert.DeserializeObject<object>(jsonData);
+            JsonObject responseData = JsonSerializer.Deserialize<JsonObject>(jsonData);
             if (responseData["data"][0]["id"] != null)
             {
                Guid rewardId = Guid.Parse((string)responseData["data"][0]["id"]);
@@ -108,7 +108,7 @@ namespace GIFBot.Shared.Utility
             is_enabled = isEnabled
          };
 
-         string channelPointRewardJson = JsonConvert.SerializeObject(channelPointRewardUpdateData);
+         string channelPointRewardJson = JsonSerializer.Serialize(channelPointRewardUpdateData);
          byte[] channelPointRewardRaw = Encoding.ASCII.GetBytes(channelPointRewardJson);
          request.Content = new ByteArrayContent(channelPointRewardRaw);
 
@@ -173,7 +173,7 @@ namespace GIFBot.Shared.Utility
          //               using (StreamReader stream = new StreamReader(inboundResponse.GetResponseStream()))
          //               {
          //                  string jsonData = stream.ReadToEnd();
-         //                  TwitchHypeTrainEvent responseData = JsonConvert.DeserializeObject<TwitchHypeTrainEvent>(jsonData);
+         //                  TwitchHypeTrainEvent responseData = JsonSerializer.Deserialize<TwitchHypeTrainEvent>(jsonData);
          //                  return responseData;
          //               }
          //            }
@@ -209,7 +209,7 @@ namespace GIFBot.Shared.Utility
             if (response.IsSuccessStatusCode)
             {
                string jsonData = response.Content.ReadAsStringAsync().Result;
-               TwitchGetUserResponse responseData = JsonConvert.DeserializeObject<TwitchGetUserResponse>(jsonData);
+               TwitchGetUserResponse responseData = JsonSerializer.Deserialize<TwitchGetUserResponse>(jsonData);
                if (responseData.data != null && responseData.data.Any())
                {
                   return responseData.data.FirstOrDefault();
@@ -218,37 +218,6 @@ namespace GIFBot.Shared.Utility
          }
          
          return null;
-      }
-
-      public static List<string> GetUserList(HttpClient client, string oauth, string channelName)
-      {
-         List<string> users = new List<string>();
-
-         if (!string.IsNullOrEmpty(channelName))
-         {
-            string url = string.Format("https://tmi.twitch.tv/group/user/{0}/chatters", channelName.ToLower().Trim());
-
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, url);            
-            request.Headers.Add("Authorization", $"Bearer {oauth.Trim()}");
-            request.Headers.Add("Client-ID", Common.skTwitchClientId);
-
-            HttpResponseMessage response = client.Send(request);            
-            if (response.IsSuccessStatusCode)
-            { 
-               string jsonData = response.Content.ReadAsStringAsync().Result;
-               dynamic responseData = JsonConvert.DeserializeObject<object>(jsonData);
-               if (responseData["chatters"] != null)
-               {
-                  JArray userArray = responseData["chatters"]["viewers"];
-                  foreach (var user in userArray.Children())
-                  {
-                     users.Add((string)user);
-                  }
-               }
-            }
-         }
-
-         return users;
-      }    
+      }   
    }
 }

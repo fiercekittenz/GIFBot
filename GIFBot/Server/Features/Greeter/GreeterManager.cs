@@ -1,7 +1,7 @@
 ﻿using GIFBot.Server.Interfaces;
 using GIFBot.Shared;
 using GIFBot.Shared.Models.Features;
-using Newtonsoft.Json;
+using System.Text.Json;
 using System;
 using System.IO;
 using System.Linq;
@@ -85,7 +85,7 @@ namespace GIFBot.Server.Features.Greeter
          if (!String.IsNullOrEmpty(DataFilePath) && File.Exists(DataFilePath))
          {
             string fileData = File.ReadAllText(DataFilePath);
-            mData = JsonConvert.DeserializeObject<GreeterData>(fileData);
+            mData = JsonSerializer.Deserialize<GreeterData>(fileData);
 
             _ = Bot?.SendLogMessage("Greeter data loaded and enabled.");
          }
@@ -97,7 +97,7 @@ namespace GIFBot.Server.Features.Greeter
          {
             Directory.CreateDirectory(Path.GetDirectoryName(DataFilePath));
 
-            var jsonData = JsonConvert.SerializeObject(mData);
+            var jsonData = JsonSerializer.Serialize(mData);
             File.WriteAllText(DataFilePath, jsonData);
 
             _ = Bot?.SendLogMessage("Greeter data saved.");

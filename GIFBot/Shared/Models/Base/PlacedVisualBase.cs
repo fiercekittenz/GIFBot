@@ -8,6 +8,9 @@ namespace GIFBot.Shared.Models.Base
 {
    public class PlacedVisualBase
    {
+      // For S.T.J.
+      public PlacedVisualBase() { }
+
       public string Visual { get; set; }
       public string Top { get; set; }
       public string Left { get; set; }

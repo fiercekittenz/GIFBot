@@ -4,7 +4,7 @@ using GIFBot.Shared;
 using GIFBot.Shared.Models.Features;
 using GIFBot.Shared.Utility;
 using Microsoft.AspNetCore.SignalR;
-using Newtonsoft.Json;
+using System.Text.Json;
 using System;
 using System.IO;
 using System.Linq;
@@ -185,7 +185,7 @@ namespace GIFBot.Server.Features.Giveaway
          if (!String.IsNullOrEmpty(DataFilePath) && System.IO.File.Exists(DataFilePath))
          {
             string fileData = System.IO.File.ReadAllText(DataFilePath);
-            mData = JsonConvert.DeserializeObject<GiveawayData>(fileData);
+            mData = JsonSerializer.Deserialize<GiveawayData>(fileData);
 
             if (mData.BumpVersion())
             {
@@ -202,7 +202,7 @@ namespace GIFBot.Server.Features.Giveaway
          {
             Directory.CreateDirectory(Path.GetDirectoryName(DataFilePath));
 
-            var jsonData = JsonConvert.SerializeObject(mData);
+            var jsonData = JsonSerializer.Serialize(mData);
             System.IO.File.WriteAllText(DataFilePath, jsonData);
 
             _ = Bot?.SendLogMessage("Giveaway data saved.");

@@ -8,8 +8,11 @@ namespace GIFBot.Shared.Models.Animation
 {
    public class AnimationSelectorItem
    {
+      // For S.T.J.
+      public AnimationSelectorItem() { }
+
       public Guid Id { get; set; } = Guid.Empty;
 
-      public string DisplayName { get; set; }
+      public string DisplayName { get; set; } = string.Empty;
    }
 }

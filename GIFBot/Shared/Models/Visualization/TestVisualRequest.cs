@@ -8,6 +8,9 @@ namespace GIFBot.Shared.Models.Visualization
 {
    public class TestVisualRequest
    {
+      // For S.T.J.
+      public TestVisualRequest() { }
+
       public TestVisualRequest(string visual, bool mirrored, AnimationPlacement placement, AnimationEnums.AnimationLayer layer)
       {
          Visual = visual;

@@ -1,7 +1,7 @@
 ﻿using GIFBot.Shared;
 using GIFBot.Shared.Models.Animation;
 using Microsoft.AspNetCore.SignalR;
-using Newtonsoft.Json;
+using System.Text.Json;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;

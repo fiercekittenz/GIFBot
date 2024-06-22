@@ -2,7 +2,7 @@
 using GIFBot.Shared.Models.Features;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.SignalR.Client;
-using Newtonsoft.Json;
+using System.Text.Json;
 using Radzen;
 using System;
 using System.Collections.Generic;
@@ -123,7 +123,7 @@ namespace GIFBot.Client.Pages.Features
 
       private async Task HandleConfirmEditCommand()
       {
-         bool result = await mHubConnection.InvokeAsync<bool>("UpdateGreeterEntry", JsonConvert.SerializeObject(mTempGreeterEntry));
+         bool result = await mHubConnection.InvokeAsync<bool>("UpdateGreeterEntry", JsonSerializer.Serialize(mTempGreeterEntry));
          if (result)
          {
             NotificationService.Notify(NotificationSeverity.Success, "Success", "The entry has been updated.", 5000);
@@ -207,19 +207,19 @@ namespace GIFBot.Client.Pages.Features
       private async Task GetGreeterDataFromHub()
       {
          string rawData = await mHubConnection.InvokeAsync<string>("GetGreeterData");
-         Data = JsonConvert.DeserializeObject<GreeterData>(rawData);
+         Data = JsonSerializer.Deserialize<GreeterData>(rawData);
       }
 
       private async Task GetAnimationOptions()
       {
          string rawData = await mHubConnection.InvokeAsync<string>("GetAnimationOptions");
-         AnimationOptions = JsonConvert.DeserializeObject<List<AnimationSelectorItem>>(rawData);
+         AnimationOptions = JsonSerializer.Deserialize<List<AnimationSelectorItem>>(rawData);
       }
 
       private async Task GetGreeterRecipientsFromImport(Guid greeterEntryId)
       {
          string rawData = await mHubConnection.InvokeAsync<string>("GetGreeterRecipientsFromImport", greeterEntryId);
-         mTempGreeterEntry.Recipients = JsonConvert.DeserializeObject<List<GreetedPersonality>>(rawData);
+         mTempGreeterEntry.Recipients = JsonSerializer.Deserialize<List<GreetedPersonality>>(rawData);
       }
 
       #endregion

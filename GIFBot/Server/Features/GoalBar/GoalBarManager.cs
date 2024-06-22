@@ -2,7 +2,7 @@
 using GIFBot.Shared;
 using GIFBot.Shared.Models.Features;
 using Microsoft.AspNetCore.SignalR;
-using Newtonsoft.Json;
+using System.Text.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -43,7 +43,7 @@ namespace GIFBot.Server.Features.GoalBar
          if (!String.IsNullOrEmpty(DataFilePath) && File.Exists(DataFilePath))
          {
             string fileData = File.ReadAllText(DataFilePath);
-            mData = JsonConvert.DeserializeObject<GoalBarData>(fileData);
+            mData = JsonSerializer.Deserialize<GoalBarData>(fileData);
 
             if (mData.Settings.Enabled)
             {
@@ -65,7 +65,7 @@ namespace GIFBot.Server.Features.GoalBar
          {
             Directory.CreateDirectory(Path.GetDirectoryName(DataFilePath));
 
-            var jsonData = JsonConvert.SerializeObject(mData);
+            var jsonData = JsonSerializer.Serialize(mData);
             File.WriteAllText(DataFilePath, jsonData);
 
             _ = Bot?.SendLogMessage("GoalBar data saved.");
