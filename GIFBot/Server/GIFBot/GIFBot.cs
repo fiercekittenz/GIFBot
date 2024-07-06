@@ -349,7 +349,7 @@ namespace GIFBot.Server.GIFBot
              BackdropManager.Data.RedemptionType == CostRedemptionType.Tip &&
              (int)(Math.Floor(amount)) == BackdropManager.Data.Cost)
          {
-            BackdropManager.HandleBackdropEvent(String.Empty);
+            BackdropManager.HandleBackdropEvent(message);
          }
 
          // Look for Countdown Timer
@@ -1212,7 +1212,7 @@ namespace GIFBot.Server.GIFBot
              BackdropManager.Data.RedemptionType == CostRedemptionType.Tiltify &&
              (int)(Math.Floor(donation.Amount)) == BackdropManager.Data.Cost)
          {
-            BackdropManager.HandleBackdropEvent(String.Empty);
+            BackdropManager.HandleBackdropEvent(donation.Comment);
          }
 
          // Look for Countdown Timer

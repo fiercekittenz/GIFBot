@@ -118,9 +118,16 @@ namespace GIFBot.Server.Features.Backdrop
          }
       }
 
-      public void HandleBackdropEvent(string message)
+      public void HandleBackdropEvent(string message, bool fromThirdPartyService = false)
       {
-         if (mData.Backdrops.Any() && (String.IsNullOrEmpty(message) || message.Contains(mData.Command, StringComparison.OrdinalIgnoreCase)))
+         // Must have backdrops in the system.
+         // One of two cases qualify:
+         //    1. This is coming from a channel point redemption, not a third party service, and we expect the command to be in the title.
+         //    2. This is coming from a third party service like streamlabs or streamelements tips and we only expect the user to have provided the name of the backdrop they wanted.
+         if (mData.Backdrops.Any() && 
+             ( (!fromThirdPartyService && (String.IsNullOrEmpty(message) || message.Contains(mData.Command, StringComparison.OrdinalIgnoreCase))) ||
+               (fromThirdPartyService)
+             ))
          {
             BackdropVideoEntryData backdropToPlay = GetBackdropVideoFromMessage(message);
             if (backdropToPlay == null)
