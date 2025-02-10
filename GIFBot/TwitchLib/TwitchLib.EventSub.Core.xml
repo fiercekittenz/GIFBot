@@ -1249,6 +1249,16 @@
             The emote ID.
             </summary>
         </member>
+        <member name="T:TwitchLib.EventSub.Core.Models.Whisper.WhisperMessage">
+            <summary>
+            Represents a whisper message
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Core.Models.Whisper.WhisperMessage.Text">
+            <summary>
+            The body of the whisper message.
+            </summary>
+        </member>
         <member name="T:TwitchLib.EventSub.Core.SubscriptionTypes.Channel.ChannelAdBreakBegin">
             <summary>
             Channel Ad Break begin subscription type model
@@ -1640,6 +1650,31 @@
         <member name="P:TwitchLib.EventSub.Core.SubscriptionTypes.Channel.ChannelChatMessage.ChannelPointsCustomRewardId">
             <summary>
             Optional. The ID of a channel points custom reward that was redeemed.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Core.SubscriptionTypes.Channel.ChannelChatMessage.SourceBroadcasterUserId">
+            <summary>
+            Optional. The broadcaster user ID of the channel the message was sent from.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Core.SubscriptionTypes.Channel.ChannelChatMessage.SourceBroadcasterUserName">
+            <summary>
+            Optional. The user name of the broadcaster of the channel the message was sent from.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Core.SubscriptionTypes.Channel.ChannelChatMessage.SourceBroadcasterUserLogin">
+            <summary>
+            Optional. The login of the broadcaster of the channel the message was sent from. 
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Core.SubscriptionTypes.Channel.ChannelChatMessage.SourceMessageId">
+            <summary>
+            Optional. The UUID that identifies the source message from the channel the message was sent from.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Core.SubscriptionTypes.Channel.ChannelChatMessage.SourceBadges">
+            <summary>
+            Optional. The list of chat badges for the chatter in the channel the message was sent from. 
             </summary>
         </member>
         <member name="P:TwitchLib.EventSub.Core.SubscriptionTypes.Channel.ChannelChatMessage.IsSubscriber">
@@ -3011,6 +3046,105 @@
             The requested broadcaster login.
             </summary>
         </member>
+        <member name="T:TwitchLib.EventSub.Core.SubscriptionTypes.Channel.ChannelWarningAcknowledge">
+            <summary>
+            Channel Warning Acknowledge subscription type model
+            <para>Description:</para>
+            <para>A user awknowledges a warning. Broadcasters and moderators can see the warning’s details.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Core.SubscriptionTypes.Channel.ChannelWarningAcknowledge.BroadcasterUserId">
+            <summary>
+            The user ID of the broadcaster.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Core.SubscriptionTypes.Channel.ChannelWarningAcknowledge.BroadcasterUserLogin">
+            <summary>
+            The login of the broadcaster.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Core.SubscriptionTypes.Channel.ChannelWarningAcknowledge.BroadcasterUserName">
+            <summary>
+            The user name of the broadcaster.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Core.SubscriptionTypes.Channel.ChannelWarningAcknowledge.UserId">
+            <summary>
+            The ID of the user that has acknowledged their warning.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Core.SubscriptionTypes.Channel.ChannelWarningAcknowledge.UserLogin">
+            <summary>
+            The login of the user that has acknowledged their warning.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Core.SubscriptionTypes.Channel.ChannelWarningAcknowledge.UserName">
+            <summary>
+            The user name of the user that has acknowledged their warning.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.EventSub.Core.SubscriptionTypes.Channel.ChannelWarningSend">
+            <summary>
+            Channel Warning Send subscription type model
+            <para>Description:</para>
+            <para>A user is sent a warning. Broadcasters and moderators can see the warning’s details.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Core.SubscriptionTypes.Channel.ChannelWarningSend.BroadcasterUserId">
+            <summary>
+            The user ID of the broadcaster.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Core.SubscriptionTypes.Channel.ChannelWarningSend.BroadcasterUserLogin">
+            <summary>
+            The login of the broadcaster.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Core.SubscriptionTypes.Channel.ChannelWarningSend.BroadcasterUserName">
+            <summary>
+            The user name of the broadcaster.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Core.SubscriptionTypes.Channel.ChannelWarningSend.ModeratorUserId">
+            <summary>
+            The user ID of the moderator who sent the warning.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Core.SubscriptionTypes.Channel.ChannelWarningSend.ModeratorUserLogin">
+            <summary>
+            The login of the moderator.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Core.SubscriptionTypes.Channel.ChannelWarningSend.ModeratorUserName">
+            <summary>
+            The user name of the moderator.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Core.SubscriptionTypes.Channel.ChannelWarningSend.UserId">
+            <summary>
+            The ID of the user being warned.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Core.SubscriptionTypes.Channel.ChannelWarningSend.UserLogin">
+            <summary>
+            The login of the user being warned.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Core.SubscriptionTypes.Channel.ChannelWarningSend.UserName">
+            <summary>
+            The user name of the user being.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Core.SubscriptionTypes.Channel.ChannelWarningSend.Reason">
+            <summary>
+            Optional. The reason given for the warning.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Core.SubscriptionTypes.Channel.ChannelWarningSend.ChatRulesCited">
+            <summary>
+            Optional. The chat rules cited for the warning.
+            </summary>
+        </member>
         <member name="T:TwitchLib.EventSub.Core.SubscriptionTypes.Channel.HypeTrainBegin">
             <summary>
             HypeTrain Begin subscription type model
@@ -3340,6 +3474,53 @@
         <member name="P:TwitchLib.EventSub.Core.SubscriptionTypes.User.UserUpdate.Description">
             <summary>
             The user's description 
+            </summary>
+        </member>
+        <member name="T:TwitchLib.EventSub.Core.SubscriptionTypes.User.UserWhisperMessage">
+            <summary>
+            Channel Whisper Received subscription type model
+            <para>Description:</para>
+            <para>The user.whisper.message subscription type sends a notification when a user receives a whisper.</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Core.SubscriptionTypes.User.UserWhisperMessage.FromUserId">
+            <summary>
+            The ID of the user sending the message.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Core.SubscriptionTypes.User.UserWhisperMessage.FromUserLogin">
+            <summary>
+            The name of the user sending the message.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Core.SubscriptionTypes.User.UserWhisperMessage.FromUserName">
+            <summary>
+            The login of the user sending the message.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Core.SubscriptionTypes.User.UserWhisperMessage.ToUserId">
+            <summary>
+            The ID of the user receiving the message.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Core.SubscriptionTypes.User.UserWhisperMessage.ToUserLogin">
+            <summary>
+            The login of the user receiving the message.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Core.SubscriptionTypes.User.UserWhisperMessage.ToUserName">
+            <summary>
+            The name of the user receiving the message.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Core.SubscriptionTypes.User.UserWhisperMessage.WhisperId">
+            <summary>
+            The whisper ID.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Core.SubscriptionTypes.User.UserWhisperMessage.Whisper">
+            <summary>
+            The structured whisper message
             </summary>
         </member>
     </members>

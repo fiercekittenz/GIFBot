@@ -228,6 +228,11 @@
             Event that triggers on "channel.channel_points_custom_reward.update" notifications
             </summary>
         </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelPointsAutomaticRewardRedemptionAdd">
+            <summary>
+            Event that triggers on "channel.channel_points_automatic_reward_redemption.add" notifications
+            </summary>
+        </member>
         <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelPointsCustomRewardRedemptionAdd">
             <summary>
             Event that triggers on "channel.channel_points_custom_reward_redemption.add" notifications
@@ -328,6 +333,16 @@
             Event that triggers on "channel.suspicious_user.update" notifications
             </summary>
         </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelWarningAcknowledge">
+            <summary>
+            Event that triggers on "channel.warning.acknowledge" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelWarningSend">
+            <summary>
+            Event that triggers on "channel.warning.send" notifications
+            </summary>
+        </member>
         <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.ChannelUnban">
             <summary>
             Event that triggers on "channel.unban" notifications
@@ -351,6 +366,11 @@
         <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.UserUpdate">
             <summary>
             Event that triggers on "user.update" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.UserWhisperMessage">
+            <summary>
+            Event that triggers on "user.whisper.message" notifications
             </summary>
         </member>
         <member name="P:TwitchLib.EventSub.Websockets.EventSubWebsocketClient.SessionId">
@@ -533,6 +553,17 @@
             <inheritdoc />
         </member>
         <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.ChannelPoints.CustomReward.ChannelPointsCustomRewardUpdateHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.ChannelPoints.Redemptions.ChannelPointsAutomaticRewardRedemptionAddHandler">
+            <summary>
+            Handler for 'channel.channel_points_automatic_reward_redemption.add' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.ChannelPoints.Redemptions.ChannelPointsAutomaticRewardRedemptionAddHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.ChannelPoints.Redemptions.ChannelPointsAutomaticRewardRedemptionAddHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
             <inheritdoc />
         </member>
         <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.ChannelPoints.Redemptions.ChannelPointsCustomRewardRedemptionAddHandler">
@@ -1016,6 +1047,28 @@
         <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.Vips.ChannelVipRemoveHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
             <inheritdoc />
         </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.Warning.ChannelWarningAcknowledgeHandler">
+            <summary>
+            Handler for 'channel.warning.acknowledge' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.Warning.ChannelWarningAcknowledgeHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.Warning.ChannelWarningAcknowledgeHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.Channel.Warning.ChannelWarningSendHandler">
+            <summary>
+            Handler for 'channel.warning.send' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.Channel.Warning.ChannelWarningSendHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.Channel.Warning.ChannelWarningSendHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
         <member name="T:TwitchLib.EventSub.Websockets.Handler.RevocationHandler">
             <summary>
             Handler for 'revocation' notifications
@@ -1058,6 +1111,17 @@
             <inheritdoc />
         </member>
         <member name="M:TwitchLib.EventSub.Websockets.Handler.User.UserUpdateHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:TwitchLib.EventSub.Websockets.Handler.User.UserWhisperMessageHandler">
+            <summary>
+            Handler for 'user.whisper.message' notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Websockets.Handler.User.UserWhisperMessageHandler.SubscriptionType">
+            <inheritdoc />
+        </member>
+        <member name="M:TwitchLib.EventSub.Websockets.Handler.User.UserWhisperMessageHandler.Handle(TwitchLib.EventSub.Websockets.EventSubWebsocketClient,System.String,System.Text.Json.JsonSerializerOptions)">
             <inheritdoc />
         </member>
     </members>

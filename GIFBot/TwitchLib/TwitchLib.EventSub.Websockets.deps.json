@@ -6,11 +6,11 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v6.0": {
-      "TwitchLib.EventSub.Websockets/0.5.0": {
+      "TwitchLib.EventSub.Websockets/0.6.0": {
         "dependencies": {
           "Microsoft.Extensions.Logging": "8.0.0",
-          "System.Text.Json": "8.0.3",
-          "TwitchLib.EventSub.Core": "2.5.3.0"
+          "System.Text.Json": "8.0.5",
+          "TwitchLib.EventSub.Core": "2.5.3-preview-ce9df77"
         },
         "runtime": {
           "TwitchLib.EventSub.Websockets.dll": {}
@@ -82,6 +82,7 @@
           }
         }
       },
+      "Microsoft.NETCore.Platforms/7.0.4": {},
       "System.Runtime.CompilerServices.Unsafe/6.0.0": {},
       "System.Text.Encodings.Web/8.0.0": {
         "dependencies": {
@@ -102,7 +103,7 @@
           }
         }
       },
-      "System.Text.Json/8.0.3": {
+      "System.Text.Json/8.0.5": {
         "dependencies": {
           "System.Runtime.CompilerServices.Unsafe": "6.0.0",
           "System.Text.Encodings.Web": "8.0.0"
@@ -110,13 +111,16 @@
         "runtime": {
           "lib/net6.0/System.Text.Json.dll": {
             "assemblyVersion": "8.0.0.0",
-            "fileVersion": "8.0.324.11423"
+            "fileVersion": "8.0.1024.46610"
           }
         }
       },
-      "TwitchLib.EventSub.Core/2.5.3.0": {
+      "TwitchLib.EventSub.Core/2.5.3-preview-ce9df77": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "7.0.4"
+        },
         "runtime": {
-          "TwitchLib.EventSub.Core.dll": {
+          "lib/net6.0/TwitchLib.EventSub.Core.dll": {
             "assemblyVersion": "2.5.3.0",
             "fileVersion": "2.5.3.0"
           }
@@ -125,7 +129,7 @@
     }
   },
   "libraries": {
-    "TwitchLib.EventSub.Websockets/0.5.0": {
+    "TwitchLib.EventSub.Websockets/0.6.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -172,6 +176,13 @@
       "path": "microsoft.extensions.primitives/8.0.0",
       "hashPath": "microsoft.extensions.primitives.8.0.0.nupkg.sha512"
     },
+    "Microsoft.NETCore.Platforms/7.0.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-yLEHlNN7O5WiND89r42sepgVwy5W/ZoTiFEdJDV7MHR1lW02LL7Nipz2TD5qM/Kx9W3/k3NP+PAP2qUdOm+leg==",
+      "path": "microsoft.netcore.platforms/7.0.4",
+      "hashPath": "microsoft.netcore.platforms.7.0.4.nupkg.sha512"
+    },
     "System.Runtime.CompilerServices.Unsafe/6.0.0": {
       "type": "package",
       "serviceable": true,
@@ -186,17 +197,19 @@
       "path": "system.text.encodings.web/8.0.0",
       "hashPath": "system.text.encodings.web.8.0.0.nupkg.sha512"
     },
-    "System.Text.Json/8.0.3": {
+    "System.Text.Json/8.0.5": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-hpagS9joOwv6efWfrMmV9MjQXpiXZH72PgN067Ysfr6AWMSD1/1hEcvh/U5mUpPLezEWsOJSuVrmqDIVD958iA==",
-      "path": "system.text.json/8.0.3",
-      "hashPath": "system.text.json.8.0.3.nupkg.sha512"
+      "sha512": "sha512-0f1B50Ss7rqxXiaBJyzUu9bWFOO2/zSlifZ/UNMdiIpDYe4cY4LQQicP4nirK1OS31I43rn062UIJ1Q9bpmHpg==",
+      "path": "system.text.json/8.0.5",
+      "hashPath": "system.text.json.8.0.5.nupkg.sha512"
     },
-    "TwitchLib.EventSub.Core/2.5.3.0": {
-      "type": "reference",
-      "serviceable": false,
-      "sha512": ""
+    "TwitchLib.EventSub.Core/2.5.3-preview-ce9df77": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-1mLseMsfzETwDwiGGdHasF8IVuMEWBD5HQZAggC0Sjsf+vHsjOT8bZhPW0/daQ/FSuUsJPUIsfn+tIl/BJLbmA==",
+      "path": "twitchlib.eventsub.core/2.5.3-preview-ce9df77",
+      "hashPath": "twitchlib.eventsub.core.2.5.3-preview-ce9df77.nupkg.sha512"
     }
   }
 }

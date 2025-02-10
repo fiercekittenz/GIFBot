@@ -19,7 +19,9 @@ using GIFBot.Shared.Models.Twitch;
 using GIFBot.Shared.Utility;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.Build.Framework;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -519,10 +521,10 @@ namespace GIFBot.Server.GIFBot
             _ = mStreamerTwitchClient.DisconnectAsync();
          }
 
-         // Initialize the Twitch API.
+         // Initialize the Twitch Helix API (used for Webhook and Websocket Events)
          mTwitchApi = new TwitchAPI();
          mTwitchApi.Settings.ClientId = Common.skTwitchClientId;
-         mTwitchApi.Settings.AccessToken = BotSettings.BotOauthToken;
+         mTwitchApi.Settings.AccessToken = BotSettings.StreamerOauthToken;
 
          // Setup the BOT Twitch Client
          {
@@ -720,7 +722,7 @@ namespace GIFBot.Server.GIFBot
 
          ChannelId = TwitchEndpointHelpers.GetChannelId(HttpClientFactory.CreateClient(Common.skHttpClientName), BotSettings.ChannelName, BotSettings.BotOauthToken, out string result);
 
-         ChannelPointManager.InitializePubSub();
+         ChannelPointManager.InitializeEventSub();
          CheckForHypeTrainEvent(false);
 
          ApiSettings apiSettings = new ApiSettings() {
