@@ -10,6 +10,9 @@ namespace GIFBot.Shared
    /// </summary>
    public class AnimationTreeItem
    {
+      // For S.T.J.
+      public AnimationTreeItem() { }
+
       public AnimationTreeItem(Guid id, string title, Guid? parentTreeId, AnimationTreeTier tier)
       {
          Id = id;

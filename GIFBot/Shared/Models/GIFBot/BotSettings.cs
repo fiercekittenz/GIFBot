@@ -1,6 +1,5 @@
 ﻿using GIFBot.Shared.Models.Animation;
 using GIFBot.Shared.Models.GIFBot;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,6 +8,9 @@ namespace GIFBot.Shared
 {
    public class BotSettings
    {
+      // For S.T.J.
+      public BotSettings() { }
+
       #region Statics
 
       /// <summary>

@@ -1,0 +1,602 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TwitchLib.EventSub.Webhooks</name>
+    </assembly>
+    <members>
+        <member name="T:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks">
+            <summary>
+            Class where everything runs together
+            <para>Listen to events from EventSub from this class</para>
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelBan">
+            <summary>
+            Event that triggers on "channel.ban" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelCheer">
+            <summary>
+            Event that triggers on "channel.cheer" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelCharityCampaignStart">
+            <summary>
+            Event that triggers on "channel.charity_campaign.start" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelCharityCampaignDonate">
+            <summary>
+            Event that triggers on "channel.charity_campaign.donate" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelCharityCampaignProgress">
+            <summary>
+            Event that triggers on "channel.charity_campaign.progress" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelCharityCampaignStop">
+            <summary>
+            Event that triggers on "channel.charity_campaign.stop" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelFollow">
+            <summary>
+            Event that triggers on "channel.follow" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelGoalBegin">
+            <summary>
+            Event that triggers on "channel.goal.begin" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelGoalEnd">
+            <summary>
+            Event that triggers on "channel.goal.end" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelGoalProgress">
+            <summary>
+            Event that triggers on "channel.goal.progress" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelHypeTrainBegin">
+            <summary>
+            Event that triggers on "channel.hype_train.begin" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelHypeTrainEnd">
+            <summary>
+            Event that triggers on "channel.hype_train.end" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelHypeTrainProgress">
+            <summary>
+            Event that triggers on "channel.hype_train.progress" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelModeratorAdd">
+            <summary>
+            Event that triggers on "channel.moderator.add" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelModeratorRemove">
+            <summary>
+            Event that triggers on "channel.moderator.remove" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelPointsCustomRewardAdd">
+            <summary>
+            Event that triggers on "channel.channel_points_custom_reward.add" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelPointsCustomRewardUpdate">
+            <summary>
+            Event that triggers on "channel.channel_points_custom_reward.update" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelPointsCustomRewardRemove">
+            <summary>
+            Event that triggers on "channel.channel_points_custom_reward.remove" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelPointsCustomRewardRedemptionAdd">
+            <summary>
+            Event that triggers on "channel.channel_points_custom_reward_redemption.add" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelPointsCustomRewardRedemptionUpdate">
+            <summary>
+            Event that triggers on "channel.channel_points_custom_reward_redemption.update" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelPollBegin">
+            <summary>
+            Event that triggers on "channel.poll.begin" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelPollEnd">
+            <summary>
+            Event that triggers on "channel.poll.end" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelPollProgress">
+            <summary>
+            Event that triggers on "channel.poll.progress" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelPredictionBegin">
+            <summary>
+            Event that triggers on "channel.prediction.begin" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelPredictionEnd">
+            <summary>
+            Event that triggers on "channel.prediction.end" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelPredictionLock">
+            <summary>
+            Event that triggers on "channel.prediction.lock" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelPredictionProgress">
+            <summary>
+            Event that triggers on "channel.prediction.progress" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelRaid">
+            <summary>
+            Event that triggers on "channel.raid" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelShieldModeBegin">
+            <summary>
+            Event that triggers on "channel.shield_mode.begin" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelShieldModeEnd">
+            <summary>
+            Event that triggers on "channel.shield_mode.end" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelShoutoutCreate">
+            <summary>
+            Event that triggers on "channel.shoutout.create" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelShoutoutReceive">
+            <summary>
+            Event that triggers on "channel.shoutout.receive" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelSubscribe">
+            <summary>
+            Event that triggers on "channel.subscribe" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelSubscriptionEnd">
+            <summary>
+            Event that triggers on "channel.subscription.end" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelSubscriptionGift">
+            <summary>
+            Event that triggers on "channel.subscription.gift" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelSubscriptionMessage">
+            <summary>
+            Event that triggers on "channel.subscription.end" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelUnban">
+            <summary>
+            Event that triggers on "channel.unban" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnChannelUpdate">
+            <summary>
+            Event that triggers on "channel.update" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnError">
+            <summary>
+            Event that triggers if an error parsing a notification or revocation was encountered
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnDropEntitlementGrant">
+            <summary>
+            Event that triggers on "drop.entitlement.grant" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnExtensionBitsTransactionCreate">
+            <summary>
+            Event that triggers on "extension.bits_transaction.create" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnRevocation">
+            <summary>
+            Event that triggers on if a revocation notification was received
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnStreamOffline">
+            <summary>
+            Event that triggers on "stream.offline" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnStreamOnline">
+            <summary>
+            Event that triggers on "stream.online" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnUserAuthorizationGrant">
+            <summary>
+            Event that triggers on "user.authorization.grant" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnUserAuthorizationRevoke">
+            <summary>
+            Event that triggers on "user.authorization.revoke" notifications
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.OnUserUpdate">
+            <summary>
+            Event that triggers on "user.update" notifications
+            </summary>
+        </member>
+        <member name="M:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.ProcessNotificationAsync(System.Collections.Generic.Dictionary{System.String,System.String},System.IO.Stream)">
+            <summary>
+            Processes "notification" type messages. You should not use this in your code, its for internal use only!
+            </summary>
+            <param name="headers">Dictionary of the request headers</param>
+            <param name="body">Stream of the request body</param>
+        </member>
+        <member name="M:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks.ProcessRevocationAsync(System.Collections.Generic.Dictionary{System.String,System.String},System.IO.Stream)">
+            <summary>
+            Processes "revocation" type messages. You should not use this in your code, its for internal use only!
+            </summary>
+            <param name="headers">Dictionary of the request headers</param>
+            <param name="body">Stream of the request body</param>
+        </member>
+        <member name="T:TwitchLib.EventSub.Webhooks.Core.Models.BatchedNotificationPayload`1">
+            <summary>
+            Defines a notification payload of batched EventSub notifications
+            </summary>
+            <typeparam name="T">SubscriptionType</typeparam>
+        </member>
+        <member name="P:TwitchLib.EventSub.Webhooks.Core.Models.BatchedNotificationPayload`1.Subscription">
+            <summary>
+            Data about the subscription the notifications belong to
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Webhooks.Core.Models.BatchedNotificationPayload`1.Events">
+            <summary>
+            Event data of the notifications
+            </summary>
+        </member>
+        <member name="T:TwitchLib.EventSub.Webhooks.Core.Models.EventSubBatchedEvent`1">
+            <summary>
+            Defining a batched EventSub event
+            </summary>
+            <typeparam name="T">SubscriptionType</typeparam>
+        </member>
+        <member name="P:TwitchLib.EventSub.Webhooks.Core.Models.EventSubBatchedEvent`1.Id">
+            <summary>
+            Id of the notification event
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Webhooks.Core.Models.EventSubBatchedEvent`1.Data">
+            <summary>
+            Event data
+            </summary>
+        </member>
+        <member name="T:TwitchLib.EventSub.Webhooks.Core.Models.EventSubNotificationPayload`1">
+            <summary>
+            Defines a notification payload of an EventSub notification
+            </summary>
+            <typeparam name="T">SubscriptionType</typeparam>
+        </member>
+        <member name="P:TwitchLib.EventSub.Webhooks.Core.Models.EventSubNotificationPayload`1.Subscription">
+            <summary>
+            Data about the subscription the notifications belong to
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Webhooks.Core.Models.EventSubNotificationPayload`1.Event">
+            <summary>
+            Event Data
+            </summary>
+        </member>
+        <member name="T:TwitchLib.EventSub.Webhooks.Core.Models.EventSubSubscription">
+            <summary>
+            Defines an EventSub Subscription
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Webhooks.Core.Models.EventSubSubscription.Id">
+            <summary>
+            The ID of the subscription
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Webhooks.Core.Models.EventSubSubscription.Type">
+            <summary>
+            The subscription type name.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Webhooks.Core.Models.EventSubSubscription.Version">
+            <summary>
+            The subscription type version.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Webhooks.Core.Models.EventSubSubscription.Status">
+            <summary>
+            The status of the subscription.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Webhooks.Core.Models.EventSubSubscription.Condition">
+            <summary>
+            Subscription-specific parameters. The parameters inside this object differ by subscription type and may differ by version.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Webhooks.Core.Models.EventSubSubscription.Transport">
+            <summary>
+            Transport-specific parameters.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Webhooks.Core.Models.EventSubSubscription.IsBatchingEnabled">
+            <summary>
+            Whether batching is enabled for the subscription.
+            <para>!! Currently only supported for drop.entitlement.grant !!</para>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Webhooks.Core.Models.EventSubSubscription.CreatedAt">
+            <summary>
+            The time the subscription was created.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Webhooks.Core.Models.EventSubSubscription.Cost">
+            <summary>
+            How much the subscription counts against your limit. 
+            </summary>
+        </member>
+        <member name="T:TwitchLib.EventSub.Webhooks.Core.Models.EventSubSubscriptionTransport">
+            <summary>
+            Defines an EventSub Subscription Transport
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Webhooks.Core.Models.EventSubSubscriptionTransport.Method">
+            <summary>
+            The transport method. Supported values: webhook.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Webhooks.Core.Models.EventSubSubscriptionTransport.Callback">
+            <summary>
+            The callback URL where the notification should be sent.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.EventSub.Webhooks.Core.Models.TwitchLibEventSubOptions">
+            <summary>
+            Options to configure TwitchLib.EventSub.Webhooks
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Webhooks.Core.Models.TwitchLibEventSubOptions.Secret">
+            <summary>
+            Secret to be used to verify notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Webhooks.Core.Models.TwitchLibEventSubOptions.CallbackPath">
+            <summary>
+            Callback Path to listen on for EventSub notifications
+            </summary>
+        </member>
+        <member name="P:TwitchLib.EventSub.Webhooks.Core.Models.TwitchLibEventSubOptions.EnableLogging">
+            <summary>
+            Enables logging of EventSub notifications. Default: true
+            <para>TwitchLib.EventSub.Webhooks handles the request before it is logged by the usual logging middleware</para>
+            <para>Because of that we added our own logging to compensate for that</para>
+            </summary>
+        </member>
+        <member name="T:TwitchLib.EventSub.Webhooks.Core.NamingPolicies.SnakeCaseNamingPolicy">
+            <summary>
+            JsonNamingPolicy to convert json property names to snake case
+            </summary>
+        </member>
+        <member name="M:TwitchLib.EventSub.Webhooks.Core.NamingPolicies.SnakeCaseNamingPolicy.ConvertName(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="name">property name to be converted</param>
+            <returns>property name as snake case</returns>
+        </member>
+        <member name="T:TwitchLib.EventSub.Webhooks.EventSubWebhooks">
+            <inheritdoc/>
+            <summary>
+            <para>Implements <see cref="T:TwitchLib.EventSub.Webhooks.Core.IEventSubWebhooks"/></para>
+            </summary>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelBan">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelCheer">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelCharityCampaignStart">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelCharityCampaignDonate">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelCharityCampaignProgress">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelCharityCampaignStop">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelFollow">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelGoalBegin">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelGoalEnd">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelGoalProgress">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelHypeTrainBegin">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelHypeTrainEnd">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelHypeTrainProgress">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelModeratorAdd">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelModeratorRemove">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelPointsCustomRewardAdd">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelPointsCustomRewardUpdate">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelPointsCustomRewardRemove">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelPointsCustomRewardRedemptionAdd">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelPointsCustomRewardRedemptionUpdate">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelPollBegin">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelPollEnd">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelPollProgress">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelPredictionBegin">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelPredictionEnd">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelPredictionLock">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelPredictionProgress">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelRaid">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelShieldModeBegin">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelShieldModeEnd">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelShoutoutCreate">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelShoutoutReceive">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelSubscribe">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelSubscriptionEnd">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelSubscriptionGift">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelSubscriptionMessage">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelUnban">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnChannelUpdate">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnError">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnDropEntitlementGrant">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnExtensionBitsTransactionCreate">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnRevocation">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnStreamOffline">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnStreamOnline">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnUserAuthorizationGrant">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnUserAuthorizationRevoke">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.EventSub.Webhooks.EventSubWebhooks.OnUserUpdate">
+            <inheritdoc/>
+        </member>
+        <member name="M:TwitchLib.EventSub.Webhooks.EventSubWebhooks.ProcessNotificationAsync(System.Collections.Generic.Dictionary{System.String,System.String},System.IO.Stream)">
+            <inheritdoc/>
+        </member>
+        <member name="M:TwitchLib.EventSub.Webhooks.EventSubWebhooks.ProcessRevocationAsync(System.Collections.Generic.Dictionary{System.String,System.String},System.IO.Stream)">
+            <inheritdoc/>
+        </member>
+        <member name="T:TwitchLib.EventSub.Webhooks.Extensions.ApplicationBuilderExtensions">
+            <summary>
+            Extension methods for ApplicationBuilder
+            </summary>
+        </member>
+        <member name="M:TwitchLib.EventSub.Webhooks.Extensions.ApplicationBuilderExtensions.UseTwitchLibEventSubWebhooks(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            Adds needed Middlewares for TwitchLib.EventSub.Webhooks to the specified IApplicationBuilder
+            </summary>
+            <param name="app">IApplicationBuilder used my .NET to build the execution pipeline</param>
+            <returns>Reference to IApplicationBuilder after the operation has completed</returns>
+        </member>
+        <member name="T:TwitchLib.EventSub.Webhooks.Extensions.ServiceCollectionExtensions">
+            <summary>
+            Extension methods for ServiceCollection
+            </summary>
+        </member>
+        <member name="M:TwitchLib.EventSub.Webhooks.Extensions.ServiceCollectionExtensions.AddTwitchLibEventSubWebhooks(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{TwitchLib.EventSub.Webhooks.Core.Models.TwitchLibEventSubOptions})">
+            <summary>
+            Adds services for TwitchLib.EventSub.Webhooks to the specified IServiceCollection
+            </summary>
+            <param name="services">Reference to the IServiceCollection</param>
+            <param name="config">An Action to configure TwitchLib.EventSub.Webhooks</param>
+            <returns>A reference to the IServiceCollection after the operation has completed</returns>
+        </member>
+        <member name="T:TwitchLib.EventSub.Webhooks.Extensions.StringExtensions">
+            <summary>
+            Extension methods for string
+            </summary>
+        </member>
+        <member name="M:TwitchLib.EventSub.Webhooks.Extensions.StringExtensions.ToSnakeCase(System.String)">
+            <summary>
+            Converts the input string to snake case
+            <para>e.g. "UserName" => "user_name"</para>
+            </summary>
+            <param name="input">input string to be converted to snake case</param>
+            <returns>input string as snake case</returns>
+        </member>
+    </members>
+</doc>

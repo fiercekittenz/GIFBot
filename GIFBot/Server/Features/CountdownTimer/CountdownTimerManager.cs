@@ -1,7 +1,7 @@
 ﻿using GIFBot.Server.Interfaces;
 using GIFBot.Shared.Models.Features;
 using Microsoft.AspNetCore.SignalR;
-using Newtonsoft.Json;
+using System.Text.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -54,7 +54,7 @@ namespace GIFBot.Server.Features.CountdownTimer
          if (!String.IsNullOrEmpty(DataFilePath) && File.Exists(DataFilePath))
          {
             string fileData = File.ReadAllText(DataFilePath);
-            mData = JsonConvert.DeserializeObject<CountdownTimerData>(fileData);
+            mData = JsonSerializer.Deserialize<CountdownTimerData>(fileData);
 
             if (mData.Enabled)
             {
@@ -81,7 +81,7 @@ namespace GIFBot.Server.Features.CountdownTimer
          {
             Directory.CreateDirectory(Path.GetDirectoryName(DataFilePath));
 
-            var jsonData = JsonConvert.SerializeObject(mData);
+            var jsonData = JsonSerializer.Serialize(mData);
             File.WriteAllText(DataFilePath, jsonData);
 
             _ = Bot?.SendLogMessage("Countdown Timer data saved.");
@@ -315,7 +315,7 @@ namespace GIFBot.Server.Features.CountdownTimer
          mData.Caption.Text = $"{mData.Current.ToString(@"hh\:mm\:ss")}";
 
          IHubClients clients = Bot.GIFBotHub.Clients;
-         clients.All.SendAsync("UpdateTime", JsonConvert.SerializeObject(mData.Caption));
+         clients.All.SendAsync("UpdateTime", JsonSerializer.Serialize(mData.Caption));
       }
 
       #endregion

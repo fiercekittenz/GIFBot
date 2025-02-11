@@ -4,7 +4,7 @@ using GIFBot.Shared.Models.Animation;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.JSInterop;
-using Newtonsoft.Json;
+using System.Text.Json;
 using Radzen;
 using System;
 using System.Collections.Generic;
@@ -59,7 +59,7 @@ namespace GIFBot.Client.Pages.Animation_Editor
          string treeDataJson = await mHubConnection.InvokeAsync<string>("GetAnimationTreeData");
          if (!String.IsNullOrEmpty(treeDataJson))
          {
-            mAnimationTreeData = Newtonsoft.Json.JsonConvert.DeserializeObject<List<AnimationTreeItem>>(treeDataJson);
+            mAnimationTreeData = JsonSerializer.Deserialize<List<AnimationTreeItem>>(treeDataJson);
 
             if (!mAnimationTreeData.Any())
             {
@@ -178,7 +178,7 @@ namespace GIFBot.Client.Pages.Animation_Editor
       {
          if (mSelectedTreeItems.Any())
          {
-            bool results = await mHubConnection.InvokeAsync<bool>("DeleteAnimations", JsonConvert.SerializeObject(mSelectedTreeItems.Where(t => t.Tier == AnimationTreeTier.Animation).Select(t => t.Id)));
+            bool results = await mHubConnection.InvokeAsync<bool>("DeleteAnimations", JsonSerializer.Serialize(mSelectedTreeItems.Where(t => t.Tier == AnimationTreeTier.Animation).Select(t => t.Id)));
             if (results)
             {
                NotificationService.Notify(NotificationSeverity.Success, "Success", $"The animations have been deleted.", 5000);
@@ -325,7 +325,7 @@ namespace GIFBot.Client.Pages.Animation_Editor
       {
          if (mSelectedTreeItems.Any() && mSelectedMoveCategory != Guid.Empty)
          {
-            bool results = await mHubConnection.InvokeAsync<bool>("MoveAnimations", JsonConvert.SerializeObject(mSelectedTreeItems.Where(t => t.Tier == AnimationTreeTier.Animation).Select(t => t.Id)), mSelectedMoveCategory);
+            bool results = await mHubConnection.InvokeAsync<bool>("MoveAnimations", JsonSerializer.Serialize(mSelectedTreeItems.Where(t => t.Tier == AnimationTreeTier.Animation).Select(t => t.Id)), mSelectedMoveCategory);
             if (results)
             {
                NotificationService.Notify(NotificationSeverity.Success, "Success", $"The selected animations have been moved.", 5000);
@@ -355,7 +355,7 @@ namespace GIFBot.Client.Pages.Animation_Editor
 
             if (animationsToModify.Any())
             {
-               bool result = await mHubConnection.InvokeAsync<bool>("EnableAnimations", JsonConvert.SerializeObject(animationsToModify));
+               bool result = await mHubConnection.InvokeAsync<bool>("EnableAnimations", JsonSerializer.Serialize(animationsToModify));
                if (result)
                {
                   NotificationService.Notify(NotificationSeverity.Success, "Success", "The animations have been enabled.", 5000);
@@ -383,7 +383,7 @@ namespace GIFBot.Client.Pages.Animation_Editor
 
             if (animationsToModify.Any())
             {
-               bool result = await mHubConnection.InvokeAsync<bool>("DisableAnimations", JsonConvert.SerializeObject(animationsToModify));
+               bool result = await mHubConnection.InvokeAsync<bool>("DisableAnimations", JsonSerializer.Serialize(animationsToModify));
                if (result)
                {
                   NotificationService.Notify(NotificationSeverity.Success, "Success", "The animations have been disabled.", 5000);
@@ -453,7 +453,7 @@ namespace GIFBot.Client.Pages.Animation_Editor
       {
          if (treeItem != null && treeItem.Tier == AnimationTreeTier.Animation)
          {
-            bool result = await mHubConnection.InvokeAsync<bool>("DeleteAnimations", JsonConvert.SerializeObject(new List<Guid>() { treeItem.Id }));
+            bool result = await mHubConnection.InvokeAsync<bool>("DeleteAnimations", JsonSerializer.Serialize(new List<Guid>() { treeItem.Id }));
             if (result)
             {
                NotificationService.Notify(NotificationSeverity.Info, "Info", $"The animation has been deleted.", 5000);

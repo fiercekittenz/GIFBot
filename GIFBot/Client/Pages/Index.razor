@@ -4,7 +4,7 @@
 @using GIFBot.Client.Components
 @using GIFBot.Client.Utility
 @using GIFBot.Shared.Models.Animation
-@using Newtonsoft.Json
+@using System.Text.Json
 @using Microsoft.AspNetCore.Http.Connections
 @using System.Collections.Generic
 @using System.Collections.ObjectModel
@@ -194,7 +194,7 @@
       string treeDataJson = await mHubConnection.InvokeAsync<string>("GetAnimationTreeData");
       if (!String.IsNullOrEmpty(treeDataJson))
       {
-         mAnimationTreeData = Newtonsoft.Json.JsonConvert.DeserializeObject<List<AnimationTreeItem>>(treeDataJson);
+         mAnimationTreeData = JsonSerializer.Deserialize<List<AnimationTreeItem>>(treeDataJson);
          foreach (var anim in mAnimationTreeData)
          {
             mFilteredData.Add(anim);
@@ -207,7 +207,7 @@
       string botSettingsJson = await mHubConnection.InvokeAsync<string>("GetBotSettings");
       if (!String.IsNullOrEmpty(botSettingsJson))
       {
-         mBotSettings = Newtonsoft.Json.JsonConvert.DeserializeObject<BotSettings>(botSettingsJson);
+         mBotSettings = JsonSerializer.Deserialize<BotSettings>(botSettingsJson);
          if (mBotSettings != null)
          {
             if (mBotSettings.CurrentSetupStep != SetupStep.Finished)
@@ -316,7 +316,7 @@
    private async Task NavigateToReauthenticate()
    {
       mBotSettings.CurrentSetupStep = SetupStep.Welcome;
-      await mHubConnection.InvokeAsync("UpdateBotSettings", Newtonsoft.Json.JsonConvert.SerializeObject(mBotSettings), false);
+      await mHubConnection.InvokeAsync("UpdateBotSettings", JsonSerializer.Serialize(mBotSettings), false);
       NavigationManager.NavigateTo("/setup/");
    }
 

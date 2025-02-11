@@ -5,7 +5,7 @@
 @using GIFBot.Shared.Models.Animation
 @using GIFBot.Shared.Models.Visualization
 @using Microsoft.AspNetCore.SignalR
-@using Newtonsoft.Json
+@using System.Text.Json
 @using Microsoft.AspNetCore.Http.Connections
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JSRuntime
@@ -14,7 +14,6 @@
 
 @layout BasicLayout
 <!-- Special Thanks to exegete46 and jairs_corner for the css help! -->
-
 @if (mAnimationVisible)
 {
    <div style="position: relative; align-content: center; top: @mTop; left: @mLeft; width: @mWidth; height: @mHeight">
@@ -55,7 +54,7 @@
    {
       // Build the connection to the main bot hub.
       mHubConnection = new HubConnectionBuilder()
-         .WithUrl(NavigationManager.ToAbsoluteUri("/gifbothub"), HttpTransportType.LongPolling) 
+         .WithUrl(NavigationManager.ToAbsoluteUri("/gifbothub"), HttpTransportType.LongPolling)
          .Build();
 
       // Detect a disconnection and immediately reconnect. This will fix if a user
@@ -69,13 +68,15 @@
 
       mHubConnection.On<string>("PlayAnimation", async (data) =>
       {
-         AnimationRequest animationRequest = JsonConvert.DeserializeObject<AnimationRequest>(data);
+         Console.WriteLine("PlayAnimation received");
+         AnimationRequest animationRequest = JsonSerializer.Deserialize<AnimationRequest>(data);
+         Console.WriteLine(string.Format("PlayAnimation received request to play {0}", animationRequest.AnimationData.Command));
          await PlayAnimation(animationRequest);
       });
 
       mHubConnection.On<string>("UpdateTestVisual", async (data) =>
       {
-         TestVisualRequest testVisualRequest = JsonConvert.DeserializeObject<TestVisualRequest>(data);
+         TestVisualRequest testVisualRequest = JsonSerializer.Deserialize<TestVisualRequest>(data);
          await UpdateTestVisual(testVisualRequest);
       });
 
@@ -87,8 +88,9 @@
 
       mHubConnection.On("StopAnimation", async () =>
       {
-      // Hide the animation again.
-      if (!mHasPlayedOnce)
+         Console.WriteLine("StopAnimation received");
+         // Hide the animation again.
+         if (!mHasPlayedOnce)
          {
             await Task.Delay(500);
             mHasPlayedOnce = true;
@@ -100,6 +102,7 @@
 
       mHubConnection.On<string>("SendStreamlabsAuthToken", async (data) =>
       {
+         Console.WriteLine("SendStreamlabsAuthToken received");
          StreamlabsAuthToken = data;
          Console.WriteLine("Updating the streamlabs token in Javascript.");
          await JSRuntime.InvokeVoidAsync("SetupStreamlabs", StreamlabsAuthToken);

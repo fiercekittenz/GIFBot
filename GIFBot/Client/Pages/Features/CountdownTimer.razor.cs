@@ -3,7 +3,7 @@ using GIFBot.Shared.Models.Visualization;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.JSInterop;
-using Newtonsoft.Json;
+using System.Text.Json;
 using Radzen;
 using System;
 using System.Collections.Generic;
@@ -75,7 +75,7 @@ namespace GIFBot.Client.Pages.Features
 
       private async Task OnSaveChanges()
       {
-         await mHubConnection.InvokeAsync("UpdateCountdownTimerData", JsonConvert.SerializeObject(Data));
+         await mHubConnection.InvokeAsync("UpdateCountdownTimerData", JsonSerializer.Serialize(Data));
          await GetCountdownDataFromHub();
          NotificationService.Notify(NotificationSeverity.Success, "Save Successful", "The countdown data has been saved.", 5000);
          await InvokeAsync(() => { StateHasChanged(); });
@@ -152,7 +152,7 @@ namespace GIFBot.Client.Pages.Features
 
       private async Task HandleConfirmEditCommand()
       {
-         bool result = await mHubConnection.InvokeAsync<bool>("UpdateCountdownTimerAction", JsonConvert.SerializeObject(mTempData));
+         bool result = await mHubConnection.InvokeAsync<bool>("UpdateCountdownTimerAction", JsonSerializer.Serialize(mTempData));
          if (result)
          {
             NotificationService.Notify(NotificationSeverity.Success, "Success", "The action has been updated.", 5000);
@@ -270,7 +270,7 @@ namespace GIFBot.Client.Pages.Features
       private async Task GetCountdownDataFromHub()
       {
          string rawData = await mHubConnection.InvokeAsync<string>("GetCountdownTimerData");
-         Data = JsonConvert.DeserializeObject<CountdownTimerData>(rawData);
+         Data = JsonSerializer.Deserialize<CountdownTimerData>(rawData);
          mCaptionFontSelection = (int)Data.Caption.FontFamily;
          Data.Caption.Text = "01:23:45";
          UpdateCaptionPreview(null);

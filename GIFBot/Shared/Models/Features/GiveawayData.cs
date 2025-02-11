@@ -9,6 +9,9 @@ namespace GIFBot.Shared.Models.Features
 {
    public class GiveawayData
    {
+      // For S.T.J.
+      public GiveawayData() { }
+
       public enum GiveawayEntryBehaviorType
       {
          Command,

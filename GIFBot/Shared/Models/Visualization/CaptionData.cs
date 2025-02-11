@@ -9,6 +9,9 @@ namespace GIFBot.Shared.Models.Visualization
    /// </summary>
    public class CaptionData : ICloneable
    {
+      // For S.T.J.
+      public CaptionData() { }
+
       public object Clone()
       {
          return MemberwiseClone();

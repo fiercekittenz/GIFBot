@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.JSInterop;
-using Newtonsoft.Json;
+using System.Text.Json;
 using Radzen;
 using System;
 using System.Collections.Generic;
@@ -52,7 +52,7 @@ namespace GIFBot.Client.Pages.Features
          string userGroupsRaw = await mHubConnection.InvokeAsync<string>("GetUserGroupList");
          if (!String.IsNullOrEmpty(userGroupsRaw))
          {
-            mUserGroupNames = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(userGroupsRaw);
+            mUserGroupNames = JsonSerializer.Deserialize<List<string>>(userGroupsRaw);
             mUserGroupNames.Sort();
          }
 
@@ -77,7 +77,7 @@ namespace GIFBot.Client.Pages.Features
       private async Task GetStickerDataFromHub()
       {
          string rawData = await mHubConnection.InvokeAsync<string>("GetStickerData");
-         mStickerData = JsonConvert.DeserializeObject<StickerData>(rawData);
+         mStickerData = JsonSerializer.Deserialize<StickerData>(rawData);
 
          mFormVolume = (int)(mStickerData.Volume * 100);
          mAccessSelection = (int)(mStickerData.Access);
@@ -188,7 +188,7 @@ namespace GIFBot.Client.Pages.Features
       private async Task OnSaveChanges()
       {
          await HandleDisplayTestModeChanged(false, null);
-         await mHubConnection.InvokeAsync("UpdateStickerData", JsonConvert.SerializeObject(mStickerData));
+         await mHubConnection.InvokeAsync("UpdateStickerData", JsonSerializer.Serialize(mStickerData));
          await GetStickerDataFromHub();
          NotificationService.Notify(NotificationSeverity.Success, "Save Successful", "The sticker data has been saved.", 5000);
          await InvokeAsync(() => { StateHasChanged(); });
@@ -300,7 +300,7 @@ namespace GIFBot.Client.Pages.Features
                   stickersToDelete.Add(sticker.Id);
                }
 
-               bool result = await mHubConnection.InvokeAsync<bool>("DeleteStickers", JsonConvert.SerializeObject(stickersToDelete));
+               bool result = await mHubConnection.InvokeAsync<bool>("DeleteStickers", JsonSerializer.Serialize(stickersToDelete));
                if (result)
                {
                   NotificationService.Notify(NotificationSeverity.Success, "Success", "The stickers have been deleted.", 5000);
@@ -327,7 +327,7 @@ namespace GIFBot.Client.Pages.Features
                stickersToModify.Add(sticker.Id);
             }
 
-            bool result = await mHubConnection.InvokeAsync<bool>("EnableStickers", JsonConvert.SerializeObject(stickersToModify));
+            bool result = await mHubConnection.InvokeAsync<bool>("EnableStickers", JsonSerializer.Serialize(stickersToModify));
             if (result)
             {
                NotificationService.Notify(NotificationSeverity.Success, "Success", "The stickers have been enabled.", 5000);
@@ -353,7 +353,7 @@ namespace GIFBot.Client.Pages.Features
                stickersToModify.Add(sticker.Id);
             }
 
-            bool result = await mHubConnection.InvokeAsync<bool>("DisableStickers", JsonConvert.SerializeObject(stickersToModify));
+            bool result = await mHubConnection.InvokeAsync<bool>("DisableStickers", JsonSerializer.Serialize(stickersToModify));
             if (result)
             {
                NotificationService.Notify(NotificationSeverity.Success, "Success", "The stickers have been disabled.", 5000);
@@ -383,7 +383,7 @@ namespace GIFBot.Client.Pages.Features
             stickersToEdit.Add(entry.Id);
          }
 
-         bool result = await mHubConnection.InvokeAsync<bool>("MoveStickerCategory", JsonConvert.SerializeObject(stickersToEdit), mTempStickerCategoryId);
+         bool result = await mHubConnection.InvokeAsync<bool>("MoveStickerCategory", JsonSerializer.Serialize(stickersToEdit), mTempStickerCategoryId);
          if (result)
          {
             NotificationService.Notify(NotificationSeverity.Success, "Success", "The stickers have been moved to the new category.", 5000);
@@ -408,7 +408,7 @@ namespace GIFBot.Client.Pages.Features
       /// </summary>
       private async Task HandleAddNewSticker()
       {
-         bool result = await mHubConnection.InvokeAsync<bool>("AddStickerEntry", JsonConvert.SerializeObject(mTempStickerToAdd), mTempStickerCategoryId);
+         bool result = await mHubConnection.InvokeAsync<bool>("AddStickerEntry", JsonSerializer.Serialize(mTempStickerToAdd), mTempStickerCategoryId);
          if (result)
          {
             NotificationService.Notify(NotificationSeverity.Success, "Success", "The sticker has been added.", 5000);
@@ -698,7 +698,7 @@ namespace GIFBot.Client.Pages.Features
 
             await HandleDisplayTestModeChanged(false, null);
 
-            bool result = await mHubConnection.InvokeAsync<bool>("UpdateStickerEntry", JsonConvert.SerializeObject(sticker));
+            bool result = await mHubConnection.InvokeAsync<bool>("UpdateStickerEntry", JsonSerializer.Serialize(sticker));
             if (result)
             {
                NotificationService.Notify(NotificationSeverity.Success, "Success", "The sticker was updated.", 5000);
@@ -734,7 +734,7 @@ namespace GIFBot.Client.Pages.Features
          string result = await mHubConnection.InvokeAsync<string>("GetStickerFileDimensions", dataToEdit.Visual);
          if (!String.IsNullOrEmpty(result))
          {
-            Tuple<int, int> dimensions = JsonConvert.DeserializeObject<Tuple<int, int>>(result);
+            Tuple<int, int> dimensions = JsonSerializer.Deserialize<Tuple<int, int>>(result);
             dataToEdit.Placement.Width = dimensions.Item1;
             dataToEdit.Placement.Height = dimensions.Item2;
 

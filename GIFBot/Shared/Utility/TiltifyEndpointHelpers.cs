@@ -1,15 +1,9 @@
 ﻿using GIFBot.Shared.Models.Tiltify;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace GIFBot.Shared.Utility
 {
@@ -38,7 +32,7 @@ namespace GIFBot.Shared.Utility
             if (response.IsSuccessStatusCode)
             {
                string jsonData = response.Content.ReadAsStringAsync().Result;
-               dynamic responseData = JsonConvert.DeserializeObject<object>(jsonData);
+               JsonObject responseData = JsonSerializer.Deserialize<JsonObject>(jsonData);
                if (responseData != null && responseData["access_token"] != null)
                {
                   return responseData["access_token"].ToString();
@@ -65,7 +59,7 @@ namespace GIFBot.Shared.Utility
             if (response.IsSuccessStatusCode)
             {
                string jsonData = response.Content.ReadAsStringAsync().Result;
-               dynamic responseData = JsonConvert.DeserializeObject<object>(jsonData);
+               JsonObject responseData = JsonSerializer.Deserialize<JsonObject>(jsonData);
                if (responseData != null && responseData["data"] != null)
                {
                   return responseData["data"]["id"].ToString();
@@ -108,12 +102,12 @@ namespace GIFBot.Shared.Utility
             if (response.IsSuccessStatusCode)
             {
                string jsonData = response.Content.ReadAsStringAsync().Result;
-               dynamic responseData = JsonConvert.DeserializeObject<object>(jsonData);
+               JsonObject responseData = JsonSerializer.Deserialize<JsonObject>(jsonData);
                if (responseData != null)
                {
                   if (responseData["data"] != null)
                   {
-                     JArray campaignData = responseData["data"];
+                     JsonArray campaignData = responseData["data"].AsArray();
                      foreach (var campaign in campaignData)
                      {
                         bool active = IsCampaignActive(client, authToken, campaign["id"].ToString());
@@ -155,7 +149,7 @@ namespace GIFBot.Shared.Utility
             if (response.IsSuccessStatusCode)
             {
                string jsonData = response.Content.ReadAsStringAsync().Result;
-               dynamic responseData = JsonConvert.DeserializeObject<object>(jsonData);
+               JsonObject responseData = JsonSerializer.Deserialize<JsonObject>(jsonData);
                if (responseData != null && responseData["data"] != null)
                {
                   if (responseData["data"]["retired_at"] == null) 
@@ -201,12 +195,12 @@ namespace GIFBot.Shared.Utility
             if (response.IsSuccessStatusCode)
             {
                string jsonData = response.Content.ReadAsStringAsync().Result;
-               dynamic responseData = JsonConvert.DeserializeObject<object>(jsonData);
+               JsonObject responseData = JsonSerializer.Deserialize<JsonObject>(jsonData);
                if (responseData != null)
                {
                   if (responseData["data"] != null)
                   {
-                     JArray donationData = responseData["data"];
+                     JsonArray donationData = responseData["data"].AsArray();
                      foreach (var donation in donationData)
                      {
                         TiltifyDonation current = new TiltifyDonation() {

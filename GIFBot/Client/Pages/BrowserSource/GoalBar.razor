@@ -5,7 +5,7 @@
 @using GIFBot.Shared.Models.Features
 @using GIFBot.Shared.Models.Visualization
 @using Microsoft.AspNetCore.Http.Connections
-@using Newtonsoft.Json
+@using System.Text.Json
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JSRuntime
 @inject HttpClient Http
@@ -49,7 +49,7 @@
 
       mHubConnection.On<string>("GoalBarDataUpdated", (data) =>
       {
-         mGoalBarData = JsonConvert.DeserializeObject<GoalBarData>(data);
+         mGoalBarData = JsonSerializer.Deserialize<GoalBarData>(data);
          UpdateGoalText(mGoalBarData.Goals.FirstOrDefault(g => g.IsActive == true));
          StateHasChanged();
       });
@@ -58,7 +58,7 @@
       await mHubConnection.StartAsync();
 
       string rawData = await mHubConnection.InvokeAsync<string>("GetGoalBarData");
-      mGoalBarData = JsonConvert.DeserializeObject<GoalBarData>(rawData);
+      mGoalBarData = JsonSerializer.Deserialize<GoalBarData>(rawData);
       UpdateGoalText(mGoalBarData.Goals.FirstOrDefault(g => g.IsActive == true));
       StateHasChanged();
    }

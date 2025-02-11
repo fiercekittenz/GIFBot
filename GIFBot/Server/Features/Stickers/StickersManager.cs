@@ -5,7 +5,7 @@ using GIFBot.Shared.Models.Features;
 using GIFBot.Shared.Models.GIFBot;
 using GIFBot.Shared.Utility;
 using Microsoft.AspNetCore.SignalR;
-using Newtonsoft.Json;
+using System.Text.Json;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -71,7 +71,7 @@ namespace GIFBot.Server.Features.Stickers
          if (!String.IsNullOrEmpty(DataFilePath) && File.Exists(DataFilePath))
          {
             string fileData = File.ReadAllText(DataFilePath);
-            mData = JsonConvert.DeserializeObject<StickerData>(fileData);
+            mData = JsonSerializer.Deserialize<StickerData>(fileData);
 
             if (mData.BitMinimum == 0)
             {
@@ -105,7 +105,7 @@ namespace GIFBot.Server.Features.Stickers
          {
             Directory.CreateDirectory(Path.GetDirectoryName(DataFilePath));
 
-            var jsonData = JsonConvert.SerializeObject(mData);
+            var jsonData = JsonSerializer.Serialize(mData);
             File.WriteAllText(DataFilePath, jsonData);
 
             _ = Bot?.SendLogMessage("Stickers data saved.");
@@ -143,7 +143,7 @@ namespace GIFBot.Server.Features.Stickers
                   }
                case AnimationEnums.AccessType.Moderator:
                   {
-                     if (!message.ChatMessage.IsModerator)
+                     if (!message.ChatMessage.UserDetail.IsModerator)
                      {
                         return;
                      }
@@ -151,7 +151,7 @@ namespace GIFBot.Server.Features.Stickers
                   break;
                case AnimationEnums.AccessType.Subscriber:
                   {
-                     if (!message.ChatMessage.IsSubscriber)
+                     if (!message.ChatMessage.UserDetail.IsSubscriber)
                      {
                         return;
                      }
@@ -159,7 +159,7 @@ namespace GIFBot.Server.Features.Stickers
                   break;
                case AnimationEnums.AccessType.VIP:
                   {
-                     if (!message.ChatMessage.IsVip)
+                     if (!message.ChatMessage.UserDetail.IsVip)
                      {
                         return;
                      }
@@ -174,7 +174,7 @@ namespace GIFBot.Server.Features.Stickers
                         return;
                      }
 
-                     if (Data.RestrictedUserMustBeSub && !message.ChatMessage.IsSubscriber)
+                     if (Data.RestrictedUserMustBeSub && !message.ChatMessage.UserDetail.IsSubscriber)
                      {
                         return;
                      }
@@ -365,7 +365,7 @@ namespace GIFBot.Server.Features.Stickers
 
             mLastTimeChatTriggered = DateTime.Now;
 
-            await clients.All.SendAsync("PlaceSticker", JsonConvert.SerializeObject(placedSticker));
+            await clients.All.SendAsync("PlaceSticker", JsonSerializer.Serialize(placedSticker));
          }
       }
 
@@ -509,7 +509,7 @@ namespace GIFBot.Server.Features.Stickers
                      clients = Bot.GIFBotHub.Clients;
                   }
 
-                  await Bot.GIFBotHub.Clients.All.SendAsync("PlaceSticker", JsonConvert.SerializeObject(request));
+                  await Bot.GIFBotHub.Clients.All.SendAsync("PlaceSticker", JsonSerializer.Serialize(request));
                }
 
                // Force this thread to sleep for N seconds between sticker placements to give us a nice buffer.

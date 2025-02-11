@@ -8,6 +8,9 @@ namespace GIFBot.Shared.Models.StreamElements
 {
    public class StreamElementsTipData
    {
+      // For S.T.J.
+      public StreamElementsTipData() { }
+
       public string Id { get; set; } = String.Empty;
 
       public string TipperName { get; set; } = String.Empty;

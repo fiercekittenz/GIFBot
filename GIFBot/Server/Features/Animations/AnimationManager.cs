@@ -6,7 +6,7 @@ using GIFBot.Shared.Models.Base;
 using GIFBot.Shared.Models.GIFBot;
 using GIFBot.Shared.Models.Visualization;
 using Microsoft.AspNetCore.SignalR;
-using Newtonsoft.Json;
+using System.Text.Json;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -81,7 +81,10 @@ namespace GIFBot.Server.GIFBot
          if (!String.IsNullOrEmpty(DataFilePath) && File.Exists(DataFilePath))
          {
             string fileData = File.ReadAllText(DataFilePath);
-            mData = JsonConvert.DeserializeObject<AnimationLibrary>(fileData);
+            mData = JsonSerializer.Deserialize<AnimationLibrary>(fileData, new JsonSerializerOptions {
+               PropertyNameCaseInsensitive = true,
+               Encoder = System.Text.Encodings.Web.JavaScriptEncoder.Default
+            });
 
             if (mData != null)
             {
@@ -112,7 +115,7 @@ namespace GIFBot.Server.GIFBot
          {
             Directory.CreateDirectory(Path.GetDirectoryName(DataFilePath));
 
-            var jsonData = JsonConvert.SerializeObject(mData);
+            var jsonData = JsonSerializer.Serialize(mData);
             File.WriteAllText(DataFilePath, jsonData);
 
             _ = Bot?.SendLogMessage("Animation data saved.");

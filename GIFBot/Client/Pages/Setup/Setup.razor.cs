@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.SignalR.Client;
 using System;
 using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace GIFBot.Client.Pages.Setup
 {
@@ -29,7 +30,7 @@ namespace GIFBot.Client.Pages.Setup
          string botSettingsJson = await mHubConnection.InvokeAsync<string>("GetBotSettings");
          if (!String.IsNullOrEmpty(botSettingsJson))
          {
-            mBotSettings = Newtonsoft.Json.JsonConvert.DeserializeObject<BotSettings>(botSettingsJson);
+            mBotSettings = JsonSerializer.Deserialize<BotSettings>(botSettingsJson);
             if (mBotSettings != null)
             {
                BotNameModel.Value = mBotSettings.BotName.Trim();
@@ -54,7 +55,7 @@ namespace GIFBot.Client.Pages.Setup
       private async Task HandleStartSetup()
       {
          mBotSettings.CurrentSetupStep = SetupStep.BotOauth;
-         await mHubConnection.InvokeAsync("UpdateBotSettings", Newtonsoft.Json.JsonConvert.SerializeObject(mBotSettings), false);
+         await mHubConnection.InvokeAsync("UpdateBotSettings", JsonSerializer.Serialize(mBotSettings), false);
          StateHasChanged();
       }
 
@@ -62,7 +63,7 @@ namespace GIFBot.Client.Pages.Setup
       {
          // This next step will take us off site, which means we need to persist any form information collected so far and retrieve it
          // from the server when we circle back.
-         await mHubConnection.InvokeAsync("UpdateBotSettings", Newtonsoft.Json.JsonConvert.SerializeObject(mBotSettings), false);
+         await mHubConnection.InvokeAsync("UpdateBotSettings", JsonSerializer.Serialize(mBotSettings), false);
 
          // Forcibly forward the user to the correct URL for authentication. This is necessary,
          // because Twitch will redirect them and it will be a CORS error otherwise.
@@ -73,7 +74,7 @@ namespace GIFBot.Client.Pages.Setup
       private async Task HandleSkipTwitchStreamerAuth()
       {
          mBotSettings.CurrentSetupStep = SetupStep.Finished;
-         await mHubConnection.InvokeAsync("UpdateBotSettings", Newtonsoft.Json.JsonConvert.SerializeObject(mBotSettings), false);
+         await mHubConnection.InvokeAsync("UpdateBotSettings", JsonSerializer.Serialize(mBotSettings), false);
          StateHasChanged();
       }
 
@@ -81,7 +82,7 @@ namespace GIFBot.Client.Pages.Setup
       {
          // This next step will take us off site, which means we need to persist any form information collected so far and retrieve it
          // from the server when we circle back.
-         await mHubConnection.InvokeAsync("UpdateBotSettings", Newtonsoft.Json.JsonConvert.SerializeObject(mBotSettings), false);
+         await mHubConnection.InvokeAsync("UpdateBotSettings", JsonSerializer.Serialize(mBotSettings), false);
 
          // Forcibly forward the user to the correct URL for authentication. This is necessary,
          // because Twitch will redirect them and it will be a CORS error otherwise.
@@ -92,7 +93,7 @@ namespace GIFBot.Client.Pages.Setup
       private async Task HandleSkipStreamlabsAuth()
       {
          mBotSettings.CurrentSetupStep = SetupStep.Finished;
-         await mHubConnection.InvokeAsync("UpdateBotSettings", Newtonsoft.Json.JsonConvert.SerializeObject(mBotSettings), true);
+         await mHubConnection.InvokeAsync("UpdateBotSettings", JsonSerializer.Serialize(mBotSettings), true);
          StateHasChanged();
       }
 
@@ -117,7 +118,7 @@ namespace GIFBot.Client.Pages.Setup
       private async Task SetReauthenticationVersion()
       {
          mBotSettings.BotAuthenticationVersion = BotSettings.skCurrentAuthenticationVersion;
-         await mHubConnection.InvokeAsync("UpdateBotSettings", Newtonsoft.Json.JsonConvert.SerializeObject(mBotSettings), true);
+         await mHubConnection.InvokeAsync("UpdateBotSettings", JsonSerializer.Serialize(mBotSettings), true);
          StateHasChanged();
       }
 

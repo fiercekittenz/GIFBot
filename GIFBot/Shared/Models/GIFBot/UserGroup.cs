@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -7,6 +6,9 @@ namespace GIFBot.Shared.Models.GIFBot
 {
    public class UserGroup
    {
+      // For S.T.J.
+      public UserGroup() { }
+
       public UserGroup(string name)
       {
          Id = Guid.NewGuid();
@@ -18,7 +20,7 @@ namespace GIFBot.Shared.Models.GIFBot
       public List<UserEntry> UserEntries { get; set; } = new List<UserEntry>();
 
       // DEPRECATED
-      [JsonIgnore]
+      [System.Text.Json.Serialization.JsonIgnore]
       public List<string> Users { get; set; } = new List<string>();
    }
 

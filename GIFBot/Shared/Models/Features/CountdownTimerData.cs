@@ -29,6 +29,9 @@ namespace GIFBot.Shared.Models.Features
       } = new ObservableCollection<CountdownTimerAction>();
 
       #endregion
+
+      // For S.T.J.
+      public CountdownTimerData() { }
    }
 
    #region Enums

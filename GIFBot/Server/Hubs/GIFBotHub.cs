@@ -10,7 +10,7 @@ using GIFBot.Shared.Models.Visualization;
 using GIFBot.Shared.Utility;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SignalR;
-using Newtonsoft.Json;
+using System.Text.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,6 +20,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Telerik.DataSource;
 using Telerik.DataSource.Extensions;
+using Microsoft.AspNetCore.SignalR.Client;
 
 namespace GIFBot.Server.Hubs
 {
@@ -46,13 +47,13 @@ namespace GIFBot.Server.Hubs
 
          if (Bot != null && Bot.StickersManager != null && Bot.StickersManager.Data != null)
          {
-            await Clients.All.SendAsync("SendAllPlacedStickers", JsonConvert.SerializeObject(Bot.StickersManager.PlacedStickers));
+            await Clients.All.SendAsync("SendAllPlacedStickers", JsonSerializer.Serialize(Bot.StickersManager.PlacedStickers));
             await Clients.All.SendAsync("UpdateStickerAudioSettings", Bot.StickersManager.Data.Audio, Bot.StickersManager.Data.Volume);
          }
 
          if (Bot != null && Bot.BackdropManager != null && Bot.BackdropManager.ActiveBackdrop != null)
          {
-            await Clients.All.SendAsync("HangBackdrop", JsonConvert.SerializeObject(Bot.BackdropManager.ActiveBackdrop));
+            await Clients.All.SendAsync("HangBackdrop", JsonSerializer.Serialize(Bot.BackdropManager.ActiveBackdrop));
          }
       }
 
@@ -87,8 +88,9 @@ namespace GIFBot.Server.Hubs
       public string GetBotSettings()
       {
          if (Bot != null)
-         {
-            return JsonConvert.SerializeObject(Bot.BotSettings);
+         {            
+            TwitchUserData user = GetCurrentUser(Bot.BotSettings.BotOauthToken); //debug - remove when done
+            return JsonSerializer.Serialize(Bot.BotSettings);
          }
 
          return String.Empty;
@@ -107,7 +109,7 @@ namespace GIFBot.Server.Hubs
             string oldTiltifyClientId = Bot.BotSettings.TiltifyClientId;
             string oldTiltifyClientSecret = Bot.BotSettings.TiltifyClientSecret;
 
-            Bot.BotSettings = JsonConvert.DeserializeObject<BotSettings>(jsonData);
+            Bot.BotSettings = JsonSerializer.Deserialize<BotSettings>(jsonData);
             if (reconnectToTwitch)
             {
                bool channelHasChanged = ((String.IsNullOrEmpty(oldChannelName) && 
@@ -141,7 +143,7 @@ namespace GIFBot.Server.Hubs
 
       public bool AddThrottledUser(string data)
       {
-         ThrottledUserData throttledUser = JsonConvert.DeserializeObject<ThrottledUserData>(data);
+         ThrottledUserData throttledUser = JsonSerializer.Deserialize<ThrottledUserData>(data);
          if (Bot != null &&
              throttledUser != null &&
              !Bot.BotSettings.ThrottledUsers.Where(t => t.Name.Equals(throttledUser.Name, StringComparison.OrdinalIgnoreCase)).Any())
@@ -172,7 +174,7 @@ namespace GIFBot.Server.Hubs
 
       public bool UpdateThrottledUser(string data)
       {
-         ThrottledUserData throttledUser = JsonConvert.DeserializeObject<ThrottledUserData>(data);
+         ThrottledUserData throttledUser = JsonSerializer.Deserialize<ThrottledUserData>(data);
          if (Bot != null && throttledUser != null)
          {
             ThrottledUserData existingUser = Bot.BotSettings.ThrottledUsers.FirstOrDefault(t => t.Name.Equals(throttledUser.Name, StringComparison.OrdinalIgnoreCase));
@@ -400,7 +402,7 @@ namespace GIFBot.Server.Hubs
 
          commands.Sort();
 
-         return JsonConvert.SerializeObject(commands);
+         return JsonSerializer.Serialize(commands);
       }
 
       /// <summary>
@@ -416,7 +418,7 @@ namespace GIFBot.Server.Hubs
             options.Add(new AnimationSelectorItem() { Id = anim.Id, DisplayName = anim.Command });
          }
 
-         return JsonConvert.SerializeObject(options);
+         return JsonSerializer.Serialize(options);
       }
 
       /// <summary>
@@ -437,7 +439,7 @@ namespace GIFBot.Server.Hubs
       public string GetAnimationTreeData()
       {
          IEnumerable<AnimationTreeItem> treeData = Bot?.AnimationManager.Data.GetTreeData();
-         return JsonConvert.SerializeObject(treeData);
+         return JsonSerializer.Serialize(treeData);
       }
 
       /// <summary>
@@ -469,7 +471,7 @@ namespace GIFBot.Server.Hubs
       public bool MoveAnimations(string rawAnimationIds, Guid categoryId)
       {
          AnimationCategory category = Bot.AnimationManager.GetCategoryById(categoryId);
-         List<Guid> animationIds = JsonConvert.DeserializeObject<List<Guid>>(rawAnimationIds);
+         List<Guid> animationIds = JsonSerializer.Deserialize<List<Guid>>(rawAnimationIds);
 
          if (animationIds.Any() && category != null)
          {
@@ -538,7 +540,7 @@ namespace GIFBot.Server.Hubs
          AnimationData animation = Bot.AnimationManager.GetAnimationByCommand(animationCommand);
          if (animation != null)
          {
-            return JsonConvert.SerializeObject(animation);
+            return JsonSerializer.Serialize(animation);
          }
 
          return String.Empty;
@@ -552,7 +554,7 @@ namespace GIFBot.Server.Hubs
          AnimationData animation = Bot.AnimationManager.GetAnimationById(id);
          if (animation != null)
          {
-            return JsonConvert.SerializeObject(animation);
+            return JsonSerializer.Serialize(animation);
          }
 
          return String.Empty;
@@ -654,7 +656,7 @@ namespace GIFBot.Server.Hubs
       public string GetVisualDimensions(string visualFileName)
       {
          Tuple<int, int> dimensions = AnimationLibrary.GetVisualFileDimensions(visualFileName);
-         return JsonConvert.SerializeObject(dimensions);
+         return JsonSerializer.Serialize(dimensions);
       }
 
       /// <summary>
@@ -717,7 +719,7 @@ namespace GIFBot.Server.Hubs
       /// </summary>
       public void TestAnimation(string animationData)
       {
-         AnimationData animation = JsonConvert.DeserializeObject<AnimationData>(animationData);
+         AnimationData animation = JsonSerializer.Deserialize<AnimationData>(animationData);
          if (animation != null)
          {
             Bot.AnimationManager.ForceQueueAnimation(animation, Bot.BotSettings.BotName, "123");
@@ -729,7 +731,7 @@ namespace GIFBot.Server.Hubs
       /// </summary>
       public bool DeleteAnimations(string rawIds)
       {
-         List<Guid> ids = JsonConvert.DeserializeObject<List<Guid>>(rawIds);
+         List<Guid> ids = JsonSerializer.Deserialize<List<Guid>>(rawIds);
          if (ids.Any())
          {
             bool result = true;
@@ -773,7 +775,7 @@ namespace GIFBot.Server.Hubs
          AnimationCategory category = Bot.AnimationManager.GetCategoryById(id);
          if (category != null)
          {
-            return JsonConvert.SerializeObject(category);
+            return JsonSerializer.Serialize(category);
          }
 
          return String.Empty;
@@ -785,7 +787,7 @@ namespace GIFBot.Server.Hubs
       /// <param name="animationData"></param>
       public void SaveAnimation(string animationData)
       {
-         AnimationData animation = JsonConvert.DeserializeObject<AnimationData>(animationData);
+         AnimationData animation = JsonSerializer.Deserialize<AnimationData>(animationData);
          if (animation != null)
          {
             Bot.AnimationManager.UpdateAnimation(animation);
@@ -953,7 +955,7 @@ namespace GIFBot.Server.Hubs
       {
          if (Bot != null && Bot.AnimationManager != null && !String.IsNullOrEmpty(animationGuidsRaw))
          {
-            List<Guid> animationGuids = JsonConvert.DeserializeObject<List<Guid>>(animationGuidsRaw);
+            List<Guid> animationGuids = JsonSerializer.Deserialize<List<Guid>>(animationGuidsRaw);
             foreach (var guid in animationGuids)
             {
                AnimationData animation = Bot.AnimationManager.GetAnimationById(guid);
@@ -1003,7 +1005,7 @@ namespace GIFBot.Server.Hubs
             }
          }
 
-         return JsonConvert.SerializeObject(results);
+         return JsonSerializer.Serialize(results);
       }
 
       /// <summary>
@@ -1241,7 +1243,7 @@ namespace GIFBot.Server.Hubs
       {
          if (Bot != null && Bot.GreeterManager != null)
          {
-            return JsonConvert.SerializeObject(Bot.GreeterManager.Data);
+            return JsonSerializer.Serialize(Bot.GreeterManager.Data);
          }
 
          return null;
@@ -1265,7 +1267,7 @@ namespace GIFBot.Server.Hubs
       {
          if (!String.IsNullOrEmpty(rawData) && Bot != null && Bot.GreeterManager != null)
          {
-            GreeterEntry entry = JsonConvert.DeserializeObject<GreeterEntry>(rawData);
+            GreeterEntry entry = JsonSerializer.Deserialize<GreeterEntry>(rawData);
             if (entry != null)
             {
                GreeterEntry original = Bot.GreeterManager.Data.Entries.FirstOrDefault(e => e.Id == entry.Id);
@@ -1306,7 +1308,7 @@ namespace GIFBot.Server.Hubs
             GreeterEntry entry = Bot.GreeterManager.Data.Entries.FirstOrDefault(e => e.Id == id);
             if (entry != null)
             {
-               return JsonConvert.SerializeObject(entry.Recipients);
+               return JsonSerializer.Serialize(entry.Recipients);
             }
          }
 
@@ -1321,7 +1323,7 @@ namespace GIFBot.Server.Hubs
       {
          if (Bot != null && Bot.StickersManager != null)
          {
-            return JsonConvert.SerializeObject(Bot.StickersManager.Data);
+            return JsonSerializer.Serialize(Bot.StickersManager.Data);
          }
 
          return null;
@@ -1331,7 +1333,7 @@ namespace GIFBot.Server.Hubs
       {
          if (!String.IsNullOrEmpty(rawData) && Bot != null && Bot.StickersManager != null)
          {
-            Bot.StickersManager.Data = JsonConvert.DeserializeObject<StickerData>(rawData);
+            Bot.StickersManager.Data = JsonSerializer.Deserialize<StickerData>(rawData);
             Bot.StickersManager.Data.Command.Replace(" ", "");
             Bot.StickersManager.SaveData();
 
@@ -1344,7 +1346,7 @@ namespace GIFBot.Server.Hubs
          if (Bot != null && Bot.StickersManager != null && !String.IsNullOrEmpty(stickerFile))
          {
             Tuple<int, int> dimensions = AnimationLibrary.GetVisualFileDimensions(stickerFile);
-            return JsonConvert.SerializeObject(dimensions);
+            return JsonSerializer.Serialize(dimensions);
          }
 
          return String.Empty;
@@ -1406,7 +1408,7 @@ namespace GIFBot.Server.Hubs
       {
          if (Bot != null && Bot.StickersManager != null && !String.IsNullOrEmpty(stickerGuidsRaw))
          {
-            List<Guid> stickerGuids = JsonConvert.DeserializeObject<List<Guid>>(stickerGuidsRaw);
+            List<Guid> stickerGuids = JsonSerializer.Deserialize<List<Guid>>(stickerGuidsRaw);
             foreach (var guid in stickerGuids)
             {
                Tuple<StickerCategory, StickerEntryData> sticker = Bot.StickersManager.GetStickerEntryById(guid);
@@ -1427,7 +1429,7 @@ namespace GIFBot.Server.Hubs
       {
          if (Bot != null && Bot.StickersManager != null && !String.IsNullOrEmpty(stickerGuidsRaw))
          {
-            List<Guid> stickerGuids = JsonConvert.DeserializeObject<List<Guid>>(stickerGuidsRaw);
+            List<Guid> stickerGuids = JsonSerializer.Deserialize<List<Guid>>(stickerGuidsRaw);
             foreach (var guid in stickerGuids)
             {
                Tuple<StickerCategory, StickerEntryData> sticker = Bot.StickersManager.GetStickerEntryById(guid);
@@ -1448,7 +1450,7 @@ namespace GIFBot.Server.Hubs
       {
          if (Bot != null && Bot.StickersManager != null && !String.IsNullOrEmpty(stickerGuidsRaw))
          {
-            List<Guid> stickerGuids = JsonConvert.DeserializeObject<List<Guid>>(stickerGuidsRaw);
+            List<Guid> stickerGuids = JsonSerializer.Deserialize<List<Guid>>(stickerGuidsRaw);
             foreach (var guid in stickerGuids)
             {
                Tuple<StickerCategory, StickerEntryData> sticker = Bot.StickersManager.GetStickerEntryById(guid);
@@ -1472,7 +1474,7 @@ namespace GIFBot.Server.Hubs
             StickerCategory newCategory = Bot.StickersManager.Data.Categories.FirstOrDefault(c => c.Id == newCategoryId);
             if (newCategory != null)
             {
-               List<Guid> stickerGuids = JsonConvert.DeserializeObject<List<Guid>>(stickerGuidsRaw);
+               List<Guid> stickerGuids = JsonSerializer.Deserialize<List<Guid>>(stickerGuidsRaw);
                foreach (var guid in stickerGuids)
                {
                   Tuple<StickerCategory, StickerEntryData> sticker = Bot.StickersManager.GetStickerEntryById(guid);
@@ -1495,7 +1497,7 @@ namespace GIFBot.Server.Hubs
       {
          if (Bot != null && Bot.StickersManager != null && !String.IsNullOrEmpty(stickerData))
          {
-            StickerEntryData entry = JsonConvert.DeserializeObject<StickerEntryData>(stickerData);
+            StickerEntryData entry = JsonSerializer.Deserialize<StickerEntryData>(stickerData);
             if (entry != null && !String.IsNullOrEmpty(entry.Visual))
             {
                int topRandomToken = Bot.StickersManager.Data.CanvasHeight - entry.Placement.Height;
@@ -1526,7 +1528,7 @@ namespace GIFBot.Server.Hubs
 
       public bool UpdateStickerEntry(string updatedDataRaw)
       {
-         StickerEntryData updatedStickerEntry = JsonConvert.DeserializeObject<StickerEntryData>(updatedDataRaw);
+         StickerEntryData updatedStickerEntry = JsonSerializer.Deserialize<StickerEntryData>(updatedDataRaw);
 
          if (Bot != null && Bot.StickersManager != null && updatedStickerEntry != null)
          {
@@ -1658,7 +1660,7 @@ namespace GIFBot.Server.Hubs
       {
          if (Bot != null && Bot.BackdropManager != null)
          {
-            return JsonConvert.SerializeObject(Bot.BackdropManager.Data);
+            return JsonSerializer.Serialize(Bot.BackdropManager.Data);
          }
 
          return String.Empty;
@@ -1668,7 +1670,7 @@ namespace GIFBot.Server.Hubs
       {
          if (!String.IsNullOrEmpty(rawData) && Bot != null && Bot.BackdropManager != null)
          {
-            Bot.BackdropManager.Data = JsonConvert.DeserializeObject<BackdropData>(rawData);
+            Bot.BackdropManager.Data = JsonSerializer.Deserialize<BackdropData>(rawData);
             Bot.BackdropManager.SaveData();
 
             return true;
@@ -1706,7 +1708,7 @@ namespace GIFBot.Server.Hubs
       {
          if (!String.IsNullOrEmpty(rawData) && Bot != null && Bot.BackdropManager != null)
          {
-            var backdrop = JsonConvert.DeserializeObject<BackdropVideoEntryData>(rawData);
+            var backdrop = JsonSerializer.Deserialize<BackdropVideoEntryData>(rawData);
             if (backdrop != null)
             {
                var existing = Bot.BackdropManager.Data.Backdrops.FirstOrDefault(c => c.Name.Equals(backdrop.Name, StringComparison.OrdinalIgnoreCase) && c.Id != backdrop.Id);
@@ -1788,7 +1790,7 @@ namespace GIFBot.Server.Hubs
       {
          if (Bot != null && Bot.CountdownTimerManager != null)
          {
-            return JsonConvert.SerializeObject(Bot.CountdownTimerManager.Data);
+            return JsonSerializer.Serialize(Bot.CountdownTimerManager.Data);
          }
 
          return String.Empty;
@@ -1800,7 +1802,7 @@ namespace GIFBot.Server.Hubs
          {
             int currentTimerStartValue = Bot.CountdownTimerManager.Data.TimerStartValueInMinutes;
 
-            Bot.CountdownTimerManager.Data = JsonConvert.DeserializeObject<CountdownTimerData>(rawData);
+            Bot.CountdownTimerManager.Data = JsonSerializer.Deserialize<CountdownTimerData>(rawData);
 
             if (Bot.CountdownTimerManager.Data.Current == TimeSpan.Zero ||
                 currentTimerStartValue != Bot.CountdownTimerManager.Data.TimerStartValueInMinutes)
@@ -1845,7 +1847,7 @@ namespace GIFBot.Server.Hubs
       {
          if (!String.IsNullOrEmpty(rawData) && Bot != null && Bot.CountdownTimerManager != null)
          {
-            var action = JsonConvert.DeserializeObject<CountdownTimerAction>(rawData);
+            var action = JsonSerializer.Deserialize<CountdownTimerAction>(rawData);
             if (action != null)
             {
                var existing = Bot.BackdropManager.Data.Backdrops.FirstOrDefault(c => c.Name.Equals(action.Name, StringComparison.OrdinalIgnoreCase) && c.Id != action.Id);
@@ -1926,7 +1928,7 @@ namespace GIFBot.Server.Hubs
       {
          if (Bot != null && Bot.GoalBarManager != null)
          {
-            return JsonConvert.SerializeObject(Bot.GoalBarManager.Data);
+            return JsonSerializer.Serialize(Bot.GoalBarManager.Data);
          }
 
          return null;
@@ -1936,11 +1938,11 @@ namespace GIFBot.Server.Hubs
       {
          if (!String.IsNullOrEmpty(rawData) && Bot != null && Bot.GoalBarManager != null)
          {
-            Bot.GoalBarManager.Data = JsonConvert.DeserializeObject<GoalBarData>(rawData);
+            Bot.GoalBarManager.Data = JsonSerializer.Deserialize<GoalBarData>(rawData);
             Bot.GoalBarManager.RebalanceGoals();
 
             Bot.GoalBarManager.SaveData();
-            await Bot.GIFBotHub.Clients.All.SendAsync("GoalBarDataUpdated", JsonConvert.SerializeObject(Bot.GoalBarManager.Data));
+            await Bot.GIFBotHub.Clients.All.SendAsync("GoalBarDataUpdated", JsonSerializer.Serialize(Bot.GoalBarManager.Data));
          }
       }
 
@@ -1948,7 +1950,7 @@ namespace GIFBot.Server.Hubs
       {
          if (Bot != null && Bot.GoalBarManager != null)
          {
-            return JsonConvert.SerializeObject(Bot.GoalBarManager.Data.Goals);
+            return JsonSerializer.Serialize(Bot.GoalBarManager.Data.Goals);
          }
 
          return String.Empty;
@@ -1987,7 +1989,7 @@ namespace GIFBot.Server.Hubs
                }
 
                Bot.GoalBarManager.SaveData();
-               await Bot.GIFBotHub.Clients.All.SendAsync("GoalBarDataUpdated", JsonConvert.SerializeObject(Bot.GoalBarManager.Data));
+               await Bot.GIFBotHub.Clients.All.SendAsync("GoalBarDataUpdated", JsonSerializer.Serialize(Bot.GoalBarManager.Data));
                return true;
             }
          }
@@ -2004,7 +2006,7 @@ namespace GIFBot.Server.Hubs
             {
                Bot.GoalBarManager.Data.Goals.Remove(existingGoal);
                Bot.GoalBarManager.SaveData();
-               await Bot.GIFBotHub.Clients.All.SendAsync("GoalBarDataUpdated", JsonConvert.SerializeObject(Bot.GoalBarManager.Data));
+               await Bot.GIFBotHub.Clients.All.SendAsync("GoalBarDataUpdated", JsonSerializer.Serialize(Bot.GoalBarManager.Data));
                return true;
             }
          }
@@ -2019,91 +2021,6 @@ namespace GIFBot.Server.Hubs
       {
          string currentDirectory = System.Environment.CurrentDirectory.Replace("Server", "Client");
          return Path.Combine(currentDirectory, "wwwroot", "goalbar.html");
-      }
-
-      #endregion
-
-      #region Twitch Channel Data
-
-      public string GetUserList()
-      {
-         List<TwitchUserViewModel> userViewModels = new List<TwitchUserViewModel>();
-         foreach (var user in Bot.UsersInChannel)
-         {
-            userViewModels.Add(new TwitchUserViewModel(user));
-         }
-
-         return JsonConvert.SerializeObject(userViewModels);
-      }
-
-      public void BanUser(string username)
-      {
-         if (!String.IsNullOrEmpty(username))
-         {
-            Bot.SendChatMessage($"/ban {username}");
-         }
-      }
-
-      public void BanUsers(string rawUsernames)
-      {
-         if (!String.IsNullOrEmpty(rawUsernames))
-         {
-            List<TwitchUserViewModel> users = JsonConvert.DeserializeObject<List<TwitchUserViewModel>>(rawUsernames);
-            if (users.Any())
-            {
-               _ = Task.Run(() =>
-               {
-                  // Ban the fuckers.
-                  int numberBanned = 0;
-                  foreach (var user in users)
-                  {
-                     ++numberBanned;
-                     Bot.SendChatMessage($"/ban {user.Name}");
-
-                     if (numberBanned > kMaxChatCommandsPerFrame)
-                     {
-                        numberBanned = 0;
-                        Thread.Sleep(30000);
-                     }
-                  }
-               });
-            }
-         }
-      }
-
-      public void TimeoutUser(string username)
-      {
-         if (!String.IsNullOrEmpty(username))
-         {
-            Bot.SendChatMessage($"/timeout {username}");
-         }
-      }
-
-      public void TimeoutUsers(string rawUsernames)
-      {
-         if (!String.IsNullOrEmpty(rawUsernames))
-         {
-            List<TwitchUserViewModel> users = JsonConvert.DeserializeObject<List<TwitchUserViewModel>>(rawUsernames);
-            if (users.Any())
-            {
-               _ = Task.Run(() =>
-               {
-                  // Timeout the fuckers.
-                  int numberTimedOut = 0;
-                  foreach (var user in users)
-                  {
-                     ++numberTimedOut;
-                     Bot.SendChatMessage($"/timeout {user.Name}");
-
-                     if (numberTimedOut > kMaxChatCommandsPerFrame)
-                     {
-                        numberTimedOut = 0;
-                        Thread.Sleep(30000);
-                     }
-                  }
-               });
-            }
-         }
       }
 
       #endregion
@@ -2125,7 +2042,7 @@ namespace GIFBot.Server.Hubs
             }
          }
 
-         return JsonConvert.SerializeObject(campaigns);
+         return JsonSerializer.Serialize(campaigns);
       }
 
       #endregion
@@ -2136,7 +2053,7 @@ namespace GIFBot.Server.Hubs
       {
          if (Bot?.GiveawayManager?.Data != null)
          {
-            return JsonConvert.SerializeObject(Bot.GiveawayManager.Data);
+            return JsonSerializer.Serialize(Bot.GiveawayManager.Data);
          }
 
          return String.Empty;
@@ -2146,7 +2063,7 @@ namespace GIFBot.Server.Hubs
       {
          if (Bot?.GiveawayManager?.Data != null)
          {
-            Bot.GiveawayManager.Data = JsonConvert.DeserializeObject<GiveawayData>(giveawayDataRaw);
+            Bot.GiveawayManager.Data = JsonSerializer.Deserialize<GiveawayData>(giveawayDataRaw);
             Bot.GiveawayManager.SaveData();
          }
       }
@@ -2226,12 +2143,6 @@ namespace GIFBot.Server.Hubs
       /// Reference to the hosted environment.
       /// </summary>
       public IWebHostEnvironment WebHostEnvironment { get; private set; }
-
-      #endregion
-
-      #region Private Members
-
-      private static int kMaxChatCommandsPerFrame = 75;
 
       #endregion
    }

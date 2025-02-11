@@ -11,6 +11,9 @@ namespace GIFBot.Shared.Models.Features
 {
    public class BackdropData
    {
+      // For S.T.J.
+      public BackdropData() { }
+
       public bool Enabled { get; set; } = false;
 
       public string Command { get; set; } = "!backdrop";

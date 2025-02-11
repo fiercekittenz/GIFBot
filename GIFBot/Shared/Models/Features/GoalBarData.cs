@@ -7,12 +7,18 @@ namespace GIFBot.Shared.Models.Features
 {
    public class GoalBarData
    {
+      // For S.T.J.
+      public GoalBarData() { }
+
       public GoalBarSettings Settings { get; set; } = new GoalBarSettings();
       public List<GoalData> Goals { get; set; } = new List<GoalData>();
    }
 
    public class GoalBarSettings
    {
+      // For S.T.J.
+      public GoalBarSettings() { }
+
       public bool Enabled { get; set; } = false;
 
       public bool IncludeCheers { get; set; } = false;
@@ -73,6 +79,9 @@ namespace GIFBot.Shared.Models.Features
 
    public class GoalMilestone
    {
+      // For S.T.J.
+      public GoalMilestone() { }
+
       [Required]
       [Range(1, 100)]
       public int PercentageTriggerPoint { get; set; } = 100;

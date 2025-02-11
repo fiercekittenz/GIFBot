@@ -3,7 +3,7 @@ using GIFBot.Shared.Models.Visualization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.SignalR.Client;
-using Newtonsoft.Json;
+using System.Text.Json;
 using Radzen;
 using System;
 using System.Collections.Generic;
@@ -96,7 +96,7 @@ namespace GIFBot.Client.Pages.Features
          string userGroupsRaw = await mHubConnection.InvokeAsync<string>("GetUserGroupList");
          if (!String.IsNullOrEmpty(userGroupsRaw))
          {
-            mUserGroupNames = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(userGroupsRaw);
+            mUserGroupNames = JsonSerializer.Deserialize<List<string>>(userGroupsRaw);
             mUserGroupNames.Sort();
          }
 
@@ -122,7 +122,7 @@ namespace GIFBot.Client.Pages.Features
          string rawData = await mHubConnection.InvokeAsync<string>("GetRegurgitatorPackages");
          if (!string.IsNullOrEmpty(rawData))
          {
-            List<RegurgitatorPackageBase> packages = JsonConvert.DeserializeObject<List<RegurgitatorPackageBase>>(rawData);
+            List<RegurgitatorPackageBase> packages = JsonSerializer.Deserialize<List<RegurgitatorPackageBase>>(rawData);
 
             foreach (var package in packages)
             {

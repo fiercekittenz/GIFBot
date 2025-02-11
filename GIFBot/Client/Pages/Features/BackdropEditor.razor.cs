@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.JSInterop;
-using Newtonsoft.Json;
+using System.Text.Json;
 using Radzen;
 using System;
 using System.Collections.Generic;
@@ -76,7 +76,7 @@ namespace GIFBot.Client.Pages.Features
 
       private async Task OnSaveChanges()
       {
-         await mHubConnection.InvokeAsync("UpdateBackdropData", JsonConvert.SerializeObject(Data));
+         await mHubConnection.InvokeAsync("UpdateBackdropData", JsonSerializer.Serialize(Data));
          await GetBackdropDataFromHub();
          NotificationService.Notify(NotificationSeverity.Success, "Save Successful", "The backdrop data has been saved.", 5000);
          await InvokeAsync(() => { StateHasChanged(); });
@@ -140,7 +140,7 @@ namespace GIFBot.Client.Pages.Features
 
       private async Task HandleConfirmEditCommand()
       {
-         bool result = await mHubConnection.InvokeAsync<bool>("UpdateBackdrop", JsonConvert.SerializeObject(mTempData));
+         bool result = await mHubConnection.InvokeAsync<bool>("UpdateBackdrop", JsonSerializer.Serialize(mTempData));
          if (result)
          {
             NotificationService.Notify(NotificationSeverity.Success, "Success", "The backdrop has been updated.", 5000);
@@ -231,7 +231,7 @@ namespace GIFBot.Client.Pages.Features
       private async Task GetBackdropDataFromHub()
       {
          string rawData = await mHubConnection.InvokeAsync<string>("GetBackdropData");
-         Data = JsonConvert.DeserializeObject<BackdropData>(rawData);
+         Data = JsonSerializer.Deserialize<BackdropData>(rawData);
          CurrentlyEditedRedemption = (int)Data.RedemptionType;
       }
 

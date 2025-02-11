@@ -27,6 +27,6 @@ namespace GIFBot.Shared.Models.Animation
 
       public int Left { get; set; } = 0;
 
-      public bool IsOutOfBounds = false;
+      public bool IsOutOfBounds { get; set; } = false;
    }
 }

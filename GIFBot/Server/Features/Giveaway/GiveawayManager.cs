@@ -4,7 +4,7 @@ using GIFBot.Shared;
 using GIFBot.Shared.Models.Features;
 using GIFBot.Shared.Utility;
 using Microsoft.AspNetCore.SignalR;
-using Newtonsoft.Json;
+using System.Text.Json;
 using System;
 using System.IO;
 using System.Linq;
@@ -177,7 +177,7 @@ namespace GIFBot.Server.Features.Giveaway
          {
             string entrant = message.ChatMessage.DisplayName.ToLower();
 
-            InternalAddEntrant(entrant, message.ChatMessage.IsSubscriber, message.ChatMessage.IsVip, true);
+            InternalAddEntrant(entrant, message.ChatMessage.UserDetail.IsSubscriber, message.ChatMessage.UserDetail.IsVip, true);
          }
       }
 

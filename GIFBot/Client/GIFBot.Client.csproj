@@ -4,23 +4,24 @@
     <TargetFramework>net8.0</TargetFramework>
     <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
     <BlazorWebAssemblyEnableLinking>false</BlazorWebAssemblyEnableLinking>
+    <BlazorCacheBootResources>false</BlazorCacheBootResources>
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="wwwroot\media\**" />
-    <Compile Remove="wwwroot\_content\**" />
-    <Compile Remove="wwwroot\_framework\**" />
-    <Content Remove="wwwroot\media\**" />
-    <Content Remove="wwwroot\_content\**" />
-    <Content Remove="wwwroot\_framework\**" />
-    <EmbeddedResource Remove="wwwroot\media\**" />
-    <EmbeddedResource Remove="wwwroot\_content\**" />
-    <EmbeddedResource Remove="wwwroot\_framework\**" />
-    <None Remove="wwwroot\media\**" />
-    <None Remove="wwwroot\_content\**" />
-    <None Remove="wwwroot\_framework\**" />
-  </ItemGroup>
+   <ItemGroup>
+      <Compile Remove="wwwroot\media\**" />
+      <Compile Remove="wwwroot\_content\**" />
+      <Compile Remove="wwwroot\_framework\**" />
+      <Content Remove="wwwroot\media\**" />
+      <Content Remove="wwwroot\_content\**" />
+      <Content Remove="wwwroot\_framework\**" />
+      <EmbeddedResource Remove="wwwroot\media\**" />
+      <EmbeddedResource Remove="wwwroot\_content\**" />
+      <EmbeddedResource Remove="wwwroot\_framework\**" />
+      <None Remove="wwwroot\media\**" />
+      <None Remove="wwwroot\_content\**" />
+      <None Remove="wwwroot\_framework\**" />
+   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="bootstrap" Version="5.3.3" />
@@ -35,12 +36,18 @@
     <PackageReference Include="Telerik.UI.for.Blazor" Version="6.0.2" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Shared\GIFBot.Shared.csproj" />
-  </ItemGroup>
+   <ItemGroup>
+      <ProjectReference Include="..\Shared\GIFBot.Shared.csproj" />
+   </ItemGroup>
 
-  <ItemGroup>
-    <ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
-  </ItemGroup>
+   <ItemGroup>
+      <Reference Include="TwitchLib.Client.Enums">
+         <HintPath>..\TwitchLib\TwitchLib.Client.Enums.dll</HintPath>
+      </Reference>
+   </ItemGroup>
+
+   <ItemGroup>
+      <ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
+   </ItemGroup>
 
 </Project>

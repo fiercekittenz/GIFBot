@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 using TwitchLib.Api.Core.Enums;
 
 namespace GIFBot.Shared
@@ -20,6 +21,9 @@ namespace GIFBot.Shared
    /// </summary>
    public class AnimationRequest
    {
+      // For S.T.J.
+      public AnimationRequest() { }
+
       public AnimationRequest(AnimationData animationData, 
                               string channelName, 
                               string chatId, 
@@ -44,17 +48,22 @@ namespace GIFBot.Shared
             PostPlayText = animationData.PostPlayText;
          }
       }
-
+      [JsonInclude]
       public string ChannelName { get; private set; } = String.Empty;
 
+      [JsonInclude]
       public string ChatId { get; private set; } = String.Empty;
 
+      [JsonInclude]
       public AnimationData AnimationData { get; private set; }
 
+      [JsonInclude]
       public string Triggerer { get; private set; }
 
+      [JsonInclude]
       public string Target { get; private set; }
 
+      [JsonInclude]
       public string Amount { get; private set; }
 
       public AnimationVariantData Variant { get; set; } = null;

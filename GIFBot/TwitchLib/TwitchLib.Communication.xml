@@ -1,0 +1,538 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TwitchLib.Communication</name>
+    </assembly>
+    <members>
+        <member name="T:TwitchLib.Communication.Clients.ClientBase`1">
+            <summary>
+                This <see langword="class"/> bundles almost everything that <see cref="T:TwitchLib.Communication.Clients.TcpClient"/> and <see cref="T:TwitchLib.Communication.Clients.WebSocketClient"/> have in common
+                to be able to 
+                <list>
+                    <item>
+                        pass instances of this <see langword="class"/> to <see cref="T:TwitchLib.Communication.Services.NetworkServices`1"/>
+                    </item>
+                    <item>
+                        and to access Methods of this instance within <see cref="T:TwitchLib.Communication.Services.NetworkServices`1"/>
+                    </item>
+                </list>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Communication.Clients.ClientBase`1.Token">
+            <summary>
+                This <see cref="F:TwitchLib.Communication.Clients.ClientBase`1._cancellationTokenSource"/> is used for <see cref="!:_networkServices.ListenTask"/>
+                whenever a call to <see cref="M:System.Threading.CancellationTokenSource.Cancel"/> is made
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Communication.Clients.ClientBase`1.Client">
+            <summary>
+                The underlying <typeparamref name="T"/> client.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Communication.Clients.ClientBase`1.IsConnected">
+            <inheritdoc/>
+        </member>
+        <member name="P:TwitchLib.Communication.Clients.ClientBase`1.Options">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Communication.Clients.ClientBase`1.OnConnected">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Communication.Clients.ClientBase`1.OnDisconnected">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Communication.Clients.ClientBase`1.OnError">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Communication.Clients.ClientBase`1.OnFatality">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Communication.Clients.ClientBase`1.OnMessage">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Communication.Clients.ClientBase`1.OnSendFailed">
+            <inheritdoc/>
+        </member>
+        <member name="E:TwitchLib.Communication.Clients.ClientBase`1.OnReconnected">
+            <inheritdoc/>
+        </member>
+        <member name="M:TwitchLib.Communication.Clients.ClientBase`1.RaiseSendFailed(TwitchLib.Communication.Events.OnSendFailedEventArgs)">
+            <summary>
+                Wont raise the given <see cref="T:System.EventArgs"/> if <see cref="P:TwitchLib.Communication.Clients.ClientBase`1.Token"/>.IsCancellationRequested
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Communication.Clients.ClientBase`1.RaiseError(TwitchLib.Communication.Events.OnErrorEventArgs)">
+            <summary>
+                Wont raise the given <see cref="T:System.EventArgs"/> if <see cref="P:TwitchLib.Communication.Clients.ClientBase`1.Token"/>.IsCancellationRequested
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Communication.Clients.ClientBase`1.RaiseReconnected">
+            <summary>
+                Wont raise the given <see cref="T:System.EventArgs"/> if <see cref="P:TwitchLib.Communication.Clients.ClientBase`1.Token"/>.IsCancellationRequested
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Communication.Clients.ClientBase`1.RaiseMessage(TwitchLib.Communication.Events.OnMessageEventArgs)">
+            <summary>
+                Wont raise the given <see cref="T:System.EventArgs"/> if <see cref="P:TwitchLib.Communication.Clients.ClientBase`1.Token"/>.IsCancellationRequested
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Communication.Clients.ClientBase`1.RaiseFatal(System.Exception)">
+            <summary>
+                Wont raise the given <see cref="T:System.EventArgs"/> if <see cref="P:TwitchLib.Communication.Clients.ClientBase`1.Token"/>.IsCancellationRequested
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Communication.Clients.ClientBase`1.SendAsync(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:TwitchLib.Communication.Clients.ClientBase`1.OpenAsync">
+            <inheritdoc/>
+        </member>
+        <member name="M:TwitchLib.Communication.Clients.ClientBase`1.CloseAsync">
+            <inheritdoc/>
+        </member>
+        <member name="M:TwitchLib.Communication.Clients.ClientBase`1.Dispose">
+            <summary>
+                <inheritdoc cref="M:TwitchLib.Communication.Clients.ClientBase`1.CloseAsync"/>
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Communication.Clients.ClientBase`1.ReconnectAsync">
+            <inheritdoc/>
+        </member>
+        <member name="M:TwitchLib.Communication.Clients.ClientBase`1.ClosePrivateAsync">
+            <summary>
+                Stops <see cref="!:_networkServices.ListenTaskAsync"/>
+                by calling <see cref="M:System.Threading.CancellationTokenSource.Cancel"/>
+                <br></br>
+                and enforces the <see cref="M:TwitchLib.Communication.Clients.ClientBase`1.CloseClient"/>
+                <br></br>
+                afterwards it waits for the via <see cref="P:TwitchLib.Communication.Interfaces.IClientOptions.DisconnectWait"/> given amount of milliseconds
+                <br></br>
+                <br></br>
+                <see cref="T:TwitchLib.Communication.Services.ConnectionWatchDog`1"/> will keep running,
+                because itself issued this call by calling <see cref="M:TwitchLib.Communication.Clients.ClientBase`1.ReconnectInternalAsync"/>
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Communication.Clients.ClientBase`1.ClientSendAsync(System.String)">
+            <summary>
+                Send method for the client.
+            </summary>
+            <param name="message">
+                Message to be send
+            </param>
+        </member>
+        <member name="M:TwitchLib.Communication.Clients.ClientBase`1.CreateClient">
+            <summary>
+                Instantiate the underlying client.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Communication.Clients.ClientBase`1.CloseClient">
+            <summary>
+                one of the following specific methods
+                <list>
+                    <item>
+                        <see cref="M:System.Net.Sockets.TcpClient.Close"/>
+                    </item>
+                    <item>
+                        <see cref="M:System.Net.WebSockets.ClientWebSocket.Abort"/>
+                    </item>
+                </list>
+                calls to one of the methods mentioned above,
+                also Dispose() the respective client,
+                so no additional Dispose() is needed
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Communication.Clients.ClientBase`1.ConnectClientAsync">
+            <summary>
+                Connect the client.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Communication.Clients.ClientBase`1.ReconnectInternalAsync">
+            <summary>
+                To issue a reconnect
+                <br></br>
+                especially for the <see cref="T:TwitchLib.Communication.Services.ConnectionWatchDog`1"/>
+                <br></br>
+                it stops all <see cref="T:TwitchLib.Communication.Services.NetworkServices`1"/> but <see cref="T:TwitchLib.Communication.Services.ConnectionWatchDog`1"/>!
+                <br></br>
+                <br></br>
+                see also <seealso cref="M:TwitchLib.Communication.Clients.ClientBase`1.OpenAsync"/>:
+                <br></br>
+                <inheritdoc cref="M:TwitchLib.Communication.Clients.ClientBase`1.OpenAsync"/>
+            </summary>
+            <returns>
+                <see langword="true"/> if a connection could be established, <see langword="false"/> otherwise
+            </returns>
+        </member>
+        <member name="M:TwitchLib.Communication.Clients.ClientBase`1.ListenTaskActionAsync">
+            <summary>
+                just the Action that listens for new Messages
+                the corresponding <see cref="T:System.Threading.Tasks.Task"/> is held by <see cref="T:TwitchLib.Communication.Services.NetworkServices`1"/>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Communication.Clients.TcpClient.Url">
+            <inheritdoc/>
+        </member>
+        <member name="P:TwitchLib.Communication.Clients.TcpClient.IsConnected">
+            <inheritdoc/>
+        </member>
+        <member name="M:TwitchLib.Communication.Clients.TcpClient.#ctor(TwitchLib.Communication.Interfaces.IClientOptions,Microsoft.Extensions.Logging.ILogger{TwitchLib.Communication.Clients.TcpClient})">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Communication.Clients.TcpClient"/>.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Communication.Clients.TcpClient.ClientSendAsync(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:TwitchLib.Communication.Clients.TcpClient.ConnectClientAsync">
+            <inheritdoc/>
+        </member>
+        <member name="M:TwitchLib.Communication.Clients.TcpClient.CreateClient">
+            <inheritdoc/>
+        </member>
+        <member name="M:TwitchLib.Communication.Clients.TcpClient.CloseClient">
+            <inheritdoc/>
+        </member>
+        <member name="P:TwitchLib.Communication.Clients.WebSocketClient.Url">
+            <inheritdoc/>
+        </member>
+        <member name="P:TwitchLib.Communication.Clients.WebSocketClient.IsConnected">
+            <inheritdoc/>
+        </member>
+        <member name="M:TwitchLib.Communication.Clients.WebSocketClient.#ctor(TwitchLib.Communication.Interfaces.IClientOptions,Microsoft.Extensions.Logging.ILogger{TwitchLib.Communication.Clients.WebSocketClient})">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Communication.Clients.WebSocketClient"/>.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Communication.Clients.WebSocketClient.ClientSendAsync(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:TwitchLib.Communication.Clients.WebSocketClient.ConnectClientAsync">
+            <inheritdoc/>
+        </member>
+        <member name="M:TwitchLib.Communication.Clients.WebSocketClient.CreateClient">
+            <inheritdoc/>
+        </member>
+        <member name="M:TwitchLib.Communication.Clients.WebSocketClient.CloseClient">
+            <inheritdoc/>
+        </member>
+        <member name="M:TwitchLib.Communication.Events.OnErrorEventArgs.#ctor(System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Communication.Events.OnErrorEventArgs"/>.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Communication.Events.OnFatalErrorEventArgs.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Communication.Events.OnFatalErrorEventArgs"/>.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Communication.Events.OnFatalErrorEventArgs.#ctor(System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Communication.Events.OnFatalErrorEventArgs"/>.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Communication.Events.OnMessageEventArgs.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Communication.Events.OnMessageEventArgs"/>.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Communication.Events.OnSendFailedEventArgs.#ctor(System.Exception,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Communication.Events.OnSendFailedEventArgs"/>.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Communication.Extensions.LogExtensions">
+            <summary>
+                expensive Extensions of the <see cref="T:Microsoft.Extensions.Logging.ILogger"/>
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Communication.Extensions.LogExtensions.__TraceActionStruct">
+            <summary> This API supports the logging infrastructure and is not intended to be used directly from your code. It is subject to change in the future. </summary>
+        </member>
+        <member name="P:TwitchLib.Communication.Interfaces.IClient.IsConnected">
+            <summary>
+                The current state of the connection.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Communication.Interfaces.IClient.Options">
+            <summary>
+                Client Configuration Options
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Communication.Interfaces.IClient.OnConnected">
+            <summary>
+                Fires when the Client has connected
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Communication.Interfaces.IClient.OnDisconnected">
+            <summary>
+                Fires when the Client disconnects
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Communication.Interfaces.IClient.OnError">
+            <summary>
+                Fires when An Exception Occurs in the client
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Communication.Interfaces.IClient.OnFatality">
+            <summary>
+                Fires when a Fatal Error Occurs.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Communication.Interfaces.IClient.OnMessage">
+            <summary>
+                Fires when a Message/ group of messages is received.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Communication.Interfaces.IClient.OnSendFailed">
+            <summary>
+                Fires when a message Send event failed.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.Communication.Interfaces.IClient.OnReconnected">
+            <summary>
+                Fires when the client reconnects automatically
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Communication.Interfaces.IClient.OpenAsync">
+            <summary>
+                tries to connect to twitch according to <see cref="P:TwitchLib.Communication.Interfaces.IClientOptions.ReconnectionPolicy"/>!
+            </summary>
+            <returns>
+                <see langword="true"/> if a connection could be established, <see langword="false"/> otherwise
+            </returns>
+        </member>
+        <member name="M:TwitchLib.Communication.Interfaces.IClient.ReconnectAsync">
+            <summary>
+                if the underlying Client is connected,
+                <br></br>
+                <see cref="M:TwitchLib.Communication.Interfaces.IClient.CloseAsync"/> is invoked
+                <br></br>
+                before it makes a call to <see cref="M:TwitchLib.Communication.Interfaces.IClient.OpenAsync"/> and <see cref="!:RaiseConnected()"/>
+                <br></br>
+                <br></br>
+                this Method is also used by 'TwitchLib.Client.TwitchClient' 
+                <br></br>
+                whenever it receives a Reconnect-Message
+                <br></br>
+                <br></br>
+                so, if the twitch-servers want us to reconnect,
+                <br></br>
+                we have to close the connection and establish a new ones
+                <br></br>
+                <br></br>
+                can also be used for a manual reconnect
+            </summary>
+            <returns>
+                <see langword="true"/>, if the client reconnected; <see langword="false"/> otherwise
+            </returns>
+        </member>
+        <member name="M:TwitchLib.Communication.Interfaces.IClient.CloseAsync">
+            <summary>
+                stops everything
+                and waits for the via <see cref="P:TwitchLib.Communication.Interfaces.IClientOptions.DisconnectWait"/> given amount of milliseconds
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Communication.Interfaces.IClient.SendAsync(System.String)">
+            <summary>
+                Sends the given irc-<paramref name="message"/>
+            </summary>
+            <param name="message">
+                irc-message to send
+            </param>
+            <returns>
+                <see langword="true"/>, if the message was sent
+                <br></br>
+                <see langword="false"/> otherwise
+            </returns>
+        </member>
+        <member name="P:TwitchLib.Communication.Interfaces.IClientOptions.ClientType">
+            <summary>
+            Type of the Client to Create. Possible Types Chat or PubSub.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Communication.Interfaces.IClientOptions.DisconnectWait">
+            <summary>
+            How long to wait on a clean disconnect [in ms] (default 1_500ms).
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Communication.Interfaces.IClientOptions.ReconnectionPolicy">
+            <summary>
+            Reconnection Policy Settings. Reconnect without Losing data etc.
+            The Default Policy applied is 10 reconnection attempts with 3 seconds between each attempt.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Communication.Interfaces.IClientOptions.UseSsl">
+            <summary>
+            Use Secure Connection [SSL] (default: true)
+            </summary>
+        </member>
+        <member name="P:TwitchLib.Communication.Models.ClientOptions.ReconnectionPolicy">
+            <inheritdoc/>
+        </member>
+        <member name="P:TwitchLib.Communication.Models.ClientOptions.UseSsl">
+            <inheritdoc/>
+        </member>
+        <member name="P:TwitchLib.Communication.Models.ClientOptions.DisconnectWait">
+            <inheritdoc/>
+        </member>
+        <member name="P:TwitchLib.Communication.Models.ClientOptions.ClientType">
+            <inheritdoc/>
+        </member>
+        <member name="M:TwitchLib.Communication.Models.ClientOptions.#ctor(TwitchLib.Communication.Models.ReconnectionPolicy,System.Boolean,System.UInt32,TwitchLib.Communication.Enums.ClientType)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Communication.Models.ClientOptions"/>.
+            </summary>
+            <param name="reconnectionPolicy">
+                your own <see cref="P:TwitchLib.Communication.Models.ClientOptions.ReconnectionPolicy"/>
+                <br></br>
+                by leaving it <see langword="null"/>, a <see langword="default"/> <see cref="P:TwitchLib.Communication.Models.ClientOptions.ReconnectionPolicy"/>, that makes every 3_000ms one attempt to connect for ten times, is going to be applied
+            </param>
+            <param name="useSsl">
+                <inheritdoc cref="P:TwitchLib.Communication.Models.ClientOptions.UseSsl"/>
+            </param>
+            <param name="disconnectWait">
+                <inheritdoc cref="P:TwitchLib.Communication.Models.ClientOptions.DisconnectWait"/>
+            </param>
+            <param name="clientType">
+                <inheritdoc cref="P:TwitchLib.Communication.Models.ClientOptions.ClientType"/>
+            </param>
+        </member>
+        <member name="T:TwitchLib.Communication.Models.NoReconnectionPolicy">
+            <summary>
+               This policy should be used to omit reconnect-attempts.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Communication.Models.NoReconnectionPolicy.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:TwitchLib.Communication.Models.NoReconnectionPolicy"/>.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Communication.Models.ReconnectionPolicy">
+            <summary>
+                Connection/Reconnection-Policy
+                <br></br>
+                <br></br>
+                controls the attempts to make to connect and to reconnect to twitch
+                <br></br>
+                <br></br>
+                to omit reconnects and to only make one attempt to connect to twitch, please use <see cref="T:TwitchLib.Communication.Models.NoReconnectionPolicy"/>
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Communication.Models.ReconnectionPolicy.#ctor">
+            <summary>
+                the <see cref="T:TwitchLib.Communication.Clients.TcpClient"/> or <see cref="T:TwitchLib.Communication.Clients.WebSocketClient"/>
+                <b>infinitely</b>
+                attempts to reconnect
+                <br></br>
+                <br></br>
+                with each attempt, the reconnect interval increases by 3_000 milliseconds
+                until it reaches 30_000 milliseconds
+                <br></br>
+                
+                <br></br>
+                <br></br>
+                Example:
+                <br></br>
+                try to connect -> couldn't connect -> wait 3_000 milliseconds -> try to connect -> couldn't connect -> wait 6_000 milliseconds -> and so on
+            </summary>
+        </member>
+        <member name="M:TwitchLib.Communication.Models.ReconnectionPolicy.#ctor(System.Int32,System.Int32,System.Int32)">
+            <summary>
+                the <see cref="T:TwitchLib.Communication.Clients.TcpClient"/> or <see cref="T:TwitchLib.Communication.Clients.WebSocketClient"/>
+                attempts to reconnect for <paramref name="maxAttempts"/> times
+                <br></br>
+                <br></br>
+                with each attempt, the reconnect interval increases by the amount of <paramref name="minReconnectInterval"/>
+                until it reaches <paramref name="maxReconnectInterval"/>
+                <br></br>
+                <br></br>
+                Example:
+                <br></br>
+                <paramref name="minReconnectInterval"/> = 3_000
+                <br></br>
+                <paramref name="maxReconnectInterval"/> = 30_000
+                <br></br>
+                try to connect -> couldnt connect -> wait 3_000 milliseconds -> try to connect -> couldnt connect -> wait 6_000 milliseconds -> and so on
+            </summary>
+            <param name="minReconnectInterval">
+                minimum interval in milliseconds
+            </param>
+            <param name="maxReconnectInterval">
+                maximum interval in milliseconds
+            </param>
+            <param name="maxAttempts">
+                <see langword="null"/> means <b>infinite</b>; it never stops to try to reconnect
+            </param>
+        </member>
+        <member name="M:TwitchLib.Communication.Models.ReconnectionPolicy.#ctor(System.Int32,System.Int32)">
+            <summary>
+                the <see cref="T:TwitchLib.Communication.Clients.TcpClient"/> or <see cref="T:TwitchLib.Communication.Clients.WebSocketClient"/>
+                <b>infinitely</b>
+                attempts to reconnect
+                <br></br>
+                <br></br>
+                with each attempt, the reconnect interval increases by the amount of <paramref name="minReconnectInterval"/>
+                until it reaches <paramref name="maxReconnectInterval"/>
+                <br></br>
+                <br></br>
+                Example:
+                <br></br>
+                <paramref name="minReconnectInterval"/> = 3_000
+                <br></br>
+                <paramref name="maxReconnectInterval"/> = 30_000
+                <br></br>
+                try to connect -> couldn't connect -> wait 3_000 milliseconds -> try to connect -> couldn't connect -> wait 6_000 milliseconds -> and so on
+            </summary>
+            <param name="minReconnectInterval">
+                minimum interval in milliseconds
+            </param>
+            <param name="maxReconnectInterval">
+                maximum interval in milliseconds
+            </param>
+        </member>
+        <member name="M:TwitchLib.Communication.Models.ReconnectionPolicy.#ctor(System.Int32)">
+            <summary>
+                the <see cref="T:TwitchLib.Communication.Clients.TcpClient"/> or <see cref="T:TwitchLib.Communication.Clients.WebSocketClient"/>
+                <b>infinitely</b>
+                 attempts to reconnect every <paramref name="reconnectInterval"/>-milliseconds
+            </summary>
+            <param name="reconnectInterval">
+                Interval in milliseconds between trying to reconnect
+            </param>
+        </member>
+        <member name="M:TwitchLib.Communication.Models.ReconnectionPolicy.#ctor(System.Int32,System.Nullable{System.Int32})">
+            <summary>
+                the <see cref="T:TwitchLib.Communication.Clients.TcpClient"/> or <see cref="T:TwitchLib.Communication.Clients.WebSocketClient"/>
+                attempts to reconnect every <paramref name="reconnectInterval"/>-milliseconds for <paramref name="maxAttempts"/> times
+            </summary>
+            <param name="reconnectInterval">
+                Interval in milliseconds between trying to reconnect
+            </param>
+            <param name="maxAttempts">
+                <see langword="null"/> means <b>infinite</b>; it never stops to try to reconnect
+            </param>
+        </member>
+        <member name="T:TwitchLib.Communication.Services.ConnectionWatchDog`1">
+            <summary>
+                Service that checks connection state.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.Communication.Services.ConnectionWatchDog`1._cancellationTokenSource">
+            <summary>
+                <list>
+                    <item>
+                        should only be set to a new instance in <see cref="M:TwitchLib.Communication.Services.ConnectionWatchDog`1.StartMonitorTaskAsync"/>
+                    </item>
+                    <item>
+                        should only be set to <see langword="null"/> in <see cref="M:TwitchLib.Communication.Services.ConnectionWatchDog`1.StopAsync"/>
+                    </item>
+                </list>
+            </summary>
+        </member>
+        <member name="T:TwitchLib.Communication.Services.NetworkServices`1">
+            <summary>
+                <see langword="class"/> to bundle Network-Service-<see cref="T:System.Threading.Tasks.Task"/>s
+            </summary>
+        </member>
+    </members>
+</doc>

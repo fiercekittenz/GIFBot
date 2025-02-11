@@ -9,7 +9,7 @@
 @using GIFBot.Shared.Models.Animation
 @using GIFBot.Shared.Models.Tiltify
 @using GIFBot.Shared.Models.Visualization
-@using Newtonsoft.Json
+@using System.Text.Json
 @inject NavigationManager NavigationManager
 @inject NotificationService NotificationService
 @inject IJSRuntime JSRuntime
@@ -493,7 +493,7 @@
       string botSettingsJson = await mHubConnection.InvokeAsync<string>("GetBotSettings");
       if (!String.IsNullOrEmpty(botSettingsJson))
       {
-         mBotSettings = Newtonsoft.Json.JsonConvert.DeserializeObject<BotSettings>
+         mBotSettings = JsonSerializer.Deserialize<BotSettings>
             (botSettingsJson);
 
          mUserGroupNames.Clear();
@@ -515,7 +515,7 @@
       string campaignsJson = await mHubConnection.InvokeAsync<string>("GetTiltifyCampaigns");
       if (!String.IsNullOrEmpty(campaignsJson))
       {
-         mTiltifyCampaigns = Newtonsoft.Json.JsonConvert.DeserializeObject<List<TiltifyCampaign>>(campaignsJson);
+         mTiltifyCampaigns = JsonSerializer.Deserialize<List<TiltifyCampaign>>(campaignsJson);
          mTiltifyCampaignNames.Clear();
          mSelectedTiltifyCampaign = null;
          mSelectedTiltifyCampaignName = String.Empty;
@@ -726,7 +726,7 @@
    private async Task CreateThrottledUser(GridCommandEventArgs args)
    {
       var throttledUser = args.Item as ThrottledUserData;
-      bool result = await mHubConnection.InvokeAsync<bool>("AddThrottledUser", Newtonsoft.Json.JsonConvert.SerializeObject(throttledUser));
+      bool result = await mHubConnection.InvokeAsync<bool>("AddThrottledUser", JsonSerializer.Serialize(throttledUser));
       if (result)
       {
          NotificationService.Notify(NotificationSeverity.Success, "Success", $"{throttledUser.Name} was added!", 5000);
@@ -760,7 +760,7 @@
    private async Task UpdateThrottledUser(GridCommandEventArgs args)
    {
       var throttledUser = args.Item as ThrottledUserData;
-      bool result = await mHubConnection.InvokeAsync<bool>("UpdateThrottledUser", Newtonsoft.Json.JsonConvert.SerializeObject(throttledUser));
+      bool result = await mHubConnection.InvokeAsync<bool>("UpdateThrottledUser", JsonSerializer.Serialize(throttledUser));
       if (result)
       {
          NotificationService.Notify(NotificationSeverity.Success, "Success", $"{throttledUser.Name} was updated!", 5000);
@@ -778,7 +778,7 @@
    {
       // When reauthorizing, simply set the bot back to Welcome state and navigate to the setup page.
       mBotSettings.CurrentSetupStep = SetupStep.Welcome;
-      await mHubConnection.InvokeAsync("UpdateBotSettings", Newtonsoft.Json.JsonConvert.SerializeObject(mBotSettings), false);
+      await mHubConnection.InvokeAsync("UpdateBotSettings", JsonSerializer.Serialize(mBotSettings), false);
       NavigationManager.NavigateTo("/setup/");
    }
 
@@ -793,7 +793,7 @@
       mBotSettings.BotName = mBotSettings.BotName.Trim();
       mBotSettings.ChannelName = mBotSettings.ChannelName.Trim();
 
-      await mHubConnection.InvokeAsync("UpdateBotSettings", Newtonsoft.Json.JsonConvert.SerializeObject(mBotSettings), true);
+      await mHubConnection.InvokeAsync("UpdateBotSettings", JsonSerializer.Serialize(mBotSettings), true);
 
       await UpdateTiltifyCampaignsList();
 

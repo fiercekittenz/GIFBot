@@ -6,6 +6,7 @@
 @using GIFBot.Client.Components
 @using GIFBot.Shared.Models.Animation
 @using Microsoft.AspNetCore.Http.Connections
+@using System.Text.Json
 @inject NavigationManager NavigationManager
 @inject NotificationService NotificationService
 @inject IJSRuntime JSRuntime
@@ -309,7 +310,7 @@ else if (mCurrentState == State.TutorialComplete)
       string treeDataJson = await mHubConnection.InvokeAsync<string>("GetAnimationTreeData");
       if (!String.IsNullOrEmpty(treeDataJson))
       {
-         mAnimationTreeData = Newtonsoft.Json.JsonConvert.DeserializeObject<List<AnimationTreeItem>>(treeDataJson);
+         mAnimationTreeData = JsonSerializer.Deserialize<List<AnimationTreeItem>>(treeDataJson);
          StateHasChanged();
       }
    }

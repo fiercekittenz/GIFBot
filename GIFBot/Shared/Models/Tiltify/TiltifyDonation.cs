@@ -8,11 +8,14 @@ namespace GIFBot.Shared.Models.Tiltify
 {
    public class TiltifyDonation
    {
-      public string Id { get; set; }
-      public double Amount { get; set; }
-      public string Name { get; set; }
-      public string Comment { get; set; }
-      public string CompletedAt { get; set; }
+      // For S.T.J.
+      public TiltifyDonation() { }
+
+      public string Id { get; set; } = string.Empty;
+      public double Amount { get; set; } = 0.0f;
+      public string Name { get; set; } = string.Empty;
+      public string Comment { get; set; } = string.Empty;
+      public string CompletedAt { get; set; } = string.Empty;
 
       public DateTime GetCompletedAtAsDateTime()
       {

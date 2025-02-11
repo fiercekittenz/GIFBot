@@ -6,6 +6,9 @@ namespace GIFBot.Shared.Models.Features
 {
    public class StickerTreeListItem
    {
+      // For S.T.J.
+      public StickerTreeListItem() { }
+
       public Guid Id { get; set; } = Guid.Empty;
       public int TreeId { get; set; } = 0;
       public int? ParentTreeId { get; set; } = null;

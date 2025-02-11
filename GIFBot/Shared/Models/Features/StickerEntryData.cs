@@ -1,6 +1,5 @@
 ﻿using GIFBot.Shared.Models.Animation;
 using GIFBot.Shared.Models.Base;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -63,7 +62,7 @@ namespace GIFBot.Shared.Models.Features
       /// <summary>
       /// Denotes if the sticker entry is selected in the editor or not.
       /// </summary>
-      [JsonIgnore]
+      [System.Text.Json.Serialization.JsonIgnore]
       public bool IsSelected { get; set; } = false;
    }
 }
