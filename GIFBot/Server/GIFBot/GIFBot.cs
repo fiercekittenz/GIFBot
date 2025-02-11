@@ -563,7 +563,7 @@ namespace GIFBot.Server.GIFBot
          }
       }
 
-      private void TwitchClient_OnWhisperReceived(object sender, TwitchLib.Client.Events.OnWhisperReceivedArgs e)
+      private Task TwitchClient_OnWhisperReceived(object sender, TwitchLib.Client.Events.OnWhisperReceivedArgs e)
       {
          if (e.WhisperMessage.Username.Equals(BotSettings.ChannelName, StringComparison.OrdinalIgnoreCase))
          {

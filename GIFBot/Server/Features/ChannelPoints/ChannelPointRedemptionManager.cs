@@ -62,7 +62,7 @@ namespace GIFBot.Server.Features.ChannelPoints
          }
       }
 
-      private async Task TwitchEventSub_OnWebsocketConnected(object sender, WebsocketConnectedArgs e)
+      private Task TwitchEventSub_OnWebsocketConnected(object sender, WebsocketConnectedArgs e)
       {
          if (!String.IsNullOrEmpty(Bot.BotSettings.StreamerOauthToken) && Bot.ChannelId != 0)
          {
@@ -82,6 +82,8 @@ namespace GIFBot.Server.Features.ChannelPoints
                      conditions, EventSubTransportMethod.Websocket, mTwitchEventSubWebsocketClient.SessionId);
             }
          }
+
+         return Task.CompletedTask;
       }
 
       private async Task TwitchEventSub_OnWebsocketClosed(object sender, EventArgs e)
@@ -100,12 +102,14 @@ namespace GIFBot.Server.Features.ChannelPoints
          }
       }
 
-      private async Task TwitchEventSub_OnWebsocketReconnected(object sender, EventArgs e)
+      private Task TwitchEventSub_OnWebsocketReconnected(object sender, EventArgs e)
       {
          if (!String.IsNullOrEmpty(Bot.BotSettings.StreamerOauthToken))
          {
             _ = Bot.SendLogMessage("EventSub client reconnected!");
          }
+
+         return Task.CompletedTask;
       }
 
       private async Task TwitchEventSub_OnWebsocketError(object sender, ErrorOccuredArgs e)

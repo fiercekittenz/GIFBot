@@ -15,6 +15,7 @@ using System;
 using System.Net;
 using System.Net.Http;
 using GIFBot.Shared;
+using Microsoft.AspNetCore.Http;
 
 namespace GIFBot.Server
 {
@@ -74,8 +75,8 @@ namespace GIFBot.Server
          {
             OnPrepareResponse = context =>
             {
-               context.Context.Response.Headers.Add("Cache-Control", "no-cache, no-store, must-revalidate, max-age=0");
-               context.Context.Response.Headers.Add("Expires", "-1");
+               context.Context.Response.Headers.AppendCommaSeparatedValues("Cache-Control", "no-cache, no-store, must-revalidate, max-age=0");
+               context.Context.Response.Headers.AppendCommaSeparatedValues("Expires", "-1");
             }
          });
 
