@@ -154,7 +154,7 @@ namespace GIFBot.Server.Features.EventSub
       {
          if (Bot.BotSettings.AnnounceAdBreaks && !string.IsNullOrEmpty(Bot.BotSettings.AdBreakStartAnnouncement))
          {
-            Bot.SendChatMessage(Bot.BotSettings.AdBreakStartAnnouncement);
+            Bot.SendChatMessage($"{Bot.BotSettings.AdBreakStartAnnouncement} ({args.Notification.Payload.Event.DurationSeconds}s)");
             await AnnounceAdBreakEnding(args.Notification.Payload.Event.DurationSeconds * 1000);
          }
       }
