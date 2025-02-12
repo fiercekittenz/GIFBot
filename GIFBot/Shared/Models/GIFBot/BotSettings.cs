@@ -34,7 +34,7 @@ namespace GIFBot.Shared
       ///   Version 2: Deprecated "Users" on UserGroup in favor of UserEntry list instead.
       ///   Version 3: Removed use of "Follower" as a permissions option. Can't check who is a follower or not on Twitch anymore. (6-8-2024)
       /// </summary>
-      public static int skCurrentBotSettingsVersion = 3;
+      public static int skCurrentBotSettingsVersion = 4;
 
       #endregion
 
@@ -84,6 +84,9 @@ namespace GIFBot.Shared
       public int TimeBetweenAnimationsMs { get; set; } = 5000;
       public bool AnnounceAnimationCooldown { get; set; } = true;
       public bool AnimationRouletteChatEnabled { get; set; } = false;
+      public bool AnnounceAdBreaks { get; set; } = true;
+      public string AdBreakStartAnnouncement { get; set; } = "An ad break is starting! Please grab a pint, sit back, relax, and let this whole thing blow over...";
+      public string AdBreakEndAnnouncement { get; set; } = "Thank you for your patience! We may now return to our regularly scheduled programming.";
 
       // Whispers are only allowed from the channel account.
       public bool CanTriggerAnimationsByWhisper { get; set; } = false;

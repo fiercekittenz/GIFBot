@@ -67,7 +67,7 @@ namespace GIFBot.Client.Pages.Setup
 
          // Forcibly forward the user to the correct URL for authentication. This is necessary,
          // because Twitch will redirect them and it will be a CORS error otherwise.
-         string botAuthUrl = $"https://id.twitch.tv/oauth2/authorize?client_id={Common.skTwitchClientId}&redirect_uri=https://gifbot.azurewebsites.net/twitchoauth&response_type=code&force_verify=true&scope=chat_login chat:edit chat:read whispers:read whispers:edit channel_subscriptions channel:read:redemptions channel:read:hype_train channel:manage:redemptions";
+         string botAuthUrl = $"https://id.twitch.tv/oauth2/authorize?client_id={Common.skTwitchClientId}&redirect_uri=https://gifbot.azurewebsites.net/twitchoauth&response_type=code&force_verify=true&scope=chat_login chat:edit chat:read whispers:read whispers:edit channel_subscriptions channel:read:redemptions channel:read:hype_train channel:manage:redemptions channel:read:ads";
          NavigationManager.NavigateTo(botAuthUrl);
       }
 
@@ -86,7 +86,7 @@ namespace GIFBot.Client.Pages.Setup
 
          // Forcibly forward the user to the correct URL for authentication. This is necessary,
          // because Twitch will redirect them and it will be a CORS error otherwise.
-         string streamerAuthUrl = $"https://id.twitch.tv/oauth2/authorize?client_id={Common.skTwitchClientId}&redirect_uri=https://gifbot.azurewebsites.net/twitchoauth&response_type=code&force_verify=true&scope=chat_login chat:edit chat:read whispers:read whispers:edit channel_subscriptions channel:read:redemptions channel:read:hype_train channel:manage:redemptions";
+         string streamerAuthUrl = $"https://id.twitch.tv/oauth2/authorize?client_id={Common.skTwitchClientId}&redirect_uri=https://gifbot.azurewebsites.net/twitchoauth&response_type=code&force_verify=true&scope=chat_login chat:edit chat:read whispers:read whispers:edit channel_subscriptions channel:read:redemptions channel:read:hype_train channel:manage:redemptions channel:read:ads";
          NavigationManager.NavigateTo(streamerAuthUrl);
       }
 

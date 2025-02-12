@@ -1,5 +1,5 @@
 ﻿using GIFBot.Server.Features.Backdrop;
-using GIFBot.Server.Features.ChannelPoints;
+using GIFBot.Server.Features.EventSub;
 using GIFBot.Server.Features.CountdownTimer;
 using GIFBot.Server.Features.Giveaway;
 using GIFBot.Server.Features.GoalBar;
@@ -678,7 +678,7 @@ namespace GIFBot.Server.GIFBot
 
          ChannelId = TwitchEndpointHelpers.GetChannelId(HttpClientFactory.CreateClient(Common.skHttpClientName), BotSettings.ChannelName, BotSettings.BotOauthToken, out string result);
 
-         ChannelPointManager.InitializeEventSub();
+         EventSubManager.InitializeEventSub();
          CheckForHypeTrainEvent(false);
 
          ApiSettings apiSettings = new ApiSettings() {
@@ -905,7 +905,7 @@ namespace GIFBot.Server.GIFBot
          _ = SendLogMessage("GIFBot starting up...");
 
          // Setup the channel point redemption manager. This is not a feature manager as it doesn't use chat or have persisted settings.
-         ChannelPointManager = new ChannelPointRedemptionManager(this);
+         EventSubManager = new EventSubManager(this);
 
          BotSettingsLoaded = LoadSettings();
 
@@ -1358,7 +1358,7 @@ namespace GIFBot.Server.GIFBot
          }
       }
 
-      public ChannelPointRedemptionManager ChannelPointManager { get; private set; }
+      public EventSubManager EventSubManager { get; private set; }
 
       public List<string> LogMessages { get; set; } = new List<string>();
 

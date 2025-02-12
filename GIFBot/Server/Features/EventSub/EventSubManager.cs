@@ -16,11 +16,11 @@ using Microsoft.Build.Framework;
 using TwitchLib.Api.Core.Enums;
 using TwitchLib.Api;
 
-namespace GIFBot.Server.Features.ChannelPoints
+namespace GIFBot.Server.Features.EventSub
 {
-   public class ChannelPointRedemptionManager
+   public class EventSubManager
    {
-      public ChannelPointRedemptionManager(GIFBot.GIFBot bot)
+      public EventSubManager(GIFBot.GIFBot bot)
       {
          Bot = bot;
       }
@@ -41,8 +41,12 @@ namespace GIFBot.Server.Features.ChannelPoints
             mTwitchEventSubWebsocketClient.WebsocketReconnected += TwitchEventSub_OnWebsocketReconnected;
             mTwitchEventSubWebsocketClient.ErrorOccurred += TwitchEventSub_OnWebsocketError;
 
+            // Channel Point Redemptions
             mTwitchEventSubWebsocketClient.ChannelPointsAutomaticRewardRedemptionAdd += TwitchEventSub_ChannelPointsAutomaticRewardRedemptionAdd;
             mTwitchEventSubWebsocketClient.ChannelPointsCustomRewardRedemptionAdd += TwitchEventSub_ChannelPointsCustomRewardRedemptionAdd;
+
+            // Advertisement Alerts
+            mTwitchEventSubWebsocketClient.ChannelAdBreakBegin += TwitchEventSubWebsocketClient_ChannelAdBreakBegin;
 
             if (!String.IsNullOrEmpty(Bot.BotSettings.StreamerOauthToken))
             {
@@ -80,6 +84,8 @@ namespace GIFBot.Server.Features.ChannelPoints
                      conditions, EventSubTransportMethod.Websocket, mTwitchEventSubWebsocketClient.SessionId);
                _ = Bot.TwitchAPI.Helix.EventSub.CreateEventSubSubscriptionAsync("channel.channel_points_custom_reward_redemption.add", "1",
                      conditions, EventSubTransportMethod.Websocket, mTwitchEventSubWebsocketClient.SessionId);
+               _ = Bot.TwitchAPI.Helix.EventSub.CreateEventSubSubscriptionAsync("channel.ad_break.begin", "1",
+                  conditions, EventSubTransportMethod.Websocket, mTwitchEventSubWebsocketClient.SessionId);
             }
          }
 
@@ -142,6 +148,24 @@ namespace GIFBot.Server.Features.ChannelPoints
          HandleRedemption(Guid.Empty.ToString(), "BuiltInTwitchReward", eventData.Reward.Cost, eventData.UserName, eventData.UserInput);
 
          return Task.CompletedTask;
+      }
+
+      private async Task TwitchEventSubWebsocketClient_ChannelAdBreakBegin(object sender, TwitchLib.EventSub.Websockets.Core.EventArgs.Channel.ChannelAdBreakBeginArgs args)
+      {
+         if (Bot.BotSettings.AnnounceAdBreaks && !string.IsNullOrEmpty(Bot.BotSettings.AdBreakStartAnnouncement))
+         {
+            Bot.SendChatMessage(Bot.BotSettings.AdBreakStartAnnouncement);
+            await AnnounceAdBreakEnding(args.Notification.Payload.Event.DurationSeconds * 1000);
+         }
+      }
+
+      async Task AnnounceAdBreakEnding(int delayInMs = 60000)
+      {
+         await Task.Delay(delayInMs);
+         if (!string.IsNullOrEmpty(Bot.BotSettings.AdBreakEndAnnouncement))
+         {
+            Bot.SendChatMessage(Bot.BotSettings.AdBreakEndAnnouncement);
+         }
       }
 
       private void HandleRedemption(string rewardId, string rewardTitle, int rewardCost, string redeemerName, string redeemerInput)
