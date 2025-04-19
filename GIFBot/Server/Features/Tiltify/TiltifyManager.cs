@@ -31,6 +31,10 @@ namespace GIFBot.Server.Features.Tiltify
       {
          Bot = bot;
 
+
+         // TODO - need to put this call after a change to settings has happened so that it doesn't continue to hit the endpoints
+         // after you remove the info in settings
+
          // The Tiltify API for authenticating a personal, connected application doesn't provide a refresh token.
          // We need to reauthenticate when we load the bot or make any settings changes.
          Authenticate();
