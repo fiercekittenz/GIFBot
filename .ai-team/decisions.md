@@ -312,3 +312,9 @@ All milestones are sequential. Within each milestone, tasks can be parallelized 
 6. **StreamDeck plugin** is on netcoreapp3.1 and NOT in the solution. Recommend deferring to a separate initiative unless Georgia wants it included.
 7. **jQuery dependency** — Several JS files (ElementDrag.js, AnimationHelpers.js) and browser source pages may depend on jQuery. Must verify before removing in M4.
 
+
+### 2026-02-13: Unified color scheme around deep blue/purple palette
+**By:** Helly
+**What:** Replaced all neutral grays and maroon/pink tones in PaletteDark and `.gifbot-*` CSS classes with a monochromatic blue/purple palette anchored on #1a1a2e (the drawer/appbar color Georgia liked). Key values: Background #0d0d1a, Surface #22223a, BackgroundGray #161628. CSS panels shifted to #2d2b52 / #1e1e38 / #161630 / #1c1c34. Text opacity raised to 87% (#ffffffde) and input borders brightened to #ffffff80. Typography FontFamily synced to system font stack from app.css. NoNavMenuLayout kept in sync.
+**Why:** Georgia requested the entire site match the blue/purple tones of the drawer/appbar area. The previous Background (#121218), Surface (#1e1e2d), and CSS panel colors (#36173e, #211126, #1d161f, #1e1e1e) were either neutral gray or maroon-shifted, creating visual inconsistency. The new palette is fully monochromatic blue/purple for a cohesive dark theme.
+
