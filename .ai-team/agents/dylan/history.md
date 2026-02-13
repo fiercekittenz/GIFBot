@@ -34,3 +34,16 @@
 - **1 SignalR hub** (GIFBotHub.cs) — monolithic, ~130 public methods
 - **Telerik server-side dependency:** DataSourceRequest/DataSourceResult used in GIFBotHub.cs for Regurgitator grid operations (also referenced in GiveawayManager.cs)
 - **Test.razor** exists at `/test` — a Telerik TreeList demo page, likely a dev scratchpad (candidate for removal)
+
+### M4 UI Polish Validation (Task 4.7)
+- **Build:** 0 errors, 32 warnings (all pre-existing: 58× BL0007, 2× CA2021, 2× CS0414, 2× CS4014 — none related to M4)
+- **App.razor:** Clean — no Telerik/GIFBotPurple references, has MudBlazor CSS/JS, Google Fonts, bootstrap
+- **MainLayout.razor:** MudThemeProvider + MudLayout + MudDrawer + MudAppBar, dark theme with deep purple palette ✅
+- **NavMenu.razor:** MudNavMenu with 13 MudNavLink entries, Material Design icons, no old ul/li pattern ✅
+- **Component audit:** 0 `<font>` tags, 0 `<h1>`–`<h3>` in Pages, 0 `class="row"`/`class="col-"` in Pages, 0 `text-light` in Pages
+- **PlacementComponent.razor:** Still uses Bootstrap row/col (acceptable — custom drag UI, not a page layout)
+- **GIFBotPurple22:** Not referenced in Server project (App.razor clean). Files still exist in deprecated Client/wwwroot/css — dead code, low priority cleanup
+- **Browser source overlays:** All 6 HTML files still reference jQuery, untouched by M4 ✅
+- **MudText adoption:** Used across 18+ page files. MudGrid in Dashboard Index.razor
+- **SMOKE-TESTS.md:** Updated Section 14 (removed Telerik references), added Section 17 (M4 UI Polish checklist with 13 items)
+- **Verdict:** ✅ APPROVED — M4 milestone passes all validation checks

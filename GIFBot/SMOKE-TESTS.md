@@ -116,10 +116,10 @@ Each HTML landing page should poll `localhost:5000/ping/pong` and redirect to th
 
 ## 14. Editor Pages — Deep Validation
 
-- [ ] **AnimationsEditor** — Telerik TreeList/Grid renders animation hierarchy
-- [ ] **StickersEditor** — Telerik components render all sticker configuration (61 component instances)
-- [ ] **Settings** — Telerik components render bot settings (26 component instances)
-- [ ] **GoalBarEditor** — Telerik components render goal configuration (23 component instances)
+- [ ] **AnimationsEditor** — MudBlazor components render animation hierarchy
+- [ ] **StickersEditor** — MudBlazor components render all sticker configuration
+- [ ] **Settings** — MudBlazor components render bot settings
+- [ ] **GoalBarEditor** — MudBlazor components render goal configuration
 
 ## 15. Setup & Authentication
 
@@ -133,6 +133,22 @@ Each HTML landing page should poll `localhost:5000/ping/pong` and redirect to th
 - [ ] **Tiltify** integration loads
 - [ ] **Stream Elements** integration loads
 - [ ] **Version check** in NavMenu detects updates from GitHub
+
+## 17. UI Polish (M4)
+
+- [ ] **Dark theme** renders correctly — deep purple palette, no white/light flashes
+- [ ] **MudThemeProvider** with `IsDarkMode="true"` is present in MainLayout
+- [ ] **Navigation drawer** opens and closes via hamburger icon (MudDrawer)
+- [ ] **Material Design icons** visible on all nav links (Dashboard, Settings, Animations, etc.)
+- [ ] **MudNavMenu** renders all 13 navigation links
+- [ ] **MudText** used for page headings (no raw `<h1>`–`<h3>` in page files)
+- [ ] **MudGrid/MudItem** used for layout on Dashboard (no Bootstrap `row`/`col-` in Pages)
+- [ ] **No `<font>` tags** remain in any Razor component
+- [ ] **No `text-light`** CSS class references in Pages
+- [ ] **No GIFBotPurple22** CSS references in Server project (App.razor clean)
+- [ ] **Typography** uses Roboto font family via MudBlazor theme
+- [ ] **gifbot-page-header** class used consistently for page title sections
+- [ ] **Browser source overlays** (animations.html, stickers.html, etc.) still reference jQuery and are unaffected by UI cleanup
 
 ---
 
