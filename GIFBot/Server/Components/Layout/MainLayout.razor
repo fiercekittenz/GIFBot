@@ -1,6 +1,6 @@
 ﻿@inherits LayoutComponentBase
 
-<MudThemeProvider />
+<MudThemeProvider Theme="@_theme" IsDarkMode="@_isDarkMode" />
 <MudPopoverProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
@@ -14,3 +14,55 @@
          @Body
       </div>
    </div>
+
+@code {
+    private static bool _isDarkMode = true;
+
+    private static MudTheme _theme = new MudTheme
+    {
+        PaletteLight = new PaletteLight
+        {
+            Primary = "#5d3e9c",
+            Secondary = "#7e57c2",
+            AppbarBackground = "#5d3e9c",
+        },
+        PaletteDark = new PaletteDark
+        {
+            Primary = "#7e57c2",
+            Secondary = "#b39ddb",
+            Tertiary = "#ce93d8",
+            Info = "#4fc3f7",
+            Success = "#66bb6a",
+            Warning = "#ffa726",
+            Error = "#ef5350",
+            Dark = "#1a1a2e",
+            Surface = "#1e1e2d",
+            Background = "#121218",
+            BackgroundGray = "#1a1a2e",
+            AppbarBackground = "#1a1a2e",
+            AppbarText = "#ffffffb3",
+            DrawerBackground = "#1a1a2e",
+            DrawerText = "#ffffffb3",
+            DrawerIcon = "#b39ddb",
+            TextPrimary = "#ffffffb3",
+            TextSecondary = "#ffffff80",
+            TextDisabled = "#ffffff4d",
+            ActionDefault = "#b39ddb",
+            ActionDisabled = "#ffffff42",
+            ActionDisabledBackground = "#ffffff1f",
+            LinesDefault = "#ffffff1f",
+            LinesInputs = "#ffffff4d",
+            TableLines = "#ffffff1f",
+            TableStriped = "#ffffff0a",
+            Divider = "#ffffff1f",
+            DividerLight = "#ffffff0f",
+        },
+        Typography = new Typography
+        {
+            Default = new DefaultTypography
+            {
+                FontFamily = new[] { "Roboto", "Helvetica", "Arial", "sans-serif" }
+            }
+        }
+    };
+}
