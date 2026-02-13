@@ -1,16 +1,54 @@
 ﻿@inherits LayoutComponentBase
 
-<MudThemeProvider />
+<MudThemeProvider Theme="@_theme" IsDarkMode="true" />
 <MudPopoverProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
-   <div class="sidebar">
-      <EmptyNavMenu />
-   </div>
 
-   <div class="main" style="background-color:#121218; color: rgba(255,255,255,0.7)">
-      <div class="content px-4">
-         
-         @Body
-      </div>
-   </div>
+<MudLayout>
+    <MudAppBar Elevation="0" Dense="true">
+        <MudText Typo="Typo.h6">GIFBot</MudText>
+    </MudAppBar>
+    <MudMainContent>
+        <div class="pa-4">
+            @Body
+        </div>
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    private static MudTheme _theme = new MudTheme
+    {
+        PaletteDark = new PaletteDark
+        {
+            Primary = "#7e57c2",
+            Secondary = "#b39ddb",
+            Tertiary = "#ce93d8",
+            Info = "#4fc3f7",
+            Success = "#66bb6a",
+            Warning = "#ffa726",
+            Error = "#ef5350",
+            Dark = "#1a1a2e",
+            Surface = "#1e1e2d",
+            Background = "#121218",
+            BackgroundGray = "#1a1a2e",
+            AppbarBackground = "#1a1a2e",
+            AppbarText = "#ffffffb3",
+            DrawerBackground = "#1a1a2e",
+            DrawerText = "#ffffffb3",
+            DrawerIcon = "#b39ddb",
+            TextPrimary = "#ffffffb3",
+            TextSecondary = "#ffffff80",
+            TextDisabled = "#ffffff4d",
+            ActionDefault = "#b39ddb",
+            ActionDisabled = "#ffffff42",
+            ActionDisabledBackground = "#ffffff1f",
+            LinesDefault = "#ffffff1f",
+            LinesInputs = "#ffffff4d",
+            TableLines = "#ffffff1f",
+            TableStriped = "#ffffff0a",
+            Divider = "#ffffff1f",
+            DividerLight = "#ffffff0f",
+        },
+    };
+}
