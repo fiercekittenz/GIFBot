@@ -686,7 +686,7 @@ namespace GIFBot.Server.GIFBot
 
          ChannelId = TwitchEndpointHelpers.GetChannelId(HttpClientFactory.CreateClient(Common.skHttpClientName), BotSettings.ChannelName, BotSettings.BotOauthToken, out string result);
 
-         ChannelPointManager.InitializePubSub();
+         _ = ChannelPointManager.InitializeEventSub();
          CheckForHypeTrainEvent(false);
 
          ApiSettings apiSettings = new ApiSettings() {

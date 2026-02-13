@@ -4,9 +4,12 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
-using TwitchLib.Api.Helix;
-using TwitchLib.PubSub;
+using TwitchLib.EventSub.Core.EventArgs.Channel;
+using TwitchLib.EventSub.Websockets;
+using TwitchLib.EventSub.Websockets.Core.EventArgs;
 using static GIFBot.Shared.AnimationEnums;
 using static GIFBot.Shared.Utility.Enumerations;
 
@@ -19,81 +22,133 @@ namespace GIFBot.Server.Features.ChannelPoints
          Bot = bot;
       }
 
-      public void InitializePubSub(bool disconnectPrior = false)
+      public async Task InitializeEventSub(bool disconnectPrior = false)
       {
          try
          {
-            if (mTwitchPubSub != null && disconnectPrior)
+            if (mEventSubClient != null && disconnectPrior)
             {
-               mTwitchPubSub.Disconnect();
-               mTwitchPubSub = null;
+               await mEventSubClient.DisconnectAsync();
+               mEventSubClient = null;
             }
 
-            mTwitchPubSub = new TwitchPubSub();
-            mTwitchPubSub.OnPubSubServiceConnected += TwitchPubSub_OnPubSubServiceConnected;
-            mTwitchPubSub.OnPubSubServiceClosed += TwitchPubSub_OnPubSubServiceClosed;
-            mTwitchPubSub.OnPubSubServiceError += TwitchPubSub_OnPubSubServiceError;
-            mTwitchPubSub.OnChannelPointsRewardRedeemed += TwitchPubSub_OnChannelPointsRewardRedeemed;
+            mEventSubClient = new EventSubWebsocketClient();
+            mEventSubClient.WebsocketConnected += OnWebsocketConnected;
+            mEventSubClient.WebsocketDisconnected += OnWebsocketDisconnected;
+            mEventSubClient.ErrorOccurred += OnErrorOccurred;
+            mEventSubClient.WebsocketReconnected += OnWebsocketReconnected;
+            mEventSubClient.ChannelPointsCustomRewardRedemptionAdd += OnChannelPointsRewardRedeemed;
 
             if (!String.IsNullOrEmpty(Bot.BotSettings.StreamerOauthToken))
             {
-               mTwitchPubSub.Connect();
+               await mEventSubClient.ConnectAsync();
             }
          }
          catch (Exception /*ex*/)
          {
-            _ = Bot.SendLogMessage("Unable to start the TwitchPubSub client.");
+            _ = Bot.SendLogMessage("Unable to start the EventSub websocket client.");
          }
       }
 
-      private void TwitchPubSub_OnPubSubServiceConnected(object sender, EventArgs e)
+      private async Task OnWebsocketConnected(object sender, WebsocketConnectedArgs e)
       {
-         if (!String.IsNullOrEmpty(Bot.BotSettings.StreamerOauthToken) && Bot.ChannelId != 0)
+         if (!e.IsRequestedReconnect)
          {
-            _ = Bot.SendLogMessage("PubSub client connected! Sending topics.");
-
-            mTwitchPubSub.ListenToChannelPoints(Bot.ChannelId.ToString());
-            mTwitchPubSub.SendTopics(Bot.BotSettings.StreamerOauthToken);
+            await CreateChannelPointRedemptionSubscription();
          }
       }
 
-      private void TwitchPubSub_OnPubSubServiceClosed(object sender, EventArgs e)
+      private async Task OnWebsocketDisconnected(object sender, WebsocketDisconnectedArgs e)
       {
          if (!String.IsNullOrEmpty(Bot.BotSettings.StreamerOauthToken))
          {
-            _ = Bot.SendLogMessage("PubSub client disconnected. Reconnecting...");
-            InitializePubSub();
+            _ = Bot.SendLogMessage("EventSub client disconnected. Reconnecting...");
+            await Task.Delay(1000);
+            await InitializeEventSub();
          }
       }
 
-      private void TwitchPubSub_OnPubSubServiceError(object sender, TwitchLib.PubSub.Events.OnPubSubServiceErrorArgs e)
+      private Task OnErrorOccurred(object sender, ErrorOccuredArgs e)
       {
          if (!String.IsNullOrEmpty(Bot.BotSettings.StreamerOauthToken))
          {
-            _ = Bot.SendLogMessage($"PubSub error: {e.Exception.Message}. Do you have the wrong oauth scopes?");
-            InitializePubSub();
+            _ = Bot.SendLogMessage($"EventSub error: {e.Exception?.Message ?? e.Message}. Do you have the wrong oauth scopes?");
+         }
+         return Task.CompletedTask;
+      }
+
+      private Task OnWebsocketReconnected(object sender, WebsocketReconnectedArgs e)
+      {
+         _ = Bot.SendLogMessage("EventSub client reconnected successfully.");
+         return Task.CompletedTask;
+      }
+
+      private async Task CreateChannelPointRedemptionSubscription()
+      {
+         try
+         {
+            if (Bot.ChannelId == 0 || String.IsNullOrEmpty(Bot.BotSettings.StreamerOauthToken))
+            {
+               _ = Bot.SendLogMessage("EventSub: Cannot create subscription - missing channel ID or OAuth token.");
+               return;
+            }
+
+            _ = Bot.SendLogMessage("EventSub client connected! Creating channel point redemption subscription.");
+
+            var requestBody = new
+            {
+               type = "channel.channel_points_custom_reward_redemption.add",
+               version = "1",
+               condition = new { broadcaster_user_id = Bot.ChannelId.ToString() },
+               transport = new { method = "websocket", session_id = mEventSubClient.SessionId }
+            };
+
+            var json = JsonConvert.SerializeObject(requestBody);
+            using var request = new HttpRequestMessage(HttpMethod.Post, "https://api.twitch.tv/helix/eventsub/subscriptions");
+            request.Headers.Add("Authorization", $"Bearer {Bot.BotSettings.StreamerOauthToken.Trim()}");
+            request.Headers.Add("Client-ID", Common.skTwitchClientId);
+            request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            using var httpClient = Bot.HttpClientFactory.CreateClient(Common.skHttpClientName);
+            var response = await httpClient.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+               _ = Bot.SendLogMessage("EventSub: Successfully subscribed to channel point redemptions.");
+            }
+            else
+            {
+               var responseBody = await response.Content.ReadAsStringAsync();
+               _ = Bot.SendLogMessage($"EventSub: Failed to create subscription. Status: {response.StatusCode}. Response: {responseBody}");
+            }
+         }
+         catch (Exception ex)
+         {
+            _ = Bot.SendLogMessage($"EventSub: Error creating subscription: {ex.Message}");
          }
       }
 
-      private void TwitchPubSub_OnChannelPointsRewardRedeemed(object sender, TwitchLib.PubSub.Events.OnChannelPointsRewardRedeemedArgs e)
+      private Task OnChannelPointsRewardRedeemed(object sender, ChannelPointsCustomRewardRedemptionArgs e)
       {
          _ = Bot.SendLogMessage($"REWARD DETAILS: {JsonConvert.SerializeObject(e)}");
 
-         if (e.RewardRedeemed == null ||
-             e.RewardRedeemed.Redemption == null)
+         if (e.Payload?.Event == null)
          {
             // Exit early. Invalid redemption information.
-            return;
+            return Task.CompletedTask;
          }
 
-         Guid redeemedRewardId = new Guid (e.RewardRedeemed.Redemption.Id);
-         string rewardTitle = e.RewardRedeemed.Redemption.Reward.Title;
-         int rewardCost = e.RewardRedeemed.Redemption.Reward.Cost;
-         string userInput = e.RewardRedeemed.Redemption.UserInput;
+         var redemption = e.Payload.Event;
+
+         Guid redeemedRewardId = new Guid(redemption.Id);
+         string rewardTitle = redemption.Reward.Title;
+         int rewardCost = redemption.Reward.Cost;
+         string userInput = redemption.UserInput;
+         string userDisplayName = redemption.UserName;
 
          if (!mProcessedRewardIds.Contains(redeemedRewardId))
          {            
-            _ = Bot.SendLogMessage($"PubSub: {rewardTitle} redeemed!");
+            _ = Bot.SendLogMessage($"EventSub: {rewardTitle} redeemed!");
 
             mProcessedRewardIds.Enqueue(redeemedRewardId);
             if (mProcessedRewardIds.Count > skMaxRewardIdsToTrack)
@@ -108,7 +163,7 @@ namespace GIFBot.Server.Features.ChannelPoints
                 ((Bot.StickersManager.Data.IncludeChannelPoints && rewardCost >= Bot.StickersManager.Data.ChannelPointsMinimum) ||
                  (Bot.StickersManager.Data.CanUseCommand && rewardTitle.Contains(Bot.StickersManager.Data.Command, StringComparison.OrdinalIgnoreCase))))
             {
-               _ = Bot.SendLogMessage($"Sticker placed for channel points spent by [{e.RewardRedeemed.Redemption.User.DisplayName}].");
+               _ = Bot.SendLogMessage($"Sticker placed for channel points spent by [{userDisplayName}].");
                _ = Bot.StickersManager.PlaceASticker(rewardTitle);
             }
 
@@ -119,7 +174,7 @@ namespace GIFBot.Server.Features.ChannelPoints
             {
                foreach (var alertAnim in cpAlertAnims)
                {
-                  Bot.AnimationManager.ForceQueueAnimation(alertAnim, e.RewardRedeemed.Redemption.User.DisplayName, String.Empty);
+                  Bot.AnimationManager.ForceQueueAnimation(alertAnim, userDisplayName, String.Empty);
                }
             }
 
@@ -129,14 +184,14 @@ namespace GIFBot.Server.Features.ChannelPoints
                AnimationData cpAnim = Bot.AnimationManager.GetAllAnimations(GIFBot.AnimationManager.FetchType.EnabledOnly).Where(a => a.ChannelPointRedemptionType == ChannelPointRedemptionTriggerType.MessageText && userInput.Contains(a.Command, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
                if (cpAnim != null)
                {
-                  Bot.AnimationManager.ForceQueueAnimation(cpAnim, e.RewardRedeemed.Redemption.User.DisplayName, String.Empty);
+                  Bot.AnimationManager.ForceQueueAnimation(cpAnim, userDisplayName, String.Empty);
                }
             }
 
             // Look for !animationroulette
             if (rewardTitle.Contains("!animationroulette", StringComparison.OrdinalIgnoreCase) && !Bot.BotSettings.AnimationRouletteChatEnabled)
             {
-               Bot.AnimationManager.PlayRandomAnimation(e.RewardRedeemed.Redemption.User.DisplayName);
+               Bot.AnimationManager.PlayRandomAnimation(userDisplayName);
             }
 
             // Look for a valid regurgitator package
@@ -172,14 +227,14 @@ namespace GIFBot.Server.Features.ChannelPoints
                 Bot?.GiveawayManager?.Data?.EntryBehavior == GiveawayData.GiveawayEntryBehaviorType.ChannelPoints &&
                 Bot?.GiveawayManager?.Data?.ChannelPointRewardId == redeemedRewardId)
             {
-               Bot.GiveawayManager.HandleChannelPointEntry(e.RewardRedeemed.Redemption.User.DisplayName);
+               Bot.GiveawayManager.HandleChannelPointEntry(userDisplayName);
             }
 
             // See if there is a command in the title of the reward and if the reward cost matches the cost on the animation.
             AnimationData rewardTitleAnim = Bot.AnimationManager.GetAllAnimations(GIFBot.AnimationManager.FetchType.EnabledOnly).Where(a => a.ChannelPointRedemptionType == ChannelPointRedemptionTriggerType.PointsUsed && rewardTitle.Contains(a.Command, StringComparison.OrdinalIgnoreCase) && a.ChannelPointsRequired == rewardCost).FirstOrDefault();
             if (rewardTitleAnim != null)
             {
-               Bot.AnimationManager.ForceQueueAnimation(rewardTitleAnim, e.RewardRedeemed.Redemption.User.DisplayName, String.Empty);
+               Bot.AnimationManager.ForceQueueAnimation(rewardTitleAnim, userDisplayName, String.Empty);
             }
             else
             {
@@ -187,18 +242,20 @@ namespace GIFBot.Server.Features.ChannelPoints
                AnimationData cpPointCostAnim = Bot.AnimationManager.GetAllAnimations(GIFBot.AnimationManager.FetchType.EnabledOnly).Where(a => a.ChannelPointRedemptionType == ChannelPointRedemptionTriggerType.PointsUsed && a.ChannelPointsRequired == rewardCost).FirstOrDefault();
                if (cpPointCostAnim != null)
                {
-                  Bot.AnimationManager.ForceQueueAnimation(cpPointCostAnim, e.RewardRedeemed.Redemption.User.DisplayName, String.Empty);
+                  Bot.AnimationManager.ForceQueueAnimation(cpPointCostAnim, userDisplayName, String.Empty);
                }
             }
          }
+
+         return Task.CompletedTask;
       }
 
       public GIFBot.GIFBot Bot { get; private set; }
 
       /// <summary>
-      /// The PubSub Client from TwitchLib.
+      /// The EventSub Websocket Client from TwitchLib.
       /// </summary>
-      private TwitchPubSub mTwitchPubSub;
+      private EventSubWebsocketClient mEventSubClient;
 
       private Queue<Guid> mProcessedRewardIds = new Queue<Guid>();
 
