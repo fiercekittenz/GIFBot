@@ -2,7 +2,7 @@
 
 html, body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
-    background-color: #121218;
+    background-color: #0d0d1a;
 }
 
 a, .btn-link {
@@ -53,19 +53,19 @@ a, .btn-link {
 
 /* GIFBot UI theme classes — centralizes repeated inline background colors */
 .gifbot-page-header {
-    background-color: #36173e;
+    background-color: #2d2b52;
 }
 
 .gifbot-content-panel {
-    background-color: #211126;
+    background-color: #1e1e38;
 }
 
 .gifbot-section-panel {
-    background-color: #1d161f;
+    background-color: #161630;
 }
 
 .gifbot-form-panel {
-    background-color: #1e1e1e;
+    background-color: #1c1c34;
 }
 
 .animationCanvas {
