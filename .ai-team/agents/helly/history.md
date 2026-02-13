@@ -30,5 +30,10 @@
 - `html, body` background set to `#121218` globally in app.css; browser source pages are unaffected since they set their own backgrounds via inline styles
 - Deprecated `<center>` tags replaced with MudBlazor utility classes (`d-flex justify-center`)
 - Bare `<button>` elements replaced with `<MudButton Variant="Variant.Filled" Color="Color.Primary">` for consistent theming
+- Color scheme unified around Georgia's preferred deep blue/purple (#1a1a2e) — all neutral grays replaced with blue-tinted equivalents
+- Unified palette key values: Background #0d0d1a, Surface #22223a, BackgroundGray #161628, AppbarBackground/DrawerBackground #1a1a2e (anchor)
+- CSS panel classes shifted from maroon/pink tones to blue/purple: page-header #2d2b52, content-panel #1e1e38, section-panel #161630, form-panel #1c1c34
+- Text readability improved: TextPrimary bumped from #ffffffb3 (70%) to #ffffffde (87%), LinesInputs from #ffffff4d to #ffffff80 for visible text field borders
+- Typography FontFamily updated from Roboto to match the system font stack already declared in app.css
 
 — Helly
