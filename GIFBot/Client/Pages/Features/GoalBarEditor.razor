@@ -190,30 +190,30 @@
                   <label for="uiFont"><b>Font:</b></label>
                   <small id="uiFont" class="form-text text-white-50">What font should you use?</small>
                   <MudRadioGroup @bind-Value="mCaptionFontSelection" T="int">
-<MudRadio Option="@(0)">Arial</MudRadio>
-                        <MudRadio Option="@(1)">Comic Sans</MudRadio>
-                        <MudRadio Option="@(2)">Impact</MudRadio>
-                        <MudRadio Option="@(3)">Monospace</MudRadio>
-                        <MudRadio Option="@(4)">Aldrich</MudRadio>
-                        <MudRadio Option="@(5)">Anton</MudRadio>
-                        <MudRadio Option="@(6)">Barrio</MudRadio>
-                        <MudRadio Option="@(7)">Creepster</MudRadio>
-                        <MudRadio Option="@(8)">Eater</MudRadio>
-                        <MudRadio Option="@(9)">Galada</MudRadio>
-                        <MudRadio Option="@(10)">Ranchers</MudRadio>
-                        <MudRadio Option="@(11)">Lobster</MudRadio>
-                        <MudRadio Option="@(12)">Righteous</MudRadio>
-                        <MudRadio Option="@(13)">BenchNine</MudRadio>
-                        <MudRadio Option="@(14)">Oswald</MudRadio>
-                        <MudRadio Option="@(15)">Ultra</MudRadio>
-                        <MudRadio Option="@(16)">Frijole</MudRadio>
-                        <MudRadio Option="@(17)">Viga</MudRadio>
-                        <MudRadio Option="@(18)">Quantico</MudRadio>
-                        <MudRadio Option="@(19)">Bungee</MudRadio>
-                        <MudRadio Option="@(21)">Sriracha</MudRadio>
-                        <MudRadio Option="@(22)">Arsenal</MudRadio>
-                        <MudRadio Option="@(23)">Gaegu</MudRadio>
-                        <MudRadio Option="@(24)">VT323</MudRadio>
+<MudRadio T="int" Option="@(0)">Arial</MudRadio>
+                        <MudRadio T="int" Option="@(1)">Comic Sans</MudRadio>
+                        <MudRadio T="int" Option="@(2)">Impact</MudRadio>
+                        <MudRadio T="int" Option="@(3)">Monospace</MudRadio>
+                        <MudRadio T="int" Option="@(4)">Aldrich</MudRadio>
+                        <MudRadio T="int" Option="@(5)">Anton</MudRadio>
+                        <MudRadio T="int" Option="@(6)">Barrio</MudRadio>
+                        <MudRadio T="int" Option="@(7)">Creepster</MudRadio>
+                        <MudRadio T="int" Option="@(8)">Eater</MudRadio>
+                        <MudRadio T="int" Option="@(9)">Galada</MudRadio>
+                        <MudRadio T="int" Option="@(10)">Ranchers</MudRadio>
+                        <MudRadio T="int" Option="@(11)">Lobster</MudRadio>
+                        <MudRadio T="int" Option="@(12)">Righteous</MudRadio>
+                        <MudRadio T="int" Option="@(13)">BenchNine</MudRadio>
+                        <MudRadio T="int" Option="@(14)">Oswald</MudRadio>
+                        <MudRadio T="int" Option="@(15)">Ultra</MudRadio>
+                        <MudRadio T="int" Option="@(16)">Frijole</MudRadio>
+                        <MudRadio T="int" Option="@(17)">Viga</MudRadio>
+                        <MudRadio T="int" Option="@(18)">Quantico</MudRadio>
+                        <MudRadio T="int" Option="@(19)">Bungee</MudRadio>
+                        <MudRadio T="int" Option="@(21)">Sriracha</MudRadio>
+                        <MudRadio T="int" Option="@(22)">Arsenal</MudRadio>
+                        <MudRadio T="int" Option="@(23)">Gaegu</MudRadio>
+                        <MudRadio T="int" Option="@(24)">VT323</MudRadio>
 </MudRadioGroup>
                </div>
                <div class="form-group mt-2">
@@ -455,16 +455,14 @@
       }
    }
 
-   private async Task HandleDeleteGoal(EventArgs args)
+   private async Task HandleDeleteGoal(GoalData goal)
    {
-      GoalData goal = (GoalData)args.Item;
       //await OnVariantDeleted.InvokeAsync(variant.Id);
       await Task.CompletedTask;
    }
 
-   private async Task UpdateGoalHandler(EventArgs args)
+   private async Task UpdateGoalHandler(GoalData goal)
    {
-      GoalData goal = (GoalData)args.Item;
       await Task.CompletedTask;
    }
 

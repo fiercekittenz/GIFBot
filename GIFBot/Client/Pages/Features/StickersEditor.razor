@@ -178,7 +178,7 @@
             <div class="form-group">
                <label for="uiNewStickerBitPointsLabel">Bits Amount:</label>
                <small id="uiNewStickerBitPointsLabel" class="form-text text-muted">The exact number of bits that need to be cheered to make this sticker appear.</small>
-               <MudNumericField T="double" Id="uiNewStickerBitPoints" Min="0" Max="999999" @bind-Value="CurrentlyEditedSticker.BitAmount" />
+               <MudNumericField T="int" Id="uiNewStickerBitPoints" Min="0" Max="999999" @bind-Value="CurrentlyEditedSticker.BitAmount" />
             </div>
                }
 
@@ -248,8 +248,8 @@
                <label for="uiStickerLayer">Layer:</label>
                <small id="uiStickerLayer" class="form-text text-muted">The sticker can appear on a primary or secondary layer (browser source) that you can capture in your broadcaster software.</small>
                <MudRadioGroup @bind-Value="@CurrentlyEditedStickerLayer" T="int">
-<MudRadio Option="@(0)">Primary</MudRadio>
-                     <MudRadio Option="@(1)">Secondary</MudRadio>
+<MudRadio T="int" Option="@(0)">Primary</MudRadio>
+                     <MudRadio T="int" Option="@(1)">Secondary</MudRadio>
 </MudRadioGroup>
             </div>
 
@@ -352,13 +352,13 @@
                                  this command to be used from channel point rewards, it is recommended to flag it as Bot Only!
                               </small>
                               <MudRadioGroup @bind-Value="mAccessSelection" T="int">
-<MudRadio Option="@(0)">Anyone</MudRadio>
-                                    <MudRadio Option="@(2)">Subscriber</MudRadio>
-                                    <MudRadio Option="@(3)">VIP</MudRadio>
-                                    <MudRadio Option="@(4)">Moderator</MudRadio>
-                                    <MudRadio Option="@(5)">User Group</MudRadio>
-                                    <MudRadio Option="@(6)">Specific Viewer</MudRadio>
-                                    <MudRadio Option="@(7)">Bot Only</MudRadio>
+<MudRadio T="int" Option="@(0)">Anyone</MudRadio>
+                                    <MudRadio T="int" Option="@(2)">Subscriber</MudRadio>
+                                    <MudRadio T="int" Option="@(3)">VIP</MudRadio>
+                                    <MudRadio T="int" Option="@(4)">Moderator</MudRadio>
+                                    <MudRadio T="int" Option="@(5)">User Group</MudRadio>
+                                    <MudRadio T="int" Option="@(6)">Specific Viewer</MudRadio>
+                                    <MudRadio T="int" Option="@(7)">Bot Only</MudRadio>
 </MudRadioGroup>
                            </div>
 
@@ -369,7 +369,7 @@
                                  <small id="uiUserGroup" class="form-text text-white-50">Access is restricted to a user group. Which one?</small>
 
                                  <MudSelect T="string" Placeholder="Select User Group..." Style="background-color: #2c2241; color: #e5e5e5; font-weight: bold; width: 250px;"
-                                                 Data="@mUserGroupNames" @bind-Value="@mUserGroupName" ValueChanged="@(args => HandleUserGroupSelected(args as string))" />
+                                                 Data="@mUserGroupNames" Value="@mUserGroupName" ValueChanged="@(args => HandleUserGroupSelected(args as string))" />
                               </div>
                            }
                            else if (mStickerData.Access == GIFBot.Shared.AnimationEnums.AccessType.SpecificViewer)
@@ -498,7 +498,7 @@
                         <small id="uiBitPointsLabel" class="form-text text-muted">The minimum number of bits that need to be cheered to make a sticker. Must be non-zero to work.</small>
                         <DataAnnotationsValidator />
                         <ValidationSummary />
-                        <MudNumericField T="double" Id="uiBitPoints" Min="1" Max="999999" @bind-Value="mStickerData.BitMinimum" />
+                        <MudNumericField T="int" Id="uiBitPoints" Min="1" Max="999999" @bind-Value="mStickerData.BitMinimum" />
                      </div>
                   }
 
@@ -559,7 +559,7 @@
                         <small id="uiGiftSubPointsLabel" class="form-text text-muted">The minimum number of gifted subscriptions to make a sticker.</small>
                         <DataAnnotationsValidator />
                         <ValidationSummary />
-                        <MudNumericField T="double" Id="uiGiftSubPoints" Min="0" Max="999999" @bind-Value="mStickerData.GiftSubMinimum" />
+                        <MudNumericField T="int" Id="uiGiftSubPoints" Min="0" Max="999999" @bind-Value="mStickerData.GiftSubMinimum" />
                      </div>
                   }
 
@@ -617,10 +617,9 @@
                <div class="form-group">
                   <MudTabs @bind-ActivePanelIndex="@ActiveStickerTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
                      <MudTabPanel Text="Stickers">
-                        <MudDataGrid T="object" Items="@mStickerTreeListData" Filterable="true" SortMode="SortMode.Single" Groupable="false"> items) => StickersListSelectionChanged(items) )"
-                                         Page="@mStickerPage"
-                                         PageChanged="@StickerPageChanged"
-                                         PageSize="20">
+                        <MudDataGrid T="StickerTreeListItem" Items="@mStickerTreeListData" Filterable="true" SortMode="SortMode.Single" Groupable="false"
+                                             Pageable="true"
+                                             PageSize="20">
                            <ToolBarContent>
                               <MudTextField T="string" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
                               <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleAddCategoryRequest">Add Category</MudButton>
@@ -633,10 +632,10 @@
                               }
                            </ToolBarContent>
                            <Columns>
-                              <SelectColumn T="object" />
-                              <TemplateColumn Field="Name" Title="Name" Filterable="true" Expandable="true">
+                              <SelectColumn T="StickerTreeListItem" />
+                              <TemplateColumn Title="Name" Filterable="true" >
 <CellTemplate Context="stickercontext">
-                                    @{ var sticker = stickercontext as StickerTreeListItem; }
+                                    @{ var sticker = stickercontext.Item; }
                                     @if (sticker.Type == StickerTreeListItem.ItemType.Category)
                                     {
                                        <strong>@sticker.Name</strong>
@@ -647,11 +646,11 @@
                                     }
                                  </CellTemplate>
                               </TemplateColumn>
-                              <TemplateColumn Field="Enabled" Width="110px" Title="Enabled" Filterable="false">
+                              <TemplateColumn Width="110px" Title="Enabled" Filterable="false">
 <CellTemplate Context="stickercontext">
                                     @{
                                        string output = "No";
-                                       var sticker = stickercontext as StickerTreeListItem;
+                                       var sticker = stickercontext.Item;
                                        if (sticker.Enabled)
                                        {
                                           output = "Yes";
@@ -663,20 +662,20 @@
                                     }
                                  </CellTemplate>
                               </TemplateColumn>
-                              <TemplateColumn Field="Visual" Width="100px" Filterable="false">
+                              <TemplateColumn Width="100px" Filterable="false">
 <CellTemplate Context="stickercontext">
-                                    @{ var sticker = stickercontext as StickerTreeListItem; }
+                                    @{ var sticker = stickercontext.Item; }
                                     @if (sticker.Type == StickerTreeListItem.ItemType.Entry)
                                     {
                                        <img src="@($"media/{sticker.Visual}?{System.DateTimeOffset.UtcNow.ToUnixTimeSeconds()}")" style="height: 50px; width: auto" />
                                     }
                                  </CellTemplate>
                               </TemplateColumn>
-                              <PropertyColumn Field="Visual" Width="200px" Title="Visual Filename" Filterable="true"  />
+                              <PropertyColumn T="StickerTreeListItem" TProperty="string" Property="@(x => x.Visual)" Title="Visual Filename" Width="200px" Filterable="true" />
                               <TemplateColumn Width="220px">
 <CellTemplate Context="stickercontext">
                                     @{
-                                        var sticker = stickercontext as StickerTreeListItem;
+                                        var sticker = stickercontext.Item;
                                     }
                                     @if (sticker.Type == StickerTreeListItem.ItemType.Category)
                                      {

@@ -125,10 +125,10 @@
          <label for="uiCommandRedemption">Redemption Type:</label>
          <small id="uiCommandRedemption" class="form-text text-muted">Backdrops can be changed from a variety of methods. If using chat, you need to use the command otherwise the system won't recognize it as a deliberate backdrop change. Example chat usage: !backdrop cheer100</small>
          <MudRadioGroup @bind-Value="@CurrentlyEditedRedemption" T="int">
-<MudRadio Option="@(0)">Cheer</MudRadio>
-               <MudRadio Option="@(1)">Channel Points</MudRadio>
-               <MudRadio Option="@(2)">Tiltify Donation</MudRadio>
-               <MudRadio Option="@(3)">Tip</MudRadio>
+<MudRadio T="int" Option="@(0)">Cheer</MudRadio>
+               <MudRadio T="int" Option="@(1)">Channel Points</MudRadio>
+               <MudRadio T="int" Option="@(2)">Tiltify Donation</MudRadio>
+               <MudRadio T="int" Option="@(3)">Tip</MudRadio>
 </MudRadioGroup>
       </div>
       <div class="form-group">
@@ -152,20 +152,20 @@
 
    <MudTabPanel Text="Backdrops">
       <div class="container-fluid p-2">
-         <MudDataGrid T="object" Items="@Data.Backdrops" Sortable="true" Pageable="true" PageSize="10">
+         <MudDataGrid T="BackdropVideoEntryData" Items="@Data.Backdrops" Sortable="true" Pageable="true" PageSize="10">
             <ToolBarContent>
                <MudTextField T="string" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
                <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleAddRequest">Add Backdrop</MudButton>
             </ToolBarContent>
             <Columns>
-               <PropertyColumn Width="150px" Field=@nameof(BackdropVideoEntryData.Name) Title="Value"  />
+               <PropertyColumn T="BackdropVideoEntryData" TProperty="string" Property="@(x => x.Name)" Title="Value" Width="150px" />
                <TemplateColumn Width="100px" Title="">
 <CellTemplate Context="data">
-                     <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleHangRequest((data as BackdropVideoEntryData)))"><span class="oi oi-play-circle"></span></button>
-                     <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleEditRequest((data as BackdropVideoEntryData)))"><span class="oi oi-pencil"></span></button>
-                     <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleDeleteRequest((data as BackdropVideoEntryData)))"><span class="oi oi-trash"></span></button>
+                     <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleHangRequest((data.Item)))"><span class="oi oi-play-circle"></span></button>
+                     <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleEditRequest((data.Item)))"><span class="oi oi-pencil"></span></button>
+                     <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleDeleteRequest((data.Item)))"><span class="oi oi-trash"></span></button>
                   </CellTemplate>
-               </PropertyColumn>
+               </TemplateColumn>
             </Columns>
          </MudDataGrid>
       </div>

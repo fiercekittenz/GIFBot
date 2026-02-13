@@ -228,7 +228,7 @@
                               <label for="uiTiltifyCampaigns"><b>Active Campaign:</b></label><br />
                               <small id="uiTiltifyCampaigns" class="form-text text-white-50">Please select a campaign that you would like to listen to for donations. If you do not see campaigns in the list, please add your credentials above and save. The list should update if the provided information is correct.</small>
                               <MudSelect T="string" Placeholder="Select Active Campaign..." Style="background-color: #2c2241; color: #e5e5e5; font-weight: bold; width: 250px;"
-                                              Data="@mTiltifyCampaignNames" @bind-Value="@mSelectedTiltifyCampaignName" ValueChanged="@(args => OnTiltifyCampaignSelected(args))" />
+                                              Data="@mTiltifyCampaignNames" Value="@mSelectedTiltifyCampaignName" ValueChanged="@(args => OnTiltifyCampaignSelected(args))" />
                            </div>
                            <div class="form-group form-check">
                               <label class="form-check-label">
@@ -258,7 +258,7 @@
                                           <td valign="bottom">
                                              <label for="uiUserGroups"><b>User Groups:</b></label><br />
                                              <MudSelect T="string" Placeholder="Select User Group..." Style="background-color: #2c2241; color: #e5e5e5; font-weight: bold; width: 250px;"
-                                                             Data="@mUserGroupNames" @bind-Value="@mSelectedUserGroupName" ValueChanged="@(args => OnUserGroupSelected(args))" />
+                                                             Data="@mUserGroupNames" Value="@mSelectedUserGroupName" ValueChanged="@(args => OnUserGroupSelected(args))" />
                                           </td>
                                        </tr>
                                     </table>
@@ -285,19 +285,19 @@
                      @if (mSelectedUserGroup != null)
                      {
                         <div class="container-fluid mt-3">
-                           <MudDataGrid T="object" Items="@mSelectedUserGroup.UserEntries" Sortable="true" Pageable="true" PageSize="10">
+                           <MudDataGrid T="UserEntry" Items="@mSelectedUserGroup.UserEntries" Sortable="true" Pageable="true" PageSize="10">
                               <Columns>
-                                 <PropertyColumn Width="400px" Field="@nameof(UserEntry.Name)" Title="Viewer Name"  />
+                                 <PropertyColumn T="UserEntry" TProperty="string" Property="@(x => x.Name)" Title="Viewer Name" Width="400px" />
                                  @*
                                     <CellTemplate Context="data">
-                                       <strong>@(data as string)</strong>
+                                       <strong>@(data.Item)</strong>
                                     </CellTemplate>
                                     </PropertyColumn>*@
                                  <TemplateColumn Width="50px" Title="">
 <CellTemplate Context="data">
-                                       <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleDeleteUserFromGroup((data as string)))"><span class="oi oi-trash"></span></button>
+                                       <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleDeleteUserFromGroup((data.Item).Name))"><span class="oi oi-trash"></span></button>
                                     </CellTemplate>
-                                 </PropertyColumn>
+                                 </TemplateColumn>
                               </Columns>
                            </MudDataGrid>
                         </div>
@@ -345,15 +345,15 @@
                         execute animations like everyone else in chat.
                      </p>
                      <div class="container-fluid">
-                        <MudDataGrid T="object" Items="@mBotSettings.ThrottledUsers" Pageable="true" PageSize="15">
+                        <MudDataGrid T="ThrottledUserData" Items="@mBotSettings.ThrottledUsers" Pageable="true" PageSize="15">
                            <ToolBarContent>
                               <MudButton Variant="Variant.Text" Size="Size.Small">Add Viewer</MudButton>
                               <MudTextField T="string" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
                            </ToolBarContent>
                            <Columns>
-                              <PropertyColumn Field="@nameof(ThrottledUserData.Name)" Editable="true"  />
-                              <PropertyColumn Field="@nameof(ThrottledUserData.PersonalThrottleRate)" Width="200px" Editable="true" Title="Throttle Rate (in sec)"  />
-                              <PropertyColumn Field="@nameof(ThrottledUserData.IsBanned)" Width="120px" Editable="true" Title="Is Banned"  />
+                              <PropertyColumn T="ThrottledUserData" TProperty="string" Property="@(x => x.Name)" Title="Name" Editable="true" />
+                              <PropertyColumn T="ThrottledUserData" TProperty="int" Property="@(x => x.PersonalThrottleRate)" Title="Throttle Rate (in sec)" Width="200px" Editable="true" />
+                              <PropertyColumn T="ThrottledUserData" TProperty="bool" Property="@(x => x.IsBanned)" Title="Is Banned" Width="120px" Editable="true" />
                               <TemplateColumn Context="subcontext" Width="250px">
                                  <MudButton Variant="Variant.Text" Size="Size.Small">Edit</MudButton>
                                  <MudButton Variant="Variant.Text" Size="Size.Small">Delete</MudButton>
@@ -711,9 +711,8 @@
       }
    }
 
-   private async Task CreateThrottledUser(EventArgs args)
+   private async Task CreateThrottledUser(ThrottledUserData throttledUser)
    {
-      var throttledUser = args.Item as ThrottledUserData;
       bool result = await mHubConnection.InvokeAsync<bool>("AddThrottledUser", Newtonsoft.Json.JsonConvert.SerializeObject(throttledUser));
       if (result)
       {
@@ -728,9 +727,8 @@
       }
    }
 
-   private async Task DeleteThrottledUser(EventArgs args)
+   private async Task DeleteThrottledUser(ThrottledUserData throttledUser)
    {
-      var throttledUser = args.Item as ThrottledUserData;
       bool result = await mHubConnection.InvokeAsync<bool>("DeleteThrottledUser", throttledUser.Name);
       if (result)
       {
@@ -745,9 +743,8 @@
       }
    }
 
-   private async Task UpdateThrottledUser(EventArgs args)
+   private async Task UpdateThrottledUser(ThrottledUserData throttledUser)
    {
-      var throttledUser = args.Item as ThrottledUserData;
       bool result = await mHubConnection.InvokeAsync<bool>("UpdateThrottledUser", Newtonsoft.Json.JsonConvert.SerializeObject(throttledUser));
       if (result)
       {

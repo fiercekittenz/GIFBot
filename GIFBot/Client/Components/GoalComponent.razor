@@ -43,13 +43,13 @@
    <MudExpansionPanel Text="Milestones" IsInitiallyExpanded="true">
       <div class="form-group">
          <label for="uiGoalsGrid"><b>Milestones:</b></label>
-         <MudDataGrid T="object" Items="@mGoal.Milestones" Sortable="true" Pageable="true" PageSize="10">
+         <MudDataGrid T="GoalMilestone" Items="@mGoal.Milestones" Sortable="true" Pageable="true" PageSize="10">
             <ToolBarContent>
                <MudButton Variant="Variant.Text" Size="Size.Small">Add Milestone</MudButton>
             </ToolBarContent>
             <Columns>
-               <PropertyColumn Field="@(nameof(GoalMilestone.PercentageTriggerPoint))" Width="200px" Title="Percentage Trigger Point"  />
-               <PropertyColumn Field="@(nameof(GoalMilestone.AnimationCommand))" Width="200px" Title="Animation Command to Fire"  />
+               <PropertyColumn T="GoalMilestone" TProperty="int" Property="@(x => x.PercentageTriggerPoint)" Title="Percentage Trigger Point" Width="200px" />
+               <PropertyColumn T="GoalMilestone" TProperty="string" Property="@(x => x.AnimationCommand)" Title="Animation Command to Fire" Width="200px" />
                <TemplateColumn Context="subcontext" Width="55px">
                   <MudButton Variant="Variant.Text" Size="Size.Small"></MudButton>
                   <MudButton Variant="Variant.Text" Size="Size.Small"></MudButton>
@@ -100,16 +100,14 @@
       StateHasChanged();
    }
 
-   private void DeleteMilestoneHandler(EventArgs args)
+   private void DeleteMilestoneHandler(GoalMilestone milestone)
    {
-      GoalMilestone milestone = args.Item as GoalMilestone;
       mGoal.Milestones.Remove(milestone);
       StateHasChanged();
    }
 
-   private void AddMilestoneHandler(EventArgs args)
+   private void AddMilestoneHandler(GoalMilestone milestone)
    {
-      GoalMilestone milestone = args.Item as GoalMilestone;
       mGoal.Milestones.Add(milestone);
       mGoal.Milestones = mGoal.Milestones.OrderBy(m => m.PercentageTriggerPoint).ToList();
       StateHasChanged();

@@ -26,7 +26,7 @@
              {
                  @foreach (var pkg in AvailablePackages)
                  {
-                     <MudSelectItem T="Guid" Value="@pkg.Key">@pkg.Value</MudSelectItem>
+                     <MudSelectItem T="Guid" Value="@pkg.Id">@pkg.Name</MudSelectItem>
                  }
              }
          </MudSelect>
@@ -89,13 +89,13 @@
                                         the regurgitator to be used by any feature other than chat, you should set it as "Bot Only".
                                     </small>
                                     <MudRadioGroup @bind-Value="mAccessSelection" T="int">
-<MudRadio Option="@(0)">Anyone</MudRadio>
-                                            <MudRadio Option="@(2)">Subscriber</MudRadio>
-                                            <MudRadio Option="@(3)">VIP</MudRadio>
-                                            <MudRadio Option="@(4)">Moderator</MudRadio>
-                                            <MudRadio Option="@(5)">User Group</MudRadio>
-                                            <MudRadio Option="@(6)">Specific Viewer</MudRadio>
-                                            <MudRadio Option="@(7)">Bot Only</MudRadio>
+<MudRadio T="int" Option="@(0)">Anyone</MudRadio>
+                                            <MudRadio T="int" Option="@(2)">Subscriber</MudRadio>
+                                            <MudRadio T="int" Option="@(3)">VIP</MudRadio>
+                                            <MudRadio T="int" Option="@(4)">Moderator</MudRadio>
+                                            <MudRadio T="int" Option="@(5)">User Group</MudRadio>
+                                            <MudRadio T="int" Option="@(6)">Specific Viewer</MudRadio>
+                                            <MudRadio T="int" Option="@(7)">Bot Only</MudRadio>
 </MudRadioGroup>
                                 </div>
 
@@ -106,7 +106,7 @@
                                         <small id="uiUserGroup" class="form-text text-white-50">Access is restricted to a user group. Which one?</small>
 
                                         <MudSelect T="string" Placeholder="Select User Group..." Style="background-color: #2c2241; color: #e5e5e5; font-weight: bold; width: 250px;"
-                                            Data="@mUserGroupNames" @bind-Value="@mSelectedUserGroupName" ValueChanged="@(args => HandleUserGroupSelected(args as string))" />
+                                            Data="@mUserGroupNames" Value="@mSelectedUserGroupName" ValueChanged="@(args => HandleUserGroupSelected(args as string))" />
                                     </div>
                                 }
                                 else if (mRegurgitatorSettings.Access == AnimationEnums.AccessType.SpecificViewer)
@@ -202,14 +202,14 @@
                     <label for="uiEntries">Entries:</label>
                     <small id="uiEntries" class="form-text text-muted">These are the items that will be randomly regurgitated. You can add or delete entries here.</small>
 
-                    <MudDataGrid T="object" Items="@CurrentEntries" Sortable="true" Pageable="true" PageSize="10">
+                    <MudDataGrid T="RegurgitatorEntry" Items="@CurrentEntries" Sortable="true" Pageable="true" PageSize="10">
                         <Columns>
-                            <PropertyColumn Width="400px" Field=@nameof(RegurgitatorEntry.Value) Title="Value"  />
+                            <PropertyColumn T="RegurgitatorEntry" TProperty="string" Property="@(x => x.Value)" Title="Value" Width="400px" />
                             <TemplateColumn Width="50px" Title="">
 <CellTemplate Context="data">
-                                    <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => OnDeleteEntry((data as RegurgitatorEntry)))"><span class="oi oi-trash"></span></button>
+                                    <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => OnDeleteEntry((data.Item)))"><span class="oi oi-trash"></span></button>
                                 </CellTemplate>
-                            </PropertyColumn>
+                            </TemplateColumn>
                         </Columns>
                     </MudDataGrid>
 

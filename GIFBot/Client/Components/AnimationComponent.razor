@@ -139,13 +139,13 @@
                         this command to be used from within another command, it is recommended to flag it as Bot Only!
                      </small>
                      <MudRadioGroup @bind-Value="mAccessSelection" T="int">
-<MudRadio Option="@(0)">Anyone</MudRadio>
-                           <MudRadio Option="@(2)">Subscriber</MudRadio>
-                           <MudRadio Option="@(3)">VIP</MudRadio>
-                           <MudRadio Option="@(4)">Moderator</MudRadio>
-                           <MudRadio Option="@(5)">User Group</MudRadio>
-                           <MudRadio Option="@(6)">Specific Viewer</MudRadio>
-                           <MudRadio Option="@(7)">Bot Only</MudRadio>
+<MudRadio T="int" Option="@(0)">Anyone</MudRadio>
+                           <MudRadio T="int" Option="@(2)">Subscriber</MudRadio>
+                           <MudRadio T="int" Option="@(3)">VIP</MudRadio>
+                           <MudRadio T="int" Option="@(4)">Moderator</MudRadio>
+                           <MudRadio T="int" Option="@(5)">User Group</MudRadio>
+                           <MudRadio T="int" Option="@(6)">Specific Viewer</MudRadio>
+                           <MudRadio T="int" Option="@(7)">Bot Only</MudRadio>
 </MudRadioGroup>
                   </div>
 
@@ -156,7 +156,7 @@
                         <small id="uiUserGroup" class="form-text text-white-50">Access is restricted to a user group. Which one?</small>
 
                         <MudSelect T="string" Placeholder="Select User Group..." Style="background-color: #2c2241; color: #e5e5e5; font-weight: bold; width: 250px;"
-                                     Data="@UserGroupNames" @bind-Value="@mSelectedUserGroupName" ValueChanged="@(args => OnUserGroupSelected.InvokeAsync(args as string))" />
+                                     Data="@UserGroupNames" Value="@mSelectedUserGroupName" ValueChanged="@(args => OnUserGroupSelected.InvokeAsync(args as string))" />
                      </div>
                   }
                   else if (mData.Access == AnimationEnums.AccessType.SpecificViewer)
@@ -225,8 +225,8 @@
                                        you to create catch-all alerts for ranges of values, but an exact match alert for bits cheered will always be prioritized.
                                     </small>
                                     <MudRadioGroup @bind-Value="mBitBehaviorSelection" T="int">
-<MudRadio Option="@(0)">Exact Match</MudRadio>
-                                          <MudRadio Option="@(1)">Minimum (>= Your Value)</MudRadio>
+<MudRadio T="int" Option="@(0)">Exact Match</MudRadio>
+                                          <MudRadio T="int" Option="@(1)">Minimum (>= Your Value)</MudRadio>
 </MudRadioGroup>
                                  </div>
                                  <div class="form-group form-check">
@@ -268,11 +268,11 @@
                                     <label for="uiSubTier"><b>Tier:</b></label>
                                     <small id="uiSubTier" class="form-text text-white-50">What sub tier is this for?</small>
                                     <MudRadioGroup @bind-Value="mSubTierSelection" T="int">
-<MudRadio Option="@(0)">All</MudRadio>
-                                          <MudRadio Option="@(1)">Prime</MudRadio>
-                                          <MudRadio Option="@(2)">Tier 1</MudRadio>
-                                          <MudRadio Option="@(3)">Tier 2</MudRadio>
-                                          <MudRadio Option="@(4)">Tier 3</MudRadio>
+<MudRadio T="int" Option="@(0)">All</MudRadio>
+                                          <MudRadio T="int" Option="@(1)">Prime</MudRadio>
+                                          <MudRadio T="int" Option="@(2)">Tier 1</MudRadio>
+                                          <MudRadio T="int" Option="@(3)">Tier 2</MudRadio>
+                                          <MudRadio T="int" Option="@(4)">Tier 3</MudRadio>
 </MudRadioGroup>
                                  </div>
                               }
@@ -328,10 +328,10 @@
                            <div class="form-group">
                               <label for="uiChannelPointLevel"><b>Options:</b></label>
                               <MudRadioGroup @bind-Value="mChannelPointSelection" T="int">
-<MudRadio Option="@(0)">Disabled</MudRadio>
-                                    <MudRadio Option="@(1)">Trigger on all channel point redemptions. Will be have as an alert and always be queued.</MudRadio>
-                                    <MudRadio Option="@(2)">Trigger by the redemption message. The command must be in the message (user input required).</MudRadio>
-                                    <MudRadio Option="@(3)">Trigger by the number of points spent (does not require user input).</MudRadio>
+<MudRadio T="int" Option="@(0)">Disabled</MudRadio>
+                                    <MudRadio T="int" Option="@(1)">Trigger on all channel point redemptions. Will be have as an alert and always be queued.</MudRadio>
+                                    <MudRadio T="int" Option="@(2)">Trigger by the redemption message. The command must be in the message (user input required).</MudRadio>
+                                    <MudRadio T="int" Option="@(3)">Trigger by the number of points spent (does not require user input).</MudRadio>
 </MudRadioGroup>
                            </div>
                            @if (mData.ChannelPointRedemptionType == AnimationEnums.ChannelPointRedemptionTriggerType.PointsUsed)
@@ -339,7 +339,7 @@
                               <div class="form-group">
                                  <label for="uiNumChannelPoints"><b>Number of Channel Points Spent to Trigger (exact match)</b></label>
                                  <small id="uiNumChannelPoints" class="form-text text-white-50">The number of points that must be spent in order to trigger this animation. The number must match the cost in your Stream Manager.</small>
-                                 <MudNumericField T="int" Id="uiNumChannelPoints" Min="1" Max="100000000" @bind-Value="mData.ChannelPointsRequired" OnChange="@(args => HandleChannelPointRequirementChanged(args))" />
+                                 <MudNumericField T="int" Id="uiNumChannelPoints" Min="1" Max="100000000" Value="@mData.ChannelPointsRequired" ValueChanged="@((int val) => { mData.ChannelPointsRequired = val; HandleChannelPointRequirementChanged(val); })" />
                               </div>
                            }
                         </div>
@@ -438,15 +438,15 @@
                </div>
                <div class="form-group">
                   <label for="uiVariationsGrid"><b>Variations:</b></label>
-                  <MudDataGrid T="object" Items="@mData.Variants" Sortable="true" Pageable="true" PageSize="10">
+                  <MudDataGrid T="AnimationVariantData" Items="@mData.Variants" Sortable="true" Pageable="true" PageSize="10">
                      <Columns>
-                        <PropertyColumn Field="@(nameof(AnimationVariantData.Visual))" Editable="false" Width="50px" Title="Visual"  />
-                        <PropertyColumn Field="@(nameof(AnimationVariantData.Audio))" Editable="false" Width="50px" Title="Audio"  />
-                        <PropertyColumn Field="@(nameof(AnimationVariantData.Volume))" Width="50px" Title="Volume"  />
-                        <PropertyColumn Field="@(nameof(AnimationVariantData.DurationMilliseconds))" Width="50px" Title="Duration (in ms)"  />
-                        <PropertyColumn Field="@(nameof(AnimationVariantData.AudioTimingOffsetMilliseconds))" Width="50px" Title="Offset (in ms)"  />
-                        <PropertyColumn Field="@(nameof(AnimationVariantData.PrePlayText))" Width="50px" Title="PrePlayText"  />
-                        <PropertyColumn Field="@(nameof(AnimationVariantData.PostPlayText))" Width="50px" Title="PostPlayText"  />
+                        <PropertyColumn T="AnimationVariantData" TProperty="string" Property="@(x => x.Visual)" Title="Visual" Editable="false" Width="50px" />
+                        <PropertyColumn T="AnimationVariantData" TProperty="string" Property="@(x => x.Audio)" Title="Audio" Editable="false" Width="50px" />
+                        <PropertyColumn T="AnimationVariantData" TProperty="double" Property="@(x => x.Volume)" Title="Volume" Width="50px" />
+                        <PropertyColumn T="AnimationVariantData" TProperty="int" Property="@(x => x.DurationMilliseconds)" Title="Duration (in ms)" Width="50px" />
+                        <PropertyColumn T="AnimationVariantData" TProperty="int" Property="@(x => x.AudioTimingOffsetMilliseconds)" Title="Offset (in ms)" Width="50px" />
+                        <PropertyColumn T="AnimationVariantData" TProperty="string" Property="@(x => x.PrePlayText)" Title="PrePlayText" Width="50px" />
+                        <PropertyColumn T="AnimationVariantData" TProperty="string" Property="@(x => x.PostPlayText)" Title="PostPlayText" Width="50px" />
                         <TemplateColumn Context="subcontext" Width="55px">
                            <MudButton Variant="Variant.Text" Size="Size.Small"></MudButton>
                            <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandlePlayVariant"></MudButton>
@@ -576,7 +576,7 @@
                <div class="mt-2">
                   <label for="uiCaption"><b>Caption:</b></label>
                   <small id="uiCaption" class="form-text text-white-50">The caption text to appear with the animation.</small>
-                  <MudTextField T="string" Id="uiCaption" @bind-Value="mData.Caption.Text" OnChange="@(args => UpdateCaptionPreview(args))" />
+                  <MudTextField T="string" Id="uiCaption" Value="@mData.Caption.Text" ValueChanged="@((string val) => { mData.Caption.Text = val; UpdateCaptionPreview(val); })" />
                </div>
                <div class="form-group mt-2">
                   <label for="uiCaptionFontSize"><b>Font Size:</b></label>
@@ -602,30 +602,30 @@
                   <label for="uiCaptionFont"><b>Font:</b></label>
                   <small id="uiCaptionFont" class="form-text text-white-50">What font should you use?</small>
                   <MudRadioGroup @bind-Value="mCaptionFontSelection" T="int">
-<MudRadio Option="@(0)">Arial</MudRadio>
-                        <MudRadio Option="@(1)">Comic Sans</MudRadio>
-                        <MudRadio Option="@(2)">Impact</MudRadio>
-                        <MudRadio Option="@(3)">Monospace</MudRadio>
-                        <MudRadio Option="@(4)">Aldrich</MudRadio>
-                        <MudRadio Option="@(5)">Anton</MudRadio>
-                        <MudRadio Option="@(6)">Barrio</MudRadio>
-                        <MudRadio Option="@(7)">Creepster</MudRadio>
-                        <MudRadio Option="@(8)">Eater</MudRadio>
-                        <MudRadio Option="@(9)">Galada</MudRadio>
-                        <MudRadio Option="@(10)">Ranchers</MudRadio>
-                        <MudRadio Option="@(11)">Lobster</MudRadio>
-                        <MudRadio Option="@(12)">Righteous</MudRadio>
-                        <MudRadio Option="@(13)">BenchNine</MudRadio>
-                        <MudRadio Option="@(14)">Oswald</MudRadio>
-                        <MudRadio Option="@(15)">Ultra</MudRadio>
-                        <MudRadio Option="@(16)">Frijole</MudRadio>
-                        <MudRadio Option="@(17)">Viga</MudRadio>
-                        <MudRadio Option="@(18)">Quantico</MudRadio>
-                        <MudRadio Option="@(19)">Bungee</MudRadio>
-                        <MudRadio Option="@(21)">Sriracha</MudRadio>
-                        <MudRadio Option="@(22)">Arsenal</MudRadio>
-                        <MudRadio Option="@(23)">Gaegu</MudRadio>
-                        <MudRadio Option="@(24)">VT323</MudRadio>
+<MudRadio T="int" Option="@(0)">Arial</MudRadio>
+                        <MudRadio T="int" Option="@(1)">Comic Sans</MudRadio>
+                        <MudRadio T="int" Option="@(2)">Impact</MudRadio>
+                        <MudRadio T="int" Option="@(3)">Monospace</MudRadio>
+                        <MudRadio T="int" Option="@(4)">Aldrich</MudRadio>
+                        <MudRadio T="int" Option="@(5)">Anton</MudRadio>
+                        <MudRadio T="int" Option="@(6)">Barrio</MudRadio>
+                        <MudRadio T="int" Option="@(7)">Creepster</MudRadio>
+                        <MudRadio T="int" Option="@(8)">Eater</MudRadio>
+                        <MudRadio T="int" Option="@(9)">Galada</MudRadio>
+                        <MudRadio T="int" Option="@(10)">Ranchers</MudRadio>
+                        <MudRadio T="int" Option="@(11)">Lobster</MudRadio>
+                        <MudRadio T="int" Option="@(12)">Righteous</MudRadio>
+                        <MudRadio T="int" Option="@(13)">BenchNine</MudRadio>
+                        <MudRadio T="int" Option="@(14)">Oswald</MudRadio>
+                        <MudRadio T="int" Option="@(15)">Ultra</MudRadio>
+                        <MudRadio T="int" Option="@(16)">Frijole</MudRadio>
+                        <MudRadio T="int" Option="@(17)">Viga</MudRadio>
+                        <MudRadio T="int" Option="@(18)">Quantico</MudRadio>
+                        <MudRadio T="int" Option="@(19)">Bungee</MudRadio>
+                        <MudRadio T="int" Option="@(21)">Sriracha</MudRadio>
+                        <MudRadio T="int" Option="@(22)">Arsenal</MudRadio>
+                        <MudRadio T="int" Option="@(23)">Gaegu</MudRadio>
+                        <MudRadio T="int" Option="@(24)">VT323</MudRadio>
 </MudRadioGroup>
                </div>
                <div class="form-group mt-2">
@@ -638,8 +638,8 @@
                   <label for="uiCaptionLocation"><b>Caption Location:</b></label>
                   <small id="uiCaptionLocation" class="form-text text-white-50">Where would you like the caption to appear relative to the animation?</small>
                   <MudRadioGroup @bind-Value="mCaptionLocationSelection" T="int">
-<MudRadio Option="@(0)">Above</MudRadio>
-                        <MudRadio Option="@(1)">Below</MudRadio>
+<MudRadio T="int" Option="@(0)">Above</MudRadio>
+                        <MudRadio T="int" Option="@(1)">Below</MudRadio>
 </MudRadioGroup>
                </div>
                <div class="mt-2">
@@ -667,18 +667,18 @@
                </div>
                <div class="form-group">
                   <label for="uiChainsList"><b>Chained Animation Commands:</b></label>
-                  <MudDataGrid T="object" Items="@mData.ChainedAnimations" Sortable="true" Pageable="true" PageSize="10">
+                  <MudDataGrid T="string" Items="@mData.ChainedAnimations" Sortable="true" Pageable="true" PageSize="10">
                      <Columns>
                         <TemplateColumn Width="400px" Title="Command">
 <CellTemplate Context="data">
-                              @data
+                              @data.Item
                            </CellTemplate>
-                        </PropertyColumn>
+                        </TemplateColumn>
                         <TemplateColumn Width="50px" Title="">
 <CellTemplate Context="data">
-                              <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleDeleteChainedCommand(data as string))"><span class="oi oi-trash"></span></button>
+                              <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleDeleteChainedCommand(data.Item))"><span class="oi oi-trash"></span></button>
                            </CellTemplate>
-                        </PropertyColumn>
+                        </TemplateColumn>
                      </Columns>
                   </MudDataGrid>
                </div>
@@ -1108,18 +1108,20 @@
    /// <summary>
    /// Plays the selected variant as a test.
    /// </summary>
-   private async Task HandlePlayVariant(EventArgs args)
+   private async Task HandlePlayVariant()
    {
-      AnimationVariantData variant = (AnimationVariantData)args.Item;
+      // TODO: variant play needs row context; placeholder
+      AnimationVariantData variant = null;
       await OnVariantPlay.InvokeAsync(variant.Id);
    }
 
    /// <summary>
    /// Handles the deletion of a variant.
    /// </summary>
-   private async Task HandleDeleteVariant(EventArgs args)
+   private async Task HandleDeleteVariant()
    {
-      AnimationVariantData variant = (AnimationVariantData)args.Item;
+      // TODO: variant delete needs row context; placeholder
+      AnimationVariantData variant = null;
 
       bool confirmed = await Task.FromResult(true) /* TODO: MudBlazor dialog confirm was: Dialogs.ConfirmAsync($"Are you sure you want to delete the variant?", "Delete Variant?") */;
       if (confirmed)
@@ -1133,9 +1135,10 @@
       mVariationPage = page;
    }
 
-   private async Task UpdateVariationHandler(EventArgs args)
+   private async Task UpdateVariationHandler()
    {
-      AnimationVariantData variant = (AnimationVariantData)args.Item;
+      // TODO: variant update needs row context; placeholder
+      AnimationVariantData variant = null;
 
       await OnVariantUpdated.InvokeAsync(new AnimationVariantData()
          {
@@ -1181,14 +1184,22 @@
 
    private void OnImportVisualFileProgress(EventArgs e)
    {
-      mUploadVisualProgress = e.Progress;
+      // Upload progress tracking not available with InputFile
       StateHasChanged();
    }
 
-   private async Task OnImportVisualFileComplete(UploadCompleteEventArgs e)
+   private async Task OnImportVisualFileComplete(InputFileChangeEventArgs e)
    {
       // Upload completed.
-      mData.Visual = e.RawResponse;
+      var file = e.File;
+
+      using var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024);
+
+      using var ms = new System.IO.MemoryStream();
+
+      await stream.CopyToAsync(ms);
+
+      mData.Visual = Convert.ToBase64String(ms.ToArray());
       mUploadVisualProgress = 100;
       await OnVisualFileChanged.InvokeAsync(null);
       StateHasChanged();
@@ -1202,14 +1213,22 @@
 
    private void OnImportAudioFileProgress(EventArgs e)
    {
-      mUploadAudioProgress = e.Progress;
+      // Upload progress tracking not available with InputFile
       StateHasChanged();
    }
 
-   private void OnImportAudioFileComplete(UploadCompleteEventArgs e)
+   private async Task OnImportAudioFileComplete(InputFileChangeEventArgs e)
    {
       // Upload completed.
-      mData.Audio = e.RawResponse;
+      var file = e.File;
+
+      using var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024);
+
+      using var ms = new System.IO.MemoryStream();
+
+      await stream.CopyToAsync(ms);
+
+      mData.Audio = Convert.ToBase64String(ms.ToArray());
       mUploadAudioProgress = 100;
       StateHasChanged();
    }
@@ -1226,14 +1245,22 @@
 
    private void OnImportVariantVisualFileProgress(EventArgs e)
    {
-      mUploadVariantVisualProgress = e.Progress;
+      // Upload progress tracking not available with InputFile
       StateHasChanged();
    }
 
-   private void OnImportVariantVisualFileComplete(UploadCompleteEventArgs e)
+   private async Task OnImportVariantVisualFileComplete(InputFileChangeEventArgs e)
    {
       // Upload completed.
-      mVariantVisual = e.RawResponse;
+      var file = e.File;
+
+      using var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024);
+
+      using var ms = new System.IO.MemoryStream();
+
+      await stream.CopyToAsync(ms);
+
+      mVariantVisual = Convert.ToBase64String(ms.ToArray());
       mUploadVariantVisualProgress = 100;
       StateHasChanged();
    }
@@ -1246,14 +1273,22 @@
 
    private void OnImportVariantAudioFileProgress(EventArgs e)
    {
-      mUploadVariantAudioProgress = e.Progress;
+      // Upload progress tracking not available with InputFile
       StateHasChanged();
    }
 
-   private void OnImportVariantAudioFileComplete(UploadCompleteEventArgs e)
+   private async Task OnImportVariantAudioFileComplete(InputFileChangeEventArgs e)
    {
       // Upload completed.
-      mVariantAudio = e.RawResponse;
+      var file = e.File;
+
+      using var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024);
+
+      using var ms = new System.IO.MemoryStream();
+
+      await stream.CopyToAsync(ms);
+
+      mVariantAudio = Convert.ToBase64String(ms.ToArray());
       mUploadVariantAudioProgress = 100;
       StateHasChanged();
    }

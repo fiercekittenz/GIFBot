@@ -74,9 +74,9 @@
                 <Columns>
                     <TemplateColumn Width="400px" Filterable="true" Title="Entrant Name">
 <CellTemplate Context="data">
-                            @(data as string)
+                            @(data.Item)
                         </CellTemplate>
-                    </PropertyColumn>
+                    </TemplateColumn>
                 </Columns>
             </MudDataGrid>
         </div>
@@ -89,8 +89,8 @@
                 How would you like viewers to enter your giveaway? You can use chat with subscriber luck benefits, or you can have a ticket-based system by using Channel Points. If you use Channel Points, the rewards will be created and destroyed for you as you open and close the giveaway so users cannot accidentally enter without a running giveaway.
             </small>
             <MudRadioGroup @bind-Value="mEntryBehaviorSelection" T="int">
-<MudRadio Option="@(0)">Command</MudRadio>
-                    <MudRadio Option="@(1)">Channel Points</MudRadio>
+<MudRadio T="int" Option="@(0)">Command</MudRadio>
+                    <MudRadio T="int" Option="@(1)">Channel Points</MudRadio>
 </MudRadioGroup>
         </div>
         @if (Data.EntryBehavior == GiveawayData.GiveawayEntryBehaviorType.Command)
@@ -111,10 +111,10 @@
                     You can limit what kind of viewer has access to use this giveaway. Your options are below.
                 </small>
                 <MudRadioGroup @bind-Value="mAccessSelection" T="int">
-<MudRadio Option="@(0)">Anyone</MudRadio>
-                        <MudRadio Option="@(2)">Subscriber</MudRadio>
-                        <MudRadio Option="@(3)">VIP</MudRadio>
-                        <MudRadio Option="@(4)">Moderator</MudRadio>
+<MudRadio T="int" Option="@(0)">Anyone</MudRadio>
+                        <MudRadio T="int" Option="@(2)">Subscriber</MudRadio>
+                        <MudRadio T="int" Option="@(3)">VIP</MudRadio>
+                        <MudRadio T="int" Option="@(4)">Moderator</MudRadio>
 </MudRadioGroup>
             </div>
         }
@@ -171,7 +171,7 @@
 
     <MudTabPanel Text="Banned Users">
         <div class="container-fluid p-2">
-            <MudDataGrid T="object" Items="@Data.BannedUsers" Sortable="true" Pageable="true" PageSize="20">
+            <MudDataGrid T="string" Items="@Data.BannedUsers" Sortable="true" Pageable="true" PageSize="20">
                 <ToolBarContent>
                     <MudTextField T="string" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
                     <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleAddBannedUserRequest">Add New Banned User</MudButton>
@@ -179,14 +179,14 @@
                 <Columns>
                     <TemplateColumn Width="400px" Title="Name">
 <CellTemplate Context="data">
-                            @(data as string)
+                            @(data.Item)
                         </CellTemplate>
-                    </PropertyColumn>
+                    </TemplateColumn>
                     <TemplateColumn Width="75px">
 <CellTemplate Context="data">
-                            <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleDeleteBannedUserRequest((data as string)))"><span class="oi oi-trash"></span></button>
+                            <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleDeleteBannedUserRequest((string)data.Item))"><span class="oi oi-trash"></span></button>
                         </CellTemplate>
-                    </PropertyColumn>
+                    </TemplateColumn>
                 </Columns>
             </MudDataGrid>
         </div>

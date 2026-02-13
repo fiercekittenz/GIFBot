@@ -1,5 +1,6 @@
-﻿using GIFBot.Shared.Models.Features;
+using GIFBot.Shared.Models.Features;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.JSInterop;
 using Newtonsoft.Json;
@@ -9,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http.Connections;
+using MudBlazor;
 
 namespace GIFBot.Client.Pages.Features
 {
@@ -128,16 +130,24 @@ namespace GIFBot.Client.Pages.Features
          await InvokeAsync(() => { StateHasChanged(); });
       }
 
-      private void OnImportAudioFileProgress(UploadProgressArgs e)
+      private void OnImportAudioFileProgress(InputFileChangeEventArgs e)
       {
-         mUploadAudioProgress = e.Progress;
+         // Upload progress tracking not available with InputFile
          StateHasChanged();
       }
 
-      private void OnImportAudioFileComplete(UploadCompleteEventArgs e)
+      private async Task OnImportAudioFileComplete(InputFileChangeEventArgs e)
       {
          // Upload completed.
-         mStickerData.Audio = e.RawResponse;
+         var file = e.File;
+
+         using var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024);
+
+         using var ms = new System.IO.MemoryStream();
+
+         await stream.CopyToAsync(ms);
+
+         mStickerData.Audio = Convert.ToBase64String(ms.ToArray());
          mUploadAudioProgress = 100;
          StateHasChanged();
       }
@@ -715,13 +725,13 @@ namespace GIFBot.Client.Pages.Features
          }
       }
 
-      private void OnImportStickerVisualFileProgress(UploadProgressArgs e)
+      private void OnImportStickerVisualFileProgress(InputFileChangeEventArgs e)
       {
-         mUploadStickerVisualProgress = e.Progress;
+         // Upload progress tracking not available with InputFile
          StateHasChanged();
       }
 
-      private async Task OnImportStickerVisualFileComplete(UploadCompleteEventArgs e)
+      private async Task OnImportStickerVisualFileComplete(InputFileChangeEventArgs e)
       {
          // Upload completed.
          StickerEntryData dataToEdit = mTempStickerToAdd;
@@ -730,7 +740,11 @@ namespace GIFBot.Client.Pages.Features
             dataToEdit = CurrentlyEditedSticker;
          }
 
-         dataToEdit.Visual = e.RawResponse;
+         var file = e.File;
+         using var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024);
+         using var ms = new System.IO.MemoryStream();
+         await stream.CopyToAsync(ms);
+         dataToEdit.Visual = Convert.ToBase64String(ms.ToArray());
          mUploadStickerVisualProgress = 100;
 
          string result = await mHubConnection.InvokeAsync<string>("GetStickerFileDimensions", dataToEdit.Visual);

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.JSInterop;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http.Connections;
+using MudBlazor;
 namespace GIFBot.Client.Pages.Animation_Editor
 {
    public partial class EditAnimation : ComponentBase, IAsyncDisposable

@@ -1,4 +1,4 @@
-﻿using GIFBot.Shared.Models.Features;
+using GIFBot.Shared.Models.Features;
 using GIFBot.Shared.Models.Visualization;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using static GIFBot.Shared.Utility.Enumerations;
 
+using MudBlazor;
 namespace GIFBot.Client.Pages.Features
 {
    public partial class CountdownTimer : IAsyncDisposable

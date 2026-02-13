@@ -1,5 +1,6 @@
 ﻿using GIFBot.Shared.Models.Animation;
 using GIFBot.Shared.Models.Features;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.SignalR.Client;
 using Newtonsoft.Json;
@@ -7,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MudBlazor;
 namespace GIFBot.Client.Pages.Features
 {
    public partial class GreeterEditor
@@ -160,18 +162,16 @@ namespace GIFBot.Client.Pages.Features
          StateHasChanged();
       }
 
-      public void DeleteRecipientHandler(object /* was EventArgs */ args)
+      public void DeleteRecipientHandler(GreetedPersonality person)
       {
-         GreetedPersonality person = args.Item as GreetedPersonality;
          if (person != null)
          {
             mTempGreeterEntry.Recipients.Remove(person);
          }
       }
 
-      public void CreateRecipientHandler(object /* was EventArgs */ args)
+      public void CreateRecipientHandler(GreetedPersonality person)
       {
-         GreetedPersonality person = args.Item as GreetedPersonality;
          mTempGreeterEntry.Recipients.Add(person);
       }
 
@@ -180,10 +180,10 @@ namespace GIFBot.Client.Pages.Features
       #region Bulk Import Recipients
       private void OnImportTextFileProgress(EventArgs e)
       {
-         mUploadProgress = e.Progress;
+         // Upload progress tracking not available with InputFile
       }
 
-      private async Task OnImportTextFileComplete(UploadCompleteEventArgs e)
+      private async Task OnImportTextFileComplete(InputFileChangeEventArgs e)
       {
          // Upload completed. Redownload the data and reset upload info.
          mUploadProgress = 0;

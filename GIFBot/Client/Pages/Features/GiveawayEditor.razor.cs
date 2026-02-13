@@ -1,4 +1,4 @@
-﻿using GIFBot.Shared;
+using GIFBot.Shared;
 using GIFBot.Shared.Models.Animation;
 using GIFBot.Shared.Models.Features;
 using Microsoft.AspNetCore.Http.Connections;
@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using MudBlazor;
 namespace GIFBot.Client.Pages.Features
 {
    public partial class GiveawayEditor

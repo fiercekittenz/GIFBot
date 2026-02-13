@@ -69,39 +69,8 @@
             <MudTextField T="string" Id="uiTempChatMessage" @bind-Value="mTempGreeterEntry.ChatMessage" />
         </div>
         <div class="form-group">
-            <MudList T="object">
-<MudButton Variant="Variant.Text" Size="Size.Small">Add</MudButton>
-<Template>
-                    <div class="k-card k-card-horizontal">
-                        <div class="k-card-body">
-                            <div class="k-hbox k-justify-content-between k-flex-wrap">
-                                <div>
-                                    <h5 class="k-card-subtitle">@context.Name</h5>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-actions">
-                            <MudButton Variant="Variant.Text" Size="Size.Small">Edit</MudButton>
-                            <MudButton Variant="Variant.Text" Size="Size.Small">Delete</MudButton>
-                        </div>
-                    </div>
-                </CellTemplate>
-                <EditTemplate>
-                    <div class="k-card k-card-horizontal">
-                        <div class="k-card-body">
-                            <div class="k-hbox k-justify-content-between k-flex-wrap">
-                                <div>
-                                    <label class="editor-label">Name</label>
-                                    <MudTextField T="string" @bind-Value="@context.Name" Class="mb-sm"></MudTextField>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-actions">
-                            <MudButton Variant="Variant.Text" Size="Size.Small">Save</MudButton>
-                            <MudButton Variant="Variant.Text" Size="Size.Small">Cancel</MudButton>
-                        </div>
-                    </div>
-                </EditTemplate>
+            <MudList T="string">
+                @* TODO: Greeter recipients list - needs MudBlazor-compatible implementation *@
             </MudList>
         </div>
 
@@ -137,24 +106,24 @@
 <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
     <MudTabPanel Text="Greeters">
         <div class="container-fluid p-2">
-            <MudDataGrid T="object" Items="@Data.Entries" Sortable="true" Pageable="true" PageSize="10">
+            <MudDataGrid T="GreeterEntry" Items="@Data.Entries" Sortable="true" Pageable="true" PageSize="10">
                <ToolBarContent>
                   <MudTextField T="string" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
                   <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleAddRequest">Add New Greeter</MudButton>
                </ToolBarContent>
                 <Columns>
-                    <PropertyColumn Width="200px" Field=@nameof(GreeterEntry.Name) Title="Greeter Name"  />
+                    <PropertyColumn T="GreeterEntry" TProperty="string" Property="@(x => x.Name)" Title="Greeter Name" Width="200px" />
                     <TemplateColumn Width="400px" Title="Recipients">
 <CellTemplate Context="data">
-                            @((data as GreeterEntry).GetRecipientsDisplayList())
+                            @((data.Item).GetRecipientsDisplayList())
                         </CellTemplate>
-                    </PropertyColumn>
+                    </TemplateColumn>
                     <TemplateColumn Width="75px">
 <CellTemplate Context="data">
-                            <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleEditRequest((data as GreeterEntry)))"><span class="oi oi-pencil"></span></button>
-                            <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleDeleteRequest((data as GreeterEntry)))"><span class="oi oi-trash"></span></button>
+                            <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleEditRequest((data.Item)))"><span class="oi oi-pencil"></span></button>
+                            <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleDeleteRequest((data.Item)))"><span class="oi oi-trash"></span></button>
                         </CellTemplate>
-                    </PropertyColumn>
+                    </TemplateColumn>
                 </Columns>
             </MudDataGrid>
         </div>

@@ -238,10 +238,10 @@ else if (mCurrentState == State.AnimationBaseSettings)
                Advanced options will be available when you edit through the big animations editor!
             </small>
             <MudRadioGroup @bind-Value="mAccessSelection" T="int">
-<MudRadio Option="@(0)">Anyone</MudRadio>
-                  <MudRadio Option="@(2)">Subscriber</MudRadio>
-                  <MudRadio Option="@(3)">VIP</MudRadio>
-                  <MudRadio Option="@(4)">Moderator</MudRadio>
+<MudRadio T="int" Option="@(0)">Anyone</MudRadio>
+                  <MudRadio T="int" Option="@(2)">Subscriber</MudRadio>
+                  <MudRadio T="int" Option="@(3)">VIP</MudRadio>
+                  <MudRadio T="int" Option="@(4)">Moderator</MudRadio>
 </MudRadioGroup>
          </div>
 
@@ -483,13 +483,21 @@ else if (mCurrentState == State.TutorialComplete)
 
    private void OnImportVisualFileProgress(EventArgs e)
    {
-      mUploadVisualProgress = e.Progress;
+      // Upload progress tracking not available with InputFile
    }
 
-   private void OnImportVisualFileComplete(UploadCompleteEventArgs e)
+   private async Task OnImportVisualFileComplete(InputFileChangeEventArgs e)
    {
       // Upload completed.
-      mAnimationFormModel.Visual = e.RawResponse;
+      var file = e.File;
+
+      using var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024);
+
+      using var ms = new System.IO.MemoryStream();
+
+      await stream.CopyToAsync(ms);
+
+      mAnimationFormModel.Visual = Convert.ToBase64String(ms.ToArray());
       mUploadVisualComplete = true;
    }
 
@@ -501,13 +509,21 @@ else if (mCurrentState == State.TutorialComplete)
 
    private void OnImportAudioFileProgress(EventArgs e)
    {
-      mUploadAudioProgress = e.Progress;
+      // Upload progress tracking not available with InputFile
    }
 
-   private void OnImportAudioFileComplete(UploadCompleteEventArgs e)
+   private async Task OnImportAudioFileComplete(InputFileChangeEventArgs e)
    {
       // Upload completed.
-      mAnimationFormModel.Audio = e.RawResponse;
+      var file = e.File;
+
+      using var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024);
+
+      using var ms = new System.IO.MemoryStream();
+
+      await stream.CopyToAsync(ms);
+
+      mAnimationFormModel.Audio = Convert.ToBase64String(ms.ToArray());
       mUploadAudioComplete = true;
    }
 

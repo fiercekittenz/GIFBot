@@ -1,6 +1,7 @@
 using GIFBot.Shared;
 using GIFBot.Shared.Models.Visualization;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.SignalR.Client;
 using Newtonsoft.Json;
@@ -8,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using MudBlazor;
 namespace GIFBot.Client.Pages.Features
 {
    public partial class Regurgitator : IAsyncDisposable
@@ -197,16 +199,14 @@ namespace GIFBot.Client.Pages.Features
          }
       }
 
-      private async Task ReadEntries(object /* was EventArgs */ args)
+      private async Task ReadEntries()
       {
-         if (CurrentPackage != Guid.Empty && args != null)
+         if (CurrentPackage != Guid.Empty)
          {
-            mLastKnownArgs = args;
+            List<RegurgitatorEntry> dataSourceResult = await mHubConnection.InvokeAsync<List<RegurgitatorEntry>>("GetRegurgitatorEntries", CurrentPackage, "");
 
-            List<RegurgitatorEntry> dataSourceResult = await mHubConnection.InvokeAsync<List<RegurgitatorEntry>>("GetRegurgitatorEntries", CurrentPackage, args.Request);
-
-            CurrentEntries = dataSourceResult.CurrentPageData;
-            TotalEntries = dataSourceResult.TotalItemCount;
+            CurrentEntries = dataSourceResult;
+            TotalEntries = dataSourceResult.Count;
 
             Console.WriteLine($"ReadEntries(): TotalEntries = {TotalEntries}");
 
@@ -262,7 +262,7 @@ namespace GIFBot.Client.Pages.Features
             {
                mNewEntryText = String.Empty;
                Snackbar.Add("Success - The entry was added.", Severity.Success);
-               await ReadEntries(mLastKnownArgs);
+               await ReadEntries();
                await InvokeAsync(() => { StateHasChanged(); });
             }
          }
@@ -276,7 +276,7 @@ namespace GIFBot.Client.Pages.Features
             // just remove it from the local copy.
             await mHubConnection.InvokeAsync("RemoveRegurgitatorEntry", CurrentPackage, entry.Id);
             Snackbar.Add("Success - The entry was removed.", Severity.Success);
-            await ReadEntries(mLastKnownArgs);
+            await ReadEntries();
             await InvokeAsync(() => { StateHasChanged(); });
          }
       }
@@ -286,7 +286,7 @@ namespace GIFBot.Client.Pages.Features
          if (CurrentPackage != Guid.Empty)
          { 
             await mHubConnection.InvokeAsync("ClearRegurgitatorEntries", CurrentPackage);
-            await ReadEntries(mLastKnownArgs);
+            await ReadEntries();
             StateHasChanged();
          }
       }
@@ -295,16 +295,16 @@ namespace GIFBot.Client.Pages.Features
       {
          if (CurrentPackage != Guid.Empty)
          { 
-            mUploadProgress = e.Progress;
+            // Upload progress tracking not available with InputFile
          }
       }
 
-      private async Task OnImportTextFileComplete(UploadCompleteEventArgs e)
+      private async Task OnImportTextFileComplete(InputFileChangeEventArgs e)
       {
          // Upload completed. Redownload the data and reset upload info.
          mUploadProgress = 0;
          mUploadErrorMessage = String.Empty;
-         await ReadEntries(mLastKnownArgs);
+         await ReadEntries();
          StateHasChanged();
       }
 

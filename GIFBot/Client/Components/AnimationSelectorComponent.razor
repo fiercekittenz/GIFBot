@@ -5,7 +5,7 @@
     {
         @foreach (var item in Animations)
         {
-            <MudSelectItem T="Guid" Value="@item.Id">@item.Title</MudSelectItem>
+            <MudSelectItem T="Guid" Value="@item.Id">@item.DisplayName</MudSelectItem>
         }
     }
 </MudSelect>

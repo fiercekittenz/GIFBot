@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http.Connections;
 
+using MudBlazor;
 namespace GIFBot.Client.Pages.Animation_Editor
 {
    public partial class AnimationsEditor : ComponentBase, IAsyncDisposable
@@ -24,6 +25,7 @@ namespace GIFBot.Client.Pages.Animation_Editor
       public int ActiveTabIndex { get; set; } = 0;
 
       // TODO: TelerikTreeList ref removed during migration
+      private MudDataGrid<AnimationTreeItem> AnimationTreeListRef;
 protected override async Task OnInitializedAsync()
       {
          // Build the connection to the main bot hub.
@@ -78,7 +80,7 @@ protected override async Task OnInitializedAsync()
                   }
                }
 
-               await AnimationTreeListRef.SetStateAsync(updatedState);
+               StateHasChanged();
             }
 
             StateHasChanged();
@@ -100,14 +102,14 @@ protected override async Task OnInitializedAsync()
             updatedState.ExpandedItems.Add(item);
          }
 
-         await AnimationTreeListRef.SetStateAsync(updatedState);
+         StateHasChanged();
       }
 
       private async Task HandleCollapseAllRequest()
       {
          dynamic updatedState = new System.Dynamic.ExpandoObject(); // TODO: was TreeListState<AnimationTreeItem>
          updatedState.ExpandedItems = new List<AnimationTreeItem>();
-         await AnimationTreeListRef.SetStateAsync(updatedState);
+         StateHasChanged();
       }
 
       #region Modal Dialog Handlers
@@ -208,16 +210,11 @@ protected override async Task OnInitializedAsync()
          StateHasChanged();
       }
 
-      private void OnAnimationsTreeRowClickHander(object /* was EventArgs */ args)
+      private void OnAnimationsTreeRowClickHander(AnimationTreeItem item)
       {
-         if (args.Item is AnimationTreeItem item && item.Tier == AnimationTreeTier.Category)
+         if (item != null && item.Tier == AnimationTreeTier.Category)
          {
-            var currentState = AnimationTreeListRef.GetState();
-            if (currentState != null && !currentState.ExpandedItems.Contains(item))
-            {
-               currentState.ExpandedItems.Add(item);
-               StateHasChanged();
-            }
+            StateHasChanged();
          }
       }
 
@@ -320,9 +317,9 @@ protected override async Task OnInitializedAsync()
 
       private async Task HandleConfirmMove()
       {
-         if (mSelectedTreeItems.Any() && mSelectedMoveCategory != Guid.Empty)
+         if (mSelectedTreeItems.Any() && !string.IsNullOrEmpty(mSelectedMoveCategory))
          {
-            bool results = await mHubConnection.InvokeAsync<bool>("MoveAnimations", JsonConvert.SerializeObject(mSelectedTreeItems.Where(t => t.Tier == AnimationTreeTier.Animation).Select(t => t.Id)), mSelectedMoveCategory);
+            bool results = await mHubConnection.InvokeAsync<bool>("MoveAnimations", JsonConvert.SerializeObject(mSelectedTreeItems.Where(t => t.Tier == AnimationTreeTier.Animation).Select(t => t.Id)), Guid.Parse(mSelectedMoveCategory));
             if (results)
             {
                Snackbar.Add($"Success - The selected animations have been moved.", Severity.Success);
@@ -496,7 +493,7 @@ protected override async Task OnInitializedAsync()
       private HubConnection mHubConnection;
 
       private List<AnimationTreeItem> mAnimationTreeData = new List<AnimationTreeItem>();
-      private Guid mSelectedMoveCategory = Guid.Empty;
+      private string mSelectedMoveCategory = string.Empty;
       private string mTempAnimationCommand = String.Empty;
       private int mAnimationPage = 0;
       private bool mIsDeleteConfirmationVisible = false;

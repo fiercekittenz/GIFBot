@@ -191,10 +191,8 @@
             <div class="form-group">
                 <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
                     <MudTabPanel Text="Animations">
-                        <MudDataGrid T="object" Items="@mAnimationTreeData" Filterable="true" SortMode="SortMode.Single" Groupable="false"> items) => AnimationListSelectionChanged(items) )"
-                                         Page="@mAnimationPage"
-                                         PageChanged="@AnimationPageChanged"
-                                         OnStateChanged="@((TreeListStateEventArgs<AnimationTreeItem> args) => AnimationTreeStateChanged(args))"
+                        <MudDataGrid T="AnimationTreeItem" Items="@mAnimationTreeData" Filterable="true" SortMode="SortMode.Single" Groupable="false"
+                                         Pageable="true"
                                          PageSize="50"
                                          @ref="@AnimationTreeListRef">
                             <ToolBarContent>
@@ -211,11 +209,11 @@
                                 }
                             </ToolBarContent>
                             <Columns>
-                                <SelectColumn T="object" />
-                                <TemplateColumn Field="Title" Title="Name" Filterable="true" Expandable="true" Width="150px">
+                                <SelectColumn T="AnimationTreeItem" />
+                                <TemplateColumn Title="Name" Filterable="true" Width="150px">
 <CellTemplate Context="itemcontext">
                                         @{
-                                            var item = itemcontext as AnimationTreeItem;
+                                            var item = itemcontext.Item;
                                         }
                                         @if (item.Tier == AnimationTreeTier.Category)
                                         {
@@ -227,11 +225,11 @@
                                         }
                                     </CellTemplate>
                                 </TemplateColumn>
-                                <TemplateColumn Field="Disabled" Width="110px" Title="Enabled" Filterable="false">
+                                <TemplateColumn Width="110px" Title="Enabled" Filterable="false">
 <CellTemplate Context="itemcontext">
                                         @{
                                             string output = "Yes";
-                                            var item = itemcontext as AnimationTreeItem;
+                                            var item = itemcontext.Item;
                                             if (item.Disabled)
                                             {
                                                 output = "No";
@@ -246,7 +244,7 @@
                                 <TemplateColumn Width="220px">
 <CellTemplate Context="itemcontext">
                                         @{
-                                            var item = itemcontext as AnimationTreeItem;
+                                            var item = itemcontext.Item;
                                         }
                                         @if (item.Tier == AnimationTreeTier.Category)
                                         {

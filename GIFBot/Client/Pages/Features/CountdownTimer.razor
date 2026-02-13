@@ -67,11 +67,11 @@
          <label for="uiCommandRedemption">Redemption Type:</label>
          <small id="uiCommandRedemption" class="form-text text-muted">Actions can be triggered by your viewers using a variety of methods.</small>
          <MudRadioGroup @bind-Value="@CurrentlyEditedRedemption" T="int">
-<MudRadio Option="@(0)">Cheer</MudRadio>
-               <MudRadio Option="@(1)">Channel Points</MudRadio>
-               <MudRadio Option="@(2)">Tiltify Donation</MudRadio>
-               <MudRadio Option="@(3)">Tip</MudRadio>
-               <MudRadio Option="@(4)">Subscription</MudRadio>
+<MudRadio T="int" Option="@(0)">Cheer</MudRadio>
+               <MudRadio T="int" Option="@(1)">Channel Points</MudRadio>
+               <MudRadio T="int" Option="@(2)">Tiltify Donation</MudRadio>
+               <MudRadio T="int" Option="@(3)">Tip</MudRadio>
+               <MudRadio T="int" Option="@(4)">Subscription</MudRadio>
 </MudRadioGroup>
       </div>
 
@@ -81,11 +81,11 @@
             <label for="uiSubTier"><b>Subscription Tier:</b></label>
             <small id="uiSubTier" class="form-text text-white-50">What sub tier is this action for?</small>
             <MudRadioGroup @bind-Value="SubTierSelection" T="int">
-<MudRadio Option="@(0)">All</MudRadio>
-                  <MudRadio Option="@(1)">Prime</MudRadio>
-                  <MudRadio Option="@(2)">Tier 1</MudRadio>
-                  <MudRadio Option="@(3)">Tier 2</MudRadio>
-                  <MudRadio Option="@(4)">Tier 3</MudRadio>
+<MudRadio T="int" Option="@(0)">All</MudRadio>
+                  <MudRadio T="int" Option="@(1)">Prime</MudRadio>
+                  <MudRadio T="int" Option="@(2)">Tier 1</MudRadio>
+                  <MudRadio T="int" Option="@(3)">Tier 2</MudRadio>
+                  <MudRadio T="int" Option="@(4)">Tier 3</MudRadio>
 </MudRadioGroup>
          </div>
       }
@@ -102,11 +102,11 @@
          <label for="uiBehaviorType">Action Behavior:</label>
          <small id="uiBehaviorType" class="form-text text-muted">How does this action behave? Does it need a spanking? Kappa.</small>
          <MudRadioGroup @bind-Value="@CurrentlyEditedBehavior" T="int">
-<MudRadio Option="@(0)">Remove Time</MudRadio>
-               <MudRadio Option="@(1)">Add Time</MudRadio>
-               <MudRadio Option="@(2)">Slowdown Time</MudRadio>
-               <MudRadio Option="@(3)">Speed Up Time</MudRadio>
-               <MudRadio Option="@(4)">Pause Time</MudRadio>
+<MudRadio T="int" Option="@(0)">Remove Time</MudRadio>
+               <MudRadio T="int" Option="@(1)">Add Time</MudRadio>
+               <MudRadio T="int" Option="@(2)">Slowdown Time</MudRadio>
+               <MudRadio T="int" Option="@(3)">Speed Up Time</MudRadio>
+               <MudRadio T="int" Option="@(4)">Pause Time</MudRadio>
 </MudRadioGroup>
       </div>
       @if (mTempData.Behavior == CountdownTimerActionBehavior.AddTime || mTempData.Behavior == CountdownTimerActionBehavior.RemoveTime)
@@ -133,15 +133,15 @@
             <MudRadioGroup @bind-Value="@CurrentlyEditedSpeedPreset" T="int">
 @if (mTempData.Behavior == CountdownTimerActionBehavior.SlowTime)
                   {
-                     <MudRadio Option="@(0)">Sloth</MudRadio>
-                     <MudRadio Option="@(1)">Slug</MudRadio>
-                     <MudRadio Option="@(2)">Turtle</MudRadio>
+                     <MudRadio T="int" Option="@(0)">Sloth</MudRadio>
+                     <MudRadio T="int" Option="@(1)">Slug</MudRadio>
+                     <MudRadio T="int" Option="@(2)">Turtle</MudRadio>
                   }
                   else if (mTempData.Behavior == CountdownTimerActionBehavior.SpeedUpTime)
                   {
-                     <MudRadio Option="@(3)">Rabbit</MudRadio>
-                     <MudRadio Option="@(4)">Ostrich</MudRadio>
-                     <MudRadio Option="@(5)">Sonic</MudRadio>
+                     <MudRadio T="int" Option="@(3)">Rabbit</MudRadio>
+                     <MudRadio T="int" Option="@(4)">Ostrich</MudRadio>
+                     <MudRadio T="int" Option="@(5)">Sonic</MudRadio>
                   }
 </MudRadioGroup>
          </div>
@@ -212,20 +212,20 @@
 
    <MudTabPanel Text="Timer Actions">
       <div class="container-fluid p-2">
-         <MudDataGrid T="object" Items="@Data.Actions" Sortable="true" Pageable="true" PageSize="10">
+         <MudDataGrid T="CountdownTimerAction" Items="@Data.Actions" Sortable="true" Pageable="true" PageSize="10">
             <ToolBarContent>
                <MudTextField T="string" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
                <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleAddRequest">Add Action</MudButton>
             </ToolBarContent>
             <Columns>
-               <PropertyColumn Width="150px" Field=@nameof(CountdownTimerAction.Name) Title="Value"  />
+               <PropertyColumn T="CountdownTimerAction" TProperty="string" Property="@(x => x.Name)" Title="Value" Width="150px" />
                <TemplateColumn Width="100px" Title="">
 <CellTemplate Context="data">
-                     <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandlePlayActionRequest((data as CountdownTimerAction)))"><span class="oi oi-play-circle"></span></button>
-                     <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleEditRequest((data as CountdownTimerAction)))"><span class="oi oi-pencil"></span></button>
-                     <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleDeleteRequest((data as CountdownTimerAction)))"><span class="oi oi-trash"></span></button>
+                     <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandlePlayActionRequest((data.Item)))"><span class="oi oi-play-circle"></span></button>
+                     <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleEditRequest((data.Item)))"><span class="oi oi-pencil"></span></button>
+                     <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleDeleteRequest((data.Item)))"><span class="oi oi-trash"></span></button>
                   </CellTemplate>
-               </PropertyColumn>
+               </TemplateColumn>
             </Columns>
          </MudDataGrid>
       </div>
@@ -258,30 +258,30 @@
                <label for="uiCaptionFont"><b>Font:</b></label>
                <small id="uiCaptionFont" class="form-text text-white-50">What font should you use?</small>
                <MudRadioGroup @bind-Value="mCaptionFontSelection" T="int">
-<MudRadio Option="@(0)">Arial</MudRadio>
-                     <MudRadio Option="@(1)">Comic Sans</MudRadio>
-                     <MudRadio Option="@(2)">Impact</MudRadio>
-                     <MudRadio Option="@(3)">Monospace</MudRadio>
-                     <MudRadio Option="@(4)">Aldrich</MudRadio>
-                     <MudRadio Option="@(5)">Anton</MudRadio>
-                     <MudRadio Option="@(6)">Barrio</MudRadio>
-                     <MudRadio Option="@(7)">Creepster</MudRadio>
-                     <MudRadio Option="@(8)">Eater</MudRadio>
-                     <MudRadio Option="@(9)">Galada</MudRadio>
-                     <MudRadio Option="@(10)">Ranchers</MudRadio>
-                     <MudRadio Option="@(11)">Lobster</MudRadio>
-                     <MudRadio Option="@(12)">Righteous</MudRadio>
-                     <MudRadio Option="@(13)">BenchNine</MudRadio>
-                     <MudRadio Option="@(14)">Oswald</MudRadio>
-                     <MudRadio Option="@(15)">Ultra</MudRadio>
-                     <MudRadio Option="@(16)">Frijole</MudRadio>
-                     <MudRadio Option="@(17)">Viga</MudRadio>
-                     <MudRadio Option="@(18)">Quantico</MudRadio>
-                     <MudRadio Option="@(19)">Bungee</MudRadio>
-                     <MudRadio Option="@(21)">Sriracha</MudRadio>
-                     <MudRadio Option="@(22)">Arsenal</MudRadio>
-                     <MudRadio Option="@(23)">Gaegu</MudRadio>
-                     <MudRadio Option="@(24)">VT323</MudRadio>
+<MudRadio T="int" Option="@(0)">Arial</MudRadio>
+                     <MudRadio T="int" Option="@(1)">Comic Sans</MudRadio>
+                     <MudRadio T="int" Option="@(2)">Impact</MudRadio>
+                     <MudRadio T="int" Option="@(3)">Monospace</MudRadio>
+                     <MudRadio T="int" Option="@(4)">Aldrich</MudRadio>
+                     <MudRadio T="int" Option="@(5)">Anton</MudRadio>
+                     <MudRadio T="int" Option="@(6)">Barrio</MudRadio>
+                     <MudRadio T="int" Option="@(7)">Creepster</MudRadio>
+                     <MudRadio T="int" Option="@(8)">Eater</MudRadio>
+                     <MudRadio T="int" Option="@(9)">Galada</MudRadio>
+                     <MudRadio T="int" Option="@(10)">Ranchers</MudRadio>
+                     <MudRadio T="int" Option="@(11)">Lobster</MudRadio>
+                     <MudRadio T="int" Option="@(12)">Righteous</MudRadio>
+                     <MudRadio T="int" Option="@(13)">BenchNine</MudRadio>
+                     <MudRadio T="int" Option="@(14)">Oswald</MudRadio>
+                     <MudRadio T="int" Option="@(15)">Ultra</MudRadio>
+                     <MudRadio T="int" Option="@(16)">Frijole</MudRadio>
+                     <MudRadio T="int" Option="@(17)">Viga</MudRadio>
+                     <MudRadio T="int" Option="@(18)">Quantico</MudRadio>
+                     <MudRadio T="int" Option="@(19)">Bungee</MudRadio>
+                     <MudRadio T="int" Option="@(21)">Sriracha</MudRadio>
+                     <MudRadio T="int" Option="@(22)">Arsenal</MudRadio>
+                     <MudRadio T="int" Option="@(23)">Gaegu</MudRadio>
+                     <MudRadio T="int" Option="@(24)">VT323</MudRadio>
 </MudRadioGroup>
             </div>
             <div class="form-group mt-2">

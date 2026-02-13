@@ -1,5 +1,6 @@
-﻿using GIFBot.Shared.Models.Features;
+using GIFBot.Shared.Models.Features;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.JSInterop;
@@ -9,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using static GIFBot.Shared.Utility.Enumerations;
+using MudBlazor;
 
 namespace GIFBot.Client.Pages.Features
 {
@@ -203,14 +205,18 @@ namespace GIFBot.Client.Pages.Features
 
       private void OnImportVisualFileProgress(EventArgs e)
       {
-         mUploadVisualProgress = e.Progress;
+         // Upload progress tracking not available with InputFile
          StateHasChanged();
       }
 
-      private void OnImportVisualFileComplete(UploadCompleteEventArgs e)
+      private async Task OnImportVisualFileComplete(InputFileChangeEventArgs e)
       {
          // Upload completed.
-         mTempData.Visual = e.RawResponse;
+         var file = e.File;
+         using var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024);
+         using var ms = new System.IO.MemoryStream();
+         await stream.CopyToAsync(ms);
+         mTempData.Visual = Convert.ToBase64String(ms.ToArray());
          mUploadVisualProgress = 100;
 
          StateHasChanged();
