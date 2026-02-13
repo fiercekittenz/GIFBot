@@ -66,7 +66,7 @@ protected override async Task OnInitializedAsync()
 
             if (mPersistedTreeState != null)
             {
-               object /* was object /* was TreeListState<AnimationTreeItem> */ */ updatedState = new object /* was object /* was TreeListState<AnimationTreeItem> */ */();
+               dynamic updatedState = new System.Dynamic.ExpandoObject(); // TODO: was TreeListState<AnimationTreeItem>
                updatedState.ExpandedItems = new List<AnimationTreeItem>();
 
                foreach (var expandedItem in mPersistedTreeState.ExpandedItems)
@@ -85,14 +85,14 @@ protected override async Task OnInitializedAsync()
          }
       }
 
-      private void AnimationTreeStateChanged(object /* was object /* was TreeListStateEventArgs<AnimationTreeItem> */ */ args)
+      private void AnimationTreeStateChanged(dynamic args) // TODO: was TreeListStateEventArgs<AnimationTreeItem>
       {
          mPersistedTreeState = args.TreeListState;
       }
       
       private async Task HandleExpandAllRequest()
       {
-         object /* was object /* was TreeListState<AnimationTreeItem> */ */ updatedState = new object /* was object /* was TreeListState<AnimationTreeItem> */ */();
+         dynamic updatedState = new System.Dynamic.ExpandoObject(); // TODO: was TreeListState<AnimationTreeItem>
          updatedState.ExpandedItems = new List<AnimationTreeItem>();
 
          foreach (var item in mAnimationTreeData.Where(t => t.Tier == AnimationTreeTier.Category))
@@ -105,7 +105,7 @@ protected override async Task OnInitializedAsync()
 
       private async Task HandleCollapseAllRequest()
       {
-         object /* was object /* was TreeListState<AnimationTreeItem> */ */ updatedState = new object /* was object /* was TreeListState<AnimationTreeItem> */ */();
+         dynamic updatedState = new System.Dynamic.ExpandoObject(); // TODO: was TreeListState<AnimationTreeItem>
          updatedState.ExpandedItems = new List<AnimationTreeItem>();
          await AnimationTreeListRef.SetStateAsync(updatedState);
       }
@@ -516,7 +516,7 @@ protected override async Task OnInitializedAsync()
       private IEnumerable<AnimationTreeItem> mSelectedTreeItems = Enumerable.Empty<AnimationTreeItem>();
 
       // Persisted Tree State
-      private object /* was object /* was TreeListState<AnimationTreeItem> */ */ mPersistedTreeState = null;
+      private dynamic mPersistedTreeState = null; // TODO: was TreeListState<AnimationTreeItem>
 
       #endregion
    }
