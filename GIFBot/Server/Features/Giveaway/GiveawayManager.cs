@@ -9,7 +9,6 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Telerik.SvgIcons;
 using TwitchLib.Client.Events;
 
 namespace GIFBot.Server.Features.Giveaway

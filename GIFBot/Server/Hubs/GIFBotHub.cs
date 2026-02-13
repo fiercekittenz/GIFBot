@@ -18,8 +18,6 @@ using System.Linq;
 using System.Speech.Synthesis;
 using System.Threading;
 using System.Threading.Tasks;
-using Telerik.DataSource;
-using Telerik.DataSource.Extensions;
 
 namespace GIFBot.Server.Hubs
 {
@@ -1145,9 +1143,9 @@ namespace GIFBot.Server.Hubs
       }
 
       /// <summary>
-      /// Fetches regurgitator entries based on the Telerik data source request.
+      /// Fetches regurgitator entries with paging support.
       /// </summary>
-      public async Task<DataEnvelope<RegurgitatorEntry>> GetRegurgitatorEntries(Guid packageId, DataSourceRequest request)
+      public async Task<DataEnvelope<RegurgitatorEntry>> GetRegurgitatorEntries(Guid packageId, PagedRequest request)
       {
          RegurgitatorPackage package = null;
          lock (Bot.RegurgitatorManager.PackagesMutex)
@@ -1157,11 +1155,14 @@ namespace GIFBot.Server.Hubs
 
          if (package != null)
          {
-            DataSourceResult processedData = await package.GetQueryableDataSource().ToDataSourceResultAsync(request);
+            var queryable = package.GetQueryableDataSource();
+            int total = queryable.Count();
+            int skip = (request.Page - 1) * request.PageSize;
+            var pageData = queryable.Skip(skip).Take(request.PageSize).ToList();
 
             DataEnvelope<RegurgitatorEntry> result = new DataEnvelope<RegurgitatorEntry>() {
-               CurrentPageData = processedData.Data as List<RegurgitatorEntry>,
-               TotalItemCount = processedData.Total
+               CurrentPageData = pageData,
+               TotalItemCount = total
             };
 
             return result;
