@@ -61,3 +61,11 @@
 #*.PDF   diff=astextplain
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
+
+###############################################################################
+# AI Team state — append-only files use union merge for conflict-free merging
+###############################################################################
+.ai-team/decisions.md merge=union
+.ai-team/agents/*/history.md merge=union
+.ai-team/log/** merge=union
+.ai-team/orchestration-log/** merge=union
