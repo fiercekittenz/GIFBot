@@ -40,3 +40,23 @@
 - Did NOT touch .razor component files — those are Helly's domain.
 - **Helly coordination note**: `Regurgitator.razor.cs` line 203 still invokes `GetRegurgitatorEntries` with old Telerik `args.Request`. Helly needs to update that call to pass a `PagedRequest` instead.
 - 7 files changed, 26 insertions, 28 deletions. Committed on `feature/modernization`.
+
+---
+
+### Blazor Server Dispatcher Threading Fix (2026-02-13)
+- After WASM → Server consolidation (M3), SignalR `HubConnection.On(...)` callbacks execute on non-UI threads. Under WASM this was fine (single-threaded), but Blazor Server requires `StateHasChanged()` and `JSRuntime` calls to run on the Dispatcher thread.
+- Fixed 11 files total (8 originally scoped + 3 additional code-behind files discovered via grep):
+  - `Index.razor` — 3 callbacks (LogMessage, UpdateBonkersModeState, UpdateStreamerOnlyModeState)
+  - `Animations.razor` — 5 callbacks (PlayAnimation, UpdateTestVisual, StopTestVisual, StopAnimation, SendStreamlabsAuthToken)
+  - `Stickers.razor` — 6 callbacks (UpdateTestVisual, StopTestVisual, SendAllPlacedStickers, PlaceSticker, RemoveSticker, ClearAllStickers; UpdateStickerAudioSettings skipped — no StateHasChanged/JSRuntime)
+  - `SecondaryStickers.razor` — 6 callbacks (same pattern as Stickers)
+  - `Backdrop.razor` — 2 callbacks (HangBackdrop, TakeDownBackdrop)
+  - `CountdownTimer.razor` — 2 callbacks (UpdateTime, HideTimer)
+  - `GoalBar.razor` — 2 callbacks (UpdateGoal, GoalBarDataUpdated)
+  - `GoalBarEditor.razor` — 1 callback (GoalBarDataUpdated)
+  - `EditAnimation.razor.cs` — 1 callback (UpdatePosition → UpdateVisualPosition calls StateHasChanged)
+  - `GiveawayEditor.razor.cs` — 2 callbacks (SendNewGiveawayEntrant, SendGiveawayWinner)
+  - `StickersEditor.Razor.cs` — 1 callback (UpdatePosition → UpdateStickerPosition calls StateHasChanged)
+- Pattern: `StateHasChanged()` → `await InvokeAsync(StateHasChanged)`; `JSRuntime.InvokeVoidAsync(...)` → `await InvokeAsync(async () => await JSRuntime.InvokeVoidAsync(...))`. For callbacks calling helper methods that internally use StateHasChanged/JSRuntime, wrapped the helper call with `await InvokeAsync(async () => await HelperMethod(...))`.
+- Did NOT touch `StateHasChanged()` in lifecycle methods (OnInitializedAsync), event handlers, or non-hub-callback code.
+- Build: 0 errors. 11 files changed, 56 insertions, 55 deletions. Committed on `feature/modernization`.

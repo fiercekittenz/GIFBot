@@ -37,7 +37,7 @@
     <link href="https://fonts.googleapis.com/css?family=Arsenal" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Gaegu" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=VT323" rel="stylesheet" />
-    <HeadOutlet @rendermode="RenderMode.InteractiveServer" />
+    <HeadOutlet @rendermode="new InteractiveServerRenderMode(prerender: false)" />
 
     <style>
         body {
@@ -82,7 +82,7 @@
 </head>
 
 <body style="background-color: transparent">
-    <Routes @rendermode="RenderMode.InteractiveServer" />
+    <Routes @rendermode="new InteractiveServerRenderMode(prerender: false)" />
 
     <div id="blazor-error-ui">
         An unhandled error has occurred.
