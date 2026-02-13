@@ -30,7 +30,6 @@
    <ItemGroup>
       <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="10.0.3" />
       <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="10.0.3" />
-      <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="10.0.3" />
       <PackageReference Include="Microsoft.CognitiveServices.Speech" Version="1.37.0" />
       <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="10.0.2" />
       <PackageReference Include="MudBlazor" Version="8.5.0" />
@@ -46,3 +45,4 @@
 
 
 </Project>
+
