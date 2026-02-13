@@ -36,4 +36,10 @@
 - Text readability improved: TextPrimary bumped from #ffffffb3 (70%) to #ffffffde (87%), LinesInputs from #ffffff4d to #ffffff80 for visible text field borders
 - Typography FontFamily updated from Roboto to match the system font stack already declared in app.css
 
+- Added `.mud-input-control .mud-input` CSS rule in app.css with `background-color: #2a2a48`, `border-radius: 4px`, and horizontal padding — gives all MudTextField/MudSelect inputs a visible filled background against dark panels
+- Removed legacy inline `Style="background-color: #2c2241; color: …"` from 20 .razor files (Server + Client) — CSS override now handles input appearance uniformly
+- Also removed `Style="color: #232323"` (dark text on dark bg) from Index, AddCategory, AnimationTutorial MudTextField/MudNumericField elements
+- Changed `Background` palette value from `#0d0d1a` to `#1a1a2e` in both MainLayout.razor and NoNavMenuLayout.razor — eliminates visible dark gray area behind page content
+- Updated `html, body` background in app.css from `#0d0d1a` to `#1a1a2e` to match the new palette Background value
+
 — Helly
