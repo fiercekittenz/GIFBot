@@ -1,4 +1,4 @@
-@page "/settings/"
+﻿@page "/settings/"
 @using System.Net.Http
 @using Microsoft.AspNetCore.Http.Connections
 @using Microsoft.AspNetCore.SignalR.Client
@@ -33,10 +33,10 @@
       <div class="p-2">
          <p>
             <center>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelRenameUserGroup">
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleCancelRenameUserGroup">
                   Cancel
                </button>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmRenameUserGroup">
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleConfirmRenameUserGroup">
                   Yes, Rename!
                </button>
             </center>
@@ -68,7 +68,7 @@
                         <MudTextField T="string" @bind-Value="mBotSettings.ChannelName" />
                      </div>
                      <div class="d-flex justify-end pa-3">
-                        <button type="button" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnReauthorize">Reauthorize Bot</button>
+                        <button type="button" class="btn btn-secondary p-2 gifbot-secondary-btn" @onclick="@OnReauthorize">Reauthorize Bot</button>
                      </div>
                   </div>
                </div>
@@ -273,7 +273,7 @@
                                              <MudTextField T="string" @bind-Value="mNewGroupValue" />
                                           </td>
                                           <td valign="top">
-                                             <button type="button" class="btn btn-secondary p-1 ml-2" style="background-color: #6c4872" @onclick="HandleAddNewGroup">Add New Group</button>
+                                             <button type="button" class="btn btn-secondary p-1 ml-2 gifbot-secondary-btn" @onclick="HandleAddNewGroup">Add New Group</button>
                                           </td>
                                        </tr>
                                     </table>
@@ -295,7 +295,7 @@
                                     </PropertyColumn>*@
                                  <TemplateColumn Title="">
 <CellTemplate Context="data">
-                                       <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleDeleteUserFromGroup((data.Item).Name))"><span class="oi oi-trash"></span></button>
+                                       <button type="button" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 25px; height: 25px" @onclick="(() => HandleDeleteUserFromGroup((data.Item).Name))"><span class="oi oi-trash"></span></button>
                                     </CellTemplate>
                                  </TemplateColumn>
                               </Columns>
@@ -307,25 +307,25 @@
                                  <td align="left">
                                     <label for="uiNewUser"><b>Viewer Name:</b></label>
                                     <MudTextField T="string" @bind-Value="uiNewUserValue" />
-                                    <button type="button" class="btn btn-secondary p-1" style="background-color: #6c4872" @onclick="HandleAddUserToGroup">Add User to Group</button>
+                                    <button type="button" class="btn btn-secondary p-1 gifbot-secondary-btn" @onclick="HandleAddUserToGroup">Add User to Group</button>
                                  </td>
                                  <td />
                                  <td align="right">
                                     @if (mSelectedUserGroup != null)
                                     {
-                                       <button type="button" id="uiRenameGroup" class="btn btn-secondary p-1 ml-2" style="background-color: #724859; margin-top: -3px" @onclick="HandleRenameGroup">Rename Group</button>
+                                       <button type="button" id="uiRenameGroup" class="btn btn-secondary p-1 ml-2 gifbot-danger-btn" style="margin-top: -3px" @onclick="HandleRenameGroup">Rename Group</button>
                                     }
                                  </td>
                                  <td align="right">
                                     @if (mSelectedUserGroup != null)
                                     {
-                                       <button type="button" id="uiCloneGroup" class="btn btn-secondary p-1 ml-2" style="background-color: #724859; margin-top: -3px" @onclick="HandleCloneGroup">Clone Group</button>
+                                       <button type="button" id="uiCloneGroup" class="btn btn-secondary p-1 ml-2 gifbot-danger-btn" style="margin-top: -3px" @onclick="HandleCloneGroup">Clone Group</button>
                                     }
                                  </td>
                                  <td align="right">
                                     @if (mSelectedUserGroup != null)
                                     {
-                                       <button type="button" id="uiDeleteGroup" class="btn btn-secondary p-1 ml-2" style="background-color: #724859; margin-top: -3px" @onclick="HandleDeleteGroup">Delete Group</button>
+                                       <button type="button" id="uiDeleteGroup" class="btn btn-secondary p-1 ml-2 gifbot-danger-btn" style="margin-top: -3px" @onclick="HandleDeleteGroup">Delete Group</button>
                                     }
                                  </td>
                               </tr>
@@ -393,7 +393,7 @@
                                  <MudTextField T="string" class="form-control" Style="width: 100%" ReadOnly="true" @bind-Value="mPrimaryAnimationsURL" />
                               </td>
                               <td align="left">
-                                 <button type="button" class="btn btn-secondary p-1 ml-2" style="background-color: #6c4872" @onclick='(() => HandleCopyUrl("uiAnimsUrl"))'>Copy to Clipboard</button>
+                                 <button type="button" class="btn btn-secondary p-1 ml-2 gifbot-secondary-btn" @onclick='(() => HandleCopyUrl("uiAnimsUrl"))'>Copy to Clipboard</button>
                               </td>
                            </tr>
                         </table>
@@ -410,7 +410,7 @@
                                  <MudTextField T="string" class="form-control" Style="width: 100%" ReadOnly="true" @bind-Value="mGoalBarURL" />
                               </td>
                               <td align="left">
-                                 <button type="button" class="btn btn-secondary p-1 ml-2" style="background-color: #6c4872" @onclick='(() => HandleCopyUrl("uiGoalBarUrl"))'>Copy to Clipboard</button>
+                                 <button type="button" class="btn btn-secondary p-1 ml-2 gifbot-secondary-btn" @onclick='(() => HandleCopyUrl("uiGoalBarUrl"))'>Copy to Clipboard</button>
                               </td>
                            </tr>
                         </table>
@@ -421,8 +421,8 @@
          </MudTabs>
 
                      <div class="d-flex justify-end pa-3">
-               <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnCancel">Cancel</button>
-               <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e">Save Changes</button>
+               <button type="reset" class="btn btn-secondary p-2 gifbot-secondary-btn" @onclick="@OnCancel">Cancel</button>
+               <button type="submit" class="btn btn-primary p-2 gifbot-primary-btn">Save Changes</button>
             </div>
       </EditForm>
    </div>

@@ -11,7 +11,7 @@
 @inject IJSRuntime JSRuntime
 @inject HttpClient Http
 
-<div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+<div class="jumbotron jumbotron-fluid p-1 my-1 text-left gifbot-page-header">
     <h1><span class="oi oi-play-circle" aria-hidden="true"></span> Animations</h1>
 </div>
 
@@ -27,10 +27,10 @@
         <div class="container-fluid p-2">
             <p>
                 <center>
-                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelCategoryDeletion">
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleCancelCategoryDeletion">
                         Cancel
                     </button>
-                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmCategoryDeletion">
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleConfirmCategoryDeletion">
                         Yes, Delete!
                     </button>
                 </center>
@@ -51,10 +51,10 @@
         <div class="container-fluid p-2">
             <p>
                 <center>
-                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelDeletion">
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleCancelDeletion">
                         Cancel
                     </button>
-                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmDeletion">
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleConfirmDeletion">
                         Yes, Delete!
                     </button>
                 </center>
@@ -85,10 +85,10 @@
         <div class="container-fluid p-2">
             <p>
                 <center>
-                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelMove">
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleCancelMove">
                         Cancel
                     </button>
-                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmMove">
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleConfirmMove">
                         Move!
                     </button>
                 </center>
@@ -113,10 +113,10 @@
         <div class="container-fluid p-2">
             <p>
                 <center>
-                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelAddCategory">
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleCancelAddCategory">
                         Cancel
                     </button>
-                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmAddCategory">
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleConfirmAddCategory">
                         Add!
                     </button>
                 </center>
@@ -141,10 +141,10 @@
         <div class="container-fluid p-2">
             <p>
                 <center>
-                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelEditCategory">
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleCancelEditCategory">
                         Cancel
                     </button>
-                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmEditCategory">
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleConfirmEditCategory">
                         Update!
                     </button>
                 </center>
@@ -169,10 +169,10 @@
         <div class="container-fluid p-2">
             <p>
                 <center>
-                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelAddAnimationToCategory">
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleCancelAddAnimationToCategory">
                         Cancel
                     </button>
-                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmAddAnimationToCategory">
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleConfirmAddAnimationToCategory">
                         Add!
                     </button>
                 </center>
@@ -186,7 +186,7 @@
 
     @* MudBlazor: Use MudTooltip wrapping individual elements instead *@
 
-    <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+    <div class="container-fluid p-0 m-0 rounded gifbot-form-panel">
         <div class="container-fluid p-2">
             <div class="form-group">
                 <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
@@ -248,15 +248,15 @@
                                         }
                                         @if (item.Tier == AnimationTreeTier.Category)
                                         {
-                                            <button type="button" title="Add Animation to Category" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleAddAnimationRequest(item.Id))"><span class="oi oi-plus"></span></button>
-                                            <button type="button" title="Rename Category" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleEditCategoryRequest(item))"><span class="oi oi-pencil"></span></button>
-                                            <button type="button" title="Delete Category" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleDeleteCategory(item))"><span class="oi oi-trash"></span></button>
+                                            <button type="button" title="Add Animation to Category" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleAddAnimationRequest(item.Id))"><span class="oi oi-plus"></span></button>
+                                            <button type="button" title="Rename Category" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleEditCategoryRequest(item))"><span class="oi oi-pencil"></span></button>
+                                            <button type="button" title="Delete Category" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleDeleteCategory(item))"><span class="oi oi-trash"></span></button>
                                         }
                                         else
                                         {
-                                            <button type="button" title="Edit Animation" class="btn btn-secondary p-0 m-0" style="background-color: #646464; width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleEditAnimationRequest(item))"><span class="oi oi-pencil"></span></button>
-                                            <button type="button" title="Delete Animation" class="btn btn-secondary p-0 m-0" style="background-color: #646464; width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleDeleteAnimation(item))"><span class="oi oi-trash"></span></button>
-                                            <button type="button" title="Play Animation" class="btn btn-secondary p-0 m-0" style="background-color: #646464; width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandlePlayAnimation(item))"><span class="oi oi-media-play"></span></button>
+                                            <button type="button" title="Edit Animation" class="btn btn-secondary p-0 m-0 gifbot-neutral-btn" style="width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleEditAnimationRequest(item))"><span class="oi oi-pencil"></span></button>
+                                            <button type="button" title="Delete Animation" class="btn btn-secondary p-0 m-0 gifbot-neutral-btn" style="width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleDeleteAnimation(item))"><span class="oi oi-trash"></span></button>
+                                            <button type="button" title="Play Animation" class="btn btn-secondary p-0 m-0 gifbot-neutral-btn" style="width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandlePlayAnimation(item))"><span class="oi oi-media-play"></span></button>
                                         }
                                     </CellTemplate>
                                 </TemplateColumn>

@@ -1,4 +1,4 @@
-@page "/animationtutorial/"
+﻿@page "/animationtutorial/"
 @using Microsoft.AspNetCore.SignalR.Client
 @using global::GIFBot.Shared
 @using global::GIFBot.Shared.Utility
@@ -36,7 +36,7 @@
                <ValidationSummary />
                <MudTextField T="string" @bind-Value="@mCategoryTitleModel.Value" />
                <div class="d-flex justify-end pa-3">
-                  <button type="submit" class="btn btn-primary" style="background-color: #5c4872">Next Step</button>
+                  <button type="submit" class="btn btn-primary gifbot-action-btn">Next Step</button>
                </div>
             </div>
          </EditForm>
@@ -67,7 +67,7 @@ else if (mCurrentState == State.AnimationCommand)
                <ValidationSummary />
                <MudTextField T="string" @bind-Value="@mAnimationCommandModel.Value" />
                <div class="d-flex justify-end pa-3">
-                  <button type="submit" class="btn btn-primary" style="background-color: #5c4872">Next Step</button>
+                  <button type="submit" class="btn btn-primary gifbot-action-btn">Next Step</button>
                </div>
             </div>
          </EditForm>
@@ -92,7 +92,7 @@ else if (mCurrentState == State.AnimationVisual)
 
       <div class="form-group">
          @* TODO: Wire up file upload handler *@
-<InputFile accept="image/gif,image/jpeg,image/png,video/mp4,video/webm,video/mov" style="width: 100%; background-color: #1e1e1e" />
+<InputFile accept="image/gif,image/jpeg,image/png,video/mp4,video/webm,video/mov" style="width: 100%; background-color: #16162e" />
          @if (mUploadVisualProgress > 0)
          {
              <MudProgressLinear Value="@mUploadVisualProgress" Style="margin-bottom: 20px; width: 100%" />
@@ -110,7 +110,7 @@ else if (mCurrentState == State.AnimationVisual)
          </div>
          <div class="text-left p-3" style="width: 600px">
             <div class="d-flex justify-end pa-3">
-               <button type="submit" class="btn btn-primary" style="background-color: #5c4872" @onclick="@HandleSubmitVisual">Next Step</button>
+               <button type="submit" class="btn btn-primary gifbot-action-btn" @onclick="@HandleSubmitVisual">Next Step</button>
             </div>
          </div>
       }
@@ -158,7 +158,7 @@ else if (mCurrentState == State.AnimationAudio)
 
       <div class="form-group">
          @* TODO: Wire up file upload handler *@
-<InputFile accept="audio/*" style="width: 100%; background-color: #1e1e1e" />
+<InputFile accept="audio/*" style="width: 100%; background-color: #16162e" />
          @if (mUploadAudioProgress > 0)
          {
              <MudProgressLinear Value="@mUploadAudioProgress" Style="margin-bottom: 20px; width: 100%" />
@@ -178,8 +178,8 @@ else if (mCurrentState == State.AnimationAudio)
 
       <div class="text-left p-3" style="width: 600px">
          <div class="d-flex justify-end pa-3">
-            <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnSkipAudio">Skip Step</button>
-            <button type="submit" class="btn btn-primary" style="background-color: #5c4872" @onclick="@HandleSubmitAudio" disabled="@(!mUploadAudioComplete)">Next Step</button>
+            <button type="reset" class="btn btn-secondary p-2 gifbot-secondary-btn" @onclick="@OnSkipAudio">Skip Step</button>
+            <button type="submit" class="btn btn-primary gifbot-action-btn" @onclick="@HandleSubmitAudio" disabled="@(!mUploadAudioComplete)">Next Step</button>
          </div>
       </div>
    </div>
@@ -200,7 +200,7 @@ else if (mCurrentState == State.AnimationVolume)
          <label for="uiVolumeSlider"><b>Volume:</b></label>
          <center><input type="range" class="slider" min="0" max="100" value="@mFormVolume" id="uiVolumeSlider" @onchange="@(args => OnVolumeChanged(args))"></center>
          <p align="right">
-            <button type="button" class="btn btn-primary p-2 text-center" style="background-color: #5c4872; width: 100px"
+            <button type="button" class="btn btn-primary p-2 text-center gifbot-action-btn" style="width: 100px"
                     @onclick="@HandleTestAudioVolume"
                     disabled="@(AnimationLibrary.GetFileTypeOfAnimation(mAnimationFormModel.Visual) == AnimationEnums.FileType.Video)">
                Play
@@ -210,7 +210,7 @@ else if (mCurrentState == State.AnimationVolume)
 
       <div class="text-left p-3" style="width: 600px">
          <div class="d-flex justify-end pa-3">
-            <button type="submit" class="btn btn-primary" style="background-color: #5c4872" @onclick="@HandleSubmitVolume">Next Step</button>
+            <button type="submit" class="btn btn-primary gifbot-action-btn" @onclick="@HandleSubmitVolume">Next Step</button>
          </div>
       </div>
    </div>
@@ -253,7 +253,7 @@ else if (mCurrentState == State.AnimationBaseSettings)
 
          <div class="text-left p-3" style="width: 600px">
             <div class="d-flex justify-end pa-3">
-               <button type="submit" class="btn btn-primary" style="background-color: #5c4872" @onclick="@HandleCompleteTutorial">Finish!</button>
+               <button type="submit" class="btn btn-primary gifbot-action-btn" @onclick="@HandleCompleteTutorial">Finish!</button>
             </div>
          </div>
       </div>
@@ -280,14 +280,14 @@ else if (mCurrentState == State.TutorialComplete)
                   <MudTextField T="string" class="form-control" Style="width: 100%" ReadOnly="true" @bind-Value="mPrimaryAnimationsURL" />
                </td>
                <td align="left">
-                  <button type="button" class="btn btn-secondary p-1 ml-2" style="background-color: #6c4872" @onclick='(() => HandleCopyUrl("uiAnimsUrl"))'>Copy to Clipboard</button>
+                  <button type="button" class="btn btn-secondary p-1 ml-2 gifbot-secondary-btn" @onclick='(() => HandleCopyUrl("uiAnimsUrl"))'>Copy to Clipboard</button>
                </td>
             </tr>
          </table>
       </div>
       <div class="text-left p-3" style="width: 600px">
          <div class="d-flex justify-end pa-3">
-            <button type="submit" class="btn btn-primary" style="background-color: #5c4872" @onclick="@HandleDashboardReturn">Go Back to the Dashboard</button>
+            <button type="submit" class="btn btn-primary gifbot-action-btn" @onclick="@HandleDashboardReturn">Go Back to the Dashboard</button>
          </div>
       </div>
    </div>

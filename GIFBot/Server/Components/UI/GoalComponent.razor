@@ -1,4 +1,4 @@
-@using global::GIFBot.Shared.Models.Features
+﻿@using global::GIFBot.Shared.Models.Features
 
 <div>
    <div class="form-group">
@@ -7,9 +7,9 @@
             <td align="right">
                @if (!mGoal.IsActive)
                {
-                  <button type="button" class="btn btn-secondary nav-item p-1 mr-1" style="background-color: #5c4872" @onclick="@HandleSetAsActiveGoal">Set As Active Goal</button>
+                  <button type="button" class="btn btn-secondary nav-item p-1 mr-1 gifbot-action-btn" @onclick="@HandleSetAsActiveGoal">Set As Active Goal</button>
                }
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-1" style="background-color: #724859" @onclick="@HandleDeleteGoal">Delete</button>
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-1 gifbot-danger-btn" @onclick="@HandleDeleteGoal">Delete</button>
             </td>
          </tr>
       </table>

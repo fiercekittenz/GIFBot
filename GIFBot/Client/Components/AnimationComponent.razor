@@ -1,4 +1,4 @@
-@using GIFBot.Shared
+﻿@using GIFBot.Shared
 @using GIFBot.Shared.Models.Animation
 @using GIFBot.Shared.Models.Visualization
 @inject IJSRuntime JSRuntime
@@ -6,19 +6,19 @@
 @inject HttpClient Http
 
 <EditForm Model="@mData" OnSubmit="@HandleSave">
-   <div class="container-fluid p-2 mb-2 rounded" style="background-color: #211126">
+   <div class="container-fluid p-2 mb-2 rounded gifbot-content-panel">
       <div class="container-fluid text-left" style="width: 100%">
-         <button type="button" class="btn btn-secondary p-1" style="background-color: #484d72; margin-left: auto; margin-right: 0" @onclick="@OnTestAnimation">Test Animation</button>
-         <button type="button" class="btn btn-secondary p-1" style="background-color: #6c4872; margin-left: auto; margin-right: 0" @onclick="@OnChangeCategory">Change Category</button>
-         <button type="button" class="btn btn-secondary p-1" style="background-color: #6c4872; margin-left: auto; margin-right: 0" @onclick="@OnCloneAnimation">Clone</button>
-         <button type="button" class="btn btn-secondary p-1" style="background-color: #724859; margin-left: auto; margin-right: 0" @onclick="@OnDeleteAnimation">Delete</button>
-         <button type="reset" class="btn btn-secondary p-1" style="background-color: #6c4872" @onclick="@OnCancel">Cancel</button>
-         <button type="submit" class="btn btn-primary p-1" style="background-color: #8f269e">Save Changes</button>
+         <button type="button" class="btn btn-secondary p-1 gifbot-special-btn" style="margin-left: auto; margin-right: 0" @onclick="@OnTestAnimation">Test Animation</button>
+         <button type="button" class="btn btn-secondary p-1 gifbot-secondary-btn" style="margin-left: auto; margin-right: 0" @onclick="@OnChangeCategory">Change Category</button>
+         <button type="button" class="btn btn-secondary p-1 gifbot-secondary-btn" style="margin-left: auto; margin-right: 0" @onclick="@OnCloneAnimation">Clone</button>
+         <button type="button" class="btn btn-secondary p-1 gifbot-danger-btn" style="margin-left: auto; margin-right: 0" @onclick="@OnDeleteAnimation">Delete</button>
+         <button type="reset" class="btn btn-secondary p-1 gifbot-secondary-btn" @onclick="@OnCancel">Cancel</button>
+         <button type="submit" class="btn btn-primary p-1 gifbot-primary-btn">Save Changes</button>
       </div>
    </div>
    <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
       <MudTabPanel Text="General">
-         <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+         <div class="container-fluid p-0 m-0 rounded gifbot-form-panel">
             <div class="container-fluid p-2">
                <div class="mt-2">
                   <MudCheckBox T="bool" Id="uiDisabled" @bind-Value="mData.Disabled" />
@@ -48,14 +48,14 @@
                                     <td valign="top">
                                        <MudTextField T="string" Id="uiVisual" Disabled="true" @bind-Value="mData.Visual" />
                                        @* TODO: Wire up file upload handler *@
-<InputFile accept="image/gif,image/jpeg,image/png,video/mp4,video/webm,video/mov" style="width: 100%; background-color: #1e1e1e" />
+<InputFile accept="image/gif,image/jpeg,image/png,video/mp4,video/webm,video/mov" style="width: 100%; background-color: #16162e" />
                                        <MudProgressLinear Value="@mUploadVisualProgress" Visible="@(mUploadVisualProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
                                        @if (!String.IsNullOrEmpty(mUploadVisualErrorMessage))
                                        {
                                           <label class="text-danger">@mUploadVisualErrorMessage</label>
                                        }
                                     </td>
-                                    <td style="text-align: left; vertical-align: top"><button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="ClearVisualFile"><span class="oi oi-x"></span></button></td>
+                                    <td style="text-align: left; vertical-align: top"><button type="button" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 25px; height: 25px" @onclick="ClearVisualFile"><span class="oi oi-x"></span></button></td>
                                  </tr>
                               </table>
                            </div>
@@ -70,14 +70,14 @@
                                     <td valign="top">
                                        <MudTextField T="string" Id="uiAudio" Disabled="true" @bind-Value="mData.Audio" />
                                        @* TODO: Wire up file upload handler *@
-<InputFile accept="audio/*" style="width: 100%; background-color: #1e1e1e" />
+<InputFile accept="audio/*" style="width: 100%; background-color: #16162e" />
                                        <MudProgressLinear Value="@mUploadAudioProgress" Visible="@(mUploadAudioProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
                                        @if (!String.IsNullOrEmpty(mUploadAudioErrorMessage))
                                        {
                                           <label class="text-danger">@mUploadAudioErrorMessage</label>
                                        }
                                     </td>
-                                    <td style="width: 30px; text-align: center; vertical-align: top"><button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="ClearAudioFile"><span class="oi oi-x"></span></button></td>
+                                    <td style="width: 30px; text-align: center; vertical-align: top"><button type="button" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 25px; height: 25px" @onclick="ClearAudioFile"><span class="oi oi-x"></span></button></td>
                                  </tr>
                               </table>
                            </div>
@@ -92,16 +92,16 @@
                         <p align="right">
                            @if (!String.IsNullOrEmpty(mData.Audio))
                            {
-                              <button type="button" class="btn btn-primary p-1 mr-2 mb-2 text-center" style="background-color: #5c4872; width: 200px" @onclick="@HandleTestAudioVolume">
+                              <button type="button" class="btn btn-primary p-1 mr-2 mb-2 text-center gifbot-action-btn" style="width: 200px" @onclick="@HandleTestAudioVolume">
                                  Test Audio File Volume
                               </button>
                            }
                            else if (!String.IsNullOrEmpty(mData.Visual) && AnimationLibrary.GetFileTypeOfAnimation(mData.Visual) == AnimationEnums.FileType.Video)
                            {
-                              <button type="button" class="btn btn-primary p-1 mr-2 mb-2 mt-2 text-center" style="background-color: #5c4872; width: 200px" @onclick="@HandleTestVideoVolume">
+                              <button type="button" class="btn btn-primary p-1 mr-2 mb-2 mt-2 text-center gifbot-action-btn" style="width: 200px" @onclick="@HandleTestVideoVolume">
                                  Test Video File Volume
                               </button>
-                              <button type="button" class="btn btn-primary p-1 mr-2 mb-2 mt-2 text-center" style="background-color: #5c4872; width: 50px" @onclick="@HandleStopTestVideoVolume">
+                              <button type="button" class="btn btn-primary p-1 mr-2 mb-2 mt-2 text-center gifbot-action-btn" style="width: 50px" @onclick="@HandleStopTestVideoVolume">
                                  <span class="oi oi-media-stop"></span>
                               </button>
                               <video id="videoAnimationAudioPreview" width="0" height="0" style="position:absolute;top:0;left:0;visibility: hidden;background-color: transparent">
@@ -176,7 +176,7 @@
          </div>
       </MudTabPanel>
       <MudTabPanel Text="Positioning">
-         <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+         <div class="container-fluid p-0 m-0 rounded gifbot-form-panel">
             @if (AnimationLibrary.GetFileTypeOfAnimation(mData.Visual) == AnimationEnums.FileType.Video)
             {
                <div class="container-fluid p-2">
@@ -200,11 +200,11 @@
          </div>
       </MudTabPanel>
       <MudTabPanel Text="Trigger Options">
-         <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+         <div class="container-fluid p-0 m-0 rounded gifbot-form-panel">
             <div class="container-fluid p-2">
                <MudTabs ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
                   <MudTabPanel Text="Twitch Events">
-                     <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+                     <div class="container-fluid p-0 m-0 rounded gifbot-form-panel">
                         <div class="container-fluid p-2">
                            <MudExpansionPanel Text="Cheer Requirements" IsInitiallyExpanded="true">
                               <div class="form-group form-check">
@@ -312,7 +312,7 @@
                   </MudTabPanel>
 
                   <MudTabPanel Text="Channel Point Rewards">
-                     <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+                     <div class="container-fluid p-0 m-0 rounded gifbot-form-panel">
                         <div class="container-fluid p-2">
                            <div class="container-fluid text-white-50 p-0">
                               <p>There are a few options for reacting to channel point redemptions. You can simply listen for any redemptions and treat this animation as an alert. It will always be queued first to play. You can ask users to input the command text in their redemption message OR you can listen directly for a specific point amount, which will be good for larger animation events.</p>
@@ -347,7 +347,7 @@
                   </MudTabPanel>
 
                   <MudTabPanel Text="Tips">
-                     <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+                     <div class="container-fluid p-0 m-0 rounded gifbot-form-panel">
                         <div class="container-fluid text-white-50 p-0">
                            <p>
                               If you are authenticated with Streamlabs or StreamElements, you can receive tip alerts from their respective services
@@ -374,7 +374,7 @@
                   </MudTabPanel>
 
                   <MudTabPanel Text="Charity">
-                     <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+                     <div class="container-fluid p-0 m-0 rounded gifbot-form-panel">
                         <div class="container-fluid text-white-50 p-0">
                            <p>
                               If you are authenticated with Tiltify, you can receive donation alerts from their services
@@ -402,7 +402,7 @@
                   </MudTabPanel>
 
                   <MudTabPanel Text="Chat Output">
-                     <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+                     <div class="container-fluid p-0 m-0 rounded gifbot-form-panel">
                         <div class="container-fluid p-2">
                            <div class="mt-2">
                               <label for="uiPrePlayText"><b>Pre Play Text:</b></label>
@@ -422,7 +422,7 @@
          </div>
       </MudTabPanel>
       <MudTabPanel Text="Variations">
-         <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+         <div class="container-fluid p-0 m-0 rounded gifbot-form-panel">
             <div class="container-fluid p-2">
                <div class="container-fluid text-white-50 p-0">
                   <p>
@@ -467,7 +467,7 @@
                                     <td valign="top">
                                        <MudTextField T="string" Id="uiVariantVisual" Disabled="true" @bind-Value="mVariantVisual" />
                                        @* TODO: Wire up file upload handler *@
-<InputFile accept="image/gif,image/jpeg,image/png,video/mp4,video/webm" style="width: 100%; background-color: #1e1e1e" />
+<InputFile accept="image/gif,image/jpeg,image/png,video/mp4,video/webm" style="width: 100%; background-color: #16162e" />
                                        <MudProgressLinear Value="@mUploadVariantVisualProgress" Visible="@(mUploadVariantVisualProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
                                        @if (!String.IsNullOrEmpty(mUploadVariantVisualErrorMessage))
                                        {
@@ -488,7 +488,7 @@
                                     <td valign="top">
                                        <MudTextField T="string" Id="uiVariantAudio" Disabled="true" @bind-Value="mVariantAudio" />
                                        @* TODO: Wire up file upload handler *@
-<InputFile accept="audio/*" style="width: 100%; background-color: #1e1e1e" />
+<InputFile accept="audio/*" style="width: 100%; background-color: #16162e" />
                                        <MudProgressLinear Value="@mUploadVariantAudioProgress" Visible="@(mUploadVariantAudioProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
                                        @if (!String.IsNullOrEmpty(mUploadVariantAudioErrorMessage))
                                        {
@@ -510,16 +510,16 @@
 
                            @if (!String.IsNullOrEmpty(mVariantAudio))
                            {
-                              <button type="button" class="btn btn-primary p-1 mr-2 mb-2 text-center" style="background-color: #5c4872; width: 200px" @onclick="@HandleTestVariantAudioVolume">
+                              <button type="button" class="btn btn-primary p-1 mr-2 mb-2 text-center gifbot-action-btn" style="width: 200px" @onclick="@HandleTestVariantAudioVolume">
                                  Test Audio File Volume
                               </button>
                            }
                            else if (!String.IsNullOrEmpty(mVariantVisual) && AnimationLibrary.GetFileTypeOfAnimation(mVariantVisual) == AnimationEnums.FileType.Video)
                            {
-                              <button type="button" class="btn btn-primary p-1 mr-2 mb-2 mt-2 text-center" style="background-color: #5c4872; width: 200px" @onclick="@HandleTestVariantVideoVolume">
+                              <button type="button" class="btn btn-primary p-1 mr-2 mb-2 mt-2 text-center gifbot-action-btn" style="width: 200px" @onclick="@HandleTestVariantVideoVolume">
                                  Test Video File Volume
                               </button>
-                              <button type="button" class="btn btn-primary p-1 mr-2 mb-2 mt-2 text-center" style="background-color: #5c4872; width: 50px" @onclick="@HandleStopTestVariantVideoVolume">
+                              <button type="button" class="btn btn-primary p-1 mr-2 mb-2 mt-2 text-center gifbot-action-btn" style="width: 50px" @onclick="@HandleStopTestVariantVideoVolume">
                                  <span class="oi oi-media-stop"></span>
                               </button>
                               <video id="variantVideoAnimationAudioPreview" width="0" height="0" style="position:absolute;top:0;left:0;visibility: hidden;background-color: transparent">
@@ -551,14 +551,14 @@
                      </div>
                   }
                   <div class="container-fluid text-right p-3">
-                     <button type="button" class="btn btn-secondary p-1" style="background-color: #6c4872" @onclick="HandleAddNewVariant">Add New Variant</button>
+                     <button type="button" class="btn btn-secondary p-1 gifbot-secondary-btn" @onclick="HandleAddNewVariant">Add New Variant</button>
                   </div>
                </MudExpansionPanel>
             </div>
          </div>
       </MudTabPanel>
       <MudTabPanel Text="Caption">
-         <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+         <div class="container-fluid p-0 m-0 rounded gifbot-form-panel">
             <div class="container-fluid p-2">
                <div class="container-fluid text-white-50 p-0">
                   <p>
@@ -656,7 +656,7 @@
          </div>
       </MudTabPanel>
       <MudTabPanel Text="Animation Chaining">
-         <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+         <div class="container-fluid p-0 m-0 rounded gifbot-form-panel">
             <div class="container-fluid p-2">
                <div class="container-fluid text-white-50 p-0">
                   <p>
@@ -676,7 +676,7 @@
                         </TemplateColumn>
                         <TemplateColumn Width="50px" Title="">
 <CellTemplate Context="data">
-                              <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleDeleteChainedCommand(data.Item))"><span class="oi oi-trash"></span></button>
+                              <button type="button" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 25px; height: 25px" @onclick="(() => HandleDeleteChainedCommand(data.Item))"><span class="oi oi-trash"></span></button>
                            </CellTemplate>
                         </TemplateColumn>
                      </Columns>
@@ -689,7 +689,7 @@
                      <MudTextField T="string" Id="uiChainedCommand" @bind-Value="mFormChainedCommand" />
                   </div>
                   <div class="container-fluid text-right p-3">
-                     <button type="button" class="btn btn-secondary p-1" style="background-color: #6c4872; width: 150px" @onclick="HandleAddNewChainedCommand">Add</button>
+                     <button type="button" class="btn btn-secondary p-1 gifbot-secondary-btn" style="width: 150px" @onclick="HandleAddNewChainedCommand">Add</button>
                   </div>
                </MudExpansionPanel>
             </div>
@@ -699,8 +699,8 @@
 
    <div class="row">
       <div class="container-fluid text-right p-3">
-         <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnCancel">Cancel</button>
-         <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e">Save Changes</button>
+         <button type="reset" class="btn btn-secondary p-2 gifbot-secondary-btn" @onclick="@OnCancel">Cancel</button>
+         <button type="submit" class="btn btn-primary p-2 gifbot-primary-btn">Save Changes</button>
       </div>
    </div>
 </EditForm>

@@ -1,4 +1,4 @@
-@page "/goalbareditor/"
+﻿@page "/goalbareditor/"
 @using Microsoft.AspNetCore.SignalR.Client
 @using global::GIFBot.Shared.Models.Features
 @using global::GIFBot.Shared.Models.Visualization
@@ -24,7 +24,7 @@
       <div class="p-2">
          <p>
             <center>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleAddNewGoal">
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleAddNewGoal">
                   Add
                </button>
             </center>
@@ -257,7 +257,7 @@
                }
 
                <div>
-                  <p align="right"><button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@ShowAddNewGoalWindow">Add New Goal</button></p>
+                  <p align="right"><button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@ShowAddNewGoalWindow">Add New Goal</button></p>
                </div>
                <MudTabs ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
                   @for (int i = 0; i < mGoalBarData.Goals.Count; ++i)
@@ -292,7 +292,7 @@
                      <MudTextField T="string" class="form-control" Style="width: 100%" ReadOnly="true" @bind-Value="mURL" />
                   </td>
                   <td align="left">
-                     <button type="button" class="btn btn-secondary p-1 ml-2" style="background-color: #6c4872" @onclick='(() => HandleCopyUrl("uiURL"))'>Copy to Clipboard</button>
+                     <button type="button" class="btn btn-secondary p-1 ml-2 gifbot-secondary-btn" @onclick='(() => HandleCopyUrl("uiURL"))'>Copy to Clipboard</button>
                   </td>
                </tr>
             </table>
@@ -301,8 +301,8 @@
    </MudTabs>
 
          <div class="d-flex justify-end pa-3">
-         <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnCancel">Cancel</button>
-         <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e">Save Changes</button>
+         <button type="reset" class="btn btn-secondary p-2 gifbot-secondary-btn" @onclick="@OnCancel">Cancel</button>
+         <button type="submit" class="btn btn-primary p-2 gifbot-primary-btn">Save Changes</button>
       </div>
 </EditForm>
 

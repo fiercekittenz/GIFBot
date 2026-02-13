@@ -42,4 +42,19 @@
 - Changed `Background` palette value from `#0d0d1a` to `#1a1a2e` in both MainLayout.razor and NoNavMenuLayout.razor — eliminates visible dark gray area behind page content
 - Updated `html, body` background in app.css from `#0d0d1a` to `#1a1a2e` to match the new palette Background value
 
+- **Container height fix:** Added `.mud-main-content .mud-container { min-height: calc(100vh - 64px); }` — the 64px accounts for MudAppBar's default height, making the container background extend to the bottom of the viewport instead of cropping at the content boundary
+- **Bulk inline color cleanup (42 files):** Removed ~500 inline `background-color` styles across Server Pages, Server UI components, Client Pages, Client Components, and Client Shared layouts. Each hardcoded hex was replaced with a reusable CSS class in app.css:
+  - `.gifbot-quick-actions` (#1e1e38) — navbar backgrounds (was #1f0c24)
+  - `.gifbot-action-btn` (#3d3566) — primary action buttons (was #5c4872)
+  - `.gifbot-log-panel` (#12122a) — output log panels (was #1e1e1e)
+  - `.gifbot-secondary-btn` (#3a2d56) — secondary/icon buttons (was #6c4872)
+  - `.gifbot-primary-btn` (#6b2fa0) — submit/primary buttons (was #8f269e)
+  - `.gifbot-danger-btn` (#4a2d3d) — delete/danger buttons (was #724859)
+  - `.gifbot-special-btn` (#2d3566) — special action buttons (was #484d72/#485472)
+  - `.gifbot-neutral-btn` (#3a3a5c) — neutral grey buttons (was #646464)
+  - `.gifbot-layout-dark` (#0e0e1e) — layout wrapper backgrounds (was #101010/#121218)
+- Reused existing classes: `.gifbot-page-header` for jumbotrons (#36173e), `.gifbot-content-panel` for containers (#211126), `.gifbot-form-panel` for form wrappers (#1d161f)
+- InputFile elements kept inline styles but shifted from grey #1e1e1e to blue-tinted #16162e
+- Exceptions preserved: #230000 warning reds, transparent video backgrounds, canvas editor (#dedede/#45356f), BrowserSource pages
+
 — Helly

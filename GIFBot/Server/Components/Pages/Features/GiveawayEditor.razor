@@ -1,4 +1,4 @@
-@page "/giveawayeditor/"
+﻿@page "/giveawayeditor/"
 @using Microsoft.AspNetCore.SignalR.Client
 @using global::GIFBot.Shared.Models.Animation
 @using global::GIFBot.Shared.Models.Features
@@ -30,10 +30,10 @@
         <div class="p-2">
             <p>
                 <center>
-                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelAddCommand">
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleCancelAddCommand">
                         Cancel
                     </button>
-                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmAddCommand">
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleConfirmAddCommand">
                         Add!
                     </button>
                 </center>
@@ -48,18 +48,18 @@
             <div style="width: 100%">
                 @if (!Data.IsOpenForEntries)
                 {
-                    <button type="button" class="btn btn-secondary p-1 mr-5" style="background-color: #484d72; margin-left: auto; margin-right: 0; width: 200px" @onclick="@OnStartGiveaway">Accept Entries</button>
+                    <button type="button" class="btn btn-secondary p-1 mr-5 gifbot-special-btn" style="margin-left: auto; margin-right: 0; width: 200px" @onclick="@OnStartGiveaway">Accept Entries</button>
 
                     @if (Data.Entrants.Any())
                     {
-                        <button type="button" class="btn btn-secondary p-1 mr-5" style="background-color: #6c4872; margin-left: auto; margin-right: 0; width: 200px" @onclick="@OnDrawWinner">Draw Winner</button>
+                        <button type="button" class="btn btn-secondary p-1 mr-5 gifbot-secondary-btn" style="margin-left: auto; margin-right: 0; width: 200px" @onclick="@OnDrawWinner">Draw Winner</button>
                     }
 
-                    <button type="button" class="btn btn-secondary p-1 mr-5" style="background-color: #724859; margin-left: auto; margin-right: 0; width: 200px" @onclick="@OnResetGiveaway">Reset</button>
+                    <button type="button" class="btn btn-secondary p-1 mr-5 gifbot-danger-btn" style="margin-left: auto; margin-right: 0; width: 200px" @onclick="@OnResetGiveaway">Reset</button>
                 }
                 else
                 {
-                    <button type="button" class="btn btn-secondary p-1 mr-5" style="background-color: #6c4872; margin-left: auto; margin-right: 0; width: 200px" @onclick="@OnCloseGiveaway">Close Giveaway</button>
+                    <button type="button" class="btn btn-secondary p-1 mr-5 gifbot-secondary-btn" style="margin-left: auto; margin-right: 0; width: 200px" @onclick="@OnCloseGiveaway">Close Giveaway</button>
                 }
             </div>
         </div>
@@ -162,8 +162,8 @@
             <AnimationSelectorComponent Animations="@AnimationOptions" SelectedAnimation="Data.WinnerAnimation" OnSelectedAnimationChanged="@HandleWinnerAnimationSelectionChanged" />
         </div>
                     <div class="d-flex justify-end pa-3">
-                <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnCancel">Cancel</button>
-                <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e" @onclick="@OnSaveChanges">Save Changes</button>
+                <button type="reset" class="btn btn-secondary p-2 gifbot-secondary-btn" @onclick="@OnCancel">Cancel</button>
+                <button type="submit" class="btn btn-primary p-2 gifbot-primary-btn" @onclick="@OnSaveChanges">Save Changes</button>
             </div>
     </MudTabPanel>
 
@@ -182,7 +182,7 @@
                     </TemplateColumn>
                     <TemplateColumn>
 <CellTemplate Context="data">
-                            <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleDeleteBannedUserRequest((string)data.Item))"><span class="oi oi-trash"></span></button>
+                            <button type="button" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 25px; height: 25px" @onclick="(() => HandleDeleteBannedUserRequest((string)data.Item))"><span class="oi oi-trash"></span></button>
                         </CellTemplate>
                     </TemplateColumn>
                 </Columns>

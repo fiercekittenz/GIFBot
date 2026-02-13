@@ -1,4 +1,4 @@
-@page "/stickerseditor/"
+﻿@page "/stickerseditor/"
 @using Microsoft.AspNetCore.SignalR.Client
 @using global::GIFBot.Shared.Models.Features
 @using global::GIFBot.Shared.Models.Visualization
@@ -29,10 +29,10 @@
       <div class="p-2">
          <p>
             <center>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelAddCategory">
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleCancelAddCategory">
                   Cancel
                </button>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmAddCategory">
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleConfirmAddCategory">
                   Add!
                </button>
             </center>
@@ -57,10 +57,10 @@
       <div class="p-2">
          <p>
             <center>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelEditCategory">
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleCancelEditCategory">
                   Cancel
                </button>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmEditCategory">
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleConfirmEditCategory">
                   Update!
                </button>
             </center>
@@ -92,10 +92,10 @@
       <div class="p-2">
          <p>
             <center>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelMoveCategory">
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleCancelMoveCategory">
                   Cancel
                </button>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmMoveCategory">
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleConfirmMoveCategory">
                   Update!
                </button>
             </center>
@@ -110,15 +110,15 @@
       <strong>Edit Sticker</strong>
    </TitleContent>
    <DialogContent>
-      <nav class="navbar navbar-expand-sm" style="background-color:#1f0c24">
+      <nav class="navbar navbar-expand-sm gifbot-quick-actions">
          <ul class="navbar-nav">
             <li class="nav-item">
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelStickerUpdate">
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleCancelStickerUpdate">
                   Cancel
                </button>
             </li>
             <li class="nav-item">
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmStickerUpdate">
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleConfirmStickerUpdate">
                   Update!
                </button>
             </li>
@@ -145,7 +145,7 @@
                      <td valign="top">
                         <MudTextField T="string" Disabled="true" @bind-Value="CurrentlyEditedSticker.Visual" />
                         @* TODO: Wire up file upload handler *@
-<InputFile accept="image/gif,image/jpeg,image/png" style="width: 100%; background-color: #1e1e1e" />
+<InputFile accept="image/gif,image/jpeg,image/png" style="width: 100%; background-color: #16162e" />
                         @if (mUploadStickerVisualProgress > 0)
                         {
                             <MudProgressLinear Value="@mUploadStickerVisualProgress" Style="margin-bottom: 20px; width: 100%" />
@@ -272,15 +272,15 @@
             </div>
          </MudTabPanel>
       </MudTabs>
-      <nav class="navbar navbar-expand-sm" style="background-color:#1f0c24">
+      <nav class="navbar navbar-expand-sm gifbot-quick-actions">
          <ul class="navbar-nav">
             <li class="nav-item">
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelStickerUpdate">
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleCancelStickerUpdate">
                   Cancel
                </button>
             </li>
             <li class="nav-item">
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmStickerUpdate">
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleConfirmStickerUpdate">
                   Update!
                </button>
             </li>
@@ -289,13 +289,13 @@
    </DialogContent>
 </MudDialog>
 
-<nav class="navbar navbar-expand-sm" style="background-color:#1f0c24">
+<nav class="navbar navbar-expand-sm gifbot-quick-actions">
    <span class="navbar-text mr-3">
       <b>Quick Actions:</b>
    </span>
    <ul class="navbar-nav">
       <li class="nav-item">
-         <button class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@ClearAllStickers">Clear All Stickers</button>
+         <button class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@ClearAllStickers">Clear All Stickers</button>
       </li>
    </ul>
 </nav>
@@ -398,7 +398,7 @@
                               <td valign="top">
                                  <MudTextField T="string" Disabled="true" @bind-Value="mStickerData.Audio" />
                                  @* TODO: Wire up file upload handler *@
-<InputFile accept="audio/*" style="width: 100%; background-color: #1e1e1e" />
+<InputFile accept="audio/*" style="width: 100%; background-color: #16162e" />
                                  @if (mUploadAudioProgress > 0)
                                  {
                                      <MudProgressLinear Value="@mUploadAudioProgress" Style="margin-bottom: 20px; width: 100%" />
@@ -408,7 +408,7 @@
                                     <label class="text-danger">@mUploadAudioErrorMessage</label>
                                  }
                               </td>
-                              <td style="width: 30px; text-align: center; vertical-align: top"><button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="ClearAudioFile"><span class="oi oi-x"></span></button></td>
+                              <td style="width: 30px; text-align: center; vertical-align: top"><button type="button" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 25px; height: 25px" @onclick="ClearAudioFile"><span class="oi oi-x"></span></button></td>
                            </tr>
                         </table>
                      </div>
@@ -421,7 +421,7 @@
                            <p align="right">
                               @if (!String.IsNullOrEmpty(mStickerData.Audio))
                               {
-                                 <button type="button" class="btn btn-primary p-1 mr-2 mb-2 text-center" style="background-color: #5c4872; width: 200px" @onclick="@HandleTestAudioVolume">
+                                 <button type="button" class="btn btn-primary p-1 mr-2 mb-2 text-center gifbot-action-btn" style="width: 200px" @onclick="@HandleTestAudioVolume">
                                     Test Audio File Volume
                                  </button>
                               }
@@ -683,15 +683,15 @@
                                     }
                                     @if (sticker.Type == StickerTreeListItem.ItemType.Category)
                                      {
-                                        <button type="button" title="Add Sticker to Category" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleAddStickerRequest(sticker.Id))"><span class="oi oi-plus"></span></button>
-                                        <button type="button" title="Rename Category" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleEditStickerRequest(sticker))"><span class="oi oi-pencil"></span></button>
-                                        <button type="button" title="Delete Category" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleDeleteSticker(sticker))"><span class="oi oi-delete"></span></button>
+                                        <button type="button" title="Add Sticker to Category" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleAddStickerRequest(sticker.Id))"><span class="oi oi-plus"></span></button>
+                                        <button type="button" title="Rename Category" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleEditStickerRequest(sticker))"><span class="oi oi-pencil"></span></button>
+                                        <button type="button" title="Delete Category" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleDeleteSticker(sticker))"><span class="oi oi-delete"></span></button>
                                      }
                                      else
                                      {
-                                        <button type="button" title="Edit Sticker" class="btn btn-secondary p-0 m-0" style="background-color: #646464; width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleEditStickerRequest(sticker))"><span class="oi oi-pencil"></span></button>
-                                        <button type="button" title="Delete Sticker" class="btn btn-secondary p-0 m-0" style="background-color: #646464; width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleDeleteSticker(sticker))"><span class="oi oi-trash"></span></button>
-                                        <button type="button" title="Place Sticker" class="btn btn-secondary p-0 m-0" style="background-color: #646464; width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandlePlaceSticker(sticker))"><span class="oi oi-media-play"></span></button>
+                                        <button type="button" title="Edit Sticker" class="btn btn-secondary p-0 m-0 gifbot-neutral-btn" style="width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleEditStickerRequest(sticker))"><span class="oi oi-pencil"></span></button>
+                                        <button type="button" title="Delete Sticker" class="btn btn-secondary p-0 m-0 gifbot-neutral-btn" style="width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleDeleteSticker(sticker))"><span class="oi oi-trash"></span></button>
+                                        <button type="button" title="Place Sticker" class="btn btn-secondary p-0 m-0 gifbot-neutral-btn" style="width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandlePlaceSticker(sticker))"><span class="oi oi-media-play"></span></button>
                                      }
                                  </CellTemplate>                                 
                               </TemplateColumn>
@@ -727,7 +727,7 @@
                                     <td valign="top">
                                        <MudTextField T="string" Disabled="true" @bind-Value="mTempStickerToAdd.Visual" />
                                        @* TODO: Wire up file upload handler *@
-<InputFile accept="image/gif,image/jpeg,image/png" style="width: 100%; background-color: #1e1e1e" />
+<InputFile accept="image/gif,image/jpeg,image/png" style="width: 100%; background-color: #16162e" />
                                        @if (mUploadStickerVisualProgress > 0)
                                        {
                                            <MudProgressLinear Value="@mUploadStickerVisualProgress" Style="margin-bottom: 20px; width: 100%" />
@@ -741,8 +741,8 @@
                               </table>
                            </div>
                            <div class="d-flex justify-end pa-3">
-                              <button type="button" class="btn btn-secondary p-1" style="background-color: #6c4872" @onclick="HandleCancelNewSticker">Cancel</button>
-                              <button type="button" class="btn btn-secondary p-1" style="background-color: #6c4872" @onclick="HandleAddNewSticker">Add New Sticker</button>
+                              <button type="button" class="btn btn-secondary p-1 gifbot-secondary-btn" @onclick="HandleCancelNewSticker">Cancel</button>
+                              <button type="button" class="btn btn-secondary p-1 gifbot-secondary-btn" @onclick="HandleAddNewSticker">Add New Sticker</button>
                            </div>
                         </MudTabPanel>
                      }
@@ -772,7 +772,7 @@
                      <MudTextField T="string" class="form-control" Style="width: 100%" ReadOnly="true" @bind-Value="mURL" />
                   </td>
                   <td align="left">
-                     <button type="button" class="btn btn-secondary p-1 ml-2" style="background-color: #6c4872" @onclick='(() => HandleCopyUrl("uiURL"))'>Copy to Clipboard</button>
+                     <button type="button" class="btn btn-secondary p-1 ml-2 gifbot-secondary-btn" @onclick='(() => HandleCopyUrl("uiURL"))'>Copy to Clipboard</button>
                   </td>
                </tr>
                <tr>
@@ -783,7 +783,7 @@
                      <MudTextField T="string" class="form-control" Style="width: 100%" ReadOnly="true" @bind-Value="mSecondaryURL" />
                   </td>
                   <td align="left">
-                     <button type="button" class="btn btn-secondary p-1 ml-2" style="background-color: #6c4872" @onclick='(() => HandleCopyUrl("uiSecondaryURL"))'>Copy to Clipboard</button>
+                     <button type="button" class="btn btn-secondary p-1 ml-2 gifbot-secondary-btn" @onclick='(() => HandleCopyUrl("uiSecondaryURL"))'>Copy to Clipboard</button>
                   </td>
                </tr>
             </table>
@@ -792,7 +792,7 @@
    </MudTabs>
 
          <div class="d-flex justify-end pa-3">
-         <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnCancel">Cancel</button>
-         <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e">Save Changes</button>
+         <button type="reset" class="btn btn-secondary p-2 gifbot-secondary-btn" @onclick="@OnCancel">Cancel</button>
+         <button type="submit" class="btn btn-primary p-2 gifbot-primary-btn">Save Changes</button>
       </div>
 </EditForm>

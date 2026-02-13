@@ -1,4 +1,4 @@
-@page "/animationtutorial/"
+﻿@page "/animationtutorial/"
 @using Microsoft.AspNetCore.SignalR.Client
 @using GIFBot.Shared
 @using GIFBot.Shared.Utility
@@ -14,11 +14,11 @@
 
 @if (mCurrentState == State.CategoryCreation)
 {
-   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left gifbot-page-header">
       <h1><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial (Step 1 of ?): Categories</h1>
    </div>
 
-   <div class="container text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+   <div class="container text-left p-3 rounded gifbot-log-panel" style="width: 700px">
       <p>
          Woah! You don't have any data! That must mean you're new here. Welcome! Let's get you up and running with your first animation. Animations are organized
          by categories so it's easier for you to find what you need, <i>and</i> so you don't end up with a giant list of incoherent, yet meme-worthy terms for commands.
@@ -36,7 +36,7 @@
                <ValidationSummary />
                <MudTextField T="string" id="uiCategoryName" @bind-Value="@mCategoryTitleModel.Value" />
                <div class="col-sm text-right p-3">
-                  <button type="submit" class="btn btn-primary" style="background-color: #5c4872">Next Step</button>
+                  <button type="submit" class="btn btn-primary gifbot-action-btn">Next Step</button>
                </div>
             </div>
          </EditForm>
@@ -45,11 +45,11 @@
 }
 else if (mCurrentState == State.AnimationCommand)
 {
-   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left gifbot-page-header">
       <h1><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial (Step 2 of ?): Animation Command (a.k.a. "Name")</h1>
    </div>
 
-   <div class="container text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+   <div class="container text-left p-3 rounded gifbot-log-panel" style="width: 700px">
       <p>
          Animations are typically triggered by your viewers in chat. They can also be triggered by actions such as a subscription or Streamlabs tip.
          You do not have to have '!' in front of the commands, though it is recommended if you intend for your viewers to be able to execute the
@@ -67,7 +67,7 @@ else if (mCurrentState == State.AnimationCommand)
                <ValidationSummary />
                <MudTextField T="string" id="uiCommand" @bind-Value="@mAnimationCommandModel.Value" />
                <div class="col-sm text-right p-3">
-                  <button type="submit" class="btn btn-primary" style="background-color: #5c4872">Next Step</button>
+                  <button type="submit" class="btn btn-primary gifbot-action-btn">Next Step</button>
                </div>
             </div>
          </EditForm>
@@ -76,11 +76,11 @@ else if (mCurrentState == State.AnimationCommand)
 }
 else if (mCurrentState == State.AnimationVisual)
 {
-   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left gifbot-page-header">
       <h1><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial (Step 3 of ?): Animation Visual</h1>
    </div>
 
-   <div class="container text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+   <div class="container text-left p-3 rounded gifbot-log-panel" style="width: 700px">
       <p>
          Your command will trigger the display of a visual. You can use traditional GIF, PNG, JPG files or you can
          supply movie files in MP4 and WEBM formats! If you're using a traditional image format, you'll most likely
@@ -92,7 +92,7 @@ else if (mCurrentState == State.AnimationVisual)
 
       <div class="form-group">
          @* TODO: Wire up file upload handler *@
-<InputFile accept="image/gif,image/jpeg,image/png,video/mp4,video/webm,video/mov" style="width: 100%; background-color: #1e1e1e" />
+<InputFile accept="image/gif,image/jpeg,image/png,video/mp4,video/webm,video/mov" style="width: 100%; background-color: #16162e" />
          <MudProgressLinear Value="@mUploadVisualProgress" Visible="@(mUploadVisualProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
          @if (!String.IsNullOrEmpty(mUploadVisualErrorMessage))
          {
@@ -107,7 +107,7 @@ else if (mCurrentState == State.AnimationVisual)
          </div>
          <div class="container-fluid text-left p-3" style="width: 600px">
             <div class="col-sm text-right p-3">
-               <button type="submit" class="btn btn-primary" style="background-color: #5c4872" @onclick="@HandleSubmitVisual">Next Step</button>
+               <button type="submit" class="btn btn-primary gifbot-action-btn" @onclick="@HandleSubmitVisual">Next Step</button>
             </div>
          </div>
       }
@@ -115,11 +115,11 @@ else if (mCurrentState == State.AnimationVisual)
 }
 else if (mCurrentState == State.AnimationPlacement)
 {
-   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left gifbot-page-header">
       <h1><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial (Step 4 of ?): Placement</h1>
    </div>
 
-   <div class="container text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+   <div class="container text-left p-3 rounded gifbot-log-panel" style="width: 700px">
       <p>
          An animation doesn't just appear at a random location on the screen. You can actually determine where it shows up as well as its width and height, so when you put it in your broadcaster
          software, it'll appear where you want it to. Use the canvas below to set your animation's position.
@@ -139,11 +139,11 @@ else if (mCurrentState == State.AnimationPlacement)
 }
 else if (mCurrentState == State.AnimationAudio)
 {
-   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left gifbot-page-header">
       <h1><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial (Step 5 of ?): Animation Audio</h1>
    </div>
 
-   <div class="container text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+   <div class="container text-left p-3 rounded gifbot-log-panel" style="width: 700px">
       <p>
          You can pair an audio file with your visual! If you've selected a movie file (MP4, MOV, or WEBM) then you may not want to pair
          it with a secondary audio unless your movie doesn't have any of its own. This is not required, so if you like, you may
@@ -155,7 +155,7 @@ else if (mCurrentState == State.AnimationAudio)
 
       <div class="form-group">
          @* TODO: Wire up file upload handler *@
-<InputFile accept="audio/*" style="width: 100%; background-color: #1e1e1e" />
+<InputFile accept="audio/*" style="width: 100%; background-color: #16162e" />
          <MudProgressLinear Value="@mUploadAudioProgress" Visible="@(mUploadAudioProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
          @if (!String.IsNullOrEmpty(mUploadAudioErrorMessage))
          {
@@ -172,19 +172,19 @@ else if (mCurrentState == State.AnimationAudio)
 
       <div class="container-fluid text-left p-3" style="width: 600px">
          <div class="col-sm text-right p-3">
-            <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnSkipAudio">Skip Step</button>
-            <button type="submit" class="btn btn-primary" style="background-color: #5c4872" @onclick="@HandleSubmitAudio" disabled="@(!mUploadAudioComplete)">Next Step</button>
+            <button type="reset" class="btn btn-secondary p-2 gifbot-secondary-btn" @onclick="@OnSkipAudio">Skip Step</button>
+            <button type="submit" class="btn btn-primary gifbot-action-btn" @onclick="@HandleSubmitAudio" disabled="@(!mUploadAudioComplete)">Next Step</button>
          </div>
       </div>
    </div>
 }
 else if (mCurrentState == State.AnimationVolume)
 {
-   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left gifbot-page-header">
       <h1><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial (Step 6 of ?): Volume</h1>
    </div>
 
-   <div class="container text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+   <div class="container text-left p-3 rounded gifbot-log-panel" style="width: 700px">
       <p>
          It looks like you either have a video file selected as your visual, or decided to upload a sound file. You should probably set the volume of that now, otherwise it's going
          to slay your headphone users.
@@ -194,7 +194,7 @@ else if (mCurrentState == State.AnimationVolume)
          <label for="uiVolumeSlider"><b>Volume:</b></label>
          <center><input type="range" class="slider" min="0" max="100" value="@mFormVolume" id="uiVolumeSlider" @onchange="@(args => OnVolumeChanged(args))"></center>
          <p align="right">
-            <button type="button" class="btn btn-primary p-2 text-center" style="background-color: #5c4872; width: 100px"
+            <button type="button" class="btn btn-primary p-2 text-center gifbot-action-btn" style="width: 100px"
                     @onclick="@HandleTestAudioVolume"
                     disabled="@(AnimationLibrary.GetFileTypeOfAnimation(mAnimationFormModel.Visual) == AnimationEnums.FileType.Video)">
                Play
@@ -204,18 +204,18 @@ else if (mCurrentState == State.AnimationVolume)
 
       <div class="container-fluid text-left p-3" style="width: 600px">
          <div class="col-sm text-right p-3">
-            <button type="submit" class="btn btn-primary" style="background-color: #5c4872" @onclick="@HandleSubmitVolume">Next Step</button>
+            <button type="submit" class="btn btn-primary gifbot-action-btn" @onclick="@HandleSubmitVolume">Next Step</button>
          </div>
       </div>
    </div>
 }
 else if (mCurrentState == State.AnimationBaseSettings)
 {
-   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left gifbot-page-header">
       <h1><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial (Step 7 of ?): Basic Settings</h1>
    </div>
 
-   <div class="container text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+   <div class="container text-left p-3 rounded gifbot-log-panel" style="width: 700px">
       <p>
          Now that you have your files selected, it's time to get some of the very basic settings tuned. There's a LOT of other settings, but the ones
          listed below are the main ones you should care about when first setting up an animation command.
@@ -247,7 +247,7 @@ else if (mCurrentState == State.AnimationBaseSettings)
 
          <div class="container-fluid text-left p-3" style="width: 600px">
             <div class="col-sm text-right p-3">
-               <button type="submit" class="btn btn-primary" style="background-color: #5c4872" @onclick="@HandleCompleteTutorial">Finish!</button>
+               <button type="submit" class="btn btn-primary gifbot-action-btn" @onclick="@HandleCompleteTutorial">Finish!</button>
             </div>
          </div>
       </div>
@@ -255,11 +255,11 @@ else if (mCurrentState == State.AnimationBaseSettings)
 }
 else if (mCurrentState == State.TutorialComplete)
 {
-   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left gifbot-page-header">
       <h1><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial Complete!</h1>
    </div>
 
-   <div class="container text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+   <div class="container text-left p-3 rounded gifbot-log-panel" style="width: 700px">
       <p>
          Congratulations! You setup your first animation command! Your viewers can now use it in chat by sending <font class="text-success"><b>@mAnimationFormModel.Command</b></font> in a chat message.
       </p>
@@ -274,14 +274,14 @@ else if (mCurrentState == State.TutorialComplete)
                   <MudTextField T="string" id="uiAnimsUrl" class="form-control" Style="width: 100%" ReadOnly="true" @bind-Value="mPrimaryAnimationsURL" />
                </td>
                <td align="left">
-                  <button type="button" class="btn btn-secondary p-1 ml-2" style="background-color: #6c4872" @onclick='(() => HandleCopyUrl("uiAnimsUrl"))'>Copy to Clipboard</button>
+                  <button type="button" class="btn btn-secondary p-1 ml-2 gifbot-secondary-btn" @onclick='(() => HandleCopyUrl("uiAnimsUrl"))'>Copy to Clipboard</button>
                </td>
             </tr>
          </table>
       </div>
       <div class="container-fluid text-left p-3" style="width: 600px">
          <div class="col-sm text-right p-3">
-            <button type="submit" class="btn btn-primary" style="background-color: #5c4872" @onclick="@HandleDashboardReturn">Go Back to the Dashboard</button>
+            <button type="submit" class="btn btn-primary gifbot-action-btn" @onclick="@HandleDashboardReturn">Go Back to the Dashboard</button>
          </div>
       </div>
    </div>

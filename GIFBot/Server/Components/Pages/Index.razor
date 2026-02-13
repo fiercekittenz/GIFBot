@@ -1,4 +1,4 @@
-@page "/"
+﻿@page "/"
 @using Microsoft.AspNetCore.SignalR.Client
 @using global::GIFBot.Shared
 @using global::GIFBot.Server.Components.UI
@@ -38,7 +38,7 @@
       <div class="p-2">
          <p>
             <center>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@NavigateToReauthenticate">
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@NavigateToReauthenticate">
                   Go Reauthenticate
                </button>
             </center>
@@ -53,22 +53,22 @@
    }
 </style>
 
-<nav class="navbar navbar-expand-sm" style="background-color:#1f0c24">
+<nav class="navbar navbar-expand-sm gifbot-quick-actions">
    <span class="navbar-text mr-3">
       <b>Quick Actions:</b>
    </span>
    <ul class="navbar-nav">
       <li class="nav-item">
-         <button class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@ToggleStreamerOnlyMode">@mStreamerOnlyModeState Streamer-Only Mode</button>
+         <button class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@ToggleStreamerOnlyMode">@mStreamerOnlyModeState Streamer-Only Mode</button>
       </li>
       <li class="nav-item">
-         <button class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@StopAllAnimations">Stop Animations</button>
+         <button class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@StopAllAnimations">Stop Animations</button>
       </li>
       <li class="nav-item">
-         <button class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@ToggleBonkersMode">@mBonkersModeState Bonkers Mode</button>
+         <button class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@ToggleBonkersMode">@mBonkersModeState Bonkers Mode</button>
       </li>
       <li class="nav-item">
-         <button class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@ClearAllStickers">Clear All Stickers</button>
+         <button class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@ClearAllStickers">Clear All Stickers</button>
       </li>
    </ul>
 </nav>
@@ -79,7 +79,7 @@
       <!-- Log -->
       <MudItem xs="12" sm="6">
          <div class="pa-1 gifbot-section-panel"><b>Output Log</b></div>
-         <div class="overflow-auto" id="uiLogContainer" style="height: 500px; background-color:#1e1e1e">
+         <div class="overflow-auto gifbot-log-panel" id="uiLogContainer" style="height: 500px">
             <div class="p-2">
                @foreach (var logMessage in mLogMessages)
                {
@@ -112,7 +112,7 @@
                                        <table>
                                           <tr>
                                              <td width="25" valign="middle" align="center">
-                                                <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="@(() => HandlePlayAnimation(animation))"><span class="oi oi-media-play"></span></button>
+                                                <button type="button" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 25px; height: 25px" @onclick="@(() => HandlePlayAnimation(animation))"><span class="oi oi-media-play"></span></button>
                                              </td>
                                              <td valign="middle" align="left">
                                                 <MudTreeViewItem Value="@animation" Text="@animation.Title" />

@@ -1,4 +1,4 @@
-@page "/animationseditor/addcategory"
+﻿@page "/animationseditor/addcategory"
 @using Microsoft.AspNetCore.Http.Connections
 @using Microsoft.AspNetCore.SignalR.Client
 @using global::GIFBot.Server.Components.Pages.Setup.Models
@@ -20,8 +20,8 @@
                <MudTextField T="string" class="form-control" @bind-Value="Model.Name" />
             </div>
                            <div class="d-flex justify-end pa-3">
-                  <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnCancel">Cancel</button>
-                  <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e">OK</button>
+                  <button type="reset" class="btn btn-secondary p-2 gifbot-secondary-btn" @onclick="@OnCancel">Cancel</button>
+                  <button type="submit" class="btn btn-primary p-2 gifbot-primary-btn">OK</button>
                </div>
          </EditForm>
       </div>

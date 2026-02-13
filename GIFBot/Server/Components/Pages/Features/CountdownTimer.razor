@@ -1,4 +1,4 @@
-@page "/countdowneditor/"
+﻿@page "/countdowneditor/"
 @using Microsoft.AspNetCore.SignalR.Client
 @using global::GIFBot.Shared.Models.Features
 @using global::GIFBot.Shared.Models.Visualization
@@ -29,10 +29,10 @@
       <div class="p-2">
          <p>
             <center>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelAddCommand">
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleCancelAddCommand">
                   Cancel
                </button>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmAddCommand">
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleConfirmAddCommand">
                   Add!
                </button>
             </center>
@@ -154,10 +154,10 @@
       <div class="p-2">
          <p>
             <center>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelEditCommand">
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleCancelEditCommand">
                   Cancel
                </button>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmEditCommand">
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleConfirmEditCommand">
                   Save!
                </button>
             </center>
@@ -169,16 +169,16 @@
 <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
    <MudTabPanel Text="General">
                <div class="d-flex justify-end pa-3">
-            <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnCancel">Cancel</button>
-            <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e" @onclick="@OnSaveChanges">Save Changes</button>
+            <button type="reset" class="btn btn-secondary p-2 gifbot-secondary-btn" @onclick="@OnCancel">Cancel</button>
+            <button type="submit" class="btn btn-primary p-2 gifbot-primary-btn" @onclick="@OnSaveChanges">Save Changes</button>
          </div>
 
       <div class="p-2 mb-2 rounded gifbot-content-panel">
          <div class="text-left" style="width: 100%">
-            <button type="button" class="btn btn-secondary p-1" style="background-color: #484d72; margin-left: auto; margin-right: 0" @onclick="@OnStartTimer">Start Timer</button>
-            <button type="button" class="btn btn-secondary p-1" style="background-color: #6c4872; margin-left: auto; margin-right: 0" @onclick="@OnPauseTimer">Pause Timer</button>
-            <button type="button" class="btn btn-secondary p-1" style="background-color: #6c4872; margin-left: auto; margin-right: 0" @onclick="@OnResetTimer">Reset Timer</button>
-            <button type="button" class="btn btn-secondary p-1" style="background-color: #6c4872; margin-left: auto; margin-right: 0" @onclick="@OnHideTimer">Hide Timer</button>
+            <button type="button" class="btn btn-secondary p-1 gifbot-special-btn" style="margin-left: auto; margin-right: 0" @onclick="@OnStartTimer">Start Timer</button>
+            <button type="button" class="btn btn-secondary p-1 gifbot-secondary-btn" style="margin-left: auto; margin-right: 0" @onclick="@OnPauseTimer">Pause Timer</button>
+            <button type="button" class="btn btn-secondary p-1 gifbot-secondary-btn" style="margin-left: auto; margin-right: 0" @onclick="@OnResetTimer">Reset Timer</button>
+            <button type="button" class="btn btn-secondary p-1 gifbot-secondary-btn" style="margin-left: auto; margin-right: 0" @onclick="@OnHideTimer">Hide Timer</button>
          </div>
       </div>
 
@@ -201,8 +201,8 @@
          <MudNumericField T="int" Min="1" Max="999999" @bind-Value="Data.TimerStartValueInMinutes" />
       </div>
                <div class="d-flex justify-end pa-3">
-            <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnCancel">Cancel</button>
-            <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e" @onclick="@OnSaveChanges">Save Changes</button>
+            <button type="reset" class="btn btn-secondary p-2 gifbot-secondary-btn" @onclick="@OnCancel">Cancel</button>
+            <button type="submit" class="btn btn-primary p-2 gifbot-primary-btn" @onclick="@OnSaveChanges">Save Changes</button>
          </div>
    </MudTabPanel>
 
@@ -217,9 +217,9 @@
                <PropertyColumn T="CountdownTimerAction" TProperty="string" Property="@(x => x.Name)" Title="Value" />
                <TemplateColumn Title="">
 <CellTemplate Context="data">
-                     <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandlePlayActionRequest((data.Item)))"><span class="oi oi-play-circle"></span></button>
-                     <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleEditRequest((data.Item)))"><span class="oi oi-pencil"></span></button>
-                     <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleDeleteRequest((data.Item)))"><span class="oi oi-trash"></span></button>
+                     <button type="button" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 25px; height: 25px" @onclick="(() => HandlePlayActionRequest((data.Item)))"><span class="oi oi-play-circle"></span></button>
+                     <button type="button" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 25px; height: 25px" @onclick="(() => HandleEditRequest((data.Item)))"><span class="oi oi-pencil"></span></button>
+                     <button type="button" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 25px; height: 25px" @onclick="(() => HandleDeleteRequest((data.Item)))"><span class="oi oi-trash"></span></button>
                   </CellTemplate>
                </TemplateColumn>
             </Columns>
@@ -316,7 +316,7 @@
                         <MudTextField T="string" class="form-control" Style="width: 100%" ReadOnly="true" @bind-Value="WebPath" />
                      </td>
                      <td align="left">
-                        <button type="button" class="btn btn-secondary p-1 ml-2" style="background-color: #6c4872" @onclick='(() => HandleCopyUrl("uiURL"))'>Copy to Clipboard</button>
+                        <button type="button" class="btn btn-secondary p-1 ml-2 gifbot-secondary-btn" @onclick='(() => HandleCopyUrl("uiURL"))'>Copy to Clipboard</button>
                      </td>
                   </tr>
                </table>

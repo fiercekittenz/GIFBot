@@ -76,6 +76,47 @@ a, .btn-link {
     padding-right: 8px;
 }
 
+/* Ensure main content container fills the viewport */
+.mud-main-content .mud-container {
+    min-height: calc(100vh - 64px);
+}
+
+.gifbot-quick-actions {
+    background-color: #1e1e38;
+}
+
+.gifbot-action-btn {
+    background-color: #3d3566 !important;
+}
+
+.gifbot-log-panel {
+    background-color: #12122a;
+}
+
+.gifbot-secondary-btn {
+    background-color: #3a2d56 !important;
+}
+
+.gifbot-primary-btn {
+    background-color: #6b2fa0 !important;
+}
+
+.gifbot-danger-btn {
+    background-color: #4a2d3d !important;
+}
+
+.gifbot-special-btn {
+    background-color: #2d3566 !important;
+}
+
+.gifbot-neutral-btn {
+    background-color: #3a3a5c !important;
+}
+
+.gifbot-layout-dark {
+    background-color: #0e0e1e;
+}
+
 .animationCanvas {
    width: 768px;
    height: 432px;

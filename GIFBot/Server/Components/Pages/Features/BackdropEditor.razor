@@ -1,4 +1,4 @@
-@page "/backdropeditor/"
+﻿@page "/backdropeditor/"
 @using Microsoft.AspNetCore.SignalR.Client
 @using global::GIFBot.Shared.Models.Features
 @using global::GIFBot.Shared.Models.Visualization
@@ -29,10 +29,10 @@
       <div class="p-2">
          <p>
             <center>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelAddCommand">
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleCancelAddCommand">
                   Cancel
                </button>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmAddCommand">
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleConfirmAddCommand">
                   Add!
                </button>
             </center>
@@ -66,7 +66,7 @@
                <td valign="top">
                   <MudTextField T="string" Disabled="true" @bind-Value="mTempData.Visual" />
                   @* TODO: Wire up file upload handler *@
-<InputFile accept="image/gif,image/jpeg,image/png,video/mp4,video/webm,video/mov" style="width: 100%; background-color: #1e1e1e" />
+<InputFile accept="image/gif,image/jpeg,image/png,video/mp4,video/webm,video/mov" style="width: 100%; background-color: #16162e" />
                   @if (mUploadVisualProgress > 0)
                   {
                       <MudProgressLinear Value="@mUploadVisualProgress" Style="margin-bottom: 20px; width: 100%" />
@@ -82,10 +82,10 @@
       <div class="p-2">
          <p>
             <center>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelEditCommand">
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleCancelEditCommand">
                   Cancel
                </button>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmEditCommand">
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleConfirmEditCommand">
                   Save!
                </button>
             </center>
@@ -97,9 +97,9 @@
 <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
    <MudTabPanel Text="General">
                <div class="d-flex justify-end pa-3">
-            <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnTakeDownBackdrop">Take Down Active Backdrop</button>
-            <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnCancel">Cancel</button>
-            <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e" @onclick="@OnSaveChanges">Save Changes</button>
+            <button type="reset" class="btn btn-secondary p-2 gifbot-secondary-btn" @onclick="@OnTakeDownBackdrop">Take Down Active Backdrop</button>
+            <button type="reset" class="btn btn-secondary p-2 gifbot-secondary-btn" @onclick="@OnCancel">Cancel</button>
+            <button type="submit" class="btn btn-primary p-2 gifbot-primary-btn" @onclick="@OnSaveChanges">Save Changes</button>
          </div>
 
       <div class="p-2">
@@ -144,8 +144,8 @@
       </div>
 
                <div class="d-flex justify-end pa-3">
-            <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnCancel">Cancel</button>
-            <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e" @onclick="@OnSaveChanges">Save Changes</button>
+            <button type="reset" class="btn btn-secondary p-2 gifbot-secondary-btn" @onclick="@OnCancel">Cancel</button>
+            <button type="submit" class="btn btn-primary p-2 gifbot-primary-btn" @onclick="@OnSaveChanges">Save Changes</button>
          </div>
    </MudTabPanel>
 
@@ -160,9 +160,9 @@
                <PropertyColumn T="BackdropVideoEntryData" TProperty="string" Property="@(x => x.Name)" Title="Value" />
                <TemplateColumn Title="">
 <CellTemplate Context="data">
-                     <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleHangRequest((data.Item)))"><span class="oi oi-play-circle"></span></button>
-                     <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleEditRequest((data.Item)))"><span class="oi oi-pencil"></span></button>
-                     <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleDeleteRequest((data.Item)))"><span class="oi oi-trash"></span></button>
+                     <button type="button" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 25px; height: 25px" @onclick="(() => HandleHangRequest((data.Item)))"><span class="oi oi-play-circle"></span></button>
+                     <button type="button" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 25px; height: 25px" @onclick="(() => HandleEditRequest((data.Item)))"><span class="oi oi-pencil"></span></button>
+                     <button type="button" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 25px; height: 25px" @onclick="(() => HandleDeleteRequest((data.Item)))"><span class="oi oi-trash"></span></button>
                   </CellTemplate>
                </TemplateColumn>
             </Columns>
@@ -186,7 +186,7 @@
                         <MudTextField T="string" class="form-control" Style="width: 100%" ReadOnly="true" @bind-Value="WebPath" />
                      </td>
                      <td align="left">
-                        <button type="button" class="btn btn-secondary p-1 ml-2" style="background-color: #6c4872" @onclick='(() => HandleCopyUrl("uiURL"))'>Copy to Clipboard</button>
+                        <button type="button" class="btn btn-secondary p-1 ml-2 gifbot-secondary-btn" @onclick='(() => HandleCopyUrl("uiURL"))'>Copy to Clipboard</button>
                      </td>
                   </tr>
                </table>

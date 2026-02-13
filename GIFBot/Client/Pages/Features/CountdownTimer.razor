@@ -1,4 +1,4 @@
-@page "/countdowneditor/"
+﻿@page "/countdowneditor/"
 @using Microsoft.AspNetCore.SignalR.Client
 @using GIFBot.Shared.Models.Features
 @using GIFBot.Shared.Models.Visualization
@@ -9,7 +9,7 @@
 @inject IJSRuntime JSRuntime
 @inject HttpClient Http
 
-<div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+<div class="jumbotron jumbotron-fluid p-1 my-1 text-left gifbot-page-header">
    <h1><span class="oi oi-timer" aria-hidden="true"></span> Countdown</h1>
 </div>
 
@@ -29,10 +29,10 @@
       <div class="container-fluid p-2">
          <p>
             <center>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelAddCommand">
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleCancelAddCommand">
                   Cancel
                </button>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmAddCommand">
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleConfirmAddCommand">
                   Add!
                </button>
             </center>
@@ -154,10 +154,10 @@
       <div class="container-fluid p-2">
          <p>
             <center>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelEditCommand">
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleCancelEditCommand">
                   Cancel
                </button>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmEditCommand">
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleConfirmEditCommand">
                   Save!
                </button>
             </center>
@@ -170,17 +170,17 @@
    <MudTabPanel Text="General">
       <div class="row">
          <div class="container-fluid text-right p-3">
-            <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnCancel">Cancel</button>
-            <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e" @onclick="@OnSaveChanges">Save Changes</button>
+            <button type="reset" class="btn btn-secondary p-2 gifbot-secondary-btn" @onclick="@OnCancel">Cancel</button>
+            <button type="submit" class="btn btn-primary p-2 gifbot-primary-btn" @onclick="@OnSaveChanges">Save Changes</button>
          </div>
       </div>
 
-      <div class="container-fluid p-2 mb-2 rounded" style="background-color: #211126">
+      <div class="container-fluid p-2 mb-2 rounded gifbot-content-panel">
          <div class="container-fluid text-left" style="width: 100%">
-            <button type="button" class="btn btn-secondary p-1" style="background-color: #484d72; margin-left: auto; margin-right: 0" @onclick="@OnStartTimer">Start Timer</button>
-            <button type="button" class="btn btn-secondary p-1" style="background-color: #6c4872; margin-left: auto; margin-right: 0" @onclick="@OnPauseTimer">Pause Timer</button>
-            <button type="button" class="btn btn-secondary p-1" style="background-color: #6c4872; margin-left: auto; margin-right: 0" @onclick="@OnResetTimer">Reset Timer</button>
-            <button type="button" class="btn btn-secondary p-1" style="background-color: #6c4872; margin-left: auto; margin-right: 0" @onclick="@OnHideTimer">Hide Timer</button>
+            <button type="button" class="btn btn-secondary p-1 gifbot-special-btn" style="margin-left: auto; margin-right: 0" @onclick="@OnStartTimer">Start Timer</button>
+            <button type="button" class="btn btn-secondary p-1 gifbot-secondary-btn" style="margin-left: auto; margin-right: 0" @onclick="@OnPauseTimer">Pause Timer</button>
+            <button type="button" class="btn btn-secondary p-1 gifbot-secondary-btn" style="margin-left: auto; margin-right: 0" @onclick="@OnResetTimer">Reset Timer</button>
+            <button type="button" class="btn btn-secondary p-1 gifbot-secondary-btn" style="margin-left: auto; margin-right: 0" @onclick="@OnHideTimer">Hide Timer</button>
          </div>
       </div>
 
@@ -204,8 +204,8 @@
       </div>
       <div class="row">
          <div class="container-fluid text-right p-3">
-            <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnCancel">Cancel</button>
-            <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e" @onclick="@OnSaveChanges">Save Changes</button>
+            <button type="reset" class="btn btn-secondary p-2 gifbot-secondary-btn" @onclick="@OnCancel">Cancel</button>
+            <button type="submit" class="btn btn-primary p-2 gifbot-primary-btn" @onclick="@OnSaveChanges">Save Changes</button>
          </div>
       </div>
    </MudTabPanel>
@@ -221,9 +221,9 @@
                <PropertyColumn T="CountdownTimerAction" TProperty="string" Property="@(x => x.Name)" Title="Value" Width="150px" />
                <TemplateColumn Width="100px" Title="">
 <CellTemplate Context="data">
-                     <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandlePlayActionRequest((data.Item)))"><span class="oi oi-play-circle"></span></button>
-                     <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleEditRequest((data.Item)))"><span class="oi oi-pencil"></span></button>
-                     <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleDeleteRequest((data.Item)))"><span class="oi oi-trash"></span></button>
+                     <button type="button" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 25px; height: 25px" @onclick="(() => HandlePlayActionRequest((data.Item)))"><span class="oi oi-play-circle"></span></button>
+                     <button type="button" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 25px; height: 25px" @onclick="(() => HandleEditRequest((data.Item)))"><span class="oi oi-pencil"></span></button>
+                     <button type="button" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 25px; height: 25px" @onclick="(() => HandleDeleteRequest((data.Item)))"><span class="oi oi-trash"></span></button>
                   </CellTemplate>
                </TemplateColumn>
             </Columns>
@@ -232,7 +232,7 @@
    </MudTabPanel>
 
    <MudTabPanel Text="Appearance">
-      <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+      <div class="container-fluid p-0 m-0 rounded gifbot-form-panel">
          <div class="container-fluid p-2">
             <div class="form-group mt-2">
                <label for="uiCaptionFontSize"><b>Font Size:</b></label>
@@ -305,7 +305,7 @@
    </MudTabPanel>
 
    <MudTabPanel Text="Browsersource URL">
-      <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+      <div class="container-fluid p-0 m-0 rounded gifbot-form-panel">
          <div class="container-fluid p-2">
             <p class="text-white-50">
                Below is the URL you will need to capture in your broadcaster software in order to see the Countdown on your scenes.
@@ -320,7 +320,7 @@
                         <MudTextField T="string" id="uiURL" class="form-control" Style="width: 100%" ReadOnly="true" @bind-Value="WebPath" />
                      </td>
                      <td align="left">
-                        <button type="button" class="btn btn-secondary p-1 ml-2" style="background-color: #6c4872" @onclick='(() => HandleCopyUrl("uiURL"))'>Copy to Clipboard</button>
+                        <button type="button" class="btn btn-secondary p-1 ml-2 gifbot-secondary-btn" @onclick='(() => HandleCopyUrl("uiURL"))'>Copy to Clipboard</button>
                      </td>
                   </tr>
                </table>

@@ -1,4 +1,4 @@
-@page "/regurgitator/"
+﻿@page "/regurgitator/"
 @using Microsoft.AspNetCore.SignalR.Client
 @using global::GIFBot.Shared
 @using global::GIFBot.Shared.Models.Animation
@@ -15,7 +15,7 @@
     <MudText Typo="Typo.h4"><span class="oi oi-trash" aria-hidden="true"></span> Regurgitator</MudText>
 </div>
 
-<nav class="navbar navbar-expand-sm" style="background-color:#1f0c24">
+<nav class="navbar navbar-expand-sm gifbot-quick-actions">
    <ul class="navbar-nav">
       <li class="nav-item">
          <span class="navbar-text mr-3">
@@ -30,8 +30,8 @@
                  }
              }
          </MudSelect>
-         <button class="btn btn-secondary nav-item p-1 ml-2 mr-1" style="width:100px; background-color: #5c4872" @onclick="@AddNewPackage">Add</button>
-         <button class="btn btn-secondary nav-item p-1 mr-1" style="width:100px; background-color: #5c4872" @onclick="@DeletePackage">Delete</button>
+         <button class="btn btn-secondary nav-item p-1 ml-2 mr-1 gifbot-action-btn" style="width:100px" @onclick="@AddNewPackage">Add</button>
+         <button class="btn btn-secondary nav-item p-1 mr-1 gifbot-action-btn" style="width:100px" @onclick="@DeletePackage">Delete</button>
       </li>
    </ul>
 </nav>
@@ -133,7 +133,7 @@
                                         <center><input type="range" class="slider" min="0" max="100" value="@mFormVolume" id="uiVolumeSlider" @onchange="@(args => OnVolumeChanged(args))"></center>
                                     </div>
                                     <div class="form-group">
-                                        <button type="button" class="btn btn-primary p-1 mr-2 mb-2 text-center" style="background-color: #5c4872; width: 200px" @onclick="@HandleTestTTSVolume">
+                                        <button type="button" class="btn btn-primary p-1 mr-2 mb-2 text-center gifbot-action-btn" style="width: 200px" @onclick="@HandleTestTTSVolume">
                                             Test TTS Volume
                                         </button>
                                     </div>
@@ -207,7 +207,7 @@
                             <PropertyColumn T="RegurgitatorEntry" TProperty="string" Property="@(x => x.Value)" Title="Value" />
                             <TemplateColumn Title="">
 <CellTemplate Context="data">
-                                    <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => OnDeleteEntry((data.Item)))"><span class="oi oi-trash"></span></button>
+                                    <button type="button" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 25px; height: 25px" @onclick="(() => OnDeleteEntry((data.Item)))"><span class="oi oi-trash"></span></button>
                                 </CellTemplate>
                             </TemplateColumn>
                         </Columns>
@@ -218,11 +218,11 @@
                             <tr>
                                 <td valign="top" align="left">
                                     <MudTextField T="string" @bind-Value="@mNewEntryText" />
-                                    <button type="button" class="btn btn-primary p-1" style="background-color: #5c4872; width: 200px" @onclick="@OnAddNewEntry"><span class="oi oi-plus" aria-hidden="true"></span>Add New Entry</button>
+                                    <button type="button" class="btn btn-primary p-1 gifbot-action-btn" style="width: 200px" @onclick="@OnAddNewEntry"><span class="oi oi-plus" aria-hidden="true"></span>Add New Entry</button>
                                 </td>
                                 <td></td>
                                 <td valign="top" width="150" align="right">
-                                    <button type="button" class="btn btn-primary p-1" style="background-color: #5c4872; width: 150px" @onclick="@OnClearList">Clear List</button>
+                                    <button type="button" class="btn btn-primary p-1 gifbot-action-btn" style="width: 150px" @onclick="@OnClearList">Clear List</button>
                                 </td>
                             </tr>
                         </table>
@@ -235,7 +235,7 @@
                         You can import directly from a text file. Each entry should be on its own line in the text file.
                     </small>
                     @* TODO: Wire up file upload handler *@
-<InputFile accept="text/*" style="width: 100%; background-color: #1e1e1e" />
+<InputFile accept="text/*" style="width: 100%; background-color: #16162e" />
                     @if (mUploadProgress > 0)
                     {
                         <MudProgressLinear Value="@mUploadProgress" Style="margin-bottom: 20px; width: 100%" />
@@ -249,8 +249,8 @@
         </MudTabs>
 
                     <div class="d-flex justify-end pa-3">
-                <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnCancel">Cancel</button>
-                <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e">Save Changes</button>
+                <button type="reset" class="btn btn-secondary p-2 gifbot-secondary-btn" @onclick="@OnCancel">Cancel</button>
+                <button type="submit" class="btn btn-primary p-2 gifbot-primary-btn">Save Changes</button>
             </div>
     </EditForm>
 }

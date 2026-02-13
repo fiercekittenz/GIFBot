@@ -9,7 +9,7 @@
 @inject IJSRuntime JSRuntime
 @inject HttpClient Http
 
-<div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+<div class="jumbotron jumbotron-fluid p-1 my-1 text-left gifbot-page-header">
     <h1><span class="oi oi-thumb-up" aria-hidden="true"></span> Greeter</h1>
 </div>
 
@@ -29,10 +29,10 @@
         <div class="container-fluid p-2">
             <p>
                 <center>
-                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelAddCommand">
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleCancelAddCommand">
                         Cancel
                     </button>
-                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmAddCommand">
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleConfirmAddCommand">
                         Add!
                     </button>
                 </center>
@@ -80,7 +80,7 @@
                You can import directly from a text file. Each entry should be on its own line in the text file.
             </small>
             @* TODO: Wire up file upload handler *@
-<InputFile accept="text/*" style="width: 100%; background-color: #1e1e1e" />
+<InputFile accept="text/*" style="width: 100%; background-color: #16162e" />
             <MudProgressLinear Value="@mUploadProgress" Visible="@(mUploadProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
             @if (!String.IsNullOrEmpty(mUploadErrorMessage))
             {
@@ -91,10 +91,10 @@
         <div class="container-fluid p-2">
             <p>
                 <center>
-                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelEditCommand">
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleCancelEditCommand">
                         Cancel
                     </button>
-                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmEditCommand">
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleConfirmEditCommand">
                         Save!
                     </button>
                 </center>
@@ -120,8 +120,8 @@
                     </TemplateColumn>
                     <TemplateColumn Width="75px">
 <CellTemplate Context="data">
-                            <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleEditRequest((data.Item)))"><span class="oi oi-pencil"></span></button>
-                            <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleDeleteRequest((data.Item)))"><span class="oi oi-trash"></span></button>
+                            <button type="button" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 25px; height: 25px" @onclick="(() => HandleEditRequest((data.Item)))"><span class="oi oi-pencil"></span></button>
+                            <button type="button" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 25px; height: 25px" @onclick="(() => HandleDeleteRequest((data.Item)))"><span class="oi oi-trash"></span></button>
                         </CellTemplate>
                     </TemplateColumn>
                 </Columns>

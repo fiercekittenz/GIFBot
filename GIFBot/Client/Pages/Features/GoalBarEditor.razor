@@ -1,4 +1,4 @@
-@page "/goalbareditor/"
+﻿@page "/goalbareditor/"
 @using Microsoft.AspNetCore.SignalR.Client
 @using GIFBot.Shared.Models.Features
 @using GIFBot.Shared.Models.Visualization
@@ -24,7 +24,7 @@
       <div class="container-fluid p-2">
          <p>
             <center>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleAddNewGoal">
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleAddNewGoal">
                   Add
                </button>
             </center>
@@ -33,7 +33,7 @@
    </DialogContent>
 </MudDialog>
 
-<div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+<div class="jumbotron jumbotron-fluid p-1 my-1 text-left gifbot-page-header">
    <h1><span class="oi oi-target" aria-hidden="true"></span> Goal Bar</h1>
 </div>
 
@@ -41,12 +41,12 @@
    <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
       <MudTabPanel Text="Settings">
          <div class="container-fluid" style="width: 100%">
-            <div class="container-fluid text-left p-3 rounded" style="width: 100%; background-color:#1e1e1e">
+            <div class="container-fluid text-left p-3 rounded gifbot-log-panel" style="width: 100%">
                <p>
                   The <b>Goal Bar</b> is a feature of GIFBot where you can have a monetary or point-based goal that
                   takes into consideration multiple types of Twitch events (cheering, subbing, gift subbing, and tips).
                </p>
-               <div class="container text-left p-3 rounded" style="background-color: #1d161f">
+               <div class="container text-left p-3 rounded gifbot-form-panel">
 
                   <div class="form-group form-check">
                      <label class="form-check-label">
@@ -130,7 +130,7 @@
       </MudTabPanel>
 
       <MudTabPanel Text="Visual Settings">
-         <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+         <div class="container-fluid p-0 m-0 rounded gifbot-form-panel">
             <div class="container-fluid p-2">
                <div class="form-group form-check">
                   <label class="form-check-label">
@@ -233,7 +233,7 @@
       </MudTabPanel>
 
       <MudTabPanel Text="Goals">
-         <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+         <div class="container-fluid p-0 m-0 rounded gifbot-form-panel">
             <div class="container-fluid p-2">
                <div class="container-fluid text-white-50 p-0">
                   <p>
@@ -257,7 +257,7 @@
                }
 
                <div class="container-fluid">
-                  <p align="right"><button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@ShowAddNewGoalWindow">Add New Goal</button></p>
+                  <p align="right"><button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@ShowAddNewGoalWindow">Add New Goal</button></p>
                </div>
                <MudTabs ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
                   @for (int i = 0; i < mGoalBarData.Goals.Count; ++i)
@@ -292,7 +292,7 @@
                      <MudTextField T="string" id="uiURL" class="form-control" Style="width: 100%" ReadOnly="true" @bind-Value="mURL" />
                   </td>
                   <td align="left">
-                     <button type="button" class="btn btn-secondary p-1 ml-2" style="background-color: #6c4872" @onclick='(() => HandleCopyUrl("uiURL"))'>Copy to Clipboard</button>
+                     <button type="button" class="btn btn-secondary p-1 ml-2 gifbot-secondary-btn" @onclick='(() => HandleCopyUrl("uiURL"))'>Copy to Clipboard</button>
                   </td>
                </tr>
             </table>
@@ -302,8 +302,8 @@
 
    <div class="row">
       <div class="container-fluid text-right p-3">
-         <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnCancel">Cancel</button>
-         <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e">Save Changes</button>
+         <button type="reset" class="btn btn-secondary p-2 gifbot-secondary-btn" @onclick="@OnCancel">Cancel</button>
+         <button type="submit" class="btn btn-primary p-2 gifbot-primary-btn">Save Changes</button>
       </div>
    </div>
 </EditForm>

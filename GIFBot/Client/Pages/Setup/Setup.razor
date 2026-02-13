@@ -12,11 +12,11 @@
 
 @if (mBotSettings != null && mBotSettings.CurrentSetupStep == SetupStep.Welcome)
 {
-   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left gifbot-page-header">
       <h1><span class="oi oi-cog" aria-hidden="true"></span> Bot Setup (Step 1 of 4): Welcome!</h1>
    </div>
 
-   <div class="container text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+   <div class="container text-left p-3 rounded gifbot-log-panel" style="width: 700px">
       <p>
          Welcome to GIFBot! This wizard will guide you through the setup process in authenticating your bot and streamer accounts with Twitch.
          It is recommended that you setup a second Twitch account to use as your bot. If you already have a chat bot account, you may use that
@@ -29,7 +29,7 @@
       <div class="container text-left p-3" style="width: 600px">
          <div class="container">
             <div class="col-sm text-right p-3">
-               <button type="button" class="btn btn-secondary p-2" style="background-color: #5c4872" @onclick="@HandleStartSetup">Let's Go!</button>
+               <button type="button" class="btn btn-secondary p-2 gifbot-action-btn" @onclick="@HandleStartSetup">Let's Go!</button>
             </div>
          </div>
       </div>
@@ -37,12 +37,12 @@
 }
 else if (mBotSettings != null && mBotSettings.CurrentSetupStep == SetupStep.BotOauth)
 {
-   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left gifbot-page-header">
       <h1><span class="oi oi-cog" aria-hidden="true"></span> Bot Setup (Step 2 of 4): Bot Account Authentication!</h1>
    </div>
 
    <center>
-      <div class="container text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+      <div class="container text-left p-3 rounded gifbot-log-panel" style="width: 700px">
          <p class="text-left">
             Let's get you authenticated with Twitch! The authentication button below will take you to Twitch for authentication and bring you
             right back here! When you are on the Twitch site, please make sure to log into the <b><i>bot's account</i></b>.
@@ -62,7 +62,7 @@ else if (mBotSettings != null && mBotSettings.CurrentSetupStep == SetupStep.BotO
          <div class="container text-left p-3" style="width: 600px">
             <div class="container">
                <div class="p-3 text-center">
-                  <center><button type="submit" class="btn btn-primary" style="background-color: #5c4872" @onclick="@HandleSubmitTwitchBotAuth">Authenticate BOT Account</button></center>
+                  <center><button type="submit" class="btn btn-primary gifbot-action-btn" @onclick="@HandleSubmitTwitchBotAuth">Authenticate BOT Account</button></center>
                </div>
             </div>
          </div>
@@ -71,12 +71,12 @@ else if (mBotSettings != null && mBotSettings.CurrentSetupStep == SetupStep.BotO
 }
 else if (mBotSettings != null && mBotSettings.CurrentSetupStep == SetupStep.StreamerOauth)
 {
-   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left gifbot-page-header">
       <h1><span class="oi oi-cog" aria-hidden="true"></span> Bot Setup (Step 3 of 4): Streamer Account Authentication</h1>
    </div>
 
    <center>
-      <div class="container text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+      <div class="container text-left p-3 rounded gifbot-log-panel" style="width: 700px">
          <p class="text-left">
             To have your bot join the correct channel as well as receive <font class="text-success">host alerts</font>, <font class="text-success">raid alerts</font>, <font class="text-success">channel point redemption</font>, and <font class="text-success">hype train progression</font> notices,
             you will need to authenticate with Twitch as the streamer as well.
@@ -91,7 +91,7 @@ else if (mBotSettings != null && mBotSettings.CurrentSetupStep == SetupStep.Stre
          }
          <div class="container-fluid p-3" style="width: 600px">
             <div class="container-fluid text-right">
-               <button type="submit" class="btn btn-primary p-2" style="background-color: #5c4872" @onclick="@HandleSubmitTwitchStreamerAuth">Authenticate Streamer's Account</button>
+               <button type="submit" class="btn btn-primary p-2 gifbot-action-btn" @onclick="@HandleSubmitTwitchStreamerAuth">Authenticate Streamer's Account</button>
             </div>
          </div>
       </div>
@@ -99,11 +99,11 @@ else if (mBotSettings != null && mBotSettings.CurrentSetupStep == SetupStep.Stre
 }
 else if (mBotSettings != null && mBotSettings.CurrentSetupStep == SetupStep.Finished)
 {
-   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left gifbot-page-header">
       <h1><span class="oi oi-cog" aria-hidden="true"></span> Bot Setup (Step 4 of 4): Complete!</h1>
    </div>
 
-   <div class="container text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+   <div class="container text-left p-3 rounded gifbot-log-panel" style="width: 700px">
       <p>
          <font class="text-success"><b>You have successfully completed the initial bot setup!</b></font>
       </p>
@@ -118,9 +118,9 @@ else if (mBotSettings != null && mBotSettings.CurrentSetupStep == SetupStep.Fini
       <div class="container text-left p-3" style="width: 600px">
          <div class="container">
             <div class="container-fluid text-center">
-               <button type="submit" class="btn btn-primary p-2" style="background-color: #5c4872" @onclick="@HandleFinishSettings">Go to Settings</button>
-               <button type="submit" class="btn btn-primary p-2" style="background-color: #5c4872" @onclick="@HandleAddAnimations">Add Animations!</button>
-               <button type="submit" class="btn btn-primary p-2" style="background-color: #5c4872" @onclick="@HandleFinishDashboard">Go to Dashboard</button>
+               <button type="submit" class="btn btn-primary p-2 gifbot-action-btn" @onclick="@HandleFinishSettings">Go to Settings</button>
+               <button type="submit" class="btn btn-primary p-2 gifbot-action-btn" @onclick="@HandleAddAnimations">Add Animations!</button>
+               <button type="submit" class="btn btn-primary p-2 gifbot-action-btn" @onclick="@HandleFinishDashboard">Go to Dashboard</button>
             </div>
          </div>
       </div>
@@ -128,7 +128,7 @@ else if (mBotSettings != null && mBotSettings.CurrentSetupStep == SetupStep.Fini
 }
 else
 {
-   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left gifbot-page-header">
       <h1><span class="oi oi-cog" aria-hidden="true"></span> Bot Setup: Error</h1>
    </div>
 

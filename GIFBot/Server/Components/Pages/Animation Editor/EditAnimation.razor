@@ -1,4 +1,4 @@
-@page "/animationseditor/editanimation/{CategoryId}/{AnimationId}"
+﻿@page "/animationseditor/editanimation/{CategoryId}/{AnimationId}"
 @using Microsoft.AspNetCore.SignalR.Client
 @using global::GIFBot.Server.Components.Pages.Setup.Models
 @using global::GIFBot.Server.Components.UI
@@ -25,10 +25,10 @@
       <div class="p-2">
          <p>
             <center>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelClone">
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleCancelClone">
                   Cancel
                </button>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmClone">
+               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleConfirmClone">
                   Yes, Clone!
                </button>
             </center>
