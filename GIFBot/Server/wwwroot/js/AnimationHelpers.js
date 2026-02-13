@@ -85,7 +85,9 @@ function StopVideoElement(videoElement, videoFile) {
 // Scrolls the logs down to the bottom.
 function UpdateScroll() {
    var element = document.getElementById("uiLogContainer");
-   element.scrollTop = element.scrollHeight;
+   if (element) {
+      element.scrollTop = element.scrollHeight;
+   }
 }
 
 // Copy Data from a Textbox
