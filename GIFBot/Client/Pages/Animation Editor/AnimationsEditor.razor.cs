@@ -5,12 +5,10 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.JSInterop;
 using Newtonsoft.Json;
-using Radzen;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Telerik.Blazor.Components;
 using Microsoft.AspNetCore.Http.Connections;
 
 namespace GIFBot.Client.Pages.Animation_Editor
@@ -25,9 +23,8 @@ namespace GIFBot.Client.Pages.Animation_Editor
 
       public int ActiveTabIndex { get; set; } = 0;
 
-      public TelerikTreeList<AnimationTreeItem> AnimationTreeListRef { get; set; } = new TelerikTreeList<AnimationTreeItem>();
-
-      protected override async Task OnInitializedAsync()
+      // TODO: TelerikTreeList ref removed during migration
+protected override async Task OnInitializedAsync()
       {
          // Build the connection to the main bot hub.
          mHubConnection = new HubConnectionBuilder()
@@ -69,7 +66,7 @@ namespace GIFBot.Client.Pages.Animation_Editor
 
             if (mPersistedTreeState != null)
             {
-               TreeListState<AnimationTreeItem> updatedState = new TreeListState<AnimationTreeItem>();
+               object /* was object /* was TreeListState<AnimationTreeItem> */ */ updatedState = new object /* was object /* was TreeListState<AnimationTreeItem> */ */();
                updatedState.ExpandedItems = new List<AnimationTreeItem>();
 
                foreach (var expandedItem in mPersistedTreeState.ExpandedItems)
@@ -88,14 +85,14 @@ namespace GIFBot.Client.Pages.Animation_Editor
          }
       }
 
-      private void AnimationTreeStateChanged(TreeListStateEventArgs<AnimationTreeItem> args)
+      private void AnimationTreeStateChanged(object /* was object /* was TreeListStateEventArgs<AnimationTreeItem> */ */ args)
       {
          mPersistedTreeState = args.TreeListState;
       }
       
       private async Task HandleExpandAllRequest()
       {
-         TreeListState<AnimationTreeItem> updatedState = new TreeListState<AnimationTreeItem>();
+         object /* was object /* was TreeListState<AnimationTreeItem> */ */ updatedState = new object /* was object /* was TreeListState<AnimationTreeItem> */ */();
          updatedState.ExpandedItems = new List<AnimationTreeItem>();
 
          foreach (var item in mAnimationTreeData.Where(t => t.Tier == AnimationTreeTier.Category))
@@ -108,7 +105,7 @@ namespace GIFBot.Client.Pages.Animation_Editor
 
       private async Task HandleCollapseAllRequest()
       {
-         TreeListState<AnimationTreeItem> updatedState = new TreeListState<AnimationTreeItem>();
+         object /* was object /* was TreeListState<AnimationTreeItem> */ */ updatedState = new object /* was object /* was TreeListState<AnimationTreeItem> */ */();
          updatedState.ExpandedItems = new List<AnimationTreeItem>();
          await AnimationTreeListRef.SetStateAsync(updatedState);
       }
@@ -148,14 +145,14 @@ namespace GIFBot.Client.Pages.Animation_Editor
             bool results = await mHubConnection.InvokeAsync<bool>("DeleteCategory", mTempCategory.Id);
             if (results)
             {
-               NotificationService.Notify(NotificationSeverity.Success, "Success", $"{mTempCategory.Title} has been deleted.", 5000);
+               Snackbar.Add($"Success - {mTempCategory.Title} has been deleted.", Severity.Success);
                mTempCategory = null;
                await UpdateClientAnimationTree();
                await InvokeAsync(() => { StateHasChanged(); });
             }
             else
             {
-               NotificationService.Notify(NotificationSeverity.Error, "Error", $"{mTempCategory.Title} could not be deleted, because it has animations.", 5000);
+               Snackbar.Add($"Error - {mTempCategory.Title} could not be deleted, because it has animations.", Severity.Error);
                await InvokeAsync(() => { StateHasChanged(); });
             }
          }
@@ -181,13 +178,13 @@ namespace GIFBot.Client.Pages.Animation_Editor
             bool results = await mHubConnection.InvokeAsync<bool>("DeleteAnimations", JsonConvert.SerializeObject(mSelectedTreeItems.Where(t => t.Tier == AnimationTreeTier.Animation).Select(t => t.Id)));
             if (results)
             {
-               NotificationService.Notify(NotificationSeverity.Success, "Success", $"The animations have been deleted.", 5000);
+               Snackbar.Add($"Success - The animations have been deleted.", Severity.Success);
                await UpdateClientAnimationTree();
                await InvokeAsync(() => { StateHasChanged(); });
             }
             else
             {
-               NotificationService.Notify(NotificationSeverity.Error, "Error", $"One or more of the selected animations could not be deleted.", 5000);
+               Snackbar.Add($"Error - One or more of the selected animations could not be deleted.", Severity.Error);
                await InvokeAsync(() => { StateHasChanged(); });
             }
          }
@@ -211,7 +208,7 @@ namespace GIFBot.Client.Pages.Animation_Editor
          StateHasChanged();
       }
 
-      private void OnAnimationsTreeRowClickHander(TreeListRowClickEventArgs args)
+      private void OnAnimationsTreeRowClickHander(object /* was EventArgs */ args)
       {
          if (args.Item is AnimationTreeItem item && item.Tier == AnimationTreeTier.Category)
          {
@@ -228,7 +225,7 @@ namespace GIFBot.Client.Pages.Animation_Editor
 
       #region Categories
 
-      private void HandleAddCategoryRequest(TreeListCommandEventArgs args)
+      private void HandleAddCategoryRequest(EventArgs args)
       {
          mIsCreateCategoryDialogVisible = true;
          mTempCategory = new AnimationCategory();
@@ -247,14 +244,14 @@ namespace GIFBot.Client.Pages.Animation_Editor
          bool result = await mHubConnection.InvokeAsync<bool>("AddAnimationCategory", mTempCategory.Title);
          if (result)
          {
-            NotificationService.Notify(NotificationSeverity.Success, "Success", "The category has been added.", 5000);
+            Snackbar.Add("Success - The category has been added.", Severity.Success);
             mIsCreateCategoryDialogVisible = false;
             await UpdateClientAnimationTree();
             await InvokeAsync(() => { StateHasChanged(); });
          }
          else
          {
-            NotificationService.Notify(NotificationSeverity.Error, "Error", $"The category could not be added. Either there was no text or the name is in use by another category.", 5000);
+            Snackbar.Add($"Error - The category could not be added. Either there was no text or the name is in use by another category.", Severity.Error);
             await InvokeAsync(() => { StateHasChanged(); });
          }
       }
@@ -292,14 +289,14 @@ namespace GIFBot.Client.Pages.Animation_Editor
          bool result = await mHubConnection.InvokeAsync<bool>("UpdateAnimationCategory", mTempCategory.Id, mTempCategory.Title);
          if (result)
          {
-            NotificationService.Notify(NotificationSeverity.Success, "Success", "The category has been updated.", 5000);
+            Snackbar.Add("Success - The category has been updated.", Severity.Success);
             mIsEditCategoryDialogVisible = false;
             await UpdateClientAnimationTree();
             await InvokeAsync(() => { StateHasChanged(); });
          }
          else
          {
-            NotificationService.Notify(NotificationSeverity.Error, "Error", $"The category could not be updated. Either there was no text or the name is in use by another category.", 5000);
+            Snackbar.Add($"Error - The category could not be updated. Either there was no text or the name is in use by another category.", Severity.Error);
             await InvokeAsync(() => { StateHasChanged(); });
          }
       }
@@ -328,13 +325,13 @@ namespace GIFBot.Client.Pages.Animation_Editor
             bool results = await mHubConnection.InvokeAsync<bool>("MoveAnimations", JsonConvert.SerializeObject(mSelectedTreeItems.Where(t => t.Tier == AnimationTreeTier.Animation).Select(t => t.Id)), mSelectedMoveCategory);
             if (results)
             {
-               NotificationService.Notify(NotificationSeverity.Success, "Success", $"The selected animations have been moved.", 5000);
+               Snackbar.Add($"Success - The selected animations have been moved.", Severity.Success);
                await UpdateClientAnimationTree();
                await InvokeAsync(() => { StateHasChanged(); });
             }
             else
             {
-               NotificationService.Notify(NotificationSeverity.Error, "Error", $"One or move of the selected animations could not be moved.", 5000);
+               Snackbar.Add($"Error - One or move of the selected animations could not be moved.", Severity.Error);
                await InvokeAsync(() => { StateHasChanged(); });
             }
          }
@@ -358,13 +355,13 @@ namespace GIFBot.Client.Pages.Animation_Editor
                bool result = await mHubConnection.InvokeAsync<bool>("EnableAnimations", JsonConvert.SerializeObject(animationsToModify));
                if (result)
                {
-                  NotificationService.Notify(NotificationSeverity.Success, "Success", "The animations have been enabled.", 5000);
+                  Snackbar.Add("Success - The animations have been enabled.", Severity.Success);
                   await UpdateClientAnimationTree();
                   await InvokeAsync(() => { StateHasChanged(); });
                }
                else
                {
-                  NotificationService.Notify(NotificationSeverity.Error, "Error", $"The animations could not be enabled.", 5000);
+                  Snackbar.Add($"Error - The animations could not be enabled.", Severity.Error);
                   await InvokeAsync(() => { StateHasChanged(); });
                }
             }
@@ -386,13 +383,13 @@ namespace GIFBot.Client.Pages.Animation_Editor
                bool result = await mHubConnection.InvokeAsync<bool>("DisableAnimations", JsonConvert.SerializeObject(animationsToModify));
                if (result)
                {
-                  NotificationService.Notify(NotificationSeverity.Success, "Success", "The animations have been disabled.", 5000);
+                  Snackbar.Add("Success - The animations have been disabled.", Severity.Success);
                   await UpdateClientAnimationTree();
                   await InvokeAsync(() => { StateHasChanged(); });
                }
                else
                {
-                  NotificationService.Notify(NotificationSeverity.Error, "Error", $"The animations could not be disabled.", 5000);
+                  Snackbar.Add($"Error - The animations could not be disabled.", Severity.Error);
                   await InvokeAsync(() => { StateHasChanged(); });
                }
             }
@@ -430,13 +427,13 @@ namespace GIFBot.Client.Pages.Animation_Editor
             }
             else
             {
-               NotificationService.Notify(NotificationSeverity.Error, "Error", "That animation already exists!", 5000);
+               Snackbar.Add("Error - That animation already exists!", Severity.Error);
                await InvokeAsync(() => { StateHasChanged(); });
             }
          }
          else
          {
-            NotificationService.Notify(NotificationSeverity.Error, "Error", "You must provide a command for your animation!", 5000);
+            Snackbar.Add("Error - You must provide a command for your animation!", Severity.Error);
             await InvokeAsync(() => { StateHasChanged(); });
          }
       }
@@ -456,13 +453,13 @@ namespace GIFBot.Client.Pages.Animation_Editor
             bool result = await mHubConnection.InvokeAsync<bool>("DeleteAnimations", JsonConvert.SerializeObject(new List<Guid>() { treeItem.Id }));
             if (result)
             {
-               NotificationService.Notify(NotificationSeverity.Info, "Info", $"The animation has been deleted.", 5000);
+               Snackbar.Add($"Info - The animation has been deleted.", Severity.Info);
                await UpdateClientAnimationTree();
                await InvokeAsync(() => { StateHasChanged(); });
             }
             else
             {
-               NotificationService.Notify(NotificationSeverity.Error, "Error", $"The animation could not be deleted.", 5000);
+               Snackbar.Add($"Error - The animation could not be deleted.", Severity.Error);
                await InvokeAsync(() => { StateHasChanged(); });
             }
          }
@@ -473,7 +470,7 @@ namespace GIFBot.Client.Pages.Animation_Editor
          if (treeItem != null && treeItem.Tier == AnimationTreeTier.Animation)
          {
             await mHubConnection.InvokeAsync("PlayAnimation", treeItem.Title);
-            NotificationService.Notify(NotificationSeverity.Info, "Info", $"{treeItem.Title} has been queued.", 5000);
+            Snackbar.Add($"Info - {treeItem.Title} has been queued.", Severity.Info);
             await InvokeAsync(() => { StateHasChanged(); });
          }
       }
@@ -519,7 +516,7 @@ namespace GIFBot.Client.Pages.Animation_Editor
       private IEnumerable<AnimationTreeItem> mSelectedTreeItems = Enumerable.Empty<AnimationTreeItem>();
 
       // Persisted Tree State
-      private TreeListState<AnimationTreeItem> mPersistedTreeState = null;
+      private object /* was object /* was TreeListState<AnimationTreeItem> */ */ mPersistedTreeState = null;
 
       #endregion
    }

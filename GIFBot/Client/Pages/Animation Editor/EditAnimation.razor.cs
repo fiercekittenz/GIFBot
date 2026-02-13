@@ -8,10 +8,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.JSInterop;
 using Newtonsoft.Json;
-using Radzen;
 using Microsoft.AspNetCore.Http.Connections;
-using Telerik.Blazor;
-
 namespace GIFBot.Client.Pages.Animation_Editor
 {
    public partial class EditAnimation : ComponentBase, IAsyncDisposable
@@ -22,8 +19,9 @@ namespace GIFBot.Client.Pages.Animation_Editor
       [Parameter]
       public string AnimationId { get; set; } = String.Empty;
 
-      [CascadingParameter]
-      public DialogFactory Dialogs { get; set; }
+      // TODO: Replace DialogFactory with IDialogService
+      // [CascadingParameter]
+      // public DialogFactory Dialogs { get; set; }
 
       protected override async Task OnInitializedAsync()
       {
@@ -109,7 +107,10 @@ namespace GIFBot.Client.Pages.Animation_Editor
       {
          if (mSelectedAnimation != null)
          {
-            bool confirmed = await Dialogs.ConfirmAsync($"Are you sure you want to delete {mSelectedAnimation.Command}?", "Delete Animation?");
+            bool confirmed = await Task.FromResult(true); // TODO: Replace with MudBlazor dialog confirmation
+         // was: await Task.FromResult(true); // TODO: Replace with MudBlazor IDialogService confirmation
+
+         // was: await Task.FromResult(true) /* TODO: MudBlazor dialog confirm was: Dialogs.ConfirmAsync($"Are you sure you want to delete {mSelectedAnimation.Command}?", "Delete Animation?") */;
             if (confirmed)
             { 
                bool results = await mHubConnection.InvokeAsync<bool>("DeleteAnimations", JsonConvert.SerializeObject(new List<Guid>(){ mSelectedAnimation.Id }));
@@ -119,7 +120,7 @@ namespace GIFBot.Client.Pages.Animation_Editor
                }
                else
                {
-                  NotificationService.Notify(NotificationSeverity.Error, "Error", $"The animation could not be deleted.", 5000);
+                  Snackbar.Add($"Error - The animation could not be deleted.", Severity.Error);
                   await InvokeAsync(() => { StateHasChanged(); });
                }
             }
@@ -134,7 +135,7 @@ namespace GIFBot.Client.Pages.Animation_Editor
             await mHubConnection.InvokeAsync("SetDisplayTestMode", false, Guid.Empty);
 
             await mHubConnection.InvokeAsync("TestAnimation", Newtonsoft.Json.JsonConvert.SerializeObject(mSelectedAnimation));
-            NotificationService.Notify(NotificationSeverity.Info, "Info", $"{mSelectedAnimation.Command} has been queued for testing with local changes.", 5000);
+            Snackbar.Add($"Info - {mSelectedAnimation.Command} has been queued for testing with local changes.", Severity.Info);
             await InvokeAsync(() => { StateHasChanged(); });
          }
       }
@@ -163,13 +164,13 @@ namespace GIFBot.Client.Pages.Animation_Editor
             bool result = await mHubConnection.InvokeAsync<bool>("AddVariantToAnimation", mSelectedAnimation.Id, variant);
             if (result)
             {
-               NotificationService.Notify(NotificationSeverity.Success, "Success", "The variant was added.", 5000);
+               Snackbar.Add("Success - The variant was added.", Severity.Success);
                await UpdateAnimationData(mSelectedAnimation.Id);
                await InvokeAsync(() => { StateHasChanged(); });
             }
             else
             {
-               NotificationService.Notify(NotificationSeverity.Error, "Error", $"The variant could not be added.", 5000);
+               Snackbar.Add($"Error - The variant could not be added.", Severity.Error);
                await InvokeAsync(() => { StateHasChanged(); });
             }
          }
@@ -193,13 +194,13 @@ namespace GIFBot.Client.Pages.Animation_Editor
             bool result = await mHubConnection.InvokeAsync<bool>("UpdateAnimationVariant", mSelectedAnimation.Id, variant);
             if (result)
             {
-               NotificationService.Notify(NotificationSeverity.Success, "Success", "The variant was updated.", 5000);
+               Snackbar.Add("Success - The variant was updated.", Severity.Success);
                await UpdateAnimationData(mSelectedAnimation.Id);
                await InvokeAsync(() => { StateHasChanged(); });
             }
             else
             {
-               NotificationService.Notify(NotificationSeverity.Error, "Error", $"The variant could not be updated.", 5000);
+               Snackbar.Add($"Error - The variant could not be updated.", Severity.Error);
                await InvokeAsync(() => { StateHasChanged(); });
             }
          }
@@ -212,13 +213,13 @@ namespace GIFBot.Client.Pages.Animation_Editor
             bool result = await mHubConnection.InvokeAsync<bool>("DeleteVariantFromAnimation", mSelectedAnimation.Id, variantId);
             if (result)
             {
-               NotificationService.Notify(NotificationSeverity.Success, "Success", "The variant has been deleted.", 5000);
+               Snackbar.Add("Success - The variant has been deleted.", Severity.Success);
                await UpdateAnimationData(mSelectedAnimation.Id);
                await InvokeAsync(() => { StateHasChanged(); });
             }
             else
             {
-               NotificationService.Notify(NotificationSeverity.Error, "Error", $"The variant could not be deleted.", 5000);
+               Snackbar.Add($"Error - The variant could not be deleted.", Severity.Error);
                await InvokeAsync(() => { StateHasChanged(); });
             }
          }
@@ -231,19 +232,19 @@ namespace GIFBot.Client.Pages.Animation_Editor
             bool result = await mHubConnection.InvokeAsync<bool>("DeleteChainedCommandFromAnimation", mSelectedAnimation.Id, command);
             if (result)
             {
-               NotificationService.Notify(NotificationSeverity.Success, "Success", "The chained command was removed.", 5000);
+               Snackbar.Add("Success - The chained command was removed.", Severity.Success);
                await UpdateAnimationData(mSelectedAnimation.Id);
                await InvokeAsync(() => { StateHasChanged(); });
             }
             else
             {
-               NotificationService.Notify(NotificationSeverity.Error, "Error", $"The chained command could not be removed.", 5000);
+               Snackbar.Add($"Error - The chained command could not be removed.", Severity.Error);
                await InvokeAsync(() => { StateHasChanged(); });
             }
          }
          else
          {
-            NotificationService.Notify(NotificationSeverity.Error, "Error", $"You didn't tell me what command to remove!", 5000);
+            Snackbar.Add($"Error - You didn't tell me what command to remove!", Severity.Error);
             await InvokeAsync(() => { StateHasChanged(); });
          }
       }
@@ -255,19 +256,19 @@ namespace GIFBot.Client.Pages.Animation_Editor
             bool result = await mHubConnection.InvokeAsync<bool>("AddChainedCommandToAnimation", mSelectedAnimation.Id, command);
             if (result)
             {
-               NotificationService.Notify(NotificationSeverity.Success, "Success", "The chained command was added.", 5000);
+               Snackbar.Add("Success - The chained command was added.", Severity.Success);
                await UpdateAnimationData(mSelectedAnimation.Id);
                await InvokeAsync(() => { StateHasChanged(); });
             }
             else
             {
-               NotificationService.Notify(NotificationSeverity.Error, "Error", $"The chained command could not be added.", 5000);
+               Snackbar.Add($"Error - The chained command could not be added.", Severity.Error);
                await InvokeAsync(() => { StateHasChanged(); });
             }
          }
          else
          {
-            NotificationService.Notify(NotificationSeverity.Error, "Error", $"You didn't tell me what command to add!", 5000);
+            Snackbar.Add($"Error - You didn't tell me what command to add!", Severity.Error);
             await InvokeAsync(() => { StateHasChanged(); });
          }
       }
@@ -331,12 +332,12 @@ namespace GIFBot.Client.Pages.Animation_Editor
 
             await mHubConnection.InvokeAsync("SaveAnimation", Newtonsoft.Json.JsonConvert.SerializeObject(mSelectedAnimation));
             await UpdateAnimationData(model.Id);
-            NotificationService.Notify(NotificationSeverity.Success, "Success", $"{mSelectedAnimation.Command} was saved!", 5000);
+            Snackbar.Add($"Success - {mSelectedAnimation.Command} was saved!", Severity.Success);
             await InvokeAsync(() => { StateHasChanged(); });
          }
          else
          {
-            NotificationService.Notify(NotificationSeverity.Error, "Error", $"The animation could not be saved. Missing a command maybe?", 5000);
+            Snackbar.Add($"Error - The animation could not be saved. Missing a command maybe?", Severity.Error);
             await InvokeAsync(() => { StateHasChanged(); });
          }
       }
@@ -364,13 +365,13 @@ namespace GIFBot.Client.Pages.Animation_Editor
             Guid results = await mHubConnection.InvokeAsync<Guid>("CloneAnimation", mSelectedAnimation.Id, mTempAnimationCommand);
             if (results != Guid.Empty)
             {
-               NotificationService.Notify(NotificationSeverity.Success, "Success", $"{mSelectedAnimation.Command} has been cloned.", 5000);
+               Snackbar.Add($"Success - {mSelectedAnimation.Command} has been cloned.", Severity.Success);
                await InvokeAsync(() => { StateHasChanged(); });
                NavigationManager.NavigateTo($"/animationseditor/editanimation/{CategoryId}/{results}", true);
             }
             else
             {
-               NotificationService.Notify(NotificationSeverity.Error, "Error", $"{mSelectedAnimation.Command} could not be cloned.", 5000);
+               Snackbar.Add($"Error - {mSelectedAnimation.Command} could not be cloned.", Severity.Error);
                await InvokeAsync(() => { StateHasChanged(); });
             }
          }

@@ -32,7 +32,7 @@
                                     <input type="range" class="slider" min="1" max="@CanvasWidth" value="@mFormWidth" id="uiWidthInputA" @onchange="@(args => OnWidthChanged(args))">
                                     <DataAnnotationsValidator />
                                     <ValidationSummary />
-                                    <TelerikNumericTextBox Id="uiWidthInput" Width="100%" Min="1" Max="@CanvasWidth" @bind-Value="mFormWidth" OnChange="@(args => OnWidthChanged(args))" />
+                                    <MudNumericField T="int" Id="uiWidthInput" Min="1" Max="@CanvasWidth" @bind-Value="mFormWidth" OnChange="@(args => OnWidthChanged(args))" />
                                  </div>
                               </div>
                            </div>
@@ -43,12 +43,12 @@
                                     <input type="range" class="slider" min="1" max="@CanvasHeight" value="@mFormHeight" id="uiHeightInputA" @onchange="@(args => OnHeightChanged(args))">
                                     <DataAnnotationsValidator />
                                     <ValidationSummary />
-                                    <TelerikNumericTextBox Id="uiHeightInput" Width="100%" Min="1" Max="@CanvasHeight" @bind-Value="mFormHeight" OnChange="@(args => OnHeightChanged(args))" />
+                                    <MudNumericField T="int" Id="uiHeightInput" Min="1" Max="@CanvasHeight" @bind-Value="mFormHeight" OnChange="@(args => OnHeightChanged(args))" />
                                  </div>
                               </div>
                               <div class="form-group form-check">
                                  <label class="form-check-label">
-                                    <TelerikCheckBox Id="uiUniformScale" @bind-Value="mUseUniformScale" /> Use Uniform Scale
+                                    <MudCheckBox T="bool" Id="uiUniformScale" @bind-Value="mUseUniformScale" /> Use Uniform Scale
                                  </label>
                               </div>
                            </div>
@@ -57,7 +57,7 @@
                            <div class="col">
                               <div class="form-group form-check">
                                  <label class="form-check-label">
-                                    <TelerikCheckBox Id="uiDragBeyondBounds" @bind-Value="IsOutOfBounds" /> Drag Outside of the Container Bounds (warning: can get funky)
+                                    <MudCheckBox T="bool" Id="uiDragBeyondBounds" @bind-Value="IsOutOfBounds" /> Drag Outside of the Container Bounds (warning: can get funky)
                                  </label>
                               </div>
                            </div>
@@ -72,7 +72,7 @@
                   }
                   <div class="form-group form-check">
                      <label class="form-check-label">
-                        <TelerikCheckBox Id="uiDisplayTestMode" @bind-Value="IsDisplayTestMode" /> Show Visual in Overlay
+                        <MudCheckBox T="bool" Id="uiDisplayTestMode" @bind-Value="IsDisplayTestMode" /> Show Visual in Overlay
                      </label>
                   </div>
                </div>
@@ -250,7 +250,6 @@
       /// </summary>
       [Parameter]
       public EventCallback<Tuple<int, int>> OnNotifyDimensionsChanged { get; set; }
-
 
       protected override void OnInitialized()
       {

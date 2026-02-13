@@ -7,7 +7,7 @@
 @using GIFBot.Shared.Models.Animation
 @using Newtonsoft.Json
 @inject NavigationManager NavigationManager
-@inject NotificationService NotificationService
+@inject ISnackbar Snackbar
 @inject IJSRuntime JSRuntime
 @inject HttpClient Http
 
@@ -16,11 +16,11 @@
 </div>
 
 <!-- Delete Category Confirmation Window -->
-<TelerikWindow Class="gifbot-modal-window" Width="600px" Height="250px" Centered="true" Visible="@mIsDeleteCategoryConfirmationVisible" Modal="true">
-    <WindowTitle>
+<MudDialog @bind-IsVisible="@mIsDeleteCategoryConfirmationVisible">
+    <TitleContent>
         <strong>Delete Category?</strong>
-    </WindowTitle>
-    <WindowContent>
+    </TitleContent>
+    <DialogContent>
         <div class="form-group">
             <font class="text-white">Are you sure you want to delete the [@(mTempCategory?.Title)] category? If you have any animations in it, it will not succeed.</font>
         </div>
@@ -36,15 +36,15 @@
                 </center>
             </p>
         </div>
-    </WindowContent>
-</TelerikWindow>
+    </DialogContent>
+</MudDialog>
 
 <!-- Delete Animation(s) Confirmation Window -->
-<TelerikWindow Class="gifbot-modal-window" Width="600px" Height="225px" Centered="true" Visible="@mIsDeleteConfirmationVisible" Modal="true">
-    <WindowTitle>
+<MudDialog @bind-IsVisible="@mIsDeleteConfirmationVisible">
+    <TitleContent>
         <strong>Delete Animation?</strong>
-    </WindowTitle>
-    <WindowContent>
+    </TitleContent>
+    <DialogContent>
         <div class="form-group">
             <font class="text-white">Are you sure you want to delete the selected animation(s)?</font>
         </div>
@@ -60,22 +60,27 @@
                 </center>
             </p>
         </div>
-    </WindowContent>
-</TelerikWindow>
+    </DialogContent>
+</MudDialog>
 
 <!-- Move Categories Window -->
-<TelerikWindow Class="gifbot-modal-window" Width="600px" Height="325px" Centered="true" Visible="@mIsMoveCategoryDialogVisible" Modal="true">
-    <WindowTitle>
+<MudDialog @bind-IsVisible="@mIsMoveCategoryDialogVisible">
+    <TitleContent>
         <strong>Move Animations</strong>
-    </WindowTitle>
-    <WindowContent>
+    </TitleContent>
+    <DialogContent>
         <div class="form-group">
             <font class="text-white">Which category would you like to move the selected animation(s) into?</font>
         </div>
         <div class="form-group">
             <label for="uiTitleLabel">Select the new category from the list below:</label>
             <small id="uiTitleLabel" class="form-text text-muted">Once moved, the animation's data will be immediately saved.</small>
-            <TelerikDropDownList Data="@(mAnimationTreeData.Where(a => a.Tier == AnimationTreeTier.Category))" TextField="Title" ValueField="Id" DefaultText="Select Category..." @bind-Value="@mSelectedMoveCategory" />
+            <MudSelect T="string" Placeholder="Select Category..." @bind-Value="@mSelectedMoveCategory">
+                @foreach (var cat in mAnimationTreeData.Where(a => a.Tier == AnimationTreeTier.Category))
+                {
+                    <MudSelectItem T="string" Value="@cat.Id.ToString()">@cat.Title</MudSelectItem>
+                }
+            </MudSelect>
         </div>
         <div class="container-fluid p-2">
             <p>
@@ -89,21 +94,21 @@
                 </center>
             </p>
         </div>
-    </WindowContent>
-</TelerikWindow>
+    </DialogContent>
+</MudDialog>
 
 <!-- Add New Category Window -->
-<TelerikWindow Class="gifbot-modal-window" Width="550px" Height="400px" Centered="true" Visible="@mIsCreateCategoryDialogVisible" Modal="true">
-    <WindowTitle>
+<MudDialog @bind-IsVisible="@mIsCreateCategoryDialogVisible">
+    <TitleContent>
         <strong>Add New Category</strong>
-    </WindowTitle>
-    <WindowContent>
+    </TitleContent>
+    <DialogContent>
         <div class="form-group">
             <font class="text-white">What is the name of the animation category you would like to create?</font>
         </div>
         <div class="form-group">
             <label for="uiCategoryName"><b>Name:</b></label>
-            <TelerikTextBox Id="uiCategoryName" @bind-Value="mTempCategory.Title" />
+            <MudTextField T="string" Id="uiCategoryName" @bind-Value="mTempCategory.Title" />
         </div>
         <div class="container-fluid p-2">
             <p>
@@ -117,21 +122,21 @@
                 </center>
             </p>
         </div>
-    </WindowContent>
-</TelerikWindow>
+    </DialogContent>
+</MudDialog>
 
 <!-- Edit Category Window -->
-<TelerikWindow Class="gifbot-modal-window" Width="550px" Height="400px" Centered="true" Visible="@mIsEditCategoryDialogVisible" Modal="true">
-    <WindowTitle>
+<MudDialog @bind-IsVisible="@mIsEditCategoryDialogVisible">
+    <TitleContent>
         <strong>Edit Category</strong>
-    </WindowTitle>
-    <WindowContent>
+    </TitleContent>
+    <DialogContent>
         <div class="form-group">
             <font class="text-white">You can rename the category below.</font>
         </div>
         <div class="form-group">
             <label for="uiCategoryName"><b>Name:</b></label>
-            <TelerikTextBox Id="uiCategoryName" @bind-Value="mTempCategory.Title" />
+            <MudTextField T="string" Id="uiCategoryName" @bind-Value="mTempCategory.Title" />
         </div>
         <div class="container-fluid p-2">
             <p>
@@ -145,21 +150,21 @@
                 </center>
             </p>
         </div>
-    </WindowContent>
-</TelerikWindow>
+    </DialogContent>
+</MudDialog>
 
 <!-- Add New Animation to Category Window -->
-<TelerikWindow Class="gifbot-modal-window" Width="550px" Height="400px" Centered="true" Visible="@mIsAddAnimationToCategoryDialogVisible" Modal="true">
-    <WindowTitle>
+<MudDialog @bind-IsVisible="@mIsAddAnimationToCategoryDialogVisible">
+    <TitleContent>
         <strong>Add New Animation to Category</strong>
-    </WindowTitle>
-    <WindowContent>
+    </TitleContent>
+    <DialogContent>
         <div class="form-group">
             <font class="text-white">What is the name of the animation you would like to create? If you want this to be a command, make sure to include "!" in front of it.</font>
         </div>
         <div class="form-group">
             <label for="uiName"><b>Name or Command Value:</b></label>
-            <TelerikTextBox Id="uiName" @bind-Value="mTempAnimationCommand" />
+            <MudTextField T="string" Id="uiName" @bind-Value="mTempAnimationCommand" />
         </div>
         <div class="container-fluid p-2">
             <p>
@@ -173,52 +178,42 @@
                 </center>
             </p>
         </div>
-    </WindowContent>
-</TelerikWindow>
+    </DialogContent>
+</MudDialog>
 
 <!-- Main Layout for the Animations Editor -->
 <div class="container-fluid p-3">
 
-    <TelerikTooltip TargetSelector="button[title]" Position="@Telerik.Blazor.TooltipPosition.Top" ShowOn="@TooltipShowEvent.Hover" Id="position-tooltip">
-    </TelerikTooltip>
+    @* MudBlazor: Use MudTooltip wrapping individual elements instead *@
 
     <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
         <div class="container-fluid p-2">
             <div class="form-group">
-                <TelerikTabStrip @bind-ActiveTabIndex="@ActiveTabIndex">
-                    <TabStripTab Title="Animations">
-                        <TelerikTreeList Data="@mAnimationTreeData"
-                                         IdField="Id"
-                                         ParentIdField="ParentTreeId"
-                                         Pageable="true"
-                                         Sortable="true"
-                                         SelectedItems="@mSelectedTreeItems"
-                                         OnRowClick="@OnAnimationsTreeRowClickHander"
-                                         FilterMode="@TreeListFilterMode.FilterMenu"
-                                         SelectionMode="@TreeListSelectionMode.Multiple"
-                                         SelectedItemsChanged="@( (IEnumerable<AnimationTreeItem> items) => AnimationListSelectionChanged(items) )"
+                <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
+                    <MudTabPanel Text="Animations">
+                        <MudDataGrid T="object" Items="@mAnimationTreeData" Filterable="true" SortMode="SortMode.Single" Groupable="false"> items) => AnimationListSelectionChanged(items) )"
                                          Page="@mAnimationPage"
                                          PageChanged="@AnimationPageChanged"
                                          OnStateChanged="@((TreeListStateEventArgs<AnimationTreeItem> args) => AnimationTreeStateChanged(args))"
                                          PageSize="50"
                                          @ref="@AnimationTreeListRef">
-                            <TreeListToolBarTemplate>
-                                <TreeListSearchBox Fields="@SearchableFields" />
-                                <TreeListCommandButton Command="ExpandAll" OnClick="@HandleExpandAllRequest" Icon="@SvgIcon.Download"></TreeListCommandButton>
-                                <TreeListCommandButton Command="CollapseAll" OnClick="@HandleCollapseAllRequest" Icon="@SvgIcon.Upload"></TreeListCommandButton>
-                                <TreeListCommandButton Command="AddCategory" OnClick="@HandleAddCategoryRequest" Icon="@SvgIcon.Plus">Add Category</TreeListCommandButton>
+                            <ToolBarContent>
+                                <MudTextField T="string" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
+                                <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleExpandAllRequest"></MudButton>
+                                <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleCollapseAllRequest"></MudButton>
+                                <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleAddCategoryRequest">Add Category</MudButton>
                                 @if (mSelectedTreeItems.Where(t => t.Tier == AnimationTreeTier.Animation).Any())
                                 {
-                                    <TreeListCommandButton Command="AddCategory" OnClick="@HandleMoveSelectedRequest" Icon="@SvgIcon.ChevronDoubleRight">Move</TreeListCommandButton>
-                                    <TreeListCommandButton Command="DeleteSelected" OnClick="@HandleDeleteSelectedRequest" Icon="@SvgIcon.Trash">Delete</TreeListCommandButton>
-                                    <TreeListCommandButton Command="EnableSelected" OnClick="@HandleEnableSelectedRequest" Icon="@SvgIcon.Check">Enable</TreeListCommandButton>
-                                    <TreeListCommandButton Command="DisableSelected" OnClick="@HandleDisableSelectedRequest" Icon="@SvgIcon.Cancel">Disable</TreeListCommandButton>
+                                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleMoveSelectedRequest">Move</MudButton>
+                                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleDeleteSelectedRequest">Delete</MudButton>
+                                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleEnableSelectedRequest">Enable</MudButton>
+                                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleDisableSelectedRequest">Disable</MudButton>
                                 }
-                            </TreeListToolBarTemplate>
-                            <TreeListColumns>
-                                <TreeListCheckboxColumn SelectChildren="true" SelectAll="true" CheckBoxOnlySelection="true" SelectAllMode="TreeListSelectAllMode.All"></TreeListCheckboxColumn>
-                                <TreeListColumn Field="Title" Title="Name" Filterable="true" Expandable="true" Width="150px">
-                                    <Template Context="itemcontext">
+                            </ToolBarContent>
+                            <Columns>
+                                <SelectColumn T="object" />
+                                <TemplateColumn Field="Title" Title="Name" Filterable="true" Expandable="true" Width="150px">
+<CellTemplate Context="itemcontext">
                                         @{
                                             var item = itemcontext as AnimationTreeItem;
                                         }
@@ -230,10 +225,10 @@
                                         {
                                             <u><a href="/animationseditor/editanimation/@item.ParentTreeId/@item.Id">@item.Title</a></u>
                                         }
-                                    </Template>
-                                </TreeListColumn>
-                                <TreeListColumn Field="Disabled" Width="110px" Title="Enabled" Filterable="false">
-                                    <Template Context="itemcontext">
+                                    </CellTemplate>
+                                </TemplateColumn>
+                                <TemplateColumn Field="Disabled" Width="110px" Title="Enabled" Filterable="false">
+<CellTemplate Context="itemcontext">
                                         @{
                                             string output = "Yes";
                                             var item = itemcontext as AnimationTreeItem;
@@ -246,10 +241,10 @@
                                         {
                                             <center>@output</center>
                                         }
-                                    </Template>
-                                </TreeListColumn>
-                                <TreeListColumn Width="220px">
-                                    <Template Context="itemcontext">
+                                    </CellTemplate>
+                                </TemplateColumn>
+                                <TemplateColumn Width="220px">
+<CellTemplate Context="itemcontext">
                                         @{
                                             var item = itemcontext as AnimationTreeItem;
                                         }
@@ -265,12 +260,12 @@
                                             <button type="button" title="Delete Animation" class="btn btn-secondary p-0 m-0" style="background-color: #646464; width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleDeleteAnimation(item))"><span class="oi oi-trash"></span></button>
                                             <button type="button" title="Play Animation" class="btn btn-secondary p-0 m-0" style="background-color: #646464; width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandlePlayAnimation(item))"><span class="oi oi-media-play"></span></button>
                                         }
-                                    </Template>
-                                </TreeListColumn>
-                            </TreeListColumns>
-                        </TelerikTreeList>
-                    </TabStripTab>
-                </TelerikTabStrip>
+                                    </CellTemplate>
+                                </TemplateColumn>
+                            </Columns>
+                        </MudDataGrid>
+                    </MudTabPanel>
+                </MudTabs>
             </div>
         </div>
     </div>

@@ -1,9 +1,8 @@
 ﻿@using GIFBot.Shared
 @using GIFBot.Shared.Models.Animation
 @using GIFBot.Shared.Models.Visualization
-@using Telerik.Blazor.Components
 @inject IJSRuntime JSRuntime
-@inject NotificationService NotificationService
+@inject ISnackbar Snackbar
 @inject HttpClient Http
 
 <EditForm Model="@mData" OnSubmit="@HandleSave">
@@ -17,27 +16,27 @@
          <button type="submit" class="btn btn-primary p-1" style="background-color: #8f269e">Save Changes</button>
       </div>
    </div>
-   <TelerikTabStrip @bind-ActiveTabIndex="@ActiveTabIndex">
-      <TabStripTab Title="General">
+   <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
+      <MudTabPanel Text="General">
          <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
             <div class="container-fluid p-2">
                <div class="mt-2">
-                  <TelerikCheckBox Id="uiDisabled" @bind-Value="mData.Disabled" />
+                  <MudCheckBox T="bool" Id="uiDisabled" @bind-Value="mData.Disabled" />
                   <label for="uiDisabled">Disabled</label>
                   <small for="uiDisabled" class="form-text text-white-50 ml-4">When disabled, an animation can only be triggered by the broadcaster.</small>
                </div>
                <div class="mt-2">
-                  <TelerikCheckBox Id="uiHideFromChat" @bind-Value="mData.HideFromChatOutput" />
+                  <MudCheckBox T="bool" Id="uiHideFromChat" @bind-Value="mData.HideFromChatOutput" />
                   <label for="uiHideFromChat">Hide from !animations Output</label>
                   <small id="uiHideFromChat" class="form-text text-white-50 ml-4">When enabled, the command will not appear in the list of chat output on the !animations command.</small>
                </div>
                <div class="mt-2">
                   <label for="uiCommand"><b>Command (Name):</b></label>
                   <small id="uiCommand" class="form-text text-white-50">The command viewers have to use in chat to trigger this animation. If your animation has special trigger requirements (sub, resub, tip, etc.) then this is just its name.</small>
-                  <TelerikTextBox Id="uiCommand" Width="100%" @bind-Value="mData.Command" />
+                  <MudTextField T="string" Id="uiCommand" @bind-Value="mData.Command" />
                </div>
 
-               <RadzenFieldset Text="Audio/Visual" AllowCollapse="true" Style="width: 100%; margin-top: 20px; margin-bottom: 20px">
+               <MudExpansionPanel Text="Audio/Visual" IsInitiallyExpanded="true">
                   <table>
                      <tr>
                         <td style="width: 45%" valign="top">
@@ -47,9 +46,10 @@
                               <table>
                                  <tr>
                                     <td valign="top">
-                                       <TelerikTextBox Id="uiVisual" Width="100%" Enabled="false" @bind-Value="mData.Visual" />
-                                       <RadzenUpload Style="width: 100%; background-color: #1e1e1e;" Url="upload/animation" Accept="image/gif,image/jpeg,image/png,video/mp4,video/webm,video/mov" Error="@(args => OnImportVisualFileError(args))" Progress="@(args => OnImportVisualFileProgress(args))" Complete="@(args => OnImportVisualFileComplete(args))" />
-                                       <RadzenProgressBar Value="@mUploadVisualProgress" Visible="@(mUploadVisualProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
+                                       <MudTextField T="string" Id="uiVisual" Disabled="true" @bind-Value="mData.Visual" />
+                                       @* TODO: Wire up file upload handler *@
+<InputFile accept="image/gif,image/jpeg,image/png,video/mp4,video/webm,video/mov" style="width: 100%; background-color: #1e1e1e" />
+                                       <MudProgressLinear Value="@mUploadVisualProgress" Visible="@(mUploadVisualProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
                                        @if (!String.IsNullOrEmpty(mUploadVisualErrorMessage))
                                        {
                                           <label class="text-danger">@mUploadVisualErrorMessage</label>
@@ -68,9 +68,10 @@
                               <table>
                                  <tr>
                                     <td valign="top">
-                                       <TelerikTextBox Id="uiAudio" Width="100%" Enabled="false" @bind-Value="mData.Audio" />
-                                       <RadzenUpload Style="width: 100%; background-color: #1e1e1e;" Url="upload/animation" Accept="audio/*" Error="@(args => OnImportAudioFileError(args))" Progress="@(args => OnImportAudioFileProgress(args))" Complete="@(args => OnImportAudioFileComplete(args))" />
-                                       <RadzenProgressBar Value="@mUploadAudioProgress" Visible="@(mUploadAudioProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
+                                       <MudTextField T="string" Id="uiAudio" Disabled="true" @bind-Value="mData.Audio" />
+                                       @* TODO: Wire up file upload handler *@
+<InputFile accept="audio/*" style="width: 100%; background-color: #1e1e1e" />
+                                       <MudProgressLinear Value="@mUploadAudioProgress" Visible="@(mUploadAudioProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
                                        @if (!String.IsNullOrEmpty(mUploadAudioErrorMessage))
                                        {
                                           <label class="text-danger">@mUploadAudioErrorMessage</label>
@@ -110,44 +111,42 @@
                         </p>
                      </div>
                   }
-               </RadzenFieldset>
+               </MudExpansionPanel>
 
-               <RadzenFieldset Text="Timing" AllowCollapse="true" Style="width: 100%; margin-bottom: 20px">
+               <MudExpansionPanel Text="Timing" IsInitiallyExpanded="true">
                   <div class="form-group">
                      <label for="uiDuration"><b>Duration (in milliseconds):</b></label>
                      <small id="uiDuration" class="form-text text-white-50">The number of milliseconds this animation should play for (<i>Math Reminder: 1 second = 1000ms</i>).</small>
-                     <TelerikNumericTextBox Id="uiDuration" Min="1000" Max="9999999" @bind-Value="mData.DurationMilliseconds" />
+                     <MudNumericField T="int" Id="uiDuration" Min="1000" Max="9999999" @bind-Value="mData.DurationMilliseconds" />
                   </div>
                   <div class="form-group">
                      <label for="uiCooldown"><b>Main Cooldown (in minutes):</b></label>
                      <small id="uiCooldown" class="form-text text-white-50">The number of minutes this command must wait before triggered again via chat. This cooldown does not apply if the animation is redeemed via Twitch events.</small>
-                     <TelerikNumericTextBox Id="uiCooldown" Min="0" Max="300" @bind-Value="mData.MainCooldownMinutes" />
+                     <MudNumericField T="int" Id="uiCooldown" Min="0" Max="300" @bind-Value="mData.MainCooldownMinutes" />
                   </div>
                   <div class="form-group">
                      <label for="uiAudioOffset"><b>Audio Offset (in milliseconds):</b></label>
                      <small id="uiAudioOffset" class="form-text text-white-50">Plays the audio file on a delay <i>after</i> the visual is played (<i>Math Reminder: 1 second = 1000ms</i>).</small>
-                     <TelerikNumericTextBox Id="uiAudioOffset" Min="0" Max="600000" @bind-Value="mData.AudioTimingOffsetMilliseconds" />
+                     <MudNumericField T="int" Id="uiAudioOffset" Min="0" Max="600000" @bind-Value="mData.AudioTimingOffsetMilliseconds" />
                   </div>
-               </RadzenFieldset>
+               </MudExpansionPanel>
 
-               <RadzenFieldset Text="Access Level" AllowCollapse="true" Style="width: 100%; margin-bottom: 20px">
+               <MudExpansionPanel Text="Access Level" IsInitiallyExpanded="true">
                   <div class="form-group">
                      <label for="uiAccess"><b>Access Type:</b></label>
                      <small id="uiAccess" class="form-text text-white-50">
                         You can limit what kind of viewer has access to use this animation. Your options are below. If you are making
                         this command to be used from within another command, it is recommended to flag it as Bot Only!
                      </small>
-                     <RadzenRadioButtonList @bind-Value="mAccessSelection" TValue="int" Change="@(args => OnAccessLevelChange(args))">
-                        <Items>
-                           <RadzenRadioButtonListItem Text="Anyone" Value="0" />
-                           <RadzenRadioButtonListItem Text="Subscriber" Value="2" />
-                           <RadzenRadioButtonListItem Text="VIP" Value="3" />
-                           <RadzenRadioButtonListItem Text="Moderator" Value="4" />
-                           <RadzenRadioButtonListItem Text="User Group" Value="5" />
-                           <RadzenRadioButtonListItem Text="Specific Viewer" Value="6" />
-                           <RadzenRadioButtonListItem Text="Bot Only" Value="7" />
-                        </Items>
-                     </RadzenRadioButtonList>
+                     <MudRadioGroup @bind-Value="mAccessSelection" T="int">
+<MudRadio Option="@(0)">Anyone</MudRadio>
+                           <MudRadio Option="@(2)">Subscriber</MudRadio>
+                           <MudRadio Option="@(3)">VIP</MudRadio>
+                           <MudRadio Option="@(4)">Moderator</MudRadio>
+                           <MudRadio Option="@(5)">User Group</MudRadio>
+                           <MudRadio Option="@(6)">Specific Viewer</MudRadio>
+                           <MudRadio Option="@(7)">Bot Only</MudRadio>
+</MudRadioGroup>
                   </div>
 
                   @if (mData.Access == AnimationEnums.AccessType.UserGroup)
@@ -156,8 +155,8 @@
                         <label for="uiUserGroup"><b>User Group:</b></label>
                         <small id="uiUserGroup" class="form-text text-white-50">Access is restricted to a user group. Which one?</small>
 
-                        <RadzenDropDown Placeholder="Select User Group..." Style="background-color: #2c2241; color: #e5e5e5; font-weight: bold; width: 250px;"
-                                     Data="@UserGroupNames" @bind-Value="@mSelectedUserGroupName" Change="@(args => OnUserGroupSelected.InvokeAsync(args as string))" />
+                        <MudSelect T="string" Placeholder="Select User Group..." Style="background-color: #2c2241; color: #e5e5e5; font-weight: bold; width: 250px;"
+                                     Data="@UserGroupNames" @bind-Value="@mSelectedUserGroupName" ValueChanged="@(args => OnUserGroupSelected.InvokeAsync(args as string))" />
                      </div>
                   }
                   else if (mData.Access == AnimationEnums.AccessType.SpecificViewer)
@@ -165,25 +164,25 @@
                      <div class="form-group">
                         <label for="uiRestrictedToUser"><b>Specific Viewer:</b></label>
                         <small id="uiRestrictedToUser" class="form-text text-white-50">Access is restricted to a specific viewer. Which one?</small>
-                        <TelerikTextBox Id="uiRestrictedToUser" @bind-Value="@mData.RestrictedToUser" />
+                        <MudTextField T="string" Id="uiRestrictedToUser" @bind-Value="@mData.RestrictedToUser" />
                      </div>
                      <div class="mt-2">
-                        <TelerikCheckBox Id="uiRestrictedUserMustBeSub" @bind-Value="mData.RestrictedUserMustBeSub" />
+                        <MudCheckBox T="bool" Id="uiRestrictedUserMustBeSub" @bind-Value="mData.RestrictedUserMustBeSub" />
                         <label for="uiRestrictedUserMustBeSub">Viewer must be subscribed</label>
                      </div>
                   }
-               </RadzenFieldset>
+               </MudExpansionPanel>
             </div>
          </div>
-      </TabStripTab>
-      <TabStripTab Title="Positioning">
+      </MudTabPanel>
+      <MudTabPanel Text="Positioning">
          <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
             @if (AnimationLibrary.GetFileTypeOfAnimation(mData.Visual) == AnimationEnums.FileType.Video)
             {
                <div class="container-fluid p-2">
                   <div class="form-group form-check">
                      <label class="form-check-label">
-                        <TelerikCheckBox Id="uiMirrored" @bind-Value="mData.IsMirrored" /> Mirroring: This animation should be flipped horizontally.
+                        <MudCheckBox T="bool" Id="uiMirrored" @bind-Value="mData.IsMirrored" /> Mirroring: This animation should be flipped horizontally.
                      </label>
                   </div>
                </div>
@@ -199,25 +198,25 @@
                                    OnNotifyDimensionsChanged="@(args => HandlePlacementUpdated(args))" />
             </div>
          </div>
-      </TabStripTab>
-      <TabStripTab Title="Trigger Options">
+      </MudTabPanel>
+      <MudTabPanel Text="Trigger Options">
          <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
             <div class="container-fluid p-2">
-               <TelerikTabStrip>
-                  <TabStripTab Title="Twitch Events">
+               <MudTabs ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
+                  <MudTabPanel Text="Twitch Events">
                      <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
                         <div class="container-fluid p-2">
-                           <RadzenFieldset Text="Cheer Requirements" AllowCollapse="false" Style="width: 100%; margin-bottom: 20px">
+                           <MudExpansionPanel Text="Cheer Requirements" IsInitiallyExpanded="true">
                               <div class="form-group form-check">
                                  <label class="form-check-label">
-                                    <TelerikCheckBox Id="uiBitTriggerEnabled" @bind-Value="mData.IsBitAlert" /> Trigger when someone cheers bits
+                                    <MudCheckBox T="bool" Id="uiBitTriggerEnabled" @bind-Value="mData.IsBitAlert" /> Trigger when someone cheers bits
                                  </label>
                               </div>
                               @if (mData.IsBitAlert)
                               {
                                  <div class="form-group">
                                     <small id="uiRequirementBits" class="form-text text-white-50">Require an exact number of bits to be cheered before this animation will trigger. Leave at 0 if you would like this to trigger for all cheers.</small>
-                                    <TelerikNumericTextBox Id="uiRequirementBits" Min="0" Max="999999" @bind-Value="mData.BitRequirement" />
+                                    <MudNumericField T="int" Id="uiRequirementBits" Min="0" Max="999999" @bind-Value="mData.BitRequirement" />
                                  </div>
                                  <div class="form-group">
                                     <label for="uiBitAlertBehavior"><b>Bit Alert Behavior:</b></label>
@@ -225,24 +224,22 @@
                                        Bit alerts have two types of behaviors. You can opt to perform an exact match on the bits cheered, or the bits cheered can hit a minimum. This allows
                                        you to create catch-all alerts for ranges of values, but an exact match alert for bits cheered will always be prioritized.
                                     </small>
-                                    <RadzenRadioButtonList @bind-Value="mBitBehaviorSelection" TValue="int" Change="@(args => OnBitBehaviorChange(args))">
-                                       <Items>
-                                          <RadzenRadioButtonListItem Text="Exact Match" Value="0" />
-                                          <RadzenRadioButtonListItem Text="Minimum (>= Your Value)" Value="1" />
-                                       </Items>
-                                    </RadzenRadioButtonList>
+                                    <MudRadioGroup @bind-Value="mBitBehaviorSelection" T="int">
+<MudRadio Option="@(0)">Exact Match</MudRadio>
+                                          <MudRadio Option="@(1)">Minimum (>= Your Value)</MudRadio>
+</MudRadioGroup>
                                  </div>
                                  <div class="form-group form-check">
                                     <label class="form-check-label">
-                                       <TelerikCheckBox Id="uiRequireBitPairedWithCommand" @bind-Value="mData.BitsMustBePairedWithCommand" /> Cheering must be paired with the command. (Allows users to target a specific animation when there are multiple with the same cheer amount. Example: !commandname cheer25)
+                                       <MudCheckBox T="bool" Id="uiRequireBitPairedWithCommand" @bind-Value="mData.BitsMustBePairedWithCommand" /> Cheering must be paired with the command. (Allows users to target a specific animation when there are multiple with the same cheer amount. Example: !commandname cheer25)
                                     </label>
                                  </div>
                               }
-                           </RadzenFieldset>
-                           <RadzenFieldset Text="Raid Alerts" AllowCollapse="false" Style="width: 100%; margin-bottom: 20px">
+                           </MudExpansionPanel>
+                           <MudExpansionPanel Text="Raid Alerts" IsInitiallyExpanded="true">
                               <div class="form-group form-check">
                                  <label class="form-check-label">
-                                    <TelerikCheckBox Id="uiRaidTriggerEnabled" @bind-Value="mData.IsRaidAlert" /> Trigger when someone raids the channel
+                                    <MudCheckBox T="bool" Id="uiRaidTriggerEnabled" @bind-Value="mData.IsRaidAlert" /> Trigger when someone raids the channel
                                  </label>
                               </div>
                               @if (mData.IsRaidAlert)
@@ -250,14 +247,14 @@
                                  <div class="form-group">
                                     <label for="uiRestrictedToRaid"><b>Restricted to Raids By User:</b></label>
                                     <small id="uiRestrictedToRaid" class="form-text text-white-50">Only triggers if this specific user raids. You may leave this blank to trigger for all raids.</small>
-                                    <TelerikTextBox Id="uiRestrictedToRaid" @bind-Value="mData.RaidRestrictedToUsername" />
+                                    <MudTextField T="string" Id="uiRestrictedToRaid" @bind-Value="mData.RaidRestrictedToUsername" />
                                  </div>
                               }
-                           </RadzenFieldset>
-                           <RadzenFieldset Text="Subscriber Alerts" AllowCollapse="false" Style="width: 100%; margin-bottom: 20px">
+                           </MudExpansionPanel>
+                           <MudExpansionPanel Text="Subscriber Alerts" IsInitiallyExpanded="true">
                               <div class="form-group form-check">
                                  <label class="form-check-label">
-                                    <TelerikCheckBox Id="uiSubscriberTriggerEnabled" @bind-Value="mData.IsSubAlertTrigger" /> Trigger when someone subscribes/resubscribes
+                                    <MudCheckBox T="bool" Id="uiSubscriberTriggerEnabled" @bind-Value="mData.IsSubAlertTrigger" /> Trigger when someone subscribes/resubscribes
                                  </label>
                               </div>
                               @if (mData.IsSubAlertTrigger)
@@ -265,27 +262,25 @@
                                  <div class="form-group">
                                     <label for="uiSubMonths"><b>Months Subscribed:</b></label>
                                     <small id="uiSubMonths" class="form-text text-white-50">A subscriber must subscribe or resubscribe with the number of months to trigger the animation. (0 = no restriction)</small>
-                                    <TelerikNumericTextBox Id="uiSubMonths" Min="0" Max="2500" @bind-Value="mData.SubscriptionMonthsRequired" />
+                                    <MudNumericField T="int" Id="uiSubMonths" Min="0" Max="2500" @bind-Value="mData.SubscriptionMonthsRequired" />
                                  </div>
                                  <div class="form-group">
                                     <label for="uiSubTier"><b>Tier:</b></label>
                                     <small id="uiSubTier" class="form-text text-white-50">What sub tier is this for?</small>
-                                    <RadzenRadioButtonList @bind-Value="mSubTierSelection" TValue="int" Change="@(args => OnSubTierChange(args))">
-                                       <Items>
-                                          <RadzenRadioButtonListItem Text="All" Value="0" />
-                                          <RadzenRadioButtonListItem Text="Prime" Value="1" />
-                                          <RadzenRadioButtonListItem Text="Tier 1" Value="2" />
-                                          <RadzenRadioButtonListItem Text="Tier 2" Value="3" />
-                                          <RadzenRadioButtonListItem Text="Tier 3" Value="4" />
-                                       </Items>
-                                    </RadzenRadioButtonList>
+                                    <MudRadioGroup @bind-Value="mSubTierSelection" T="int">
+<MudRadio Option="@(0)">All</MudRadio>
+                                          <MudRadio Option="@(1)">Prime</MudRadio>
+                                          <MudRadio Option="@(2)">Tier 1</MudRadio>
+                                          <MudRadio Option="@(3)">Tier 2</MudRadio>
+                                          <MudRadio Option="@(4)">Tier 3</MudRadio>
+</MudRadioGroup>
                                  </div>
                               }
-                           </RadzenFieldset>
-                           <RadzenFieldset Text="Gift Sub Bomb Alerts" AllowCollapse="false" Style="width: 100%; margin-bottom: 20px">
+                           </MudExpansionPanel>
+                           <MudExpansionPanel Text="Gift Sub Bomb Alerts" IsInitiallyExpanded="true">
                               <div class="form-group form-check">
                                  <label class="form-check-label">
-                                    <TelerikCheckBox Id="uiGiftSubscriberTriggerEnabled" @bind-Value="mData.IsGiftSubAlertTrigger" /> Trigger when someone gifts subscriptions
+                                    <MudCheckBox T="bool" Id="uiGiftSubscriberTriggerEnabled" @bind-Value="mData.IsGiftSubAlertTrigger" /> Trigger when someone gifts subscriptions
                                  </label>
                               </div>
                               @if (mData.IsGiftSubAlertTrigger)
@@ -293,14 +288,14 @@
                                  <div class="form-group">
                                     <label for="uiNumGifted"><b>Number of Gift Subscriptions to Trigger</b></label>
                                     <small id="uiNumGifted" class="form-text text-white-50">The number of subscriptions that have to be gifted in one event to trigger. The number must match, or you may say 0 for this to fire on all gift subscription events.</small>
-                                    <TelerikNumericTextBox Id="uiNumGifted" Min="0" Max="2500" @bind-Value="mData.GiftSubCountRequirement" />
+                                    <MudNumericField T="int" Id="uiNumGifted" Min="0" Max="2500" @bind-Value="mData.GiftSubCountRequirement" />
                                  </div>
                               }
-                           </RadzenFieldset>
-                           @*<RadzenFieldset Text="Hype Train Leveling" AllowCollapse="false" Style="width: 100%; margin-bottom: 20px">
+                           </MudExpansionPanel>
+                           @*<MudExpansionPanel Text="Hype Train Leveling" IsInitiallyExpanded="true">
                            <div class="form-group form-check">
                            <label class="form-check-label">
-                           <TelerikCheckBox Id="uiHypeTrainEnabled" @bind-Value="mData.IsHypeTrainTrigger" /> Trigger when a new hype train level has been reached
+                           <MudCheckBox T="bool" Id="uiHypeTrainEnabled" @bind-Value="mData.IsHypeTrainTrigger" /> Trigger when a new hype train level has been reached
                            </label>
                            </div>
                            @if (mData.IsHypeTrainTrigger)
@@ -308,15 +303,15 @@
                            <div class="form-group">
                            <label for="uiHypeTrainLevel"><b>Hype Train Level:</b></label>
                            <small id="uiHypeTrainLevel" class="form-text text-white-50">The level of hype train that must be reached to trigger this animation.</small>
-                           <TelerikNumericTextBox Id="uiHypeTrainLevel" Min="0" Max="2500" @bind-Value="mData.HypeTrainLevel" />
+                           <MudNumericField T="int" Id="uiHypeTrainLevel" Min="0" Max="2500" @bind-Value="mData.HypeTrainLevel" />
                            </div>
                            }
-                           </RadzenFieldset>*@
+                           </MudExpansionPanel>*@
                         </div>
                      </div>
-                  </TabStripTab>
+                  </MudTabPanel>
 
-                  <TabStripTab Title="Channel Point Rewards">
+                  <MudTabPanel Text="Channel Point Rewards">
                      <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
                         <div class="container-fluid p-2">
                            <div class="container-fluid text-white-50 p-0">
@@ -332,28 +327,26 @@
                            </div>
                            <div class="form-group">
                               <label for="uiChannelPointLevel"><b>Options:</b></label>
-                              <RadzenRadioButtonList @bind-Value="mChannelPointSelection" TValue="int" Change="@(args => OnChannelPointChange(args))" Orientation="Radzen.Orientation.Vertical">
-                                 <Items>
-                                    <RadzenRadioButtonListItem Text="Disabled" Value="0" />
-                                    <RadzenRadioButtonListItem Text="Trigger on all channel point redemptions. Will be have as an alert and always be queued." Value="1" />
-                                    <RadzenRadioButtonListItem Text="Trigger by the redemption message. The command must be in the message (user input required)." Value="2" />
-                                    <RadzenRadioButtonListItem Text="Trigger by the number of points spent (does not require user input)." Value="3" />
-                                 </Items>
-                              </RadzenRadioButtonList>
+                              <MudRadioGroup @bind-Value="mChannelPointSelection" T="int">
+<MudRadio Option="@(0)">Disabled</MudRadio>
+                                    <MudRadio Option="@(1)">Trigger on all channel point redemptions. Will be have as an alert and always be queued.</MudRadio>
+                                    <MudRadio Option="@(2)">Trigger by the redemption message. The command must be in the message (user input required).</MudRadio>
+                                    <MudRadio Option="@(3)">Trigger by the number of points spent (does not require user input).</MudRadio>
+</MudRadioGroup>
                            </div>
                            @if (mData.ChannelPointRedemptionType == AnimationEnums.ChannelPointRedemptionTriggerType.PointsUsed)
                            {
                               <div class="form-group">
                                  <label for="uiNumChannelPoints"><b>Number of Channel Points Spent to Trigger (exact match)</b></label>
                                  <small id="uiNumChannelPoints" class="form-text text-white-50">The number of points that must be spent in order to trigger this animation. The number must match the cost in your Stream Manager.</small>
-                                 <TelerikNumericTextBox Id="uiNumChannelPoints" Min="1" Max="100000000" @bind-Value="mData.ChannelPointsRequired" OnChange="@(args => HandleChannelPointRequirementChanged(args))" />
+                                 <MudNumericField T="int" Id="uiNumChannelPoints" Min="1" Max="100000000" @bind-Value="mData.ChannelPointsRequired" OnChange="@(args => HandleChannelPointRequirementChanged(args))" />
                               </div>
                            }
                         </div>
                      </div>
-                  </TabStripTab>
+                  </MudTabPanel>
 
-                  <TabStripTab Title="Tips">
+                  <MudTabPanel Text="Tips">
                      <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
                         <div class="container-fluid text-white-50 p-0">
                            <p>
@@ -362,25 +355,25 @@
                            </p>
                         </div>
                         <div class="container-fluid p-2">
-                           <RadzenFieldset Text="Tip Requirement" AllowCollapse="false" Style="width: 100%; margin-bottom: 20px">
+                           <MudExpansionPanel Text="Tip Requirement" IsInitiallyExpanded="true">
                               <div class="form-group form-check">
                                  <label class="form-check-label">
-                                    <TelerikCheckBox Id="uiStreamlabsTipTrigger" @bind-Value="mData.IsStreamlabsTipTrigger" /> Trigger when tips are made through Streamlabs or StreamElements
+                                    <MudCheckBox T="bool" Id="uiStreamlabsTipTrigger" @bind-Value="mData.IsStreamlabsTipTrigger" /> Trigger when tips are made through Streamlabs or StreamElements
                                  </label>
                               </div>
                               @if (mData.IsStreamlabsTipTrigger)
                               {
                                  <div class="form-group">
                                     <small id="uiTipRequirement" class="form-text text-white-50">Amount of currency to be tipped before this animation will trigger (0 = all tips).</small>
-                                    <TelerikNumericTextBox Decimals="2" Id="uiTipRequirement" Min="0" Max="100000" @bind-Value="mData.StreamlabsTipRequirement" />
+                                    <MudNumericField T="double" Id="uiTipRequirement" Min="0" Max="100000" @bind-Value="mData.StreamlabsTipRequirement" />
                                  </div>
                               }
-                           </RadzenFieldset>
+                           </MudExpansionPanel>
                         </div>
                      </div>
-                  </TabStripTab>
+                  </MudTabPanel>
 
-                  <TabStripTab Title="Charity">
+                  <MudTabPanel Text="Charity">
                      <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
                         <div class="container-fluid text-white-50 p-0">
                            <p>
@@ -390,45 +383,45 @@
                            </p>
                         </div>
                         <div class="container-fluid p-2">
-                           <RadzenFieldset Text="Tip Requirement" AllowCollapse="false" Style="width: 100%; margin-bottom: 20px">
+                           <MudExpansionPanel Text="Tip Requirement" IsInitiallyExpanded="true">
                               <div class="form-group form-check">
                                  <label class="form-check-label">
-                                    <TelerikCheckBox Id="uiStreamlabsTiltifyTrigger" @bind-Value="mData.IsTiltifyTrigger" /> Trigger when donations are made through Tiltify
+                                    <MudCheckBox T="bool" Id="uiStreamlabsTiltifyTrigger" @bind-Value="mData.IsTiltifyTrigger" /> Trigger when donations are made through Tiltify
                                  </label>
                               </div>
                               @if (mData.IsTiltifyTrigger)
                               {
                                  <div class="form-group">
                                     <small id="uiTilitifyRequirement" class="form-text text-white-50">Amount of currency to be donated before this animation will trigger (0 = all donations).</small>
-                                    <TelerikNumericTextBox Decimals="2" Id="uiTiltifyRequirement" Min="0" Max="1000000" @bind-Value="mData.TiltifyDonationRequirement" />
+                                    <MudNumericField T="double" Id="uiTiltifyRequirement" Min="0" Max="1000000" @bind-Value="mData.TiltifyDonationRequirement" />
                                  </div>
                               }
-                           </RadzenFieldset>
+                           </MudExpansionPanel>
                         </div>
                      </div>
-                  </TabStripTab>
+                  </MudTabPanel>
 
-                  <TabStripTab Title="Chat Output">
+                  <MudTabPanel Text="Chat Output">
                      <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
                         <div class="container-fluid p-2">
                            <div class="mt-2">
                               <label for="uiPrePlayText"><b>Pre Play Text:</b></label>
                               <small id="uiPrePlayText" class="form-text text-white-50">Text that is sent to chat just prior to playing the animation. If triggered from chat, use $user in the place where you would like to have the trigger's name appear in the message.</small>
-                              <TelerikTextBox Id="uiPrePlayText" Width="100%" @bind-Value="mData.PrePlayText" />
+                              <MudTextField T="string" Id="uiPrePlayText" @bind-Value="mData.PrePlayText" />
                            </div>
                            <div class="mt-2">
                               <label for="uiPostPlayText"><b>Post Play Text:</b></label>
                               <small id="uiPostPlayText" class="form-text text-white-50">Text that is sent to chat after playing the animation. If triggered from chat, use $user in the place where you would like to have the trigger's name appear in the message.</small>
-                              <TelerikTextBox Id="uiPostPlayText" Width="100%" @bind-Value="mData.PostPlayText" />
+                              <MudTextField T="string" Id="uiPostPlayText" @bind-Value="mData.PostPlayText" />
                            </div>
                         </div>
                      </div>
-                  </TabStripTab>
-               </TelerikTabStrip>
+                  </MudTabPanel>
+               </MudTabs>
             </div>
          </div>
-      </TabStripTab>
-      <TabStripTab Title="Variations">
+      </MudTabPanel>
+      <MudTabPanel Text="Variations">
          <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
             <div class="container-fluid p-2">
                <div class="container-fluid text-white-50 p-0">
@@ -440,29 +433,29 @@
                <div class="form-group mt-2">
                   <label for="uiPlayAllVariantsBeforeRepeat"><b>Variations Repeat Behavior:</b></label>
                   <small id="uiPlayAllVariantsBeforeRepeat" class="form-text text-white-50">Would you like all variations to be played before they can repeat? If enabled, all variations in the grid below will have to play at least once before they can be played again. Otherwise, they stand a chance of being repeated with multiple command executions.</small>
-                  <TelerikCheckBox Id="uiPlayAllVariantsBeforeRepeat" @bind-Value="mData.PlayAllVariantsBeforeRepeat" />
+                  <MudCheckBox T="bool" Id="uiPlayAllVariantsBeforeRepeat" @bind-Value="mData.PlayAllVariantsBeforeRepeat" />
                   <label for="uiPlayAllVariantsBeforeRepeat">Play all variants before repeating</label>
                </div>
                <div class="form-group">
                   <label for="uiVariationsGrid"><b>Variations:</b></label>
-                  <TelerikGrid Sortable="true" Pageable="true" EditMode="@GridEditMode.Popup" Data="@mData.Variants" OnUpdate="@UpdateVariationHandler" Page="@mVariationPage" PageChanged="@VariationPageChanged" PageSize="10">
-                     <GridColumns>
-                        <GridColumn Field="@(nameof(AnimationVariantData.Visual))" Editable="false" Width="50px" Title="Visual" />
-                        <GridColumn Field="@(nameof(AnimationVariantData.Audio))" Editable="false" Width="50px" Title="Audio" />
-                        <GridColumn Field="@(nameof(AnimationVariantData.Volume))" Width="50px" Title="Volume" />
-                        <GridColumn Field="@(nameof(AnimationVariantData.DurationMilliseconds))" Width="50px" Title="Duration (in ms)" />
-                        <GridColumn Field="@(nameof(AnimationVariantData.AudioTimingOffsetMilliseconds))" Width="50px" Title="Offset (in ms)" />
-                        <GridColumn Field="@(nameof(AnimationVariantData.PrePlayText))" Width="50px" Title="PrePlayText" />
-                        <GridColumn Field="@(nameof(AnimationVariantData.PostPlayText))" Width="50px" Title="PostPlayText" />
-                        <GridCommandColumn Context="subcontext" Width="55px">
-                           <GridCommandButton Command="Edit" Icon="@SvgIcon.Pencil"></GridCommandButton>
-                           <GridCommandButton Command="PlayVariant" Icon="@SvgIcon.Play" OnClick="@HandlePlayVariant"></GridCommandButton>
-                           <GridCommandButton Command="DeleteVariant" Icon="@SvgIcon.Trash" Class="alert-danger" OnClick="@HandleDeleteVariant"></GridCommandButton>
-                        </GridCommandColumn>
-                     </GridColumns>
-                  </TelerikGrid>
+                  <MudDataGrid T="object" Items="@mData.Variants" Sortable="true" Pageable="true" PageSize="10">
+                     <Columns>
+                        <PropertyColumn Field="@(nameof(AnimationVariantData.Visual))" Editable="false" Width="50px" Title="Visual"  />
+                        <PropertyColumn Field="@(nameof(AnimationVariantData.Audio))" Editable="false" Width="50px" Title="Audio"  />
+                        <PropertyColumn Field="@(nameof(AnimationVariantData.Volume))" Width="50px" Title="Volume"  />
+                        <PropertyColumn Field="@(nameof(AnimationVariantData.DurationMilliseconds))" Width="50px" Title="Duration (in ms)"  />
+                        <PropertyColumn Field="@(nameof(AnimationVariantData.AudioTimingOffsetMilliseconds))" Width="50px" Title="Offset (in ms)"  />
+                        <PropertyColumn Field="@(nameof(AnimationVariantData.PrePlayText))" Width="50px" Title="PrePlayText"  />
+                        <PropertyColumn Field="@(nameof(AnimationVariantData.PostPlayText))" Width="50px" Title="PostPlayText"  />
+                        <TemplateColumn Context="subcontext" Width="55px">
+                           <MudButton Variant="Variant.Text" Size="Size.Small"></MudButton>
+                           <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandlePlayVariant"></MudButton>
+                           <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleDeleteVariant"></MudButton>
+                        </TemplateColumn>
+                     </Columns>
+                  </MudDataGrid>
                </div>
-               <RadzenFieldset Text="Add New Variant" AllowCollapse="true" Style="width: 100%; margin-bottom: 20px">
+               <MudExpansionPanel Text="Add New Variant" IsInitiallyExpanded="true">
                   <table>
                      <tr>
                         <td style="width: 45%" valign="top">
@@ -472,9 +465,10 @@
                               <table>
                                  <tr>
                                     <td valign="top">
-                                       <TelerikTextBox Id="uiVariantVisual" Width="100%" Enabled="false" @bind-Value="mVariantVisual" />
-                                       <RadzenUpload Style="width: 100%; background-color: #1e1e1e" Url="upload/animation" Accept="image/gif,image/jpeg,image/png,video/mp4,video/webm" Error="@(args => OnImportVariantVisualFileError(args))" Progress="@(args => OnImportVariantVisualFileProgress(args))" Complete="@(args => OnImportVariantVisualFileComplete(args))" />
-                                       <RadzenProgressBar Value="@mUploadVariantVisualProgress" Visible="@(mUploadVariantVisualProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
+                                       <MudTextField T="string" Id="uiVariantVisual" Disabled="true" @bind-Value="mVariantVisual" />
+                                       @* TODO: Wire up file upload handler *@
+<InputFile accept="image/gif,image/jpeg,image/png,video/mp4,video/webm" style="width: 100%; background-color: #1e1e1e" />
+                                       <MudProgressLinear Value="@mUploadVariantVisualProgress" Visible="@(mUploadVariantVisualProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
                                        @if (!String.IsNullOrEmpty(mUploadVariantVisualErrorMessage))
                                        {
                                           <label class="text-danger">@mUploadVariantVisualErrorMessage</label>
@@ -492,9 +486,10 @@
                               <table>
                                  <tr>
                                     <td valign="top">
-                                       <TelerikTextBox Id="uiVariantAudio" Width="100%" Enabled="false" @bind-Value="mVariantAudio" />
-                                       <RadzenUpload Style="width: 100%; background-color: #1e1e1e" Url="upload/animation" Accept="audio/*" Error="@(args => OnImportVariantAudioFileError(args))" Progress="@(args => OnImportVariantAudioFileProgress(args))" Complete="@(args => OnImportVariantAudioFileComplete(args))" />
-                                       <RadzenProgressBar Value="@mUploadVariantAudioProgress" Visible="@(mUploadVariantAudioProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
+                                       <MudTextField T="string" Id="uiVariantAudio" Disabled="true" @bind-Value="mVariantAudio" />
+                                       @* TODO: Wire up file upload handler *@
+<InputFile accept="audio/*" style="width: 100%; background-color: #1e1e1e" />
+                                       <MudProgressLinear Value="@mUploadVariantAudioProgress" Visible="@(mUploadVariantAudioProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
                                        @if (!String.IsNullOrEmpty(mUploadVariantAudioErrorMessage))
                                        {
                                           <label class="text-danger">@mUploadVariantAudioErrorMessage</label>
@@ -537,12 +532,12 @@
                   <div class="form-group">
                      <label for="uiVariantDuration"><b>Variant Duration (in milliseconds):</b></label>
                      <small id="uiVariantDuration" class="form-text text-white-50">The number of milliseconds this variant should play for (<i>Math Reminder: 1 second = 1000ms</i>).</small>
-                     <TelerikNumericTextBox Id="uiVariantDuration" Min="1000" Max="600000" @bind-Value="mVariantDuration" />
+                     <MudNumericField T="int" Id="uiVariantDuration" Min="1000" Max="600000" @bind-Value="mVariantDuration" />
                   </div>
                   <div class="form-group">
                      <label for="uiVariantAudioOffset"><b>Variant Audio Offset (in milliseconds):</b></label>
                      <small id="uiVariantAudioOffset" class="form-text text-white-50">Plays the audio file on a delay <i>after</i> the visual is played (<i>Math Reminder: 1 second = 1000ms</i>).</small>
-                     <TelerikNumericTextBox Id="uiVariantAudioOffset" Min="0" Max="600000" @bind-Value="mVariantAudioOffset" />
+                     <MudNumericField T="int" Id="uiVariantAudioOffset" Min="0" Max="600000" @bind-Value="mVariantAudioOffset" />
                   </div>
                   @if (AnimationLibrary.GetFileTypeOfAnimation(mData.Visual) == AnimationEnums.FileType.Video ||
                   AnimationLibrary.GetFileTypeOfAnimation(mVariantVisual) == AnimationEnums.FileType.Video)
@@ -550,7 +545,7 @@
                      <div class="container-fluid p-2">
                         <div class="form-group form-check">
                            <label class="form-check-label">
-                              <TelerikCheckBox Id="uiVariantMirrored" @bind-Value="mVariantMirrored" /> Mirroring: This animation should be flipped horizontally.
+                              <MudCheckBox T="bool" Id="uiVariantMirrored" @bind-Value="mVariantMirrored" /> Mirroring: This animation should be flipped horizontally.
                            </label>
                         </div>
                      </div>
@@ -558,11 +553,11 @@
                   <div class="container-fluid text-right p-3">
                      <button type="button" class="btn btn-secondary p-1" style="background-color: #6c4872" @onclick="HandleAddNewVariant">Add New Variant</button>
                   </div>
-               </RadzenFieldset>
+               </MudExpansionPanel>
             </div>
          </div>
-      </TabStripTab>
-      <TabStripTab Title="Caption">
+      </MudTabPanel>
+      <MudTabPanel Text="Caption">
          <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
             <div class="container-fluid p-2">
                <div class="container-fluid text-white-50 p-0">
@@ -581,12 +576,12 @@
                <div class="mt-2">
                   <label for="uiCaption"><b>Caption:</b></label>
                   <small id="uiCaption" class="form-text text-white-50">The caption text to appear with the animation.</small>
-                  <TelerikTextBox Id="uiCaption" Width="100%" @bind-Value="mData.Caption.Text" OnChange="@(args => UpdateCaptionPreview(args))" />
+                  <MudTextField T="string" Id="uiCaption" @bind-Value="mData.Caption.Text" OnChange="@(args => UpdateCaptionPreview(args))" />
                </div>
                <div class="form-group mt-2">
                   <label for="uiCaptionFontSize"><b>Font Size:</b></label>
                   <small id="uiCaptionFontSize" class="form-text text-white-50">The size of the font used (bigger = better).</small>
-                  <TelerikNumericTextBox Id="uiCaptionFontSize" Min="18" Max="100" @bind-Value="mData.Caption.FontSize" />
+                  <MudNumericField T="int" Id="uiCaptionFontSize" Min="18" Max="100" @bind-Value="mData.Caption.FontSize" />
                </div>
                <div class="form-group mt-2">
                   <label for="uiCaptionFontColor"><b>Font Color:</b></label>
@@ -596,7 +591,7 @@
                <div class="form-group mt-2">
                   <label for="uiCaptionStrokeThickness"><b>Stroke Thickness:</b></label>
                   <small id="uiCaptionStrokeThickness" class="form-text text-white-50">The width of the stroke (outline) on the caption text.</small>
-                  <TelerikNumericTextBox Id="uiCaptionStrokeThickness" Min="0" Max="5" @bind-Value="mData.Caption.StrokeThickness" />
+                  <MudNumericField T="int" Id="uiCaptionStrokeThickness" Min="0" Max="5" @bind-Value="mData.Caption.StrokeThickness" />
                </div>
                <div class="form-group mt-2">
                   <label for="uiCaptionFontStrokeColor"><b>Stroke Color:</b></label>
@@ -606,50 +601,46 @@
                <div class="form-group mt-2">
                   <label for="uiCaptionFont"><b>Font:</b></label>
                   <small id="uiCaptionFont" class="form-text text-white-50">What font should you use?</small>
-                  <RadzenRadioButtonList @bind-Value="mCaptionFontSelection" TValue="int" Change="@(args => OnCaptionFontChange(args))" Orientation="Radzen.Orientation.Horizontal">
-                     <Items>
-                        <RadzenRadioButtonListItem Text="Arial" Value="0" />
-                        <RadzenRadioButtonListItem Text="Comic Sans" Value="1" />
-                        <RadzenRadioButtonListItem Text="Impact" Value="2" />
-                        <RadzenRadioButtonListItem Text="Monospace" Value="3" />
-                        <RadzenRadioButtonListItem Text="Aldrich" Value="4" />
-                        <RadzenRadioButtonListItem Text="Anton" Value="5" />
-                        <RadzenRadioButtonListItem Text="Barrio" Value="6" />
-                        <RadzenRadioButtonListItem Text="Creepster" Value="7" />
-                        <RadzenRadioButtonListItem Text="Eater" Value="8" />
-                        <RadzenRadioButtonListItem Text="Galada" Value="9" />
-                        <RadzenRadioButtonListItem Text="Ranchers" Value="10" />
-                        <RadzenRadioButtonListItem Text="Lobster" Value="11" />
-                        <RadzenRadioButtonListItem Text="Righteous" Value="12" />
-                        <RadzenRadioButtonListItem Text="BenchNine" Value="13" />
-                        <RadzenRadioButtonListItem Text="Oswald" Value="14" />
-                        <RadzenRadioButtonListItem Text="Ultra" Value="15" />
-                        <RadzenRadioButtonListItem Text="Frijole" Value="16" />
-                        <RadzenRadioButtonListItem Text="Viga" Value="17" />
-                        <RadzenRadioButtonListItem Text="Quantico" Value="18" />
-                        <RadzenRadioButtonListItem Text="Bungee" Value="19" />
-                        <RadzenRadioButtonListItem Text="Sriracha" Value="21" />
-                        <RadzenRadioButtonListItem Text="Arsenal" Value="22" />
-                        <RadzenRadioButtonListItem Text="Gaegu" Value="23" />
-                        <RadzenRadioButtonListItem Text="VT323" Value="24" />
-                     </Items>
-                  </RadzenRadioButtonList>
+                  <MudRadioGroup @bind-Value="mCaptionFontSelection" T="int">
+<MudRadio Option="@(0)">Arial</MudRadio>
+                        <MudRadio Option="@(1)">Comic Sans</MudRadio>
+                        <MudRadio Option="@(2)">Impact</MudRadio>
+                        <MudRadio Option="@(3)">Monospace</MudRadio>
+                        <MudRadio Option="@(4)">Aldrich</MudRadio>
+                        <MudRadio Option="@(5)">Anton</MudRadio>
+                        <MudRadio Option="@(6)">Barrio</MudRadio>
+                        <MudRadio Option="@(7)">Creepster</MudRadio>
+                        <MudRadio Option="@(8)">Eater</MudRadio>
+                        <MudRadio Option="@(9)">Galada</MudRadio>
+                        <MudRadio Option="@(10)">Ranchers</MudRadio>
+                        <MudRadio Option="@(11)">Lobster</MudRadio>
+                        <MudRadio Option="@(12)">Righteous</MudRadio>
+                        <MudRadio Option="@(13)">BenchNine</MudRadio>
+                        <MudRadio Option="@(14)">Oswald</MudRadio>
+                        <MudRadio Option="@(15)">Ultra</MudRadio>
+                        <MudRadio Option="@(16)">Frijole</MudRadio>
+                        <MudRadio Option="@(17)">Viga</MudRadio>
+                        <MudRadio Option="@(18)">Quantico</MudRadio>
+                        <MudRadio Option="@(19)">Bungee</MudRadio>
+                        <MudRadio Option="@(21)">Sriracha</MudRadio>
+                        <MudRadio Option="@(22)">Arsenal</MudRadio>
+                        <MudRadio Option="@(23)">Gaegu</MudRadio>
+                        <MudRadio Option="@(24)">VT323</MudRadio>
+</MudRadioGroup>
                </div>
                <div class="form-group mt-2">
                   <label for="uiCaptionIsBold"><b>Font Weight:</b></label>
                   <small id="uiCaptionIsBold" class="form-text text-white-50">Would you like the font to be bold?</small>
-                  <TelerikCheckBox Id="uiCaptionIsBold" @bind-Value="mData.Caption.IsBold" />
+                  <MudCheckBox T="bool" Id="uiCaptionIsBold" @bind-Value="mData.Caption.IsBold" />
                   <label for="uiCaptionIsBold">Bolded Text</label>
                </div>
                <div class="form-group mt-2">
                   <label for="uiCaptionLocation"><b>Caption Location:</b></label>
                   <small id="uiCaptionLocation" class="form-text text-white-50">Where would you like the caption to appear relative to the animation?</small>
-                  <RadzenRadioButtonList @bind-Value="mCaptionLocationSelection" TValue="int" Change="@(args => OnCaptionLocationChange(args))" Orientation="Radzen.Orientation.Horizontal">
-                     <Items>
-                        <RadzenRadioButtonListItem Text="Above" Value="0" />
-                        <RadzenRadioButtonListItem Text="Below" Value="1" />
-                     </Items>
-                  </RadzenRadioButtonList>
+                  <MudRadioGroup @bind-Value="mCaptionLocationSelection" T="int">
+<MudRadio Option="@(0)">Above</MudRadio>
+                        <MudRadio Option="@(1)">Below</MudRadio>
+</MudRadioGroup>
                </div>
                <div class="mt-2">
                   <label for="uiCaptionPreview"><b>Preview:</b></label>
@@ -663,8 +654,8 @@
                </div>
             </div>
          </div>
-      </TabStripTab>
-      <TabStripTab Title="Animation Chaining">
+      </MudTabPanel>
+      <MudTabPanel Text="Animation Chaining">
          <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
             <div class="container-fluid p-2">
                <div class="container-fluid text-white-50 p-0">
@@ -676,35 +667,35 @@
                </div>
                <div class="form-group">
                   <label for="uiChainsList"><b>Chained Animation Commands:</b></label>
-                  <TelerikGrid Sortable="true" Pageable="true" Data="@mData.ChainedAnimations" Page="@mChainedPage" PageChanged="@ChainedAnimPageChanged" PageSize="10">
-                     <GridColumns>
-                        <GridColumn Width="400px" Title="Command">
-                           <Template Context="data">
+                  <MudDataGrid T="object" Items="@mData.ChainedAnimations" Sortable="true" Pageable="true" PageSize="10">
+                     <Columns>
+                        <TemplateColumn Width="400px" Title="Command">
+<CellTemplate Context="data">
                               @data
-                           </Template>
-                        </GridColumn>
-                        <GridColumn Width="50px" Title="">
-                           <Template Context="data">
+                           </CellTemplate>
+                        </PropertyColumn>
+                        <TemplateColumn Width="50px" Title="">
+<CellTemplate Context="data">
                               <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleDeleteChainedCommand(data as string))"><span class="oi oi-trash"></span></button>
-                           </Template>
-                        </GridColumn>
-                     </GridColumns>
-                  </TelerikGrid>
+                           </CellTemplate>
+                        </PropertyColumn>
+                     </Columns>
+                  </MudDataGrid>
                </div>
-               <RadzenFieldset Text="Add Chained Command" AllowCollapse="true" Style="width: 100%; margin-bottom: 20px">
+               <MudExpansionPanel Text="Add Chained Command" IsInitiallyExpanded="true">
                   <div class="form-group">
                      <label for="uiChainedCommand"><b>Command:</b></label>
                      <small id="uiChainedCommand" class="form-text text-white-50">The animation command that should be executed in the chain.</small>
-                     <TelerikTextBox Id="uiChainedCommand" Width="100%" @bind-Value="mFormChainedCommand" />
+                     <MudTextField T="string" Id="uiChainedCommand" @bind-Value="mFormChainedCommand" />
                   </div>
                   <div class="container-fluid text-right p-3">
                      <button type="button" class="btn btn-secondary p-1" style="background-color: #6c4872; width: 150px" @onclick="HandleAddNewChainedCommand">Add</button>
                   </div>
-               </RadzenFieldset>
+               </MudExpansionPanel>
             </div>
          </div>
-      </TabStripTab>
-   </TelerikTabStrip>
+      </MudTabPanel>
+   </MudTabs>
 
    <div class="row">
       <div class="container-fluid text-right p-3">
@@ -739,8 +730,9 @@
       }
    }
 
-   [CascadingParameter]
-   public DialogFactory Dialogs { get; set; }
+   // TODO: Replace DialogFactory with IDialogService
+   // [CascadingParameter]
+   // public DialogFactory Dialogs { get; set; }
 
    /// <summary>
    /// Keeps track of which tab is selected.
@@ -997,7 +989,7 @@
             {
                // There was a collision. Reset the value to 0 and warn the user.
                mData.ChannelPointsRequired = 0;
-               NotificationService.Notify(NotificationSeverity.Error, "Error", "Another animation already has that channel point redemption amount!", 5000);
+               Snackbar.Add("Error - Another animation already has that channel point redemption amount!", Severity.Error);
                await InvokeAsync(() => { StateHasChanged(); });
             }
          }
@@ -1116,7 +1108,7 @@
    /// <summary>
    /// Plays the selected variant as a test.
    /// </summary>
-   private async Task HandlePlayVariant(GridCommandEventArgs args)
+   private async Task HandlePlayVariant(EventArgs args)
    {
       AnimationVariantData variant = (AnimationVariantData)args.Item;
       await OnVariantPlay.InvokeAsync(variant.Id);
@@ -1125,11 +1117,11 @@
    /// <summary>
    /// Handles the deletion of a variant.
    /// </summary>
-   private async Task HandleDeleteVariant(GridCommandEventArgs args)
+   private async Task HandleDeleteVariant(EventArgs args)
    {
       AnimationVariantData variant = (AnimationVariantData)args.Item;
 
-      bool confirmed = await Dialogs.ConfirmAsync($"Are you sure you want to delete the variant?", "Delete Variant?");
+      bool confirmed = await Task.FromResult(true) /* TODO: MudBlazor dialog confirm was: Dialogs.ConfirmAsync($"Are you sure you want to delete the variant?", "Delete Variant?") */;
       if (confirmed)
       {
          await OnVariantDeleted.InvokeAsync(variant.Id);
@@ -1141,7 +1133,7 @@
       mVariationPage = page;
    }
 
-   private async Task UpdateVariationHandler(GridCommandEventArgs args)
+   private async Task UpdateVariationHandler(EventArgs args)
    {
       AnimationVariantData variant = (AnimationVariantData)args.Item;
 
@@ -1187,7 +1179,7 @@
 
    #region Main Command Upload Handling
 
-   private void OnImportVisualFileProgress(UploadProgressArgs e)
+   private void OnImportVisualFileProgress(EventArgs e)
    {
       mUploadVisualProgress = e.Progress;
       StateHasChanged();
@@ -1202,13 +1194,13 @@
       StateHasChanged();
    }
 
-   private void OnImportVisualFileError(Radzen.UploadErrorEventArgs e)
+   private void OnImportVisualFileError(EventArgs e)
    {
       mUploadVisualErrorMessage = $"There was an error uploading the file.";
       StateHasChanged();
    }
 
-   private void OnImportAudioFileProgress(UploadProgressArgs e)
+   private void OnImportAudioFileProgress(EventArgs e)
    {
       mUploadAudioProgress = e.Progress;
       StateHasChanged();
@@ -1222,7 +1214,7 @@
       StateHasChanged();
    }
 
-   private void OnImportAudioFileError(Radzen.UploadErrorEventArgs e)
+   private void OnImportAudioFileError(EventArgs e)
    {
       mUploadAudioErrorMessage = $"There was an error uploading the file.";
       StateHasChanged();
@@ -1232,7 +1224,7 @@
 
    #region Variant Upload Handling
 
-   private void OnImportVariantVisualFileProgress(UploadProgressArgs e)
+   private void OnImportVariantVisualFileProgress(EventArgs e)
    {
       mUploadVariantVisualProgress = e.Progress;
       StateHasChanged();
@@ -1246,13 +1238,13 @@
       StateHasChanged();
    }
 
-   private void OnImportVariantVisualFileError(Radzen.UploadErrorEventArgs e)
+   private void OnImportVariantVisualFileError(EventArgs e)
    {
       mUploadVariantVisualErrorMessage = $"There was an error uploading the file.";
       StateHasChanged();
    }
 
-   private void OnImportVariantAudioFileProgress(UploadProgressArgs e)
+   private void OnImportVariantAudioFileProgress(EventArgs e)
    {
       mUploadVariantAudioProgress = e.Progress;
       StateHasChanged();
@@ -1266,7 +1258,7 @@
       StateHasChanged();
    }
 
-   private void OnImportVariantAudioFileError(Radzen.UploadErrorEventArgs e)
+   private void OnImportVariantAudioFileError(EventArgs e)
    {
       mUploadVariantAudioErrorMessage = $"There was an error uploading the file.";
       StateHasChanged();

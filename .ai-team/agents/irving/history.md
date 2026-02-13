@@ -24,3 +24,19 @@
 - `.ai-team` docs reference StreamDeck in decisions/history but those are documentation, not build artifacts.
 - Build attempted: fails on Telerik.UI.for.Blazor NuGet restore (proprietary feed not configured in this environment). This is a pre-existing issue unrelated to StreamDeck removal.
 - 26 files changed, 1973 lines deleted. Committed on `feature/modernization`.
+
+---
+
+### Telerik/Radzen Removal + MudBlazor Addition (2026-02-13)
+- Milestone plan resequenced: Telerik+Radzen removal now happens BEFORE .NET 10 upgrade because Telerik NuGet feed is unavailable.
+- **Client.csproj**: Removed `Telerik.UI.for.Blazor` (6.0.2) and `Radzen.Blazor` (4.32.6), added `MudBlazor` (8.5.0).
+- **Server.csproj**: No direct Telerik packages — Telerik.DataSource came transitively via Client project reference.
+- **Program.cs**: Replaced `AddTelerikBlazor()` + Radzen scoped services with `AddMudServices()`.
+- **_Imports.razor**: Replaced 6 Telerik/Radzen `@using` lines with single `@using MudBlazor`.
+- **index.html**: Removed Telerik CSS (kendo-font-icons), Telerik JS (telerik-blazor.js), Radzen CSS (dark-base.css), Radzen JS (Radzen.Blazor.js). Added MudBlazor CSS (Roboto font + MudBlazor.min.css) and JS (MudBlazor.min.js).
+- **GIFBotHub.cs**: Removed `using Telerik.DataSource` and `Telerik.DataSource.Extensions`. Replaced `DataSourceRequest`/`DataSourceResult`/`ToDataSourceResultAsync()` with manual LINQ paging using new `PagedRequest` model. Method `GetRegurgitatorEntries` now takes `PagedRequest` instead of `DataSourceRequest`.
+- **Created `Shared/Models/Visualization/PagedRequest.cs`**: Simple paging DTO with `Page` and `PageSize` properties. Existing `DataEnvelope<T>` was already Telerik-free — kept as-is.
+- **GiveawayManager.cs**: Removed unused `using Telerik.SvgIcons;`.
+- Did NOT touch .razor component files — those are Helly's domain.
+- **Helly coordination note**: `Regurgitator.razor.cs` line 203 still invokes `GetRegurgitatorEntries` with old Telerik `args.Request`. Helly needs to update that call to pass a `PagedRequest` instead.
+- 7 files changed, 26 insertions, 28 deletions. Committed on `feature/modernization`.

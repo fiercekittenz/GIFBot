@@ -6,20 +6,20 @@
 @using Newtonsoft.Json
 @using Microsoft.AspNetCore.Http.Connections
 @inject NavigationManager NavigationManager
-@inject NotificationService NotificationService
+@inject ISnackbar Snackbar
 @inject IJSRuntime JSRuntime
 @inject HttpClient Http
 @implements IAsyncDisposable
 
-<TelerikWindow Class="gifbot-modal-window" Width="500px" Height="300px" Centered="true" Visible="@mIsNewGoalPromptVisible" Modal="true">
-   <WindowTitle>
+<MudDialog @bind-IsVisible="@mIsNewGoalPromptVisible">
+   <TitleContent>
       <strong>Add New Goal</strong>
-   </WindowTitle>
-   <WindowContent>
+   </TitleContent>
+   <DialogContent>
       <div class="form-group">
          <label for="uiTitleLabel">Please provide the title for your new goal:</label>
          <small id="uiTitleLabel" class="form-text text-muted">The purpose of your goal (ex: "New Camera" or "Sweet Mic").</small>
-         <TelerikTextBox Id="uiTitle" @bind-Value="mNewGoalTitle" />
+         <MudTextField T="string" Id="uiTitle" @bind-Value="mNewGoalTitle" />
       </div>
       <div class="container-fluid p-2">
          <p>
@@ -30,16 +30,16 @@
             </center>
          </p>
       </div>
-   </WindowContent>
-</TelerikWindow>
+   </DialogContent>
+</MudDialog>
 
 <div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
    <h1><span class="oi oi-target" aria-hidden="true"></span> Goal Bar</h1>
 </div>
 
 <EditForm Model="@mGoalBarData" OnSubmit="@OnSaveChanges">
-   <TelerikTabStrip @bind-ActiveTabIndex="@ActiveTabIndex">
-      <TabStripTab Title="Settings">
+   <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
+      <MudTabPanel Text="Settings">
          <div class="container-fluid" style="width: 100%">
             <div class="container-fluid text-left p-3 rounded" style="width: 100%; background-color:#1e1e1e">
                <p>
@@ -50,15 +50,15 @@
 
                   <div class="form-group form-check">
                      <label class="form-check-label">
-                        <TelerikCheckBox Id="uiEnabled" @bind-Value="mGoalBarData.Settings.Enabled" /> Feature Enabled
+                        <MudCheckBox T="bool" Id="uiEnabled" @bind-Value="mGoalBarData.Settings.Enabled" /> Feature Enabled
                         <small id="uiEnabled" class="form-text text-muted">When enabled, Twitch events will be computed and have their values applied to the goal.</small>
                      </label>
                   </div>
 
-                  <RadzenFieldset Text="Goal Triggers" AllowCollapse="true" Collapsed="false" Style="width: 100%; margin-bottom: 20px">
+                  <MudExpansionPanel Text="Goal Triggers" IsInitiallyExpanded="true">
                      <div class="form-group form-check">
                         <label class="form-check-label">
-                           <TelerikCheckBox Id="uiIncludeCheers" @bind-Value="mGoalBarData.Settings.IncludeCheers" /> Include Cheers
+                           <MudCheckBox T="bool" Id="uiIncludeCheers" @bind-Value="mGoalBarData.Settings.IncludeCheers" /> Include Cheers
                            <small id="uiIncludeCheers" class="form-text text-muted">When enabled, cheering will count toward the goal.</small>
                         </label>
                      </div>
@@ -70,13 +70,13 @@
                            <small id="uiBitPointsLabel" class="form-text text-muted">The number of points applied to the goal per bit cheered. If you would like to only count bits, make sure you either set this value to 1 <i>OR</i> make sure the goal is the dollar amount of bits you want to achieve.</small>
                            <DataAnnotationsValidator />
                            <ValidationSummary />
-                           <TelerikNumericTextBox Id="uiBitPoints" Decimals="2" Min="0.01" Max="1000" @bind-Value="mGoalBarData.Settings.BitPoints" />
+                           <MudNumericField T="double" Id="uiBitPoints" Min="0.01" Max="1000" @bind-Value="mGoalBarData.Settings.BitPoints" />
                         </div>
                      }
 
                      <div class="form-group form-check">
                         <label class="form-check-label">
-                           <TelerikCheckBox Id="uiIncludeTips" @bind-Value="mGoalBarData.Settings.IncludeTips" /> Include Streamlabs Tips
+                           <MudCheckBox T="bool" Id="uiIncludeTips" @bind-Value="mGoalBarData.Settings.IncludeTips" /> Include Streamlabs Tips
                            <small id="uiIncludeTips" class="form-text text-muted">When enabled, tipping via Streamlabs will count toward the goal (must authenticate with Streamlabs).</small>
                         </label>
                      </div>
@@ -88,13 +88,13 @@
                            <small id="uiTipPointsLabel" class="form-text text-muted">The number of points applied to the goal per 1 currency tipped (i.e. $1 = 1 point).</small>
                            <DataAnnotationsValidator />
                            <ValidationSummary />
-                           <TelerikNumericTextBox Id="uiTipPoints" Decimals="2" Min="0.01" Max="1000" @bind-Value="mGoalBarData.Settings.TipPoints" />
+                           <MudNumericField T="double" Id="uiTipPoints" Min="0.01" Max="1000" @bind-Value="mGoalBarData.Settings.TipPoints" />
                         </div>
                      }
 
                      <div class="form-group form-check">
                         <label class="form-check-label">
-                           <TelerikCheckBox Id="uiIncludeSubs" @bind-Value="mGoalBarData.Settings.IncludeSubs" /> Include Subscriptions
+                           <MudCheckBox T="bool" Id="uiIncludeSubs" @bind-Value="mGoalBarData.Settings.IncludeSubs" /> Include Subscriptions
                            <small id="uiIncludeSubs" class="form-text text-muted">When enabled, subscriptions, resubscriptions, and gift subscriptions count toward the goal.</small>
                         </label>
                      </div>
@@ -106,41 +106,41 @@
                            <small id="uiSub1PointsLabel" class="form-text text-muted">The number of points applied to the goal tier 1 subscription.</small>
                            <DataAnnotationsValidator />
                            <ValidationSummary />
-                           <TelerikNumericTextBox Id="uiSub1Points" Decimals="2" Min="0.01" Max="1000" @bind-Value="mGoalBarData.Settings.SubTier1Points" />
+                           <MudNumericField T="double" Id="uiSub1Points" Min="0.01" Max="1000" @bind-Value="mGoalBarData.Settings.SubTier1Points" />
                         </div>
                         <div class="form-group">
                            <label for="uiSub2PointsLabel">Tier 2 Point Amount:</label>
                            <small id="uiSub2PointsLabel" class="form-text text-muted">The number of points applied to the goal tier 2 subscription.</small>
                            <DataAnnotationsValidator />
                            <ValidationSummary />
-                           <TelerikNumericTextBox Id="uiSub2Points" Decimals="2" Min="0.01" Max="1000" @bind-Value="mGoalBarData.Settings.SubTier2Points" />
+                           <MudNumericField T="double" Id="uiSub2Points" Min="0.01" Max="1000" @bind-Value="mGoalBarData.Settings.SubTier2Points" />
                         </div>
                         <div class="form-group">
                            <label for="uiSub3PointsLabel">Tier 3 Point Amount:</label>
                            <small id="uiSub3PointsLabel" class="form-text text-muted">The number of points applied to the goal tier 3 subscription.</small>
                            <DataAnnotationsValidator />
                            <ValidationSummary />
-                           <TelerikNumericTextBox Id="uiSub3Points" Decimals="2" Min="0.01" Max="1000" @bind-Value="mGoalBarData.Settings.SubTier3Points" />
+                           <MudNumericField T="double" Id="uiSub3Points" Min="0.01" Max="1000" @bind-Value="mGoalBarData.Settings.SubTier3Points" />
                         </div>
                      }
-                  </RadzenFieldset>
+                  </MudExpansionPanel>
                </div>
             </div>
          </div>
-      </TabStripTab>
+      </MudTabPanel>
 
-      <TabStripTab Title="Visual Settings">
+      <MudTabPanel Text="Visual Settings">
          <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
             <div class="container-fluid p-2">
                <div class="form-group form-check">
                   <label class="form-check-label">
-                     <TelerikCheckBox Id="uiHideGoalText" @bind-Value="mGoalBarData.Settings.HideGoalText" /> Hide Goal Text
+                     <MudCheckBox T="bool" Id="uiHideGoalText" @bind-Value="mGoalBarData.Settings.HideGoalText" /> Hide Goal Text
                      <small id="uiHideGoalText" class="form-text text-muted">When enabled, the text for the goal will not be visible on the bar overlay.</small>
                   </label>
                </div>
                <div class="form-group form-check">
                   <label class="form-check-label">
-                     <TelerikCheckBox Id="uiPercentage" @bind-Value="mGoalBarData.Settings.ShowAmountAsPercentage" /> Show Current Amount as Percentage
+                     <MudCheckBox T="bool" Id="uiPercentage" @bind-Value="mGoalBarData.Settings.ShowAmountAsPercentage" /> Show Current Amount as Percentage
                      <small id="uiPercentage" class="form-text text-muted">When enabled, the current amount on the bar will be shown as a percentage value.</small>
                   </label>
                </div>
@@ -148,13 +148,13 @@
                {
                   <div class="form-group">
                      <label for="uiCurrencyLabel">The currency symbol to use:</label>
-                     <TelerikTextBox Id="uiCurrencySymbol" @bind-Value="@mGoalBarData.Settings.CurrencySymbol" />
+                     <MudTextField T="string" Id="uiCurrencySymbol" @bind-Value="@mGoalBarData.Settings.CurrencySymbol" />
                   </div>
                }
                <div class="form-group mt-2">
                   <label for="uiWidth"><b>Bar Width:</b></label>
                   <small id="uiWidth" class="form-text text-white-50">The width of the whole goal bar.</small>
-                  <TelerikNumericTextBox Id="uiWidth" Min="100" Max="9999" @bind-Value="mGoalBarData.Settings.Width" />
+                  <MudNumericField T="int" Id="uiWidth" Min="100" Max="9999" @bind-Value="mGoalBarData.Settings.Width" />
                </div>
                <div class="form-group mt-2">
                   <label for="uiBarForeColorLabel"><b>Bar Forecolor:</b></label>
@@ -169,7 +169,7 @@
                <div class="form-group mt-2">
                   <label for="uiFontSize"><b>Font Size:</b></label>
                   <small id="uiFontSize" class="form-text text-white-50">The size of the font used (bigger = better).</small>
-                  <TelerikNumericTextBox Id="uiFontSize" Min="18" Max="100" @bind-Value="mGoalBarData.Settings.Caption.FontSize" />
+                  <MudNumericField T="int" Id="uiFontSize" Min="18" Max="100" @bind-Value="mGoalBarData.Settings.Caption.FontSize" />
                </div>
                <div class="form-group mt-2">
                   <label for="uiFontColor"><b>Font Color:</b></label>
@@ -179,7 +179,7 @@
                <div class="form-group mt-2">
                   <label for="uiStrokeThickness"><b>Stroke Thickness:</b></label>
                   <small id="uiStrokeThickness" class="form-text text-white-50">The width of the stroke (outline) on the caption text.</small>
-                  <TelerikNumericTextBox Id="uiStrokeThickness" Min="0" Max="5" @bind-Value="mGoalBarData.Settings.Caption.StrokeThickness" />
+                  <MudNumericField T="int" Id="uiStrokeThickness" Min="0" Max="5" @bind-Value="mGoalBarData.Settings.Caption.StrokeThickness" />
                </div>
                <div class="form-group mt-2">
                   <label for="uiFontStrokeColor"><b>Stroke Color:</b></label>
@@ -189,39 +189,37 @@
                <div class="form-group mt-2">
                   <label for="uiFont"><b>Font:</b></label>
                   <small id="uiFont" class="form-text text-white-50">What font should you use?</small>
-                  <RadzenRadioButtonList @bind-Value="mCaptionFontSelection" TValue="int" Change="@(args => OnCaptionFontChange(args))" Orientation="Radzen.Orientation.Horizontal">
-                     <Items>
-                        <RadzenRadioButtonListItem Text="Arial" Value="0" />
-                        <RadzenRadioButtonListItem Text="Comic Sans" Value="1" />
-                        <RadzenRadioButtonListItem Text="Impact" Value="2" />
-                        <RadzenRadioButtonListItem Text="Monospace" Value="3" />
-                        <RadzenRadioButtonListItem Text="Aldrich" Value="4" />
-                        <RadzenRadioButtonListItem Text="Anton" Value="5" />
-                        <RadzenRadioButtonListItem Text="Barrio" Value="6" />
-                        <RadzenRadioButtonListItem Text="Creepster" Value="7" />
-                        <RadzenRadioButtonListItem Text="Eater" Value="8" />
-                        <RadzenRadioButtonListItem Text="Galada" Value="9" />
-                        <RadzenRadioButtonListItem Text="Ranchers" Value="10" />
-                        <RadzenRadioButtonListItem Text="Lobster" Value="11" />
-                        <RadzenRadioButtonListItem Text="Righteous" Value="12" />
-                        <RadzenRadioButtonListItem Text="BenchNine" Value="13" />
-                        <RadzenRadioButtonListItem Text="Oswald" Value="14" />
-                        <RadzenRadioButtonListItem Text="Ultra" Value="15" />
-                        <RadzenRadioButtonListItem Text="Frijole" Value="16" />
-                        <RadzenRadioButtonListItem Text="Viga" Value="17" />
-                        <RadzenRadioButtonListItem Text="Quantico" Value="18" />
-                        <RadzenRadioButtonListItem Text="Bungee" Value="19" />
-                        <RadzenRadioButtonListItem Text="Sriracha" Value="21" />
-                        <RadzenRadioButtonListItem Text="Arsenal" Value="22" />
-                        <RadzenRadioButtonListItem Text="Gaegu" Value="23" />
-                        <RadzenRadioButtonListItem Text="VT323" Value="24" />
-                     </Items>
-                  </RadzenRadioButtonList>
+                  <MudRadioGroup @bind-Value="mCaptionFontSelection" T="int">
+<MudRadio Option="@(0)">Arial</MudRadio>
+                        <MudRadio Option="@(1)">Comic Sans</MudRadio>
+                        <MudRadio Option="@(2)">Impact</MudRadio>
+                        <MudRadio Option="@(3)">Monospace</MudRadio>
+                        <MudRadio Option="@(4)">Aldrich</MudRadio>
+                        <MudRadio Option="@(5)">Anton</MudRadio>
+                        <MudRadio Option="@(6)">Barrio</MudRadio>
+                        <MudRadio Option="@(7)">Creepster</MudRadio>
+                        <MudRadio Option="@(8)">Eater</MudRadio>
+                        <MudRadio Option="@(9)">Galada</MudRadio>
+                        <MudRadio Option="@(10)">Ranchers</MudRadio>
+                        <MudRadio Option="@(11)">Lobster</MudRadio>
+                        <MudRadio Option="@(12)">Righteous</MudRadio>
+                        <MudRadio Option="@(13)">BenchNine</MudRadio>
+                        <MudRadio Option="@(14)">Oswald</MudRadio>
+                        <MudRadio Option="@(15)">Ultra</MudRadio>
+                        <MudRadio Option="@(16)">Frijole</MudRadio>
+                        <MudRadio Option="@(17)">Viga</MudRadio>
+                        <MudRadio Option="@(18)">Quantico</MudRadio>
+                        <MudRadio Option="@(19)">Bungee</MudRadio>
+                        <MudRadio Option="@(21)">Sriracha</MudRadio>
+                        <MudRadio Option="@(22)">Arsenal</MudRadio>
+                        <MudRadio Option="@(23)">Gaegu</MudRadio>
+                        <MudRadio Option="@(24)">VT323</MudRadio>
+</MudRadioGroup>
                </div>
                <div class="form-group mt-2">
                   <label for="uiIsBold"><b>Font Weight:</b></label>
                   <small id="uiIsBold" class="form-text text-white-50">Would you like the font to be bold?</small>
-                  <TelerikCheckBox Id="uiIsBold" @bind-Value="mGoalBarData.Settings.Caption.IsBold" />
+                  <MudCheckBox T="bool" Id="uiIsBold" @bind-Value="mGoalBarData.Settings.Caption.IsBold" />
                   <label for="uiIsBold">Bolded Text</label>
                </div>
                <div class="mt-2">
@@ -232,9 +230,9 @@
                </div>
             </div>
          </div>
-      </TabStripTab>
+      </MudTabPanel>
 
-      <TabStripTab Title="Goals">
+      <MudTabPanel Text="Goals">
          <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
             <div class="container-fluid p-2">
                <div class="container-fluid text-white-50 p-0">
@@ -261,7 +259,7 @@
                <div class="container-fluid">
                   <p align="right"><button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@ShowAddNewGoalWindow">Add New Goal</button></p>
                </div>
-               <TelerikTabStrip>
+               <MudTabs ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
                   @for (int i = 0; i < mGoalBarData.Goals.Count; ++i)
                   {
                      GoalData goal = mGoalBarData.Goals[i];
@@ -271,16 +269,16 @@
                         title += " (Active)";
                      }
 
-                     <TabStripTab Title="@(title)">
+                     <MudTabPanel Text="@(title)">
                         <GoalComponent Goal="@goal" OnMakeGoalActive="@HandleMakeGoalActive" OnDeleteGoal="@HandleDeleteGoal" />
-                     </TabStripTab>
+                     </MudTabPanel>
                   }
-               </TelerikTabStrip>
+               </MudTabs>
             </div>
          </div>
-      </TabStripTab>
+      </MudTabPanel>
 
-      <TabStripTab Title="BrowserSource URL">
+      <MudTabPanel Text="BrowserSource URL">
          <div class="container-fluid">
             <div class="container-fluid text-white-50 p-0">
                <p>
@@ -291,7 +289,7 @@
             <table width="100%">
                <tr>
                   <td width="600">
-                     <RadzenTextBox id="uiURL" class="form-control" Style="background-color: #2c2241; color: #FFFFFF; width: 100%" ReadOnly="true" @bind-Value="mURL" />
+                     <MudTextField T="string" id="uiURL" class="form-control" Style="background-color: #2c2241; color: #FFFFFF; width: 100%" ReadOnly="true" @bind-Value="mURL" />
                   </td>
                   <td align="left">
                      <button type="button" class="btn btn-secondary p-1 ml-2" style="background-color: #6c4872" @onclick='(() => HandleCopyUrl("uiURL"))'>Copy to Clipboard</button>
@@ -299,8 +297,8 @@
                </tr>
             </table>
          </div>
-      </TabStripTab>
-   </TelerikTabStrip>
+      </MudTabPanel>
+   </MudTabs>
 
    <div class="row">
       <div class="container-fluid text-right p-3">
@@ -414,13 +412,13 @@
       bool result = await mHubConnection.InvokeAsync<bool>("AddGoal", mNewGoalTitle);
       if (result)
       {
-         NotificationService.Notify(NotificationSeverity.Success, "Success", "The new goal was added.", 5000);
+         Snackbar.Add("Success - The new goal was added.", Severity.Success);
          await GetGoalBarDataFromHub();
          await InvokeAsync(() => { StateHasChanged(); });
       }
       else
       {
-         NotificationService.Notify(NotificationSeverity.Error, "Error", $"The new goal could not be added. A goal with that title already exists!", 5000);
+         Snackbar.Add($"Error - The new goal could not be added. A goal with that title already exists!", Severity.Error);
          await InvokeAsync(() => { StateHasChanged(); });
       }
    }
@@ -430,13 +428,13 @@
       bool result = await mHubConnection.InvokeAsync<bool>("MakeGoalActive", goalId);
       if (result)
       {
-         NotificationService.Notify(NotificationSeverity.Success, "Success", "The goal is now active!", 5000);
+         Snackbar.Add("Success - The goal is now active!", Severity.Success);
          await GetGoalBarDataFromHub();
          await InvokeAsync(() => { StateHasChanged(); });
       }
       else
       {
-         NotificationService.Notify(NotificationSeverity.Error, "Error", $"The goal could not be activated. Does not exist.", 5000);
+         Snackbar.Add($"Error - The goal could not be activated. Does not exist.", Severity.Error);
          await InvokeAsync(() => { StateHasChanged(); });
       }
    }
@@ -446,25 +444,25 @@
       bool result = await mHubConnection.InvokeAsync<bool>("DeleteGoal", goalId);
       if (result)
       {
-         NotificationService.Notify(NotificationSeverity.Success, "Success", "The goal was deleted!", 5000);
+         Snackbar.Add("Success - The goal was deleted!", Severity.Success);
          await GetGoalBarDataFromHub();
          await InvokeAsync(() => { StateHasChanged(); });
       }
       else
       {
-         NotificationService.Notify(NotificationSeverity.Error, "Error", $"The goal could not be deleted. Does not exist.", 5000);
+         Snackbar.Add($"Error - The goal could not be deleted. Does not exist.", Severity.Error);
          await InvokeAsync(() => { StateHasChanged(); });
       }
    }
 
-   private async Task HandleDeleteGoal(GridCommandEventArgs args)
+   private async Task HandleDeleteGoal(EventArgs args)
    {
       GoalData goal = (GoalData)args.Item;
       //await OnVariantDeleted.InvokeAsync(variant.Id);
       await Task.CompletedTask;
    }
 
-   private async Task UpdateGoalHandler(GridCommandEventArgs args)
+   private async Task UpdateGoalHandler(EventArgs args)
    {
       GoalData goal = (GoalData)args.Item;
       await Task.CompletedTask;
@@ -478,7 +476,7 @@
    private async Task HandleCopyUrl(string elementName)
    {
       await JSRuntime.InvokeVoidAsync("CopyToClipboard", elementName);
-      NotificationService.Notify(NotificationSeverity.Success, "Success", "The URL was copied to your clipboard!", 5000);
+      Snackbar.Add("Success - The URL was copied to your clipboard!", Severity.Success);
       await InvokeAsync(() => { StateHasChanged(); });
    }
 
@@ -491,7 +489,7 @@
    {
       await mHubConnection.InvokeAsync("UpdateGoalBarData", JsonConvert.SerializeObject(mGoalBarData));
       await GetGoalBarDataFromHub();
-      NotificationService.Notify(NotificationSeverity.Success, "Save Successful", "The goal bar data has been saved.", 5000);
+      Snackbar.Add("Save Successful - The goal bar data has been saved.", Severity.Success);
       await InvokeAsync(() => { StateHasChanged(); });
    }
 

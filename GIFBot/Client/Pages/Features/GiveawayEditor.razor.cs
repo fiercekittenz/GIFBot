@@ -4,7 +4,6 @@ using GIFBot.Shared.Models.Features;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.SignalR.Client;
 using Newtonsoft.Json;
-using Radzen;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -169,7 +168,7 @@ namespace GIFBot.Client.Pages.Features
          bool result = await mHubConnection.InvokeAsync<bool>("AddBannedGiveawayUser", mTempBannedUserName);
          if (result == true)
          {
-            NotificationService.Notify(NotificationSeverity.Success, "Success", "The banned user has been added.", 5000);
+            Snackbar.Add("Success - The banned user has been added.", Severity.Success);
             mIsAddBannedUserDialogVisible = false;
 
             await GetGiveawayDataFromHub();
@@ -178,7 +177,7 @@ namespace GIFBot.Client.Pages.Features
          }
          else
          {
-            NotificationService.Notify(NotificationSeverity.Error, "Error", $"The banned user could not be added. Either there was no text or the name is already in the list.", 5000);
+            Snackbar.Add($"Error - The banned user could not be added. Either there was no text or the name is already in the list.", Severity.Error);
             await InvokeAsync(() => { StateHasChanged(); });
          }
       }
@@ -188,7 +187,7 @@ namespace GIFBot.Client.Pages.Features
          bool result = await mHubConnection.InvokeAsync<bool>("RemoveBannedGiveawayUser", bannedUserName);
          if (result == true)
          {
-            NotificationService.Notify(NotificationSeverity.Success, "Success", "The banned user has been removed.", 5000);
+            Snackbar.Add("Success - The banned user has been removed.", Severity.Success);
 
             await GetGiveawayDataFromHub();
 
@@ -196,7 +195,7 @@ namespace GIFBot.Client.Pages.Features
          }
          else
          {
-            NotificationService.Notify(NotificationSeverity.Error, "Error", $"The banned user could not be removed. Either there was no text or the name doesn't exist in the list.", 5000);
+            Snackbar.Add($"Error - The banned user could not be removed. Either there was no text or the name doesn't exist in the list.", Severity.Error);
             await InvokeAsync(() => { StateHasChanged(); });
          }
       }
@@ -222,7 +221,7 @@ namespace GIFBot.Client.Pages.Features
       {
          await mHubConnection.InvokeAsync("UpdateGiveawayData", JsonConvert.SerializeObject(Data));
          await GetGiveawayDataFromHub();
-         NotificationService.Notify(NotificationSeverity.Success, "Save Successful", "The giveaway data has been saved.", 5000);
+         Snackbar.Add("Save Successful - The giveaway data has been saved.", Severity.Success);
          await InvokeAsync(() => { StateHasChanged(); });
       }
 

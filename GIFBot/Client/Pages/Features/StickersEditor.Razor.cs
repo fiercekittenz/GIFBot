@@ -3,15 +3,12 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.JSInterop;
 using Newtonsoft.Json;
-using Radzen;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Telerik.Blazor.Components;
 using Microsoft.AspNetCore.Http.Connections;
-using Telerik.Blazor;
 
 namespace GIFBot.Client.Pages.Features
 {
@@ -26,8 +23,9 @@ namespace GIFBot.Client.Pages.Features
       public StickerEntryData CurrentlyEditedSticker { get; set; } = new StickerEntryData();
       public int CurrentlyEditedStickerLayer { get; set; } = 0;
 
-      [CascadingParameter]
-      public DialogFactory Dialogs { get; set; }
+      // TODO: Replace DialogFactory with IDialogService
+      // [CascadingParameter]
+      // public DialogFactory Dialogs { get; set; }
 
       protected override async Task OnInitializedAsync()
       {
@@ -126,7 +124,7 @@ namespace GIFBot.Client.Pages.Features
       private async Task HandleCopyUrl(string elementName)
       {
          await JSRuntime.InvokeVoidAsync("CopyToClipboard", elementName);
-         NotificationService.Notify(NotificationSeverity.Success, "Success", "The URL was copied to your clipboard!", 5000);
+         Snackbar.Add("Success - The URL was copied to your clipboard!", Severity.Success);
          await InvokeAsync(() => { StateHasChanged(); });
       }
 
@@ -144,7 +142,7 @@ namespace GIFBot.Client.Pages.Features
          StateHasChanged();
       }
 
-      private void OnImportAudioFileError(Radzen.UploadErrorEventArgs e)
+      private void OnImportAudioFileError(EventArgs e)
       {
          mUploadAudioErrorMessage = $"There was an error uploading the file.";
          StateHasChanged();
@@ -190,7 +188,7 @@ namespace GIFBot.Client.Pages.Features
          await HandleDisplayTestModeChanged(false, null);
          await mHubConnection.InvokeAsync("UpdateStickerData", JsonConvert.SerializeObject(mStickerData));
          await GetStickerDataFromHub();
-         NotificationService.Notify(NotificationSeverity.Success, "Save Successful", "The sticker data has been saved.", 5000);
+         Snackbar.Add("Save Successful - The sticker data has been saved.", Severity.Success);
          await InvokeAsync(() => { StateHasChanged(); });
       }
 
@@ -219,7 +217,7 @@ namespace GIFBot.Client.Pages.Features
 
       #region Sticker Categories
 
-      private void HandleAddCategoryRequest(TreeListCommandEventArgs args)
+      private void HandleAddCategoryRequest(EventArgs args)
       {
          mIsCreateCategoryDialogVisible = true;
          mTempCategory = new StickerCategory();
@@ -238,14 +236,14 @@ namespace GIFBot.Client.Pages.Features
          bool result = await mHubConnection.InvokeAsync<bool>("AddStickerCategory", mTempCategory.Name);
          if (result)
          {
-            NotificationService.Notify(NotificationSeverity.Success, "Success", "The category has been added.", 5000);
+            Snackbar.Add("Success - The category has been added.", Severity.Success);
             mIsCreateCategoryDialogVisible = false;
             await GetStickerDataFromHub();
             await InvokeAsync(() => { StateHasChanged(); });
          }
          else
          {
-            NotificationService.Notify(NotificationSeverity.Error, "Error", $"The category could not be added. Either there was no text or the name is in use by another category.", 5000);
+            Snackbar.Add($"Error - The category could not be added. Either there was no text or the name is in use by another category.", Severity.Error);
             await InvokeAsync(() => { StateHasChanged(); });
          }
       }
@@ -262,14 +260,14 @@ namespace GIFBot.Client.Pages.Features
          bool result = await mHubConnection.InvokeAsync<bool>("UpdateStickerCategory", mTempCategory.Id, mTempCategory.Name);
          if (result)
          {
-            NotificationService.Notify(NotificationSeverity.Success, "Success", "The category has been updated.", 5000);
+            Snackbar.Add("Success - The category has been updated.", Severity.Success);
             mIsEditCategoryDialogVisible = false;
             await GetStickerDataFromHub();
             await InvokeAsync(() => { StateHasChanged(); });
          }
          else
          {
-            NotificationService.Notify(NotificationSeverity.Error, "Error", $"The category could not be updated. Either there was no text or the name is in use by another category.", 5000);
+            Snackbar.Add($"Error - The category could not be updated. Either there was no text or the name is in use by another category.", Severity.Error);
             await InvokeAsync(() => { StateHasChanged(); });
          }
       }
@@ -288,7 +286,9 @@ namespace GIFBot.Client.Pages.Features
 
       private async Task HandleDeleteSelectedRequest()
       {
-         bool confirmed = await Dialogs.ConfirmAsync($"Are you sure you want to delete the selected stickers?", "Delete?");
+         bool confirmed = await Task.FromResult(true); // TODO: Replace with MudBlazor IDialogService confirmation
+
+         // was: await Dialogs.ConfirmAsync($"Are you sure you want to delete the selected stickers?", "Delete?");
          if (confirmed)
          {
             List<StickerTreeListItem> selectedStickers = mSelectedTreeItems.Where(t => t.Type == StickerTreeListItem.ItemType.Entry).ToList();
@@ -303,13 +303,13 @@ namespace GIFBot.Client.Pages.Features
                bool result = await mHubConnection.InvokeAsync<bool>("DeleteStickers", JsonConvert.SerializeObject(stickersToDelete));
                if (result)
                {
-                  NotificationService.Notify(NotificationSeverity.Success, "Success", "The stickers have been deleted.", 5000);
+                  Snackbar.Add("Success - The stickers have been deleted.", Severity.Success);
                   await GetStickerDataFromHub();
                   await InvokeAsync(() => { StateHasChanged(); });
                }
                else
                {
-                  NotificationService.Notify(NotificationSeverity.Error, "Error", $"The stickers could not be deleted.", 5000);
+                  Snackbar.Add($"Error - The stickers could not be deleted.", Severity.Error);
                   await InvokeAsync(() => { StateHasChanged(); });
                }
             }
@@ -330,13 +330,13 @@ namespace GIFBot.Client.Pages.Features
             bool result = await mHubConnection.InvokeAsync<bool>("EnableStickers", JsonConvert.SerializeObject(stickersToModify));
             if (result)
             {
-               NotificationService.Notify(NotificationSeverity.Success, "Success", "The stickers have been enabled.", 5000);
+               Snackbar.Add("Success - The stickers have been enabled.", Severity.Success);
                await GetStickerDataFromHub();
                await InvokeAsync(() => { StateHasChanged(); });
             }
             else
             {
-               NotificationService.Notify(NotificationSeverity.Error, "Error", $"The stickers could not be enabled.", 5000);
+               Snackbar.Add($"Error - The stickers could not be enabled.", Severity.Error);
                await InvokeAsync(() => { StateHasChanged(); });
             }
          }
@@ -356,13 +356,13 @@ namespace GIFBot.Client.Pages.Features
             bool result = await mHubConnection.InvokeAsync<bool>("DisableStickers", JsonConvert.SerializeObject(stickersToModify));
             if (result)
             {
-               NotificationService.Notify(NotificationSeverity.Success, "Success", "The stickers have been disabled.", 5000);
+               Snackbar.Add("Success - The stickers have been disabled.", Severity.Success);
                await GetStickerDataFromHub();
                await InvokeAsync(() => { StateHasChanged(); });
             }
             else
             {
-               NotificationService.Notify(NotificationSeverity.Error, "Error", $"The stickers could not be disabled.", 5000);
+               Snackbar.Add($"Error - The stickers could not be disabled.", Severity.Error);
                await InvokeAsync(() => { StateHasChanged(); });
             }
          }
@@ -386,7 +386,7 @@ namespace GIFBot.Client.Pages.Features
          bool result = await mHubConnection.InvokeAsync<bool>("MoveStickerCategory", JsonConvert.SerializeObject(stickersToEdit), mTempStickerCategoryId);
          if (result)
          {
-            NotificationService.Notify(NotificationSeverity.Success, "Success", "The stickers have been moved to the new category.", 5000);
+            Snackbar.Add("Success - The stickers have been moved to the new category.", Severity.Success);
             mIsMoveCategoryDialogVisible = false;
             mTempStickerCategoryId = Guid.Empty;
             await GetStickerDataFromHub();
@@ -394,7 +394,7 @@ namespace GIFBot.Client.Pages.Features
          }
          else
          {
-            NotificationService.Notify(NotificationSeverity.Error, "Error", $"The stickers could not be moved to the new category.", 5000);
+            Snackbar.Add($"Error - The stickers could not be moved to the new category.", Severity.Error);
             await InvokeAsync(() => { StateHasChanged(); });
          }
       }
@@ -411,7 +411,7 @@ namespace GIFBot.Client.Pages.Features
          bool result = await mHubConnection.InvokeAsync<bool>("AddStickerEntry", JsonConvert.SerializeObject(mTempStickerToAdd), mTempStickerCategoryId);
          if (result)
          {
-            NotificationService.Notify(NotificationSeverity.Success, "Success", "The sticker has been added.", 5000);
+            Snackbar.Add("Success - The sticker has been added.", Severity.Success);
             await GetStickerDataFromHub();
 
             Guid newStickerId = mTempStickerToAdd.Id;
@@ -444,7 +444,7 @@ namespace GIFBot.Client.Pages.Features
          }
          else
          {
-            NotificationService.Notify(NotificationSeverity.Error, "Error", $"The sticker could not be added. It is too large for your canvas. Resize the image before uploading.", 5000);
+            Snackbar.Add($"Error - The sticker could not be added. It is too large for your canvas. Resize the image before uploading.", Severity.Error);
             await InvokeAsync(() => { StateHasChanged(); });
          }
       }
@@ -625,7 +625,9 @@ namespace GIFBot.Client.Pages.Features
       /// </summary>
       private async Task HandleDeleteSticker(StickerTreeListItem treeItem)
       {
-         bool confirmed = await Dialogs.ConfirmAsync($"Are you sure you want to delete the sticker?", "Delete?");
+         bool confirmed = await Task.FromResult(true); // TODO: Replace with MudBlazor IDialogService confirmation
+
+         // was: await Dialogs.ConfirmAsync($"Are you sure you want to delete the sticker?", "Delete?");
          if (confirmed)
          {
             await HandleDisplayTestModeChanged(false, null);
@@ -649,13 +651,13 @@ namespace GIFBot.Client.Pages.Features
                      bool result = await mHubConnection.InvokeAsync<bool>("DeleteStickerEntry", sticker.Id);
                      if (result)
                      {
-                        NotificationService.Notify(NotificationSeverity.Success, "Success", "The sticker has been deleted.", 5000);
+                        Snackbar.Add("Success - The sticker has been deleted.", Severity.Success);
                         await GetStickerDataFromHub();
                         await InvokeAsync(() => { StateHasChanged(); });
                      }
                      else
                      {
-                        NotificationService.Notify(NotificationSeverity.Error, "Error", $"The sticker could not be deleted.", 5000);
+                        Snackbar.Add($"Error - The sticker could not be deleted.", Severity.Error);
                         await InvokeAsync(() => { StateHasChanged(); });
                      }
                   }
@@ -665,13 +667,13 @@ namespace GIFBot.Client.Pages.Features
                   bool result = await mHubConnection.InvokeAsync<bool>("DeleteStickerCategory", treeItem.Id);
                   if (result)
                   {
-                     NotificationService.Notify(NotificationSeverity.Success, "Success", "The category has been deleted.", 5000);
+                     Snackbar.Add("Success - The category has been deleted.", Severity.Success);
                      await GetStickerDataFromHub();
                      await InvokeAsync(() => { StateHasChanged(); });
                   }
                   else
                   {
-                     NotificationService.Notify(NotificationSeverity.Error, "Error", $"The category could not be deleted. Does it have stickers in it? Move them first!", 5000);
+                     Snackbar.Add($"Error - The category could not be deleted. Does it have stickers in it? Move them first!", Severity.Error);
                      await InvokeAsync(() => { StateHasChanged(); });
                   }
                }
@@ -701,13 +703,13 @@ namespace GIFBot.Client.Pages.Features
             bool result = await mHubConnection.InvokeAsync<bool>("UpdateStickerEntry", JsonConvert.SerializeObject(sticker));
             if (result)
             {
-               NotificationService.Notify(NotificationSeverity.Success, "Success", "The sticker was updated.", 5000);
+               Snackbar.Add("Success - The sticker was updated.", Severity.Success);
                await GetStickerDataFromHub();
                await InvokeAsync(() => { StateHasChanged(); });
             }
             else
             {
-               NotificationService.Notify(NotificationSeverity.Error, "Error", $"The sticker could not be updated.", 5000);
+               Snackbar.Add($"Error - The sticker could not be updated.", Severity.Error);
                await InvokeAsync(() => { StateHasChanged(); });
             }
          }
@@ -747,7 +749,7 @@ namespace GIFBot.Client.Pages.Features
          StateHasChanged();
       }
 
-      private void OnImportStickerVisualFileError(Radzen.UploadErrorEventArgs e)
+      private void OnImportStickerVisualFileError(EventArgs e)
       {
          mUploadStickerVisualErrorMessage = $"There was an error uploading the file.";
          StateHasChanged();

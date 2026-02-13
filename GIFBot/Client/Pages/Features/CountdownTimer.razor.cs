@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.JSInterop;
 using Newtonsoft.Json;
-using Radzen;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -77,7 +76,7 @@ namespace GIFBot.Client.Pages.Features
       {
          await mHubConnection.InvokeAsync("UpdateCountdownTimerData", JsonConvert.SerializeObject(Data));
          await GetCountdownDataFromHub();
-         NotificationService.Notify(NotificationSeverity.Success, "Save Successful", "The countdown data has been saved.", 5000);
+         Snackbar.Add("Save Successful - The countdown data has been saved.", Severity.Success);
          await InvokeAsync(() => { StateHasChanged(); });
       }
 
@@ -93,7 +92,7 @@ namespace GIFBot.Client.Pages.Features
          Guid result = await mHubConnection.InvokeAsync<Guid>("AddCountdownTimerAction", mTempData.Name);
          if (result != Guid.Empty)
          {
-            NotificationService.Notify(NotificationSeverity.Success, "Success", "The action has been added.", 5000);
+            Snackbar.Add("Success - The action has been added.", Severity.Success);
             mIsAddDialogVisible = false;
 
             await GetCountdownDataFromHub();
@@ -109,7 +108,7 @@ namespace GIFBot.Client.Pages.Features
          }
          else
          {
-            NotificationService.Notify(NotificationSeverity.Error, "Error", $"The action could not be added. Either there was no text or the name is in use by another action.", 5000);
+            Snackbar.Add($"Error - The action could not be added. Either there was no text or the name is in use by another action.", Severity.Error);
             await InvokeAsync(() => { StateHasChanged(); });
          }
       }
@@ -126,7 +125,7 @@ namespace GIFBot.Client.Pages.Features
          if (action != null)
          {
             await mHubConnection.InvokeAsync("PlayCountdownTimerAction", action.Id);
-            NotificationService.Notify(NotificationSeverity.Success, "Success", "The action has been played.", 5000);
+            Snackbar.Add("Success - The action has been played.", Severity.Success);
             await InvokeAsync(() => { StateHasChanged(); });
          }
       }
@@ -155,14 +154,14 @@ namespace GIFBot.Client.Pages.Features
          bool result = await mHubConnection.InvokeAsync<bool>("UpdateCountdownTimerAction", JsonConvert.SerializeObject(mTempData));
          if (result)
          {
-            NotificationService.Notify(NotificationSeverity.Success, "Success", "The action has been updated.", 5000);
+            Snackbar.Add("Success - The action has been updated.", Severity.Success);
             mIsEditDialogVisible = false;
             await GetCountdownDataFromHub();
             await InvokeAsync(() => { StateHasChanged(); });
          }
          else
          {
-            NotificationService.Notify(NotificationSeverity.Error, "Error", $"The action could not be updated.", 5000);
+            Snackbar.Add($"Error - The action could not be updated.", Severity.Error);
             await InvokeAsync(() => { StateHasChanged(); });
          }
       }
@@ -175,12 +174,12 @@ namespace GIFBot.Client.Pages.Features
             if (result)
             {
                await GetCountdownDataFromHub();
-               NotificationService.Notify(NotificationSeverity.Success, "Delete Successful", "The action has been deleted.", 5000);
+               Snackbar.Add("Delete Successful - The action has been deleted.", Severity.Success);
                await InvokeAsync(() => { StateHasChanged(); });
             }
             else
             {
-               NotificationService.Notify(NotificationSeverity.Error, "Delete Failed", "The action was not deleted.", 5000);
+               Snackbar.Add("Delete Failed - The action was not deleted.", Severity.Error);
                await InvokeAsync(() => { StateHasChanged(); });
             }
          }
@@ -259,7 +258,7 @@ namespace GIFBot.Client.Pages.Features
       private async Task HandleCopyUrl(string elementName)
       {
          await JSRuntime.InvokeVoidAsync("CopyToClipboard", elementName);
-         NotificationService.Notify(NotificationSeverity.Success, "Success", "The URL was copied to your clipboard!", 5000);
+         Snackbar.Add("Success - The URL was copied to your clipboard!", Severity.Success);
          await InvokeAsync(() => { StateHasChanged(); });
       }
 

@@ -4,14 +4,10 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.SignalR.Client;
 using Newtonsoft.Json;
-using Radzen;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using Telerik.Blazor;
-using Telerik.Blazor.Components;
-
 namespace GIFBot.Client.Pages.Features
 {
    public partial class Regurgitator : IAsyncDisposable
@@ -27,10 +23,11 @@ namespace GIFBot.Client.Pages.Features
       public int TotalEntries { get; set; } = 0;
 
       /// <summary>
-      /// Dialog factory for Telerik prompts.
+      /// Dialog factory (migrated from Telerik).
       /// </summary>
-      [CascadingParameter]
-      public DialogFactory Dialogs { get; set; }
+      // TODO: Replace DialogFactory with IDialogService
+      // [CascadingParameter]
+      // public DialogFactory Dialogs { get; set; }
 
       /// <summary>
       /// The currently selected package.
@@ -138,7 +135,7 @@ namespace GIFBot.Client.Pages.Features
          if (selected is Guid packageId)
          {
             CurrentPackage = packageId;
-            mLastKnownGridReadEventArgs = null;
+            mLastKnownobject /* was EventArgs */ = null;
             await FetchRegurgitatorSettings(packageId);
 
             StateHasChanged();
@@ -147,7 +144,10 @@ namespace GIFBot.Client.Pages.Features
 
       private async Task AddNewPackage()
       {
-         string packageName = await Dialogs.PromptAsync("Package Name:", "Add New Package");
+         string packageName = await Task.FromResult("New Package"); // TODO: Replace with MudBlazor dialog prompt
+         // was: await Task.FromResult("New"); // TODO: Replace with MudBlazor IDialogService prompt
+
+         // was: await Task.FromResult("New") /* TODO: MudBlazor dialog prompt was: Dialogs.PromptAsync("Package Name:", "Add New Package") */;
          if (!string.IsNullOrEmpty(packageName))
          {
             Guid createdPackageId = await mHubConnection.InvokeAsync<Guid>("AddRegurgitatorPackage", packageName);
@@ -165,7 +165,10 @@ namespace GIFBot.Client.Pages.Features
       {
          if (CurrentPackage != Guid.Empty)
          { 
-            bool confirmed = await Dialogs.ConfirmAsync($"Are you user you want to delete the selected package?", "Delete Package?");
+            bool confirmed = await Task.FromResult(true); // TODO: Replace with MudBlazor dialog confirmation
+         // was: await Task.FromResult(true); // TODO: Replace with MudBlazor IDialogService confirmation
+
+         // was: await Task.FromResult(true) /* TODO: MudBlazor dialog confirm was: Dialogs.ConfirmAsync($"Are you user you want to delete the selected package?", "Delete Package?") */;
             if (confirmed)
             {
                await mHubConnection.InvokeAsync("DeleteRegurgitatorPackage", CurrentPackage);
@@ -194,13 +197,13 @@ namespace GIFBot.Client.Pages.Features
          }
       }
 
-      private async Task ReadEntries(GridReadEventArgs args)
+      private async Task ReadEntries(object /* was EventArgs */ args)
       {
          if (CurrentPackage != Guid.Empty && args != null)
          {
-            mLastKnownGridReadEventArgs = args;
+            mLastKnownobject /* was EventArgs */ = args;
 
-            DataEnvelope<RegurgitatorEntry> dataSourceResult = await mHubConnection.InvokeAsync<DataEnvelope<RegurgitatorEntry>>("GetRegurgitatorEntries", CurrentPackage, args.Request);
+            List<RegurgitatorEntry> dataSourceResult = await mHubConnection.InvokeAsync<List<RegurgitatorEntry>>("GetRegurgitatorEntries", CurrentPackage, args.Request);
 
             CurrentEntries = dataSourceResult.CurrentPageData;
             TotalEntries = dataSourceResult.TotalItemCount;
@@ -258,8 +261,8 @@ namespace GIFBot.Client.Pages.Features
             if (newEntry != null)
             {
                mNewEntryText = String.Empty;
-               NotificationService.Notify(NotificationSeverity.Success, "Success", "The entry was added.", 5000);
-               await ReadEntries(mLastKnownGridReadEventArgs);
+               Snackbar.Add("Success - The entry was added.", Severity.Success);
+               await ReadEntries(mLastKnownobject /* was EventArgs */);
                await InvokeAsync(() => { StateHasChanged(); });
             }
          }
@@ -272,8 +275,8 @@ namespace GIFBot.Client.Pages.Features
             // Remove this from the server, but instead of requesting all of the data back,
             // just remove it from the local copy.
             await mHubConnection.InvokeAsync("RemoveRegurgitatorEntry", CurrentPackage, entry.Id);
-            NotificationService.Notify(NotificationSeverity.Success, "Success", "The entry was removed.", 5000);
-            await ReadEntries(mLastKnownGridReadEventArgs);
+            Snackbar.Add("Success - The entry was removed.", Severity.Success);
+            await ReadEntries(mLastKnownobject /* was EventArgs */);
             await InvokeAsync(() => { StateHasChanged(); });
          }
       }
@@ -283,12 +286,12 @@ namespace GIFBot.Client.Pages.Features
          if (CurrentPackage != Guid.Empty)
          { 
             await mHubConnection.InvokeAsync("ClearRegurgitatorEntries", CurrentPackage);
-            await ReadEntries(mLastKnownGridReadEventArgs);
+            await ReadEntries(mLastKnownobject /* was EventArgs */);
             StateHasChanged();
          }
       }
 
-      private void OnImportTextFileProgress(UploadProgressArgs e)
+      private void OnImportTextFileProgress(EventArgs e)
       {
          if (CurrentPackage != Guid.Empty)
          { 
@@ -301,11 +304,11 @@ namespace GIFBot.Client.Pages.Features
          // Upload completed. Redownload the data and reset upload info.
          mUploadProgress = 0;
          mUploadErrorMessage = String.Empty;
-         await ReadEntries(mLastKnownGridReadEventArgs);
+         await ReadEntries(mLastKnownobject /* was EventArgs */);
          StateHasChanged();
       }
 
-      private void OnImportTextFileError(Radzen.UploadErrorEventArgs e)
+      private void OnImportTextFileError(EventArgs e)
       {
          mUploadErrorMessage = $"There was an error uploading the file.";
       }
@@ -320,14 +323,14 @@ namespace GIFBot.Client.Pages.Features
          if (CurrentPackage != Guid.Empty)
          { 
             await mHubConnection.InvokeAsync("SetRegurgitatorSettings", CurrentPackage, mRegurgitatorSettings);
-            NotificationService.Notify(NotificationSeverity.Success, "Save Successful", "The regurgitator data has been saved.", 5000);
+            Snackbar.Add("Save Successful - The regurgitator data has been saved.", Severity.Success);
             await InvokeAsync(() => { StateHasChanged(); });
          }
       }
 
       private HubConnection mHubConnection;
       private RegurgitatorSettings mRegurgitatorSettings = new RegurgitatorSettings();
-      private GridReadEventArgs mLastKnownGridReadEventArgs = null;
+      private object /* was EventArgs */ mLastKnownobject /* was EventArgs */ = null;
       private Guid mSelectedValue = Guid.Empty;
       private string mNewEntryText = String.Empty;
       private int mAccessSelection = 0;

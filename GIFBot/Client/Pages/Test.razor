@@ -1,15 +1,13 @@
 ﻿@page "/test"
-<TelerikTreeList Data="@Data"
-                 IdField="Id" ParentIdField="ParentId"
-                 Pageable="true" Width="850px" Height="400px">
-   <TreeListColumns>
-      <TreeListColumn Field="Name" Expandable="true" Width="320px" />
-      <TreeListColumn Field="Id" Width="120px" />
-      <TreeListColumn Field="ParentId" Width="120px" />
-      <TreeListColumn Field="EmailAddress" Width="120px" />
-      <TreeListColumn Field="HireDate" Width="220px" />
-   </TreeListColumns>
-</TelerikTreeList>
+<MudDataGrid T="object" Items="@Data" Filterable="true" SortMode="SortMode.Single" Groupable="false">
+   <Columns>
+      <PropertyColumn Field="Name" Expandable="true" Width="320px"  />
+      <PropertyColumn Field="Id" Width="120px"  />
+      <PropertyColumn Field="ParentId" Width="120px"  />
+      <PropertyColumn Field="EmailAddress" Width="120px"  />
+      <PropertyColumn Field="HireDate" Width="220px"  />
+   </Columns>
+</MudDataGrid>
 
 @code {
    public List<Employee> Data { get; set; }

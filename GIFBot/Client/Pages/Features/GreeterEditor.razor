@@ -4,10 +4,8 @@
 @using GIFBot.Shared.Models.Visualization
 @using GIFBot.Client.Components
 @using Newtonsoft.Json
-@using Telerik.DataSource
-@using Telerik.DataSource.Extensions
 @inject NavigationManager NavigationManager
-@inject NotificationService NotificationService
+@inject ISnackbar Snackbar
 @inject IJSRuntime JSRuntime
 @inject HttpClient Http
 
@@ -16,17 +14,17 @@
 </div>
 
 <!-- Add New Entry Window -->
-<TelerikWindow Class="gifbot-modal-window" Width="550px" Height="400px" Centered="true" Visible="@mIsAddDialogVisible" Modal="true">
-    <WindowTitle>
+<MudDialog @bind-IsVisible="@mIsAddDialogVisible">
+    <TitleContent>
         <strong>Add New Greeter Entry</strong>
-    </WindowTitle>
-    <WindowContent>
+    </TitleContent>
+    <DialogContent>
         <div class="form-group">
             <font class="text-white">What is the name of this greeter? This is a name only for your reference to describe the greeter.</font>
         </div>
         <div class="form-group">
             <label for="uiName"><b>Name:</b></label>
-            <TelerikTextBox Id="uiName" @bind-Value="mTempGreeterEntry.Name" />
+            <MudTextField T="string" Id="uiName" @bind-Value="mTempGreeterEntry.Name" />
         </div>
         <div class="container-fluid p-2">
             <p>
@@ -40,25 +38,25 @@
                 </center>
             </p>
         </div>
-    </WindowContent>
-</TelerikWindow>
+    </DialogContent>
+</MudDialog>
 
 <!-- Edit Entry Window -->
-<TelerikWindow Class="gifbot-modal-window" Width="750px" Height="700px" Centered="true" Visible="@mIsEditDialogVisible" Modal="true">
-    <WindowTitle>
+<MudDialog @bind-IsVisible="@mIsEditDialogVisible">
+    <TitleContent>
         <strong>Edit Greeter: @mTempGreeterEntry.Name</strong>
-    </WindowTitle>
-    <WindowContent>
+    </TitleContent>
+    <DialogContent>
         <div class="form-group form-check">
             <label class="form-check-label">
-                <TelerikCheckBox Id="uiTempEntryEnabled" @bind-Value="mTempGreeterEntry.Enabled" /> Enabled
+                <MudCheckBox T="bool" Id="uiTempEntryEnabled" @bind-Value="mTempGreeterEntry.Enabled" /> Enabled
                 <small id="uiTempEntryEnabled" class="form-text text-muted">When enabled, this greeter active.</small>
             </label>
         </div>
         <div class="form-group">
             <label for="uiTempName"><b>Name:</b></label>
             <small id="uiTempNameLabel" class="form-text text-white-50">The name to identify this greeter</small>
-            <TelerikTextBox Id="uiTempName" @bind-Value="mTempGreeterEntry.Name" />
+            <MudTextField T="string" Id="uiTempName" @bind-Value="mTempGreeterEntry.Name" />
         </div>
         <div class="form-group">
             <label for="uiTempAnimation"><b>Animation:</b></label>
@@ -68,18 +66,12 @@
         <div class="form-group">
             <label for="uiTempChatMessage"><b>Phrase Sent to Chat:</b></label>
             <small id="uiTempChatMessageLabel" class="form-text text-white-50">The bot will send this to chat in addition to any animation. Use $user to display who was greeted! (e.g. "!so $user")</small>
-            <TelerikTextBox Id="uiTempChatMessage" Width="400px" @bind-Value="mTempGreeterEntry.ChatMessage" />
+            <MudTextField T="string" Id="uiTempChatMessage" @bind-Value="mTempGreeterEntry.ChatMessage" />
         </div>
         <div class="form-group">
-            <TelerikListView Data=@mTempGreeterEntry.Recipients
-                             Pageable="true"
-                             Height="400px"
-                             OnDelete="@DeleteRecipientHandler"
-                             OnCreate="@CreateRecipientHandler">
-                <HeaderTemplate>
-                    <ListViewCommandButton Command="Add">Add</ListViewCommandButton>
-                </HeaderTemplate>
-                <Template>
+            <MudList T="object">
+<MudButton Variant="Variant.Text" Size="Size.Small">Add</MudButton>
+<Template>
                     <div class="k-card k-card-horizontal">
                         <div class="k-card-body">
                             <div class="k-hbox k-justify-content-between k-flex-wrap">
@@ -89,28 +81,28 @@
                             </div>
                         </div>
                         <div class="product-actions">
-                            <ListViewCommandButton Command="Edit">Edit</ListViewCommandButton>
-                            <ListViewCommandButton Command="Delete">Delete</ListViewCommandButton>
+                            <MudButton Variant="Variant.Text" Size="Size.Small">Edit</MudButton>
+                            <MudButton Variant="Variant.Text" Size="Size.Small">Delete</MudButton>
                         </div>
                     </div>
-                </Template>
+                </CellTemplate>
                 <EditTemplate>
                     <div class="k-card k-card-horizontal">
                         <div class="k-card-body">
                             <div class="k-hbox k-justify-content-between k-flex-wrap">
                                 <div>
                                     <label class="editor-label">Name</label>
-                                    <TelerikTextBox @bind-Value="@context.Name" Class="mb-sm"></TelerikTextBox>
+                                    <MudTextField T="string" @bind-Value="@context.Name" Class="mb-sm"></MudTextField>
                                 </div>
                             </div>
                         </div>
                         <div class="product-actions">
-                            <ListViewCommandButton Command="Save">Save</ListViewCommandButton>
-                            <ListViewCommandButton Command="Cancel">Cancel</ListViewCommandButton>
+                            <MudButton Variant="Variant.Text" Size="Size.Small">Save</MudButton>
+                            <MudButton Variant="Variant.Text" Size="Size.Small">Cancel</MudButton>
                         </div>
                     </div>
                 </EditTemplate>
-            </TelerikListView>
+            </MudList>
         </div>
 
          <div class="form-group">
@@ -118,8 +110,9 @@
             <small id="uiImport" class="form-text text-muted">
                You can import directly from a text file. Each entry should be on its own line in the text file.
             </small>
-            <RadzenUpload Style="width: 100%; background-color: #1e1e1e" Url="@($"upload/greeter/{mTempGreeterEntry.Id}")" Accept="text/*" Error="@(args => OnImportTextFileError(args))" Progress="@(args => OnImportTextFileProgress(args))" Complete="@(args => OnImportTextFileComplete(args))" />
-            <RadzenProgressBar Value="@mUploadProgress" Visible="@(mUploadProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
+            @* TODO: Wire up file upload handler *@
+<InputFile accept="text/*" style="width: 100%; background-color: #1e1e1e" />
+            <MudProgressLinear Value="@mUploadProgress" Visible="@(mUploadProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
             @if (!String.IsNullOrEmpty(mUploadErrorMessage))
             {
                <label class="text-danger">@mUploadErrorMessage</label>
@@ -138,35 +131,35 @@
                 </center>
             </p>
         </div>
-    </WindowContent>
-</TelerikWindow>
+    </DialogContent>
+</MudDialog>
 
-<TelerikTabStrip @bind-ActiveTabIndex="@ActiveTabIndex">
-    <TabStripTab Title="Greeters">
+<MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
+    <MudTabPanel Text="Greeters">
         <div class="container-fluid p-2">
-            <TelerikGrid Sortable="true" FilterMode="Telerik.Blazor.GridFilterMode.FilterRow" Pageable="true" Data="@Data.Entries" PageSize="10">
-               <GridToolBarTemplate>
-                  <GridSearchBox/>
-                  <GridCommandButton Command="AddCommand" OnClick="@HandleAddRequest" Icon="@SvgIcon.Plus">Add New Greeter</GridCommandButton>
-               </GridToolBarTemplate>
-                <GridColumns>
-                    <GridColumn Width="200px" Field=@nameof(GreeterEntry.Name) Title="Greeter Name" />
-                    <GridColumn Width="400px" Title="Recipients">
-                        <Template Context="data">
+            <MudDataGrid T="object" Items="@Data.Entries" Sortable="true" Pageable="true" PageSize="10">
+               <ToolBarContent>
+                  <MudTextField T="string" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
+                  <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleAddRequest">Add New Greeter</MudButton>
+               </ToolBarContent>
+                <Columns>
+                    <PropertyColumn Width="200px" Field=@nameof(GreeterEntry.Name) Title="Greeter Name"  />
+                    <TemplateColumn Width="400px" Title="Recipients">
+<CellTemplate Context="data">
                             @((data as GreeterEntry).GetRecipientsDisplayList())
-                        </Template>
-                    </GridColumn>
-                    <GridColumn Width="75px">
-                        <Template Context="data">
+                        </CellTemplate>
+                    </PropertyColumn>
+                    <TemplateColumn Width="75px">
+<CellTemplate Context="data">
                             <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleEditRequest((data as GreeterEntry)))"><span class="oi oi-pencil"></span></button>
                             <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleDeleteRequest((data as GreeterEntry)))"><span class="oi oi-trash"></span></button>
-                        </Template>
-                    </GridColumn>
-                </GridColumns>
-            </TelerikGrid>
+                        </CellTemplate>
+                    </PropertyColumn>
+                </Columns>
+            </MudDataGrid>
         </div>
-    </TabStripTab>
-</TelerikTabStrip>
+    </MudTabPanel>
+</MudTabs>
 
 <style>
     .k-listview-header {

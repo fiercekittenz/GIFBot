@@ -1,14 +1,16 @@
 ﻿@inherits LayoutComponentBase
 
-<TelerikRootComponent>
+<MudThemeProvider />
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
    <div class="sidebar">
       <EmptyNavMenu />
    </div>
 
    <div class="main text-light" style="background-color:#101010">
       <div class="content px-4">
-         <RadzenNotification />
+         
          @Body
       </div>
    </div>
-</TelerikRootComponent>

@@ -3,13 +3,10 @@ using GIFBot.Shared.Models.Features;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.SignalR.Client;
 using Newtonsoft.Json;
-using Radzen;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Telerik.Blazor.Components;
-
 namespace GIFBot.Client.Pages.Features
 {
    public partial class GreeterEditor
@@ -83,7 +80,7 @@ namespace GIFBot.Client.Pages.Features
          Guid result = await mHubConnection.InvokeAsync<Guid>("AddGreeterEntry", mTempGreeterEntry.Name);
          if (result != Guid.Empty)
          {
-            NotificationService.Notify(NotificationSeverity.Success, "Success", "The entry has been added.", 5000);
+            Snackbar.Add("Success - The entry has been added.", Severity.Success);
             mIsAddDialogVisible = false;
 
             await GetGreeterDataFromHub();
@@ -99,7 +96,7 @@ namespace GIFBot.Client.Pages.Features
          }
          else
          {
-            NotificationService.Notify(NotificationSeverity.Error, "Error", $"The entry could not be added. Either there was no text or the name is in use by another command.", 5000);
+            Snackbar.Add($"Error - The entry could not be added. Either there was no text or the name is in use by another command.", Severity.Error);
             await InvokeAsync(() => { StateHasChanged(); });
          }
       }
@@ -126,14 +123,14 @@ namespace GIFBot.Client.Pages.Features
          bool result = await mHubConnection.InvokeAsync<bool>("UpdateGreeterEntry", JsonConvert.SerializeObject(mTempGreeterEntry));
          if (result)
          {
-            NotificationService.Notify(NotificationSeverity.Success, "Success", "The entry has been updated.", 5000);
+            Snackbar.Add("Success - The entry has been updated.", Severity.Success);
             mIsEditDialogVisible = false;
             await GetGreeterDataFromHub();
             await InvokeAsync(() => { StateHasChanged(); });
          }
          else
          {
-            NotificationService.Notify(NotificationSeverity.Error, "Error", $"The entry could not be updated.", 5000);
+            Snackbar.Add($"Error - The entry could not be updated.", Severity.Error);
             await InvokeAsync(() => { StateHasChanged(); });
          }
       }
@@ -146,12 +143,12 @@ namespace GIFBot.Client.Pages.Features
             if (result)
             {
                await GetGreeterDataFromHub();
-               NotificationService.Notify(NotificationSeverity.Success, "Delete Successful", "The Greeter entry has been deleted.", 5000);
+               Snackbar.Add("Delete Successful - The Greeter entry has been deleted.", Severity.Success);
                await InvokeAsync(() => { StateHasChanged(); });
             }
             else
             {
-               NotificationService.Notify(NotificationSeverity.Error, "Delete Failed", "The Greeter entry was not deleted.", 5000);
+               Snackbar.Add("Delete Failed - The Greeter entry was not deleted.", Severity.Error);
                await InvokeAsync(() => { StateHasChanged(); });
             }
          }
@@ -163,7 +160,7 @@ namespace GIFBot.Client.Pages.Features
          StateHasChanged();
       }
 
-      public void DeleteRecipientHandler(ListViewCommandEventArgs args)
+      public void DeleteRecipientHandler(object /* was EventArgs */ args)
       {
          GreetedPersonality person = args.Item as GreetedPersonality;
          if (person != null)
@@ -172,7 +169,7 @@ namespace GIFBot.Client.Pages.Features
          }
       }
 
-      public void CreateRecipientHandler(ListViewCommandEventArgs args)
+      public void CreateRecipientHandler(object /* was EventArgs */ args)
       {
          GreetedPersonality person = args.Item as GreetedPersonality;
          mTempGreeterEntry.Recipients.Add(person);
@@ -181,7 +178,7 @@ namespace GIFBot.Client.Pages.Features
       #endregion
 
       #region Bulk Import Recipients
-      private void OnImportTextFileProgress(UploadProgressArgs e)
+      private void OnImportTextFileProgress(EventArgs e)
       {
          mUploadProgress = e.Progress;
       }
@@ -195,7 +192,7 @@ namespace GIFBot.Client.Pages.Features
          StateHasChanged();
       }
 
-      private void OnImportTextFileError(Radzen.UploadErrorEventArgs e)
+      private void OnImportTextFileError(EventArgs e)
       {
          mUploadErrorMessage = $"There was an error uploading the file.";
       }

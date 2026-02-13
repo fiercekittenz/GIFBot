@@ -11,25 +11,25 @@
             <button type="button" class="btn btn-secondary p-1" style="background-color: #485472; margin-left: auto; margin-right: 0" @onclick="@(() => OnToggleEnabledAll.InvokeAsync(false))">Disable All Animations</button>
          </div>
       </div>
-      <TelerikTabStrip>
-         <TabStripTab Title="General">
+      <MudTabs ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
+         <MudTabPanel Text="General">
             <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
                <div class="container-fluid p-2">
                   <div class="form-group">
                      <label for="uiTitle"><b>Category Name:</b></label>
                      <small id="uiTitle" class="form-text text-white-50">It's pretty self-explanatory. Basically it's the title of the category.</small>
-                     <TelerikTextBox Id="uiTitle" @bind-Value="mCategoryNameModel.Name" />
+                     <MudTextField T="string" Id="uiTitle" @bind-Value="mCategoryNameModel.Name" />
                   </div>
                </div>
             </div>
-         </TabStripTab>
-         @*<TabStripTab Title="Bulk Actions">
+         </MudTabPanel>
+         @*<MudTabPanel Text="Bulk Actions">
             <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
                <div class="container-fluid p-2">
                </div>
             </div>
-         </TabStripTab>*@
-      </TelerikTabStrip>
+         </MudTabPanel>*@
+      </MudTabs>
 
       <div class="row">
          <div class="container-fluid text-right p-3">

@@ -5,10 +5,8 @@
 @using GIFBot.Shared.Models.Visualization
 @using GIFBot.Client.Components
 @using Newtonsoft.Json
-@using Telerik.DataSource
-@using Telerik.DataSource.Extensions
 @inject NavigationManager NavigationManager
-@inject NotificationService NotificationService
+@inject ISnackbar Snackbar
 @inject IJSRuntime JSRuntime
 @inject HttpClient Http
 
@@ -17,17 +15,17 @@
 </div>
 
 <!-- Add New Banned User Window -->
-<TelerikWindow Class="gifbot-modal-window" Width="550px" Height="400px" Centered="true" Visible="@mIsAddBannedUserDialogVisible" Modal="true">
-    <WindowTitle>
+<MudDialog @bind-IsVisible="@mIsAddBannedUserDialogVisible">
+    <TitleContent>
         <strong>Add New Banned User Entry</strong>
-    </WindowTitle>
-    <WindowContent>
+    </TitleContent>
+    <DialogContent>
         <div class="form-group">
             <font class="text-white">What is the name of this banned user?</font>
         </div>
         <div class="form-group">
             <label for="uiName"><b>Name:</b></label>
-            <TelerikTextBox Id="uiName" @bind-Value="mTempBannedUserName" />
+            <MudTextField T="string" Id="uiName" @bind-Value="mTempBannedUserName" />
         </div>
         <div class="container-fluid p-2">
             <p>
@@ -41,11 +39,11 @@
                 </center>
             </p>
         </div>
-    </WindowContent>
-</TelerikWindow>
+    </DialogContent>
+</MudDialog>
 
-<TelerikTabStrip @bind-ActiveTabIndex="@ActiveTabIndex">
-    <TabStripTab Title="Giveaway">
+<MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
+    <MudTabPanel Text="Giveaway">
         <div class="container-fluid p-2 mb-2 rounded" style="background-color: #211126">
             <div class="container-fluid" style="width: 100%">
                 @if (!Data.IsOpenForEntries)
@@ -72,56 +70,52 @@
             </div>
         }
         <div class="container-fluid p-2">
-            <TelerikGrid Sortable="true" FilterMode="Telerik.Blazor.GridFilterMode.FilterRow" Pageable="true" Data="@Data.Entrants" PageSize="50">
-                <GridColumns>
-                    <GridColumn Width="400px" Filterable="true" Title="Entrant Name">
-                        <Template Context="data">
+            <MudDataGrid T="object" Items="@Data.Entrants" Sortable="true" Pageable="true" PageSize="50">
+                <Columns>
+                    <TemplateColumn Width="400px" Filterable="true" Title="Entrant Name">
+<CellTemplate Context="data">
                             @(data as string)
-                        </Template>
-                    </GridColumn>
-                </GridColumns>
-            </TelerikGrid>
+                        </CellTemplate>
+                    </PropertyColumn>
+                </Columns>
+            </MudDataGrid>
         </div>
-    </TabStripTab>
+    </MudTabPanel>
 
-    <TabStripTab Title="Settings">
+    <MudTabPanel Text="Settings">
         <div class="form-group">
             <label for="uiEntryBehavior"><b>Entry Behavior:</b></label>
             <small id="uiEntryBehavior" class="form-text text-white-50">
                 How would you like viewers to enter your giveaway? You can use chat with subscriber luck benefits, or you can have a ticket-based system by using Channel Points. If you use Channel Points, the rewards will be created and destroyed for you as you open and close the giveaway so users cannot accidentally enter without a running giveaway.
             </small>
-            <RadzenRadioButtonList @bind-Value="mEntryBehaviorSelection" TValue="int" Change="@(args => OnEntryBehaviorSelectionChange(args))">
-                <Items>
-                    <RadzenRadioButtonListItem Text="Command" Value="0" />
-                    <RadzenRadioButtonListItem Text="Channel Points" Value="1" />
-                </Items>
-            </RadzenRadioButtonList>
+            <MudRadioGroup @bind-Value="mEntryBehaviorSelection" T="int">
+<MudRadio Option="@(0)">Command</MudRadio>
+                    <MudRadio Option="@(1)">Channel Points</MudRadio>
+</MudRadioGroup>
         </div>
         @if (Data.EntryBehavior == GiveawayData.GiveawayEntryBehaviorType.Command)
         {
             <div class="form-group">
                 <label for="uiCommand"><b>Command:</b></label>
                 <small id="uiCommandLabel" class="form-text text-white-50">The command that viewers type in chat to enter your giveaway. (Note: Does not have to have ! in front of it.)</small>
-                <TelerikTextBox Id="uiCommand" @bind-Value="Data.Command" />
+                <MudTextField T="string" Id="uiCommand" @bind-Value="Data.Command" />
             </div>
             <div class="form-group">
                 <label for="uiSubLuckMultiplier"><b>Sub Luck Multiplier:</b></label>
                 <small id="uiSubLuckMultiplierLabel" class="form-text text-white-50">The additional number of tickets that a subscriber gets when entering your giveaways (<i>e.g. 2 = 2 tickets vs the 1 ticket regulars get</i>).</small>
-                <TelerikNumericTextBox Id="uiSubLuckMultiplier" Min="1" Max="1000" @bind-Value="Data.SubLuckMultiplier" />
+                <MudNumericField T="int" Id="uiSubLuckMultiplier" Min="1" Max="1000" @bind-Value="Data.SubLuckMultiplier" />
             </div>
             <div class="form-group">
                 <label for="uiAccess"><b>Access Type:</b></label>
                 <small id="uiAccess" class="form-text text-white-50">
                     You can limit what kind of viewer has access to use this giveaway. Your options are below.
                 </small>
-                <RadzenRadioButtonList @bind-Value="mAccessSelection" TValue="int" Change="@(args => OnAccessLevelChange(args))">
-                    <Items>
-                        <RadzenRadioButtonListItem Text="Anyone" Value="0" />
-                        <RadzenRadioButtonListItem Text="Subscriber" Value="2" />
-                        <RadzenRadioButtonListItem Text="VIP" Value="3" />
-                        <RadzenRadioButtonListItem Text="Moderator" Value="4" />
-                    </Items>
-                </RadzenRadioButtonList>
+                <MudRadioGroup @bind-Value="mAccessSelection" T="int">
+<MudRadio Option="@(0)">Anyone</MudRadio>
+                        <MudRadio Option="@(2)">Subscriber</MudRadio>
+                        <MudRadio Option="@(3)">VIP</MudRadio>
+                        <MudRadio Option="@(4)">Moderator</MudRadio>
+</MudRadioGroup>
             </div>
         }
         else if (Data.EntryBehavior == GiveawayData.GiveawayEntryBehaviorType.ChannelPoints)
@@ -129,33 +123,33 @@
             <div class="form-group">
                 <label for="uiChannelPointRewardTitle"><b>Reward Title:</b></label>
                 <small id="uiChannelPointRewardTitleLabel" class="form-text text-white-50">The title of the channel point reward.</small>
-                <TelerikTextBox Id="uiChannelPointRewardTitle" @bind-Value="Data.ChannelPointRewardTitle" />
+                <MudTextField T="string" Id="uiChannelPointRewardTitle" @bind-Value="Data.ChannelPointRewardTitle" />
             </div>
             <div class="form-group">
                 <label for="uiChannelPoints"><b>Points Required:</b></label>
                 <small id="uiChannelPointsLabel" class="form-text text-white-50">The number of points required for the channel point reward redemption. Will be created automatically for you when you start the giveaway. Cannot be the same number of points as another channel point reward.</small>
-                <TelerikNumericTextBox Id="uiChannelPoints" Min="1" Max="999999" @bind-Value="Data.ChannelPointsRequired" />
+                <MudNumericField T="int" Id="uiChannelPoints" Min="1" Max="999999" @bind-Value="Data.ChannelPointsRequired" />
             </div>
             <div class="form-group">
                 <label for="uiMaxNumberOfEntriesAllowed"><b>Number of Redemptions Allowed for Entry:</b></label>
                 <small id="uiMaxNumberOfEntriesAllowedLabel" class="form-text text-white-50">You can allow your viewers to redeem multiple times for multiple entries. Think of this as a "ticket" system for channel points.</small>
-                <TelerikNumericTextBox Id="uiMaxNumberOfEntriesAllowed" Min="1" Max="1000" @bind-Value="Data.MaxNumberOfEntriesAllowed" />
+                <MudNumericField T="int" Id="uiMaxNumberOfEntriesAllowed" Min="1" Max="1000" @bind-Value="Data.MaxNumberOfEntriesAllowed" />
             </div>
         }
         <div class="form-group">
             <label for="uiGiveawayOpenAnnouncementText"><b>Giveaway Open Announcement Text:</b></label>
             <small id="uiGiveawayOpenAnnouncementTextLabel" class="form-text text-white-50">The text sent to chat when the giveaway is opened. Use $command if you want the command to be displayed in the output.</small>
-            <TelerikTextBox Id="uiGiveawayOpenAnnouncementText" Width="600px" @bind-Value="Data.GiveawayOpenAnnouncementText" />
+            <MudTextField T="string" Id="uiGiveawayOpenAnnouncementText" @bind-Value="Data.GiveawayOpenAnnouncementText" />
         </div>
         <div class="form-group">
             <label for="uiGiveawayClosedAnnouncementText"><b>Giveaway Closed Announcement Text:</b></label>
             <small id="uiGiveawayClosedAnnouncementTextLabel" class="form-text text-white-50">The text sent to chat when the giveaway is closed.</small>
-            <TelerikTextBox Id="uiGiveawayClosedAnnouncementText" Width="600px" @bind-Value="Data.GiveawayClosedAnnouncementText" />
+            <MudTextField T="string" Id="uiGiveawayClosedAnnouncementText" @bind-Value="Data.GiveawayClosedAnnouncementText" />
         </div>
         <div class="form-group">
             <label for="uiWinnerAnnouncementText"><b>Winner Announcement Text:</b></label>
             <small id="uiWinnerAnnouncementTextLabel" class="form-text text-white-50">The text sent to chat when the winner is selected. Use $user if you would like the winner's name to appear in the announcement.</small>
-            <TelerikTextBox Id="uiWinnerAnnouncementText" Width="600px" @bind-Value="Data.WinnerAnnouncementText" />
+            <MudTextField T="string" Id="uiWinnerAnnouncementText" @bind-Value="Data.WinnerAnnouncementText" />
         </div>
         <div class="form-group">
             <label for="uiDrumrollAnimation"><b>Drumroll Animation:</b></label>
@@ -173,28 +167,28 @@
                 <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e" @onclick="@OnSaveChanges">Save Changes</button>
             </div>
         </div>
-    </TabStripTab>
+    </MudTabPanel>
 
-    <TabStripTab Title="Banned Users">
+    <MudTabPanel Text="Banned Users">
         <div class="container-fluid p-2">
-            <TelerikGrid Sortable="true" FilterMode="Telerik.Blazor.GridFilterMode.FilterRow" Pageable="true" Data="@Data.BannedUsers" PageSize="20">
-                <GridToolBarTemplate>
-                    <GridSearchBox />
-                    <GridCommandButton Command="AddCommand" OnClick="@HandleAddBannedUserRequest" Icon="@SvgIcon.Plus">Add New Banned User</GridCommandButton>
-                </GridToolBarTemplate>
-                <GridColumns>
-                    <GridColumn Width="400px" Title="Name">
-                        <Template Context="data">
+            <MudDataGrid T="object" Items="@Data.BannedUsers" Sortable="true" Pageable="true" PageSize="20">
+                <ToolBarContent>
+                    <MudTextField T="string" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
+                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleAddBannedUserRequest">Add New Banned User</MudButton>
+                </ToolBarContent>
+                <Columns>
+                    <TemplateColumn Width="400px" Title="Name">
+<CellTemplate Context="data">
                             @(data as string)
-                        </Template>
-                    </GridColumn>
-                    <GridColumn Width="75px">
-                        <Template Context="data">
+                        </CellTemplate>
+                    </PropertyColumn>
+                    <TemplateColumn Width="75px">
+<CellTemplate Context="data">
                             <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleDeleteBannedUserRequest((data as string)))"><span class="oi oi-trash"></span></button>
-                        </Template>
-                    </GridColumn>
-                </GridColumns>
-            </TelerikGrid>
+                        </CellTemplate>
+                    </PropertyColumn>
+                </Columns>
+            </MudDataGrid>
         </div>
-    </TabStripTab>
-</TelerikTabStrip>
+    </MudTabPanel>
+</MudTabs>

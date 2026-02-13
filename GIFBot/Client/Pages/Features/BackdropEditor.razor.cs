@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.JSInterop;
 using Newtonsoft.Json;
-using Radzen;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -78,7 +77,7 @@ namespace GIFBot.Client.Pages.Features
       {
          await mHubConnection.InvokeAsync("UpdateBackdropData", JsonConvert.SerializeObject(Data));
          await GetBackdropDataFromHub();
-         NotificationService.Notify(NotificationSeverity.Success, "Save Successful", "The backdrop data has been saved.", 5000);
+         Snackbar.Add("Save Successful - The backdrop data has been saved.", Severity.Success);
          await InvokeAsync(() => { StateHasChanged(); });
       }
 
@@ -94,7 +93,7 @@ namespace GIFBot.Client.Pages.Features
          Guid result = await mHubConnection.InvokeAsync<Guid>("AddBackdrop", mTempData.Name);
          if (result != Guid.Empty)
          {
-            NotificationService.Notify(NotificationSeverity.Success, "Success", "The backdrop has been added.", 5000);
+            Snackbar.Add("Success - The backdrop has been added.", Severity.Success);
             mIsAddDialogVisible = false;
 
             await GetBackdropDataFromHub();
@@ -110,7 +109,7 @@ namespace GIFBot.Client.Pages.Features
          }
          else
          {
-            NotificationService.Notify(NotificationSeverity.Error, "Error", $"The backdrop could not be added. Either there was no text or the name is in use by another backdrop.", 5000);
+            Snackbar.Add($"Error - The backdrop could not be added. Either there was no text or the name is in use by another backdrop.", Severity.Error);
             await InvokeAsync(() => { StateHasChanged(); });
          }
       }
@@ -143,14 +142,14 @@ namespace GIFBot.Client.Pages.Features
          bool result = await mHubConnection.InvokeAsync<bool>("UpdateBackdrop", JsonConvert.SerializeObject(mTempData));
          if (result)
          {
-            NotificationService.Notify(NotificationSeverity.Success, "Success", "The backdrop has been updated.", 5000);
+            Snackbar.Add("Success - The backdrop has been updated.", Severity.Success);
             mIsEditDialogVisible = false;
             await GetBackdropDataFromHub();
             await InvokeAsync(() => { StateHasChanged(); });
          }
          else
          {
-            NotificationService.Notify(NotificationSeverity.Error, "Error", $"The backdrop could not be updated.", 5000);
+            Snackbar.Add($"Error - The backdrop could not be updated.", Severity.Error);
             await InvokeAsync(() => { StateHasChanged(); });
          }
       }
@@ -163,12 +162,12 @@ namespace GIFBot.Client.Pages.Features
             if (result)
             {
                await GetBackdropDataFromHub();
-               NotificationService.Notify(NotificationSeverity.Success, "Delete Successful", "The backdrop has been deleted.", 5000);
+               Snackbar.Add("Delete Successful - The backdrop has been deleted.", Severity.Success);
                await InvokeAsync(() => { StateHasChanged(); });
             }
             else
             {
-               NotificationService.Notify(NotificationSeverity.Error, "Delete Failed", "The backdrop was not deleted.", 5000);
+               Snackbar.Add("Delete Failed - The backdrop was not deleted.", Severity.Error);
                await InvokeAsync(() => { StateHasChanged(); });
             }
          }
@@ -194,7 +193,7 @@ namespace GIFBot.Client.Pages.Features
       private async Task HandleCopyUrl(string elementName)
       {
          await JSRuntime.InvokeVoidAsync("CopyToClipboard", elementName);
-         NotificationService.Notify(NotificationSeverity.Success, "Success", "The URL was copied to your clipboard!", 5000);
+         Snackbar.Add("Success - The URL was copied to your clipboard!", Severity.Success);
          await InvokeAsync(() => { StateHasChanged(); });
       }
 
@@ -202,8 +201,7 @@ namespace GIFBot.Client.Pages.Features
 
       #region Upload Visual
 
-
-      private void OnImportVisualFileProgress(UploadProgressArgs e)
+      private void OnImportVisualFileProgress(EventArgs e)
       {
          mUploadVisualProgress = e.Progress;
          StateHasChanged();
@@ -218,7 +216,7 @@ namespace GIFBot.Client.Pages.Features
          StateHasChanged();
       }
 
-      private void OnImportVisualFileError(Radzen.UploadErrorEventArgs e)
+      private void OnImportVisualFileError(EventArgs e)
       {
          mUploadVisualErrorMessage = $"There was an error uploading the file.";
          StateHasChanged();

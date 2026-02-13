@@ -1,12 +1,14 @@
 ﻿@using GIFBot.Shared.Models.Animation
-@using Telerik.Blazor.Components
 
-<TelerikDropDownList Data="@Animations"
-                     TextField="DisplayName"
-                     ValueField="Id"
-                     Filterable="true"
-                     FilterOperator="Telerik.Blazor.StringFilterOperator.Contains"
-                     @bind-Value="SelectedAnimation" />
+<MudSelect T="Guid" @bind-Value="SelectedAnimation" AnchorOrigin="Origin.BottomCenter">
+    @if (Animations != null)
+    {
+        @foreach (var item in Animations)
+        {
+            <MudSelectItem T="Guid" Value="@item.Id">@item.Title</MudSelectItem>
+        }
+    }
+</MudSelect>
 
 @code
 {

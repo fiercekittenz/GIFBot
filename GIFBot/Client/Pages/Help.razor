@@ -7,12 +7,9 @@
 
 <div class="container-fluid p-2 mb-2 rounded" style="background-color: #211126">
    <div class="container-fluid text-left" style="width: 100%">
-      <RadzenFieldset AllowCollapse="true" Collapsed="false" Style="width: 100%; margin-bottom: 20px">
-         <HeaderTemplate>
-            <RadzenLabel Text="Helpful Videos" Style="color: #FFFFFF; font-weight: bold" />
-         </HeaderTemplate>
-         <ChildContent>
-            <div class="container-fluid mb-4">
+      <MudExpansionPanel IsInitiallyExpanded="true">
+<MudText>Helpful Videos</MudText>
+<div class="container-fluid mb-4">
                <div class="row">
                   <div class="col">
                      <label><b>I have no idea what I'm doing.</b></label>
@@ -24,15 +21,11 @@
                   </div>
                </div>
             </div>
-         </ChildContent>
-      </RadzenFieldset>
+</MudExpansionPanel>
 
-      <RadzenFieldset AllowCollapse="true" Collapsed="false" Style="width: 100%; margin-bottom: 20px">
-         <HeaderTemplate>
-            <RadzenLabel Text="Basic Troubleshooting" Style="color: #FFFFFF; font-weight: bold" />
-         </HeaderTemplate>
-         <ChildContent>
-            <div class="container-fluid mb-4">
+      <MudExpansionPanel IsInitiallyExpanded="true">
+<MudText>Basic Troubleshooting</MudText>
+<div class="container-fluid mb-4">
                <div class="row">
                   <div class="col">
                      <label><b>Everything is running, but my broadcaster software isn't playing the animations.</b></label>
@@ -70,7 +63,6 @@
                   </div>
                </div>
             </div>
-         </ChildContent>
-      </RadzenFieldset>
+</MudExpansionPanel>
    </div>
 </div>

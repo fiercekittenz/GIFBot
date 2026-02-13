@@ -6,8 +6,8 @@
 </div>
 
 <div class="container-fluid p-2 mb-2 rounded" style="background-color: #211126">
-   <TelerikTabStrip>
-      <TabStripTab Title="General">
+   <MudTabs ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
+      <MudTabPanel Text="General">
          <div class="container text-white-50 mb-4" style="width: 700px">
             GIFBot-R is the next evolution of GIFBot. The application originally started out as a really crappy Java app. Then I wrote it in C# with WinForms. Then it just
             kept piling on highly customized features for specific streamers, becoming very difficult to distribute and maintain. As such, this is the new evolution.
@@ -21,19 +21,19 @@
          <div class="container text-white-50 mb-4" style="width: 700px">
             GIFBot-R is developed and maintained solely by twitch.tv/fiercekittenz. She does this for free in her spare time while raising a family and working a full-time job.
          </div>
-      </TabStripTab>
-      <TabStripTab Title="Version History">
+      </MudTabPanel>
+      <MudTabPanel Text="Version History">
 
-         <RadzenFieldset Text="Version 1.0f" Collapsed="false">
+         <MudExpansionPanel Text="Version 1.0f" IsInitiallyExpanded="true">
             <div class="container text-white-50 mb-4" style="width: 700px">
                <ul>
                   <li>Removed Twitch obsolete features (hosting, /ban and /timeout - Sorry, Snapper had to go because of this!)</li>
                   <li>Updated GIFBot to the latest TwitchLib API</li>
                </ul>
             </div>
-         </RadzenFieldset>
+         </MudExpansionPanel>
 
-         <RadzenFieldset Text="Version 1.0e" Collapsed="false">
+         <MudExpansionPanel Text="Version 1.0e" IsInitiallyExpanded="true">
             <div class="container text-white-50 mb-4" style="width: 700px">
                <ul>
                   <li>Feature: Greeter - Create groups of viewers that you want to have an animation play when they say hello in chat!</li>
@@ -45,9 +45,9 @@
                   <li>Various UX improvements, most notably prompting before deleting all the things.</li>
                </ul>
             </div>
-         </RadzenFieldset>
+         </MudExpansionPanel>
 
-         <RadzenFieldset Text="Version 1.0d" Collapsed="false">
+         <MudExpansionPanel Text="Version 1.0d" IsInitiallyExpanded="true">
             <div class="container text-white-50 mb-4" style="width: 700px">
                <ul>
                   <li>Feature: Countdown Timer - Have your community contribute bits, tips, charitable donations and more to add or remove time!</li>
@@ -56,9 +56,9 @@
                   <li>Temporary removal of the Hype Train alert feature. Twitch disabled API access and unfortunately, we can no longer use it.</li>
                </ul>
             </div>
-         </RadzenFieldset>
+         </MudExpansionPanel>
 
-         <RadzenFieldset Text="Version 1.0c" Collapsed="false">
+         <MudExpansionPanel Text="Version 1.0c" IsInitiallyExpanded="true">
             <div class="container text-white-50 mb-4" style="width: 700px">
                <ul>
                   <li>Feature: Animations Editor Redesign!</li>
@@ -78,17 +78,17 @@
                   <li>Fixed a bug where global cooldown was being ignored.</li>
                </ul>
             </div>
-         </RadzenFieldset>
+         </MudExpansionPanel>
 
-         <RadzenFieldset Text="Version 1.0b-1" Collapsed="false">
+         <MudExpansionPanel Text="Version 1.0b-1" IsInitiallyExpanded="true">
             <div class="container text-white-50 mb-4" style="width: 700px">
                <ul>
                   <li>Fixed a bug with the new kpop tags breaking cheering from chat.</li>
                </ul>
             </div>
-         </RadzenFieldset>
+         </MudExpansionPanel>
 
-         <RadzenFieldset Text="Version 1.0b" Collapsed="false">
+         <MudExpansionPanel Text="Version 1.0b" IsInitiallyExpanded="true">
             <div class="container text-white-50 mb-4" style="width: 700px">
                <ul>
                   <li>Feature: Stickers!</li>
@@ -105,15 +105,15 @@
                   <li>Fixed a bug where mod-only animations were being triggered by !animationroulette.</li>
                </ul>
             </div>
-         </RadzenFieldset>
+         </MudExpansionPanel>
 
-         <RadzenFieldset Text="Version 1.0a" Collapsed="false">
+         <MudExpansionPanel Text="Version 1.0a" IsInitiallyExpanded="true">
             <div class="container text-white-50 mb-4" style="width: 700px">
                <ul>
                   <li>Initial Release!</li>
                </ul>
             </div>
-         </RadzenFieldset>
-      </TabStripTab>
-   </TelerikTabStrip>
+         </MudExpansionPanel>
+      </MudTabPanel>
+   </MudTabs>
 </div>

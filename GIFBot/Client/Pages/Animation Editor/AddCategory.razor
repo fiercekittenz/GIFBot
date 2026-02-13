@@ -3,7 +3,7 @@
 @using Microsoft.AspNetCore.SignalR.Client
 @using GIFBot.Client.Pages.Setup.Models
 @inject NavigationManager NavigationManager
-@inject NotificationService NotificationService
+@inject ISnackbar Snackbar
 @implements IAsyncDisposable
 
 <div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
@@ -17,7 +17,7 @@
             <div class="form-group">
                <label for="uiValue"><b>Category Name:</b></label>
                <small id="uiValue" class="form-text text-white-50">Pretty self-explanatory, right?</small>
-               <RadzenTextBox id="uiValue" class="form-control" Style="color: #232323" @bind-Value="Model.Name" />
+               <MudTextField T="string" id="uiValue" class="form-control" Style="color: #232323" @bind-Value="Model.Name" />
             </div>
             <div class="row">
                <div class="container-fluid text-right p-3">
@@ -71,13 +71,13 @@
          }
          else
          {
-            NotificationService.Notify(NotificationSeverity.Error, "Error", "That category already exists!", 5000);
+            Snackbar.Add("Error - That category already exists!", Severity.Error);
             await InvokeAsync(() => { StateHasChanged(); });
          }
       }
       else
       {
-         NotificationService.Notify(NotificationSeverity.Error, "Error", "The category has no name!", 5000);
+         Snackbar.Add("Error - The category has no name!", Severity.Error);
          await InvokeAsync(() => { StateHasChanged(); });
       }
    }
