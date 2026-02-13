@@ -1,0 +1,182 @@
+@page "/greetereditor/"
+@using Microsoft.AspNetCore.SignalR.Client
+@using global::GIFBot.Shared.Models.Features
+@using global::GIFBot.Shared.Models.Visualization
+@using global::GIFBot.Server.Components.UI
+@using Newtonsoft.Json
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
+@inject IJSRuntime JSRuntime
+@inject HttpClient Http
+
+<div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+    <h1><span class="oi oi-thumb-up" aria-hidden="true"></span> Greeter</h1>
+</div>
+
+<!-- Add New Entry Window -->
+<MudDialog @bind-IsVisible="@mIsAddDialogVisible">
+    <TitleContent>
+        <strong>Add New Greeter Entry</strong>
+    </TitleContent>
+    <DialogContent>
+        <div class="form-group">
+            <font class="text-white">What is the name of this greeter? This is a name only for your reference to describe the greeter.</font>
+        </div>
+        <div class="form-group">
+            <label for="uiName"><b>Name:</b></label>
+            <MudTextField T="string" Id="uiName" @bind-Value="mTempGreeterEntry.Name" />
+        </div>
+        <div class="container-fluid p-2">
+            <p>
+                <center>
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelAddCommand">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmAddCommand">
+                        Add!
+                    </button>
+                </center>
+            </p>
+        </div>
+    </DialogContent>
+</MudDialog>
+
+<!-- Edit Entry Window -->
+<MudDialog @bind-IsVisible="@mIsEditDialogVisible">
+    <TitleContent>
+        <strong>Edit Greeter: @mTempGreeterEntry.Name</strong>
+    </TitleContent>
+    <DialogContent>
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                <MudCheckBox T="bool" Id="uiTempEntryEnabled" @bind-Value="mTempGreeterEntry.Enabled" /> Enabled
+                <small id="uiTempEntryEnabled" class="form-text text-muted">When enabled, this greeter active.</small>
+            </label>
+        </div>
+        <div class="form-group">
+            <label for="uiTempName"><b>Name:</b></label>
+            <small id="uiTempNameLabel" class="form-text text-white-50">The name to identify this greeter</small>
+            <MudTextField T="string" Id="uiTempName" @bind-Value="mTempGreeterEntry.Name" />
+        </div>
+        <div class="form-group">
+            <label for="uiTempAnimation"><b>Animation:</b></label>
+            <small id="uiTempAnimationLabel" class="form-text text-white-50">Play an animation when a viewer in this greeter's recipient list speaks in chat. You may want to make sure this animation is BOT ONLY so it can't be triggered by anything but this greeter.</small>
+            <AnimationSelectorComponent Animations="@AnimationOptions" SelectedAnimation="mTempGreeterEntry.AnimationId" OnSelectedAnimationChanged="@HandleAnimationSelectionChanged" />
+        </div>
+        <div class="form-group">
+            <label for="uiTempChatMessage"><b>Phrase Sent to Chat:</b></label>
+            <small id="uiTempChatMessageLabel" class="form-text text-white-50">The bot will send this to chat in addition to any animation. Use $user to display who was greeted! (e.g. "!so $user")</small>
+            <MudTextField T="string" Id="uiTempChatMessage" @bind-Value="mTempGreeterEntry.ChatMessage" />
+        </div>
+        <div class="form-group">
+            <MudList T="string">
+                @* TODO: Greeter recipients list - needs MudBlazor-compatible implementation *@
+            </MudList>
+        </div>
+
+         <div class="form-group">
+            <label for="uiImport">Bulk Import Recipients from Text File:</label>
+            <small id="uiImport" class="form-text text-muted">
+               You can import directly from a text file. Each entry should be on its own line in the text file.
+            </small>
+            @* TODO: Wire up file upload handler *@
+<InputFile accept="text/*" style="width: 100%; background-color: #1e1e1e" />
+            <MudProgressLinear Value="@mUploadProgress" Visible="@(mUploadProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
+            @if (!String.IsNullOrEmpty(mUploadErrorMessage))
+            {
+               <label class="text-danger">@mUploadErrorMessage</label>
+            }
+         </div>
+
+        <div class="container-fluid p-2">
+            <p>
+                <center>
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelEditCommand">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmEditCommand">
+                        Save!
+                    </button>
+                </center>
+            </p>
+        </div>
+    </DialogContent>
+</MudDialog>
+
+<MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
+    <MudTabPanel Text="Greeters">
+        <div class="container-fluid p-2">
+            <MudDataGrid T="GreeterEntry" Items="@Data.Entries" Sortable="true" Pageable="true" PageSize="10">
+               <ToolBarContent>
+                  <MudTextField T="string" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
+                  <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleAddRequest">Add New Greeter</MudButton>
+               </ToolBarContent>
+                <Columns>
+                    <PropertyColumn T="GreeterEntry" TProperty="string" Property="@(x => x.Name)" Title="Greeter Name" Width="200px" />
+                    <TemplateColumn Width="400px" Title="Recipients">
+<CellTemplate Context="data">
+                            @((data.Item).GetRecipientsDisplayList())
+                        </CellTemplate>
+                    </TemplateColumn>
+                    <TemplateColumn Width="75px">
+<CellTemplate Context="data">
+                            <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleEditRequest((data.Item)))"><span class="oi oi-pencil"></span></button>
+                            <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleDeleteRequest((data.Item)))"><span class="oi oi-trash"></span></button>
+                        </CellTemplate>
+                    </TemplateColumn>
+                </Columns>
+            </MudDataGrid>
+        </div>
+    </MudTabPanel>
+</MudTabs>
+
+<style>
+    .k-listview-header {
+        padding: 10px 20px;
+    }
+
+    .k-card {
+        padding: 10px 20px;
+        border-width: 0 0 1px 0;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .k-card-body {
+        padding: 0;
+    }
+
+    .k-card:last-child {
+        border-bottom: 0;
+    }
+
+    .k-card .k-card-title {
+        padding: 0;
+        font-size: 1.2em;
+        font-weight: bold;
+        line-height: normal;
+    }
+
+    .k-card-subtitle {
+        font-size: 1em;
+        margin-bottom: 0;
+    }
+
+    .product-name {
+        width: 50%;
+        min-width: 200px;
+        padding: 5px 0;
+    }
+
+    .product-price {
+        width: 50%;
+        min-width: 200px;
+        padding: 5px 0;
+    }
+
+    .editor-label {
+        margin: 0;
+        font-size: .875em;
+        display: block;
+    }
+</style>

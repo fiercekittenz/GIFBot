@@ -1,0 +1,16 @@
+﻿@inherits LayoutComponentBase
+
+<MudThemeProvider />
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+   <div class="sidebar">
+      <NavMenu />
+   </div>
+
+   <div class="main text-light" style="background-color:#101010">
+      <div class="content px-4">
+         
+         @Body
+      </div>
+   </div>

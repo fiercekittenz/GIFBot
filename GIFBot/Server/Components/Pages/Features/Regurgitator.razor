@@ -1,0 +1,255 @@
+@page "/regurgitator/"
+@using Microsoft.AspNetCore.SignalR.Client
+@using global::GIFBot.Shared
+@using global::GIFBot.Shared.Models.Animation
+@using global::GIFBot.Shared.Models.Visualization
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Http.Connections
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
+@inject IJSRuntime JSRuntime
+@inject HttpClient Http
+@implements IAsyncDisposable
+
+<div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+    <h1><span class="oi oi-trash" aria-hidden="true"></span> Regurgitator</h1>
+</div>
+
+<nav class="navbar navbar-expand-sm" style="background-color:#1f0c24">
+   <ul class="navbar-nav">
+      <li class="nav-item">
+         <span class="navbar-text mr-3">
+            <b>Package:</b>
+         </span>
+         <MudSelect T="Guid" Placeholder="Select Package to Edit..." @bind-Value="@CurrentPackage">
+             @if (AvailablePackages != null)
+             {
+                 @foreach (var pkg in AvailablePackages)
+                 {
+                     <MudSelectItem T="Guid" Value="@pkg.Id">@pkg.Name</MudSelectItem>
+                 }
+             }
+         </MudSelect>
+         <button class="btn btn-secondary nav-item p-1 ml-2 mr-1" style="width:100px; background-color: #5c4872" @onclick="@AddNewPackage">Add</button>
+         <button class="btn btn-secondary nav-item p-1 mr-1" style="width:100px; background-color: #5c4872" @onclick="@DeletePackage">Delete</button>
+      </li>
+   </ul>
+</nav>
+
+@if (CurrentPackage != Guid.Empty)
+{
+    <EditForm Model="@mRegurgitatorSettings" OnSubmit="@OnSaveChanges">
+        <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
+            <MudTabPanel Text="Settings">
+                <div class="container-fluid" style="width: 100%">
+                    <div class="container-fluid text-left p-3 rounded" style="width: 100%; background-color:#1e1e1e">
+                        <p>
+                            The <b>Regurgitator</b> is a feature of GIFBot where you can have a command
+                            or timed event to regurgitate a random entry (fact, pun, dad joke, etc.) to chat. To use, simply enable and
+                            provide a text file of sentences, separated by a line feed (return/enter).
+                        </p>
+                        <div class="container text-left p-3 rounded" style="background-color: #1d161f">
+
+                            <div class="form-group form-check">
+                                <label class="form-check-label">
+                                    <MudCheckBox T="bool" Id="uiEnabled" @bind-Value="mRegurgitatorSettings.Enabled" /> Package Enabled
+                                    <small id="uiEnabled" class="form-text text-muted">When enabled, the bot will allow this package's command to regurgitate to chat. Sounds nasty, right? Thanks dewritten.</small>
+                                </label>
+                            </div>
+
+                            <div class="form-group form-check">
+                                <label class="form-check-label">
+                                    <MudCheckBox T="bool" Id="uiPlayOnTimer" @bind-Value="mRegurgitatorSettings.PlayOnTimer" /> Play on Timer
+                                    <small id="uiPlayOnTimer" class="form-text text-muted">When enabled, the package will periodically send one of its entries to chat. The chat command is disabled when this is on.</small>
+                                </label>
+                            </div>
+
+                            @if (!mRegurgitatorSettings.PlayOnTimer)
+                            {
+                                <div class="form-group">
+                                    <label for="uiCommand">Command:</label>
+                                    <small id="uiCommand" class="form-text text-muted">This is the command viewers can use in chat to regurgitate a random entry from this package.</small>
+                                    <DataAnnotationsValidator />
+                                    <ValidationSummary />
+                                    <MudTextField T="string" Id="uiCommand" @bind-Value="mRegurgitatorSettings.Command" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="uiMinutesBetweenChatRequests">Cooldown for Chat Command (in minutes):</label>
+                                    <small id="uiMinutesBetweenChatRequests" class="form-text text-muted">The number of minutes that must pass before this chat command can be used again.</small>
+                                    <DataAnnotationsValidator />
+                                    <ValidationSummary />
+                                    <MudNumericField T="int" Id="uiMinutesBetweenChatRequests" Min="0" Max="120" @bind-Value="mRegurgitatorSettings.MinutesBetweenChatRequests" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="uiAccess"><b>Access Type:</b></label>
+                                    <small id="uiAccess" class="form-text text-white-50">
+                                        You can limit what kind of viewer has access to use this feature when used from chat commands. Your options are below. If you want
+                                        the regurgitator to be used by any feature other than chat, you should set it as "Bot Only".
+                                    </small>
+                                    <MudRadioGroup @bind-Value="mAccessSelection" T="int">
+<MudRadio T="int" Option="@(0)">Anyone</MudRadio>
+                                            <MudRadio T="int" Option="@(2)">Subscriber</MudRadio>
+                                            <MudRadio T="int" Option="@(3)">VIP</MudRadio>
+                                            <MudRadio T="int" Option="@(4)">Moderator</MudRadio>
+                                            <MudRadio T="int" Option="@(5)">User Group</MudRadio>
+                                            <MudRadio T="int" Option="@(6)">Specific Viewer</MudRadio>
+                                            <MudRadio T="int" Option="@(7)">Bot Only</MudRadio>
+</MudRadioGroup>
+                                </div>
+
+                                @if (mRegurgitatorSettings.Access == AnimationEnums.AccessType.UserGroup)
+                                {
+                                    <div class="form-group">
+                                        <label for="uiUserGroup"><b>User Group:</b></label>
+                                        <small id="uiUserGroup" class="form-text text-white-50">Access is restricted to a user group. Which one?</small>
+
+                                        <MudSelect T="string" Placeholder="Select User Group..." Style="background-color: #2c2241; color: #e5e5e5; font-weight: bold; width: 250px;"
+                                            Data="@mUserGroupNames" Value="@mSelectedUserGroupName" ValueChanged="@(args => HandleUserGroupSelected(args as string))" />
+                                    </div>
+                                }
+                                else if (mRegurgitatorSettings.Access == AnimationEnums.AccessType.SpecificViewer)
+                                {
+                                    <div class="form-group">
+                                        <label for="uiRestrictedToUser"><b>Specific Viewer:</b></label>
+                                        <small id="uiRestrictedToUser" class="form-text text-white-50">Access is restricted to a specific viewer. Which one?</small>
+                                        <MudTextField T="string" Id="uiRestrictedToUser" @bind-Value="@mRegurgitatorSettings.RestrictedToUser" />
+                                    </div>
+                                    <div class="mt-2">
+                                        <MudCheckBox T="bool" Id="uiRestrictedUserMustBeSub" @bind-Value="mRegurgitatorSettings.RestrictedUserMustBeSub" />
+                                        <label for="uiRestrictedUserMustBeSub">Viewer must be subscribed</label>
+                                    </div>
+                                }
+
+                                <MudExpansionPanel Text="Text-to-Speech (TTS)" IsInitiallyExpanded="true">
+                                    <div class="form-group form-check">
+                                        <label class="form-check-label">
+                                            <MudCheckBox T="bool" Id="uiTTSEnabled" @bind-Value="mRegurgitatorSettings.AllowTTSReading" /> Use Text-to-Speech to read selected entries as a sound-only Animation instead of sending to chat.
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="uiVolumeSlider" class="ml-2 mt-2"><b>TTS Volume:</b></label>
+                                        <center><input type="range" class="slider" min="0" max="100" value="@mFormVolume" id="uiVolumeSlider" @onchange="@(args => OnVolumeChanged(args))"></center>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-primary p-1 mr-2 mb-2 text-center" style="background-color: #5c4872; width: 200px" @onclick="@HandleTestTTSVolume">
+                                            Test TTS Volume
+                                        </button>
+                                    </div>
+                                </MudExpansionPanel>
+                            }
+                            else
+                            {
+                                <div class="form-group">
+                                    <label for="uiFrequencyInSeconds">Frequency in Seconds:</label>
+                                    <small id="uiFrequencyInSeconds" class="form-text text-muted">The number of seconds in between entries being sent to chat, when Play On Timer is enabled.</small>
+                                    <DataAnnotationsValidator />
+                                    <ValidationSummary />
+                                    <MudNumericField T="int" Id="uiFrequencyInSeconds" @bind-Value="mRegurgitatorSettings.TimerFrequencyInSeconds" />
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </MudTabPanel>
+
+            <MudTabPanel Text="Trigger Costs">
+                <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+                    <div class="container-fluid p-2">
+                        <MudExpansionPanel Text="Cheer Requirements" IsInitiallyExpanded="true">
+                            <div class="form-group">
+                                <small id="uiRequirementBits" class="form-text text-white-50">Require an exact number of bits to be cheered before the regurgitator will trigger. Leave the value at 0 to disable.</small>
+                                <MudNumericField T="int" Id="uiRequirementBits" Min="0" Max="100000" @bind-Value="mRegurgitatorSettings.BitRequirement" />
+                            </div>
+                        </MudExpansionPanel>
+
+                        <MudExpansionPanel Text="Streamlabs Tip Requirement" IsInitiallyExpanded="true">
+                            <div class="form-group form-check">
+                                <label class="form-check-label">
+                                    <MudCheckBox T="bool" Id="uiStreamlabsTipTrigger" @bind-Value="mRegurgitatorSettings.IsStreamlabsTipTrigger" /> Trigger when tips are made through Streamlabs
+                                </label>
+                            </div>
+                            @if (mRegurgitatorSettings.IsStreamlabsTipTrigger)
+                            {
+                                <div class="form-group">
+                                    <small id="uiTipRequirement" class="form-text text-white-50">Amount of currency to be tipped before the regurgitator will trigger (0 = all tips).</small>
+                                    <MudNumericField T="double" Id="uiTipRequirement" Min="0" Max="100000" @bind-Value="mRegurgitatorSettings.StreamlabsTipRequirement" />
+                                </div>
+                            }
+                        </MudExpansionPanel>
+
+                        <MudExpansionPanel Text="Tiltify via Streamlabs Donation Requirement" IsInitiallyExpanded="true">
+                            <div class="form-group form-check">
+                                <label class="form-check-label">
+                                    <MudCheckBox T="bool" Id="uiStreamlabsTiltifyTrigger" @bind-Value="mRegurgitatorSettings.IsTiltifyTrigger" /> Trigger when charitable donations are made through Tiltify
+                                </label>
+                            </div>
+                            @if (mRegurgitatorSettings.IsTiltifyTrigger)
+                            {
+                                <div class="form-group">
+                                    <small id="uiDonationAmount" class="form-text text-white-50">Amount of currency to be donated before this animation will trigger (0 = all donations).</small>
+                                    <MudNumericField T="double" Id="uiDonationAmount" Min="0" Max="100000" @bind-Value="mRegurgitatorSettings.TiltifyDonationRequirement" />
+                                </div>
+                            }
+                        </MudExpansionPanel>
+                    </div>
+                </div>
+            </MudTabPanel>
+
+            <MudTabPanel Text="Data Entries">
+                <div class="form-group">
+                    <label for="uiEntries">Entries:</label>
+                    <small id="uiEntries" class="form-text text-muted">These are the items that will be randomly regurgitated. You can add or delete entries here.</small>
+
+                    <MudDataGrid T="RegurgitatorEntry" Items="@CurrentEntries" Sortable="true" Pageable="true" PageSize="10">
+                        <Columns>
+                            <PropertyColumn T="RegurgitatorEntry" TProperty="string" Property="@(x => x.Value)" Title="Value" Width="400px" />
+                            <TemplateColumn Width="50px" Title="">
+<CellTemplate Context="data">
+                                    <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => OnDeleteEntry((data.Item)))"><span class="oi oi-trash"></span></button>
+                                </CellTemplate>
+                            </TemplateColumn>
+                        </Columns>
+                    </MudDataGrid>
+
+                    <div class="row container-fluid mt-2">
+                        <table width="100%">
+                            <tr>
+                                <td valign="top" align="left">
+                                    <MudTextField T="string" Id="uiNewEntryText" @bind-Value="@mNewEntryText" />
+                                    <button type="button" class="btn btn-primary p-1" style="background-color: #5c4872; width: 200px" @onclick="@OnAddNewEntry"><span class="oi oi-plus" aria-hidden="true"></span>Add New Entry</button>
+                                </td>
+                                <td></td>
+                                <td valign="top" width="150" align="right">
+                                    <button type="button" class="btn btn-primary p-1" style="background-color: #5c4872; width: 150px" @onclick="@OnClearList">Clear List</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="uiImport">Import from Text File:</label>
+                    <small id="uiImport" class="form-text text-muted">
+                        You can import directly from a text file. Each entry should be on its own line in the text file.
+                    </small>
+                    @* TODO: Wire up file upload handler *@
+<InputFile accept="text/*" style="width: 100%; background-color: #1e1e1e" />
+                    <MudProgressLinear Value="@mUploadProgress" Visible="@(mUploadProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
+                    @if (!String.IsNullOrEmpty(mUploadErrorMessage))
+                    {
+                        <label class="text-danger">@mUploadErrorMessage</label>
+                    }
+                </div>
+            </MudTabPanel>
+        </MudTabs>
+
+        <div class="row">
+            <div class="container-fluid text-right p-3">
+                <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnCancel">Cancel</button>
+                <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e">Save Changes</button>
+            </div>
+        </div>
+    </EditForm>
+}

@@ -1,0 +1,57 @@
+@using global::GIFBot.Shared.Models.Animation
+
+<MudSelect T="Guid" @bind-Value="SelectedAnimation" AnchorOrigin="Origin.BottomCenter">
+    @if (Animations != null)
+    {
+        @foreach (var item in Animations)
+        {
+            <MudSelectItem T="Guid" Value="@item.Id">@item.DisplayName</MudSelectItem>
+        }
+    }
+</MudSelect>
+
+@code
+{
+   #region Properties and Parameters
+
+   [Parameter]
+   public List<AnimationSelectorItem> Animations
+   {
+      get { return mAnimations; }
+      set
+      {
+         if (mAnimations != value)
+         {
+            mAnimations = value;
+            StateHasChanged();
+         }
+      }
+   }
+
+   [Parameter]
+   public Guid SelectedAnimation
+   {
+      get { return mSelectedAnimation; }
+      set
+      {
+         if (mSelectedAnimation != value)
+         {
+            mSelectedAnimation = value;
+            OnSelectedAnimationChanged.InvokeAsync(mSelectedAnimation);
+         }
+      }
+   }
+
+   [Parameter]
+   public EventCallback<Guid> OnSelectedAnimationChanged { get; set; }
+
+   #endregion
+
+   #region Private Members
+
+   private List<AnimationSelectorItem> mAnimations = new List<AnimationSelectorItem>();
+
+   private Guid mSelectedAnimation = Guid.Empty;
+
+   #endregion
+}

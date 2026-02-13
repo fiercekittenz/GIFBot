@@ -1,0 +1,270 @@
+@page "/animationseditor/"
+@page "/animationseditor/{anim}"
+@using Microsoft.AspNetCore.SignalR.Client
+@using global::GIFBot.Shared
+@using Microsoft.AspNetCore.Components
+@using global::GIFBot.Server.Components.UI
+@using global::GIFBot.Shared.Models.Animation
+@using Newtonsoft.Json
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
+@inject IJSRuntime JSRuntime
+@inject HttpClient Http
+
+<div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+    <h1><span class="oi oi-play-circle" aria-hidden="true"></span> Animations</h1>
+</div>
+
+<!-- Delete Category Confirmation Window -->
+<MudDialog @bind-IsVisible="@mIsDeleteCategoryConfirmationVisible">
+    <TitleContent>
+        <strong>Delete Category?</strong>
+    </TitleContent>
+    <DialogContent>
+        <div class="form-group">
+            <font class="text-white">Are you sure you want to delete the [@(mTempCategory?.Title)] category? If you have any animations in it, it will not succeed.</font>
+        </div>
+        <div class="container-fluid p-2">
+            <p>
+                <center>
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelCategoryDeletion">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmCategoryDeletion">
+                        Yes, Delete!
+                    </button>
+                </center>
+            </p>
+        </div>
+    </DialogContent>
+</MudDialog>
+
+<!-- Delete Animation(s) Confirmation Window -->
+<MudDialog @bind-IsVisible="@mIsDeleteConfirmationVisible">
+    <TitleContent>
+        <strong>Delete Animation?</strong>
+    </TitleContent>
+    <DialogContent>
+        <div class="form-group">
+            <font class="text-white">Are you sure you want to delete the selected animation(s)?</font>
+        </div>
+        <div class="container-fluid p-2">
+            <p>
+                <center>
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelDeletion">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmDeletion">
+                        Yes, Delete!
+                    </button>
+                </center>
+            </p>
+        </div>
+    </DialogContent>
+</MudDialog>
+
+<!-- Move Categories Window -->
+<MudDialog @bind-IsVisible="@mIsMoveCategoryDialogVisible">
+    <TitleContent>
+        <strong>Move Animations</strong>
+    </TitleContent>
+    <DialogContent>
+        <div class="form-group">
+            <font class="text-white">Which category would you like to move the selected animation(s) into?</font>
+        </div>
+        <div class="form-group">
+            <label for="uiTitleLabel">Select the new category from the list below:</label>
+            <small id="uiTitleLabel" class="form-text text-muted">Once moved, the animation's data will be immediately saved.</small>
+            <MudSelect T="string" Placeholder="Select Category..." @bind-Value="@mSelectedMoveCategory">
+                @foreach (var cat in mAnimationTreeData.Where(a => a.Tier == AnimationTreeTier.Category))
+                {
+                    <MudSelectItem T="string" Value="@cat.Id.ToString()">@cat.Title</MudSelectItem>
+                }
+            </MudSelect>
+        </div>
+        <div class="container-fluid p-2">
+            <p>
+                <center>
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelMove">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmMove">
+                        Move!
+                    </button>
+                </center>
+            </p>
+        </div>
+    </DialogContent>
+</MudDialog>
+
+<!-- Add New Category Window -->
+<MudDialog @bind-IsVisible="@mIsCreateCategoryDialogVisible">
+    <TitleContent>
+        <strong>Add New Category</strong>
+    </TitleContent>
+    <DialogContent>
+        <div class="form-group">
+            <font class="text-white">What is the name of the animation category you would like to create?</font>
+        </div>
+        <div class="form-group">
+            <label for="uiCategoryName"><b>Name:</b></label>
+            <MudTextField T="string" Id="uiCategoryName" @bind-Value="mTempCategory.Title" />
+        </div>
+        <div class="container-fluid p-2">
+            <p>
+                <center>
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelAddCategory">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmAddCategory">
+                        Add!
+                    </button>
+                </center>
+            </p>
+        </div>
+    </DialogContent>
+</MudDialog>
+
+<!-- Edit Category Window -->
+<MudDialog @bind-IsVisible="@mIsEditCategoryDialogVisible">
+    <TitleContent>
+        <strong>Edit Category</strong>
+    </TitleContent>
+    <DialogContent>
+        <div class="form-group">
+            <font class="text-white">You can rename the category below.</font>
+        </div>
+        <div class="form-group">
+            <label for="uiCategoryName"><b>Name:</b></label>
+            <MudTextField T="string" Id="uiCategoryName" @bind-Value="mTempCategory.Title" />
+        </div>
+        <div class="container-fluid p-2">
+            <p>
+                <center>
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelEditCategory">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmEditCategory">
+                        Update!
+                    </button>
+                </center>
+            </p>
+        </div>
+    </DialogContent>
+</MudDialog>
+
+<!-- Add New Animation to Category Window -->
+<MudDialog @bind-IsVisible="@mIsAddAnimationToCategoryDialogVisible">
+    <TitleContent>
+        <strong>Add New Animation to Category</strong>
+    </TitleContent>
+    <DialogContent>
+        <div class="form-group">
+            <font class="text-white">What is the name of the animation you would like to create? If you want this to be a command, make sure to include "!" in front of it.</font>
+        </div>
+        <div class="form-group">
+            <label for="uiName"><b>Name or Command Value:</b></label>
+            <MudTextField T="string" Id="uiName" @bind-Value="mTempAnimationCommand" />
+        </div>
+        <div class="container-fluid p-2">
+            <p>
+                <center>
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelAddAnimationToCategory">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleConfirmAddAnimationToCategory">
+                        Add!
+                    </button>
+                </center>
+            </p>
+        </div>
+    </DialogContent>
+</MudDialog>
+
+<!-- Main Layout for the Animations Editor -->
+<div class="container-fluid p-3">
+
+    @* MudBlazor: Use MudTooltip wrapping individual elements instead *@
+
+    <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
+        <div class="container-fluid p-2">
+            <div class="form-group">
+                <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
+                    <MudTabPanel Text="Animations">
+                        <MudDataGrid T="AnimationTreeItem" Items="@mAnimationTreeData" Filterable="true" SortMode="SortMode.Single" Groupable="false"
+                                         Pageable="true"
+                                         PageSize="50"
+                                         @ref="@AnimationTreeListRef">
+                            <ToolBarContent>
+                                <MudTextField T="string" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
+                                <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleExpandAllRequest"></MudButton>
+                                <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleCollapseAllRequest"></MudButton>
+                                <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleAddCategoryRequest">Add Category</MudButton>
+                                @if (mSelectedTreeItems.Where(t => t.Tier == AnimationTreeTier.Animation).Any())
+                                {
+                                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleMoveSelectedRequest">Move</MudButton>
+                                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleDeleteSelectedRequest">Delete</MudButton>
+                                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleEnableSelectedRequest">Enable</MudButton>
+                                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleDisableSelectedRequest">Disable</MudButton>
+                                }
+                            </ToolBarContent>
+                            <Columns>
+                                <SelectColumn T="AnimationTreeItem" />
+                                <TemplateColumn Title="Name" Filterable="true" Width="150px">
+<CellTemplate Context="itemcontext">
+                                        @{
+                                            var item = itemcontext.Item;
+                                        }
+                                        @if (item.Tier == AnimationTreeTier.Category)
+                                        {
+                                            <strong>@item.Title</strong>
+                                        }
+                                        else
+                                        {
+                                            <u><a href="/animationseditor/editanimation/@item.ParentTreeId/@item.Id">@item.Title</a></u>
+                                        }
+                                    </CellTemplate>
+                                </TemplateColumn>
+                                <TemplateColumn Width="110px" Title="Enabled" Filterable="false">
+<CellTemplate Context="itemcontext">
+                                        @{
+                                            string output = "Yes";
+                                            var item = itemcontext.Item;
+                                            if (item.Disabled)
+                                            {
+                                                output = "No";
+                                            }
+                                        }
+                                        @if (item.Tier == AnimationTreeTier.Animation)
+                                        {
+                                            <center>@output</center>
+                                        }
+                                    </CellTemplate>
+                                </TemplateColumn>
+                                <TemplateColumn Width="220px">
+<CellTemplate Context="itemcontext">
+                                        @{
+                                            var item = itemcontext.Item;
+                                        }
+                                        @if (item.Tier == AnimationTreeTier.Category)
+                                        {
+                                            <button type="button" title="Add Animation to Category" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleAddAnimationRequest(item.Id))"><span class="oi oi-plus"></span></button>
+                                            <button type="button" title="Rename Category" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleEditCategoryRequest(item))"><span class="oi oi-pencil"></span></button>
+                                            <button type="button" title="Delete Category" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleDeleteCategory(item))"><span class="oi oi-trash"></span></button>
+                                        }
+                                        else
+                                        {
+                                            <button type="button" title="Edit Animation" class="btn btn-secondary p-0 m-0" style="background-color: #646464; width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleEditAnimationRequest(item))"><span class="oi oi-pencil"></span></button>
+                                            <button type="button" title="Delete Animation" class="btn btn-secondary p-0 m-0" style="background-color: #646464; width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleDeleteAnimation(item))"><span class="oi oi-trash"></span></button>
+                                            <button type="button" title="Play Animation" class="btn btn-secondary p-0 m-0" style="background-color: #646464; width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandlePlayAnimation(item))"><span class="oi oi-media-play"></span></button>
+                                        }
+                                    </CellTemplate>
+                                </TemplateColumn>
+                            </Columns>
+                        </MudDataGrid>
+                    </MudTabPanel>
+                </MudTabs>
+            </div>
+        </div>
+    </div>
+</div>

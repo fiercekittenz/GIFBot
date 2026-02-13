@@ -1,0 +1,51 @@
+﻿@page "/charity"
+@inject NavigationManager NavigationManager
+
+<div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
+   <h1><span class="oi oi-tag" aria-hidden="true"></span> A Special Thanks...</h1>
+</div>
+
+<div class="container-fluid p-2 mb-2 rounded" style="background-color: #211126">
+   <div class="container text-white-50 mb-4" style="width: 700px">
+      The Fiercekittenz community is small, but mighty! We have collectively raised over $36,000 since 2017! That's a lot of doll hairs for charity! This page is here
+      to thank each and every donor to the various causes that we have helped over the years. Thank you. Truly. Every little bit helps, and I cannot thank you enough!
+   </div>
+   <div class="container text-white-50 mb-4" style="width: 700px">
+      <ul>
+         @foreach (var donor in Donors)
+         {
+            <li>@donor</li>
+         }
+      </ul>
+   </div>
+</div>
+
+@code
+{
+   public List<string> Donors { get; set; } = new List<string>()
+   {
+      "rollers",
+      "andymac4182",
+      "KniteMare",
+      "Skittykittylux",
+      "Soylent_Heston",
+      "KA1OS",
+      "MrSmoofy",
+      "tsudy",
+      "teejay64",
+      "jsteggy",
+      "JukeLimited",
+      "dewritten",
+      "swolemaz",
+      "dierna08",
+      "RanOutOfCake",
+      "Quiltoni",
+      "ArtfortheApocalypse",
+      "SvavaBlount",
+      "csharpfritz",
+      "Anrield",
+      "Pharewings",
+      "LifeSizeTeddyBear",
+      "malfunct"
+   };
+}
