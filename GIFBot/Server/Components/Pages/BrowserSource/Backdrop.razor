@@ -56,13 +56,13 @@
       mHubConnection.On<string>("HangBackdrop", async (data) =>
       {
          PlacedVisualBase placedBackdrop = JsonConvert.DeserializeObject<PlacedVisualBase>(data);
-         await HangBackdrop(placedBackdrop);
+         await InvokeAsync(async () => await HangBackdrop(placedBackdrop));
       });
 
-      mHubConnection.On("TakeDownBackdrop", () =>
+      mHubConnection.On("TakeDownBackdrop", async () =>
       {
          mBackdropVisible = false;
-         StateHasChanged();
+         await InvokeAsync(StateHasChanged);
       });
 
       await ConnectToHub();

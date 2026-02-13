@@ -42,19 +42,19 @@
          await ConnectToHub();
       };
 
-      mHubConnection.On<string>("UpdateTime", (data) =>
+      mHubConnection.On<string>("UpdateTime", async (data) =>
       {
          mCountdownTimerVisible = true;
          mCaptionData = JsonConvert.DeserializeObject<CaptionData>(data);
          Console.WriteLine($"Caption: {mCaptionData.Text}");
-         StateHasChanged();
+         await InvokeAsync(StateHasChanged);
       });
 
-      mHubConnection.On("HideTimer", () =>
+      mHubConnection.On("HideTimer", async () =>
       {
          Console.WriteLine("Hide the timer");
          mCountdownTimerVisible = false;
-         StateHasChanged();
+         await InvokeAsync(StateHasChanged);
       });
 
       await ConnectToHub();

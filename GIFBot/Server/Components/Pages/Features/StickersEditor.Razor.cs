@@ -37,9 +37,9 @@ namespace GIFBot.Server.Components.Pages.Features
             .WithAutomaticReconnect()
             .Build();
 
-         mHubConnection.On<int, int>("UpdatePosition", (top, left) =>
+         mHubConnection.On<int, int>("UpdatePosition", async (top, left) =>
          {
-            UpdateStickerPosition(top, left);
+            await InvokeAsync(() => UpdateStickerPosition(top, left));
          });
 
          // Start the connection.

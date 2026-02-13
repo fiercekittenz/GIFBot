@@ -321,10 +321,10 @@
          .WithAutomaticReconnect()
          .Build();
 
-      mHubConnection.On<string>("GoalBarDataUpdated", (data) =>
+      mHubConnection.On<string>("GoalBarDataUpdated", async (data) =>
       {
          mGoalBarData = JsonConvert.DeserializeObject<GoalBarData>(data);
-         StateHasChanged();
+         await InvokeAsync(StateHasChanged);
       });
 
       // Start the connection.

@@ -36,14 +36,14 @@ namespace GIFBot.Server.Components.Pages.Features
             .Build();
 
          // Handle an update message for adding a new entrant.
-         mHubConnection.On<string>("SendNewGiveawayEntrant", (entrant) =>
+         mHubConnection.On<string>("SendNewGiveawayEntrant", async (entrant) =>
          {
             Data.Entrants.Add(entrant);
-            StateHasChanged();
+            await InvokeAsync(StateHasChanged);
          });
 
          // Handle an update message for when a winner has been selected.
-         mHubConnection.On<string>("SendGiveawayWinner", (winner) =>
+         mHubConnection.On<string>("SendGiveawayWinner", async (winner) =>
          {
             Winner = winner;
 
@@ -55,7 +55,7 @@ namespace GIFBot.Server.Components.Pages.Features
                }
             }
 
-            StateHasChanged();
+            await InvokeAsync(StateHasChanged);
          });
 
          // Start the connection.

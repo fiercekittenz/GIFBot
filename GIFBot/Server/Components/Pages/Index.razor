@@ -157,13 +157,13 @@
             mLogMessages.RemoveAt(0);
          }
 
-         StateHasChanged();
+         await InvokeAsync(StateHasChanged);
 
-         await JSRuntime.InvokeVoidAsync("UpdateScroll");
+         await InvokeAsync(async () => await JSRuntime.InvokeVoidAsync("UpdateScroll"));
       });
 
       // Handle an update to bonkers mode.
-      mHubConnection.On<bool>("UpdateBonkersModeState", (enabled) =>
+      mHubConnection.On<bool>("UpdateBonkersModeState", async (enabled) =>
       {
          mBonkersModeState = kEnable;
          if (enabled)
@@ -171,11 +171,11 @@
             mBonkersModeState = kDisable;
          }
 
-         StateHasChanged();
+         await InvokeAsync(StateHasChanged);
       });
 
       // Handle an update to the streamer only mode.
-      mHubConnection.On<bool>("UpdateStreamerOnlyModeState", (enabled) =>
+      mHubConnection.On<bool>("UpdateStreamerOnlyModeState", async (enabled) =>
       {
          mStreamerOnlyModeState = kEnable;
          if (enabled)
@@ -183,7 +183,7 @@
             mStreamerOnlyModeState = kDisable;
          }
 
-         StateHasChanged();
+         await InvokeAsync(StateHasChanged);
       });
 
       // Start the connection.

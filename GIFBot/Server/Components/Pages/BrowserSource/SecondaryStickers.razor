@@ -47,27 +47,26 @@
       mHubConnection.On<string>("UpdateTestVisual", async (data) =>
       {
          TestVisualRequest testVisualRequest = JsonConvert.DeserializeObject<TestVisualRequest>(data);
-         await UpdateTestVisual(testVisualRequest);
+         await InvokeAsync(async () => await UpdateTestVisual(testVisualRequest));
       });
 
-      mHubConnection.On("StopTestVisual", () =>
+      mHubConnection.On("StopTestVisual", async () =>
       {
          IsTestDisplayOn = false;
-         StateHasChanged();
+         await InvokeAsync(StateHasChanged);
       });
 
       mHubConnection.On<string>("SendAllPlacedStickers", async (data) =>
       {
          List<PlacedSticker> placedStickers = JsonConvert.DeserializeObject<List<PlacedSticker>>(data);
          PlacedStickers = new List<PlacedSticker>(placedStickers);
-         StateHasChanged();
-         await Task.CompletedTask;
+         await InvokeAsync(StateHasChanged);
       });
 
       mHubConnection.On<string>("PlaceSticker", async (data) =>
       {
          PlacedSticker sticker = JsonConvert.DeserializeObject<PlacedSticker>(data);
-         await PlaceSticker(sticker);
+         await InvokeAsync(async () => await PlaceSticker(sticker));
       });
 
       mHubConnection.On<string, double>("UpdateStickerAudioSettings", (audioFile, volume) =>
@@ -76,20 +75,20 @@
          mVolume = volume;
       });
 
-      mHubConnection.On<Guid>("RemoveSticker", (stickerId) =>
+      mHubConnection.On<Guid>("RemoveSticker", async (stickerId) =>
       {
          PlacedSticker placedSticker = PlacedStickers.FirstOrDefault(s => s.Data != null && s.Data.Id == stickerId);
          if (placedSticker != null)
          {
             PlacedStickers.Remove(placedSticker);
-            StateHasChanged();
+            await InvokeAsync(StateHasChanged);
          }
       });
 
-      mHubConnection.On("ClearAllStickers", () =>
+      mHubConnection.On("ClearAllStickers", async () =>
       {
          PlacedStickers.Clear();
-         StateHasChanged();
+         await InvokeAsync(StateHasChanged);
       });
 
       await ConnectToHub();

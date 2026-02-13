@@ -42,16 +42,19 @@
          await ConnectToHub();
       };
 
-      mHubConnection.On<double, double, string>("UpdateGoal", (currentAmount, goalAmount, title) =>
+      mHubConnection.On<double, double, string>("UpdateGoal", async (currentAmount, goalAmount, title) =>
       {
-         UpdateGoalText(currentAmount, goalAmount, title);
+         await InvokeAsync(() => UpdateGoalText(currentAmount, goalAmount, title));
       });
 
-      mHubConnection.On<string>("GoalBarDataUpdated", (data) =>
+      mHubConnection.On<string>("GoalBarDataUpdated", async (data) =>
       {
          mGoalBarData = JsonConvert.DeserializeObject<GoalBarData>(data);
-         UpdateGoalText(mGoalBarData.Goals.FirstOrDefault(g => g.IsActive == true));
-         StateHasChanged();
+         await InvokeAsync(() =>
+         {
+            UpdateGoalText(mGoalBarData.Goals.FirstOrDefault(g => g.IsActive == true));
+            StateHasChanged();
+         });
       });
 
       // Start the connection.

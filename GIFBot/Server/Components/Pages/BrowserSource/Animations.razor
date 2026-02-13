@@ -70,19 +70,19 @@
       mHubConnection.On<string>("PlayAnimation", async (data) =>
       {
          AnimationRequest animationRequest = JsonConvert.DeserializeObject<AnimationRequest>(data);
-         await PlayAnimation(animationRequest);
+         await InvokeAsync(async () => await PlayAnimation(animationRequest));
       });
 
       mHubConnection.On<string>("UpdateTestVisual", async (data) =>
       {
          TestVisualRequest testVisualRequest = JsonConvert.DeserializeObject<TestVisualRequest>(data);
-         await UpdateTestVisual(testVisualRequest);
+         await InvokeAsync(async () => await UpdateTestVisual(testVisualRequest));
       });
 
-      mHubConnection.On("StopTestVisual", () =>
+      mHubConnection.On("StopTestVisual", async () =>
       {
          mAnimationVisible = false;
-         StateHasChanged();
+         await InvokeAsync(StateHasChanged);
       });
 
       mHubConnection.On("StopAnimation", async () =>
@@ -95,15 +95,15 @@
          }
 
          mAnimationVisible = false;
-         StateHasChanged();
+         await InvokeAsync(StateHasChanged);
       });
 
       mHubConnection.On<string>("SendStreamlabsAuthToken", async (data) =>
       {
          StreamlabsAuthToken = data;
          Console.WriteLine("Updating the streamlabs token in Javascript.");
-         await JSRuntime.InvokeVoidAsync("SetupStreamlabs", StreamlabsAuthToken);
-         StateHasChanged();
+         await InvokeAsync(async () => await JSRuntime.InvokeVoidAsync("SetupStreamlabs", StreamlabsAuthToken));
+         await InvokeAsync(StateHasChanged);
       });
 
       await ConnectToHub();
