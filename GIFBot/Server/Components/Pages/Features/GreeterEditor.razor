@@ -14,7 +14,7 @@
 </div>
 
 <!-- Add New Entry Window -->
-<MudDialog @bind-IsVisible="@mIsAddDialogVisible">
+<MudDialog @bind-Visible="@mIsAddDialogVisible">
     <TitleContent>
         <strong>Add New Greeter Entry</strong>
     </TitleContent>
@@ -24,7 +24,7 @@
         </div>
         <div class="form-group">
             <label for="uiName"><b>Name:</b></label>
-            <MudTextField T="string" Id="uiName" @bind-Value="mTempGreeterEntry.Name" />
+            <MudTextField T="string" @bind-Value="mTempGreeterEntry.Name" />
         </div>
         <div class="container-fluid p-2">
             <p>
@@ -42,21 +42,21 @@
 </MudDialog>
 
 <!-- Edit Entry Window -->
-<MudDialog @bind-IsVisible="@mIsEditDialogVisible">
+<MudDialog @bind-Visible="@mIsEditDialogVisible">
     <TitleContent>
         <strong>Edit Greeter: @mTempGreeterEntry.Name</strong>
     </TitleContent>
     <DialogContent>
         <div class="form-group form-check">
             <label class="form-check-label">
-                <MudCheckBox T="bool" Id="uiTempEntryEnabled" @bind-Value="mTempGreeterEntry.Enabled" /> Enabled
+                <MudCheckBox T="bool" @bind-Value="mTempGreeterEntry.Enabled" /> Enabled
                 <small id="uiTempEntryEnabled" class="form-text text-muted">When enabled, this greeter active.</small>
             </label>
         </div>
         <div class="form-group">
             <label for="uiTempName"><b>Name:</b></label>
             <small id="uiTempNameLabel" class="form-text text-white-50">The name to identify this greeter</small>
-            <MudTextField T="string" Id="uiTempName" @bind-Value="mTempGreeterEntry.Name" />
+            <MudTextField T="string" @bind-Value="mTempGreeterEntry.Name" />
         </div>
         <div class="form-group">
             <label for="uiTempAnimation"><b>Animation:</b></label>
@@ -66,7 +66,7 @@
         <div class="form-group">
             <label for="uiTempChatMessage"><b>Phrase Sent to Chat:</b></label>
             <small id="uiTempChatMessageLabel" class="form-text text-white-50">The bot will send this to chat in addition to any animation. Use $user to display who was greeted! (e.g. "!so $user")</small>
-            <MudTextField T="string" Id="uiTempChatMessage" @bind-Value="mTempGreeterEntry.ChatMessage" />
+            <MudTextField T="string" @bind-Value="mTempGreeterEntry.ChatMessage" />
         </div>
         <div class="form-group">
             <MudList T="string">
@@ -81,7 +81,10 @@
             </small>
             @* TODO: Wire up file upload handler *@
 <InputFile accept="text/*" style="width: 100%; background-color: #1e1e1e" />
-            <MudProgressLinear Value="@mUploadProgress" Visible="@(mUploadProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
+            @if (mUploadProgress > 0)
+            {
+                <MudProgressLinear Value="@mUploadProgress" Style="margin-bottom: 20px; width: 100%" />
+            }
             @if (!String.IsNullOrEmpty(mUploadErrorMessage))
             {
                <label class="text-danger">@mUploadErrorMessage</label>
@@ -106,19 +109,19 @@
 <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
     <MudTabPanel Text="Greeters">
         <div class="container-fluid p-2">
-            <MudDataGrid T="GreeterEntry" Items="@Data.Entries" Sortable="true" Pageable="true" PageSize="10">
+            <MudDataGrid T="GreeterEntry" Items="@Data.Entries" SortMode="SortMode.Single">
                <ToolBarContent>
                   <MudTextField T="string" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
                   <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleAddRequest">Add New Greeter</MudButton>
                </ToolBarContent>
                 <Columns>
-                    <PropertyColumn T="GreeterEntry" TProperty="string" Property="@(x => x.Name)" Title="Greeter Name" Width="200px" />
-                    <TemplateColumn Width="400px" Title="Recipients">
+                    <PropertyColumn T="GreeterEntry" TProperty="string" Property="@(x => x.Name)" Title="Greeter Name" />
+                    <TemplateColumn Title="Recipients">
 <CellTemplate Context="data">
                             @((data.Item).GetRecipientsDisplayList())
                         </CellTemplate>
                     </TemplateColumn>
-                    <TemplateColumn Width="75px">
+                    <TemplateColumn>
 <CellTemplate Context="data">
                             <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleEditRequest((data.Item)))"><span class="oi oi-pencil"></span></button>
                             <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleDeleteRequest((data.Item)))"><span class="oi oi-trash"></span></button>

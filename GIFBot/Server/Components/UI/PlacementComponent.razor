@@ -32,7 +32,7 @@
                                     <input type="range" class="slider" min="1" max="@CanvasWidth" value="@mFormWidth" id="uiWidthInputA" @onchange="@(args => OnWidthChanged(args))">
                                     <DataAnnotationsValidator />
                                     <ValidationSummary />
-                                    <MudNumericField T="int" Id="uiWidthInput" Min="1" Max="@CanvasWidth" Value="@mFormWidth" ValueChanged="@((int val) => OnWidthChanged(val))" />
+                                    <MudNumericField T="int" Min="1" Max="@CanvasWidth" Value="@mFormWidth" ValueChanged="@((int val) => OnWidthChanged(val))" />
                                  </div>
                               </div>
                            </div>
@@ -43,12 +43,12 @@
                                     <input type="range" class="slider" min="1" max="@CanvasHeight" value="@mFormHeight" id="uiHeightInputA" @onchange="@(args => OnHeightChanged(args))">
                                     <DataAnnotationsValidator />
                                     <ValidationSummary />
-                                    <MudNumericField T="int" Id="uiHeightInput" Min="1" Max="@CanvasHeight" Value="@mFormHeight" ValueChanged="@((int val) => OnHeightChanged(val))" />
+                                    <MudNumericField T="int" Min="1" Max="@CanvasHeight" Value="@mFormHeight" ValueChanged="@((int val) => OnHeightChanged(val))" />
                                  </div>
                               </div>
                               <div class="form-group form-check">
                                  <label class="form-check-label">
-                                    <MudCheckBox T="bool" Id="uiUniformScale" @bind-Value="mUseUniformScale" /> Use Uniform Scale
+                                    <MudCheckBox T="bool" @bind-Value="mUseUniformScale" /> Use Uniform Scale
                                  </label>
                               </div>
                            </div>
@@ -57,7 +57,7 @@
                            <div class="col">
                               <div class="form-group form-check">
                                  <label class="form-check-label">
-                                    <MudCheckBox T="bool" Id="uiDragBeyondBounds" @bind-Value="IsOutOfBounds" /> Drag Outside of the Container Bounds (warning: can get funky)
+                                    <MudCheckBox T="bool" @bind-Value="IsOutOfBounds" /> Drag Outside of the Container Bounds (warning: can get funky)
                                  </label>
                               </div>
                            </div>
@@ -72,7 +72,7 @@
                   }
                   <div class="form-group form-check">
                      <label class="form-check-label">
-                        <MudCheckBox T="bool" Id="uiDisplayTestMode" @bind-Value="IsDisplayTestMode" /> Show Visual in Overlay
+                        <MudCheckBox T="bool" @bind-Value="IsDisplayTestMode" /> Show Visual in Overlay
                      </label>
                   </div>
                </div>

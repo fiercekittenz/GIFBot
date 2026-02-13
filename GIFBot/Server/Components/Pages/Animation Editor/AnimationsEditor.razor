@@ -16,7 +16,7 @@
 </div>
 
 <!-- Delete Category Confirmation Window -->
-<MudDialog @bind-IsVisible="@mIsDeleteCategoryConfirmationVisible">
+<MudDialog @bind-Visible="@mIsDeleteCategoryConfirmationVisible">
     <TitleContent>
         <strong>Delete Category?</strong>
     </TitleContent>
@@ -40,7 +40,7 @@
 </MudDialog>
 
 <!-- Delete Animation(s) Confirmation Window -->
-<MudDialog @bind-IsVisible="@mIsDeleteConfirmationVisible">
+<MudDialog @bind-Visible="@mIsDeleteConfirmationVisible">
     <TitleContent>
         <strong>Delete Animation?</strong>
     </TitleContent>
@@ -64,7 +64,7 @@
 </MudDialog>
 
 <!-- Move Categories Window -->
-<MudDialog @bind-IsVisible="@mIsMoveCategoryDialogVisible">
+<MudDialog @bind-Visible="@mIsMoveCategoryDialogVisible">
     <TitleContent>
         <strong>Move Animations</strong>
     </TitleContent>
@@ -98,7 +98,7 @@
 </MudDialog>
 
 <!-- Add New Category Window -->
-<MudDialog @bind-IsVisible="@mIsCreateCategoryDialogVisible">
+<MudDialog @bind-Visible="@mIsCreateCategoryDialogVisible">
     <TitleContent>
         <strong>Add New Category</strong>
     </TitleContent>
@@ -108,7 +108,7 @@
         </div>
         <div class="form-group">
             <label for="uiCategoryName"><b>Name:</b></label>
-            <MudTextField T="string" Id="uiCategoryName" @bind-Value="mTempCategory.Title" />
+            <MudTextField T="string" @bind-Value="mTempCategory.Title" />
         </div>
         <div class="container-fluid p-2">
             <p>
@@ -126,7 +126,7 @@
 </MudDialog>
 
 <!-- Edit Category Window -->
-<MudDialog @bind-IsVisible="@mIsEditCategoryDialogVisible">
+<MudDialog @bind-Visible="@mIsEditCategoryDialogVisible">
     <TitleContent>
         <strong>Edit Category</strong>
     </TitleContent>
@@ -136,7 +136,7 @@
         </div>
         <div class="form-group">
             <label for="uiCategoryName"><b>Name:</b></label>
-            <MudTextField T="string" Id="uiCategoryName" @bind-Value="mTempCategory.Title" />
+            <MudTextField T="string" @bind-Value="mTempCategory.Title" />
         </div>
         <div class="container-fluid p-2">
             <p>
@@ -154,7 +154,7 @@
 </MudDialog>
 
 <!-- Add New Animation to Category Window -->
-<MudDialog @bind-IsVisible="@mIsAddAnimationToCategoryDialogVisible">
+<MudDialog @bind-Visible="@mIsAddAnimationToCategoryDialogVisible">
     <TitleContent>
         <strong>Add New Animation to Category</strong>
     </TitleContent>
@@ -164,7 +164,7 @@
         </div>
         <div class="form-group">
             <label for="uiName"><b>Name or Command Value:</b></label>
-            <MudTextField T="string" Id="uiName" @bind-Value="mTempAnimationCommand" />
+            <MudTextField T="string" @bind-Value="mTempAnimationCommand" />
         </div>
         <div class="container-fluid p-2">
             <p>
@@ -192,8 +192,6 @@
                 <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
                     <MudTabPanel Text="Animations">
                         <MudDataGrid T="AnimationTreeItem" Items="@mAnimationTreeData" Filterable="true" SortMode="SortMode.Single" Groupable="false"
-                                         Pageable="true"
-                                         PageSize="50"
                                          @ref="@AnimationTreeListRef">
                             <ToolBarContent>
                                 <MudTextField T="string" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
@@ -210,7 +208,7 @@
                             </ToolBarContent>
                             <Columns>
                                 <SelectColumn T="AnimationTreeItem" />
-                                <TemplateColumn Title="Name" Filterable="true" Width="150px">
+                                <TemplateColumn Title="Name" Filterable="true">
 <CellTemplate Context="itemcontext">
                                         @{
                                             var item = itemcontext.Item;
@@ -225,7 +223,7 @@
                                         }
                                     </CellTemplate>
                                 </TemplateColumn>
-                                <TemplateColumn Width="110px" Title="Enabled" Filterable="false">
+                                <TemplateColumn Title="Enabled" Filterable="false">
 <CellTemplate Context="itemcontext">
                                         @{
                                             string output = "Yes";
@@ -241,7 +239,7 @@
                                         }
                                     </CellTemplate>
                                 </TemplateColumn>
-                                <TemplateColumn Width="220px">
+                                <TemplateColumn>
 <CellTemplate Context="itemcontext">
                                         @{
                                             var item = itemcontext.Item;

@@ -34,7 +34,7 @@
                <p class="text-white-50">Please enter the name of your category below:</p>
                <DataAnnotationsValidator />
                <ValidationSummary />
-               <MudTextField T="string" id="uiCategoryName" @bind-Value="@mCategoryTitleModel.Value" />
+               <MudTextField T="string" @bind-Value="@mCategoryTitleModel.Value" />
                <div class="col-sm text-right p-3">
                   <button type="submit" class="btn btn-primary" style="background-color: #5c4872">Next Step</button>
                </div>
@@ -65,7 +65,7 @@ else if (mCurrentState == State.AnimationCommand)
                <p class="text-white-50">Please enter the command or name of your animation below (no spaces!):</p>
                <DataAnnotationsValidator />
                <ValidationSummary />
-               <MudTextField T="string" id="uiCommand" @bind-Value="@mAnimationCommandModel.Value" />
+               <MudTextField T="string" @bind-Value="@mAnimationCommandModel.Value" />
                <div class="col-sm text-right p-3">
                   <button type="submit" class="btn btn-primary" style="background-color: #5c4872">Next Step</button>
                </div>
@@ -93,7 +93,10 @@ else if (mCurrentState == State.AnimationVisual)
       <div class="form-group">
          @* TODO: Wire up file upload handler *@
 <InputFile accept="image/gif,image/jpeg,image/png,video/mp4,video/webm,video/mov" style="width: 100%; background-color: #1e1e1e" />
-         <MudProgressLinear Value="@mUploadVisualProgress" Visible="@(mUploadVisualProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
+         @if (mUploadVisualProgress > 0)
+         {
+             <MudProgressLinear Value="@mUploadVisualProgress" Style="margin-bottom: 20px; width: 100%" />
+         }
          @if (!String.IsNullOrEmpty(mUploadVisualErrorMessage))
          {
             <label class="text-danger">@mUploadVisualErrorMessage</label>
@@ -156,7 +159,10 @@ else if (mCurrentState == State.AnimationAudio)
       <div class="form-group">
          @* TODO: Wire up file upload handler *@
 <InputFile accept="audio/*" style="width: 100%; background-color: #1e1e1e" />
-         <MudProgressLinear Value="@mUploadAudioProgress" Visible="@(mUploadAudioProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
+         @if (mUploadAudioProgress > 0)
+         {
+             <MudProgressLinear Value="@mUploadAudioProgress" Style="margin-bottom: 20px; width: 100%" />
+         }
          @if (!String.IsNullOrEmpty(mUploadAudioErrorMessage))
          {
             <label class="text-danger">@mUploadAudioErrorMessage</label>
@@ -224,12 +230,12 @@ else if (mCurrentState == State.AnimationBaseSettings)
          <div class="form-group">
             <label for="uiDuration"><b>Duration (in milliseconds):</b></label>
             <small id="uiDuration" class="form-text text-white-50">The number of milliseconds this animation should play for (<i>Math Reminder: 1 second = 1000ms</i>).</small>
-            <MudNumericField T="int" id="uiDuration" class="form-control" Style="color: #232323" Min="1000" Max="600000" @bind-Value="mAnimationFormModel.DurationMilliseconds" />
+            <MudNumericField T="int" class="form-control" Style="color: #232323" Min="1000" Max="600000" @bind-Value="mAnimationFormModel.DurationMilliseconds" />
          </div>
          <div class="form-group">
             <label for="uiCooldown"><b>Main Cooldown (in minutes):</b></label>
             <small id="uiCooldown" class="form-text text-white-50">The number of minutes this command must wait before triggered again.</small>
-            <MudNumericField T="int" id="uiCooldown" class="form-control" Style="color: #232323" Min="0" Max="300" @bind-Value="mAnimationFormModel.MainCooldownMinutes" />
+            <MudNumericField T="int" class="form-control" Style="color: #232323" Min="0" Max="300" @bind-Value="mAnimationFormModel.MainCooldownMinutes" />
          </div>
          <div class="form-group">
             <label for="uiAccess"><b>Access Type:</b></label>
@@ -238,10 +244,10 @@ else if (mCurrentState == State.AnimationBaseSettings)
                Advanced options will be available when you edit through the big animations editor!
             </small>
             <MudRadioGroup @bind-Value="mAccessSelection" T="int">
-<MudRadio T="int" Option="@(0)">Anyone</MudRadio>
-                  <MudRadio T="int" Option="@(2)">Subscriber</MudRadio>
-                  <MudRadio T="int" Option="@(3)">VIP</MudRadio>
-                  <MudRadio T="int" Option="@(4)">Moderator</MudRadio>
+<MudRadio T="int" Value="@(0)">Anyone</MudRadio>
+                  <MudRadio T="int" Value="@(2)">Subscriber</MudRadio>
+                  <MudRadio T="int" Value="@(3)">VIP</MudRadio>
+                  <MudRadio T="int" Value="@(4)">Moderator</MudRadio>
 </MudRadioGroup>
          </div>
 
@@ -271,7 +277,7 @@ else if (mCurrentState == State.TutorialComplete)
          <table width="100%">
             <tr>
                <td width="600">
-                  <MudTextField T="string" id="uiAnimsUrl" class="form-control" Style="background-color: #2c2241; color: #FFFFFF; width: 100%" ReadOnly="true" @bind-Value="mPrimaryAnimationsURL" />
+                  <MudTextField T="string" class="form-control" Style="background-color: #2c2241; color: #FFFFFF; width: 100%" ReadOnly="true" @bind-Value="mPrimaryAnimationsURL" />
                </td>
                <td align="left">
                   <button type="button" class="btn btn-secondary p-1 ml-2" style="background-color: #6c4872" @onclick='(() => HandleCopyUrl("uiAnimsUrl"))'>Copy to Clipboard</button>

@@ -17,43 +17,45 @@
    <div class="form-group">
       <label for="uiGoalTitleLabel">Title of Goal:</label>
       <small id="uiGoalTitleLabel" class="form-text text-muted">The purpose of your goal (ex: "New Camera" or "Sweet Mic").</small>
-      <MudTextField T="string" Id="uiGoalTitle" @bind-Value="mGoal.Title" />
+      <MudTextField T="string" @bind-Value="mGoal.Title" />
    </div>
    <div class="form-group">
       <label for="uiGoalAmountLabel">Goal Amount:</label>
       <small id="uiGoalAmountLabel" class="form-text text-muted">The total amount for the ultimate goal.</small>
       <DataAnnotationsValidator />
       <ValidationSummary />
-      <MudNumericField T="double" Id="uiGoalAmount" Min="1" Max="1000000" @bind-Value="mGoal.GoalAmount" />
+      <MudNumericField T="double" Min="1" Max="1000000" @bind-Value="mGoal.GoalAmount" />
    </div>
    <div class="form-group">
       <label for="uiGoalCurrentAmountLabel">Current Amount:</label>
       <small id="uiGoalCurrentAmountLabel" class="form-text text-muted">The <i>current</i> amount raised toward the goal.</small>
       <DataAnnotationsValidator />
       <ValidationSummary />
-      <MudNumericField T="double" Id="uiGoalCurrentAmount" Min="0" Max="1000000" @bind-Value="mGoal.CurrentAmount" />
+      <MudNumericField T="double" Min="0" Max="1000000" @bind-Value="mGoal.CurrentAmount" />
    </div>
    <div class="form-group form-check">
       <label class="form-check-label">
-         <MudCheckBox T="bool" Id="uiResetWhenComplete" @bind-Value="mGoal.ResetWhenComplete" /> Reset the goal when completed.
+         <MudCheckBox T="bool" @bind-Value="mGoal.ResetWhenComplete" /> Reset the goal when completed.
          <small id="uiResetWhenComplete" class="form-text text-muted">When enabled, the goal will reset back to 0 after the goal amount is reached. Note that doing this means that any additional goals in the chain after this one will not be activated.</small>
       </label>
    </div>
 
-   <MudExpansionPanel Text="Milestones" IsInitiallyExpanded="true">
+   <MudExpansionPanel Text="Milestones" Expanded="true">
       <div class="form-group">
          <label for="uiGoalsGrid"><b>Milestones:</b></label>
-         <MudDataGrid T="GoalMilestone" Items="@mGoal.Milestones" Sortable="true" Pageable="true" PageSize="10">
+         <MudDataGrid T="GoalMilestone" Items="@mGoal.Milestones" SortMode="SortMode.Single">
             <ToolBarContent>
                <MudButton Variant="Variant.Text" Size="Size.Small">Add Milestone</MudButton>
             </ToolBarContent>
             <Columns>
-               <PropertyColumn T="GoalMilestone" TProperty="int" Property="@(x => x.PercentageTriggerPoint)" Title="Percentage Trigger Point" Width="200px" />
-               <PropertyColumn T="GoalMilestone" TProperty="string" Property="@(x => x.AnimationCommand)" Title="Animation Command to Fire" Width="200px" />
-               <TemplateColumn Context="subcontext" Width="55px">
+               <PropertyColumn T="GoalMilestone" TProperty="int" Property="@(x => x.PercentageTriggerPoint)" Title="Percentage Trigger Point" />
+               <PropertyColumn T="GoalMilestone" TProperty="string" Property="@(x => x.AnimationCommand)" Title="Animation Command to Fire" />
+               <TemplateColumn>
+   <CellTemplate Context="subcontext">
                   <MudButton Variant="Variant.Text" Size="Size.Small"></MudButton>
                   <MudButton Variant="Variant.Text" Size="Size.Small"></MudButton>
-               </TemplateColumn>
+                  </CellTemplate>
+</TemplateColumn>
             </Columns>
          </MudDataGrid>
       </div>

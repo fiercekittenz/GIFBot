@@ -21,7 +21,7 @@
 </div>
 
 <!-- Clone Animation Confirmation Window -->
-<MudDialog @bind-IsVisible="@mIsRenameGroupDialogVisible">
+<MudDialog @bind-Visible="@mIsRenameGroupDialogVisible">
    <TitleContent>
       <strong>Rename User Group?</strong>
    </TitleContent>
@@ -60,12 +60,12 @@
                      </p>
                      <div class="form-group">
                         <label for="uiBotName"><b>Bot Account Name:</b></label>
-                        <MudTextField T="string" Id="uiBotName" Disabled="true" @bind-Value="mBotSettings.BotName" />
+                        <MudTextField T="string" Disabled="true" @bind-Value="mBotSettings.BotName" />
                      </div>
                      <div class="form-group">
                         <label for="uiChannelName"><b>Channel Name:</b></label>
                         <small id="uiChannelName" class="form-text text-white-50">The channel your bot will connect to. You can change this without needing to reauthorize.</small>
-                        <MudTextField T="string" Id="uiChannelName" @bind-Value="mBotSettings.ChannelName" />
+                        <MudTextField T="string" @bind-Value="mBotSettings.ChannelName" />
                      </div>
                      <div class="container-fluid text-right p-3">
                         <button type="button" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnReauthorize">Reauthorize Bot</button>
@@ -77,59 +77,59 @@
             <MudTabPanel Text="Bot Behavior">
                <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
                   <div class="container-fluid p-2">
-                     <MudExpansionPanel IsInitiallyExpanded="true">
+                     <MudExpansionPanel Expanded="true">
 <MudText>Timing Mechanics</MudText>
 <div class="form-group">
                               <label for="uiGlobalCooldown"><b>Global Cooldown (in seconds):</b></label>
                               <small id="uiGlobalCooldown" class="form-text text-white-50">The number of seconds users will have to wait between executing animation commands.</small>
-                              <MudNumericField T="int" Id="uiGlobalCooldown" Min="0" Max="100000" @bind-Value="mBotSettings.GlobalCooldownInSeconds" />
+                              <MudNumericField T="int" Min="0" Max="100000" @bind-Value="mBotSettings.GlobalCooldownInSeconds" />
                            </div>
                            <div class="form-group">
                               <label for="uiTimeBetweenAnimations"><b>Time Between Animations (in ms):</b></label>
                               <small id="uiTimeBetweenAnimations" class="form-text text-white-50">The number of milliseconds when spacing queued animations.</small>
-                              <MudNumericField T="int" Id="uiTimeBetweenAnimations" Min="0" Max="100000" @bind-Value="mBotSettings.TimeBetweenAnimationsMs" />
+                              <MudNumericField T="int" Min="0" Max="100000" @bind-Value="mBotSettings.TimeBetweenAnimationsMs" />
                            </div>
 </MudExpansionPanel>
 
-                     <MudExpansionPanel IsInitiallyExpanded="true">
+                     <MudExpansionPanel Expanded="true">
 <MudText>Flags</MudText>
 <div class="form-group form-check">
                               <label class="form-check-label">
-                                 <MudCheckBox T="bool" Id="uiAnnounceCooldowns" @bind-Value="mBotSettings.AnnounceAnimationCooldown" /> Announce Animation Cooldown
+                                 <MudCheckBox T="bool" @bind-Value="mBotSettings.AnnounceAnimationCooldown" /> Announce Animation Cooldown
                                  <small id="uiAnnounceCooldowns" class="form-text text-white-50">When enabled, the bot will let chat know if it is in cooldown mode.</small>
                               </label>
                            </div>
                            <div class="form-group form-check">
                               <label class="form-check-label">
-                                 <MudCheckBox T="bool" Id="uiCanExecuteRoulette" @bind-Value="mBotSettings.AnimationRouletteChatEnabled" /> Can Execute !animationroulette from Chat
+                                 <MudCheckBox T="bool" @bind-Value="mBotSettings.AnimationRouletteChatEnabled" /> Can Execute !animationroulette from Chat
                                  <small id="uiCanExecuteRoulette" class="form-text text-white-50">When enabled, viewers can execute !animationroulette from chat. Disable this if you want it to be a channel point-exclusive feature.</small>
                               </label>
                            </div>
                            <div class="form-group form-check">
                               <label class="form-check-label">
-                                 <MudCheckBox T="bool" Id="uiAllowWhispers" @bind-Value="mBotSettings.CanTriggerAnimationsByWhisper" /> Allow Commands via Whisper
+                                 <MudCheckBox T="bool" @bind-Value="mBotSettings.CanTriggerAnimationsByWhisper" /> Allow Commands via Whisper
                                  <small id="uiAllowWhispers" class="form-text text-white-50">When enabled, the bot will accept commands from the channel account (e.g. your account) via whisper.</small>
                               </label>
                            </div>
 </MudExpansionPanel>
 
-                     <MudExpansionPanel IsInitiallyExpanded="true">
+                     <MudExpansionPanel Expanded="true">
 <MudText>Animation Command</MudText>
 <div class="form-group form-check">
                               <label class="form-check-label">
-                                 <MudCheckBox T="bool" Id="uiAnimationCommandEnabled" @bind-Value="mBotSettings.AnimationCommandEnabled" /> Animation Command Enabled
+                                 <MudCheckBox T="bool" @bind-Value="mBotSettings.AnimationCommandEnabled" /> Animation Command Enabled
                                  <small id="uiAnimationCommandEnabled" class="form-text text-white-50">When enabled, the animation command allows viewers to see a list of your available animations. The list will ONLY include animations that are able to be triggered by users via the command in chat. The list will not include any that behave as alerts for events such as cheering. The command will spit out a list of them to chat as a result.</small>
                               </label>
                            </div>
                            <div class="form-group">
                               <label for="uiAnimationCommandCooldown"><b>Animation Command:</b></label>
                               <small id="uiAnimationCommandCooldown" class="form-text text-white-50">What viewers need to type in chat to see a list of animations.</small>
-                              <MudTextField T="string" Id="uiAnimationCommandCooldown" @bind-Value="mBotSettings.AnimationCommand" />
+                              <MudTextField T="string" @bind-Value="mBotSettings.AnimationCommand" />
                            </div>
                            <div class="form-group">
                               <label for="uiAnimationCommandCooldown"><b>Animation Command Cooldown (in minutes):</b></label>
                               <small id="uiAnimationCommandCooldown" class="form-text text-white-50">The number of minutes the animation command is on cooldown.</small>
-                              <MudNumericField T="int" Id="uiAnimationCommandCooldown" Min="0" Max="100000" @bind-Value="mBotSettings.AnimationCommandCooldownSeconds" />
+                              <MudNumericField T="int" Min="0" Max="100000" @bind-Value="mBotSettings.AnimationCommandCooldownSeconds" />
                            </div>
 </MudExpansionPanel>
                   </div>
@@ -145,7 +145,7 @@
                      </p>
                      <div class="form-group form-check">
                         <label class="form-check-label">
-                           <MudCheckBox T="bool" Id="uiUseGlobalPositioning" @bind-Value="mBotSettings.UseGlobalPositioning" /> Use Global Positioning
+                           <MudCheckBox T="bool" @bind-Value="mBotSettings.UseGlobalPositioning" /> Use Global Positioning
                            <small id="uiUseGlobalPositioning" class="form-text text-white-50">When enabled, all animations will use the same positioning data as set below.</small>
                         </label>
                      </div>
@@ -175,7 +175,7 @@
                            </p>
                            <div class="form-group">
                               <label for="uiStreamlabsKey"><b>Streamlabs Access Token:</b></label>
-                              <MudTextField T="string" InputType="InputType.Password" id="uiStreamlabsKey" Style="width: 100%" Placeholder="Enter the Streamlabs Socket API Token..." @bind-Value="mBotSettings.StreamlabsOauthToken" />
+                              <MudTextField T="string" InputType="InputType.Password" Style="width: 100%" Placeholder="Enter the Streamlabs Socket API Token..." @bind-Value="mBotSettings.StreamlabsOauthToken" />
                            </div>
                         </div>
                      </div>
@@ -193,7 +193,7 @@
                            </p>
                            <div class="form-group">
                               <label for="uiStreamlabsKey"><b>StreamElements JWT Token:</b></label>
-                              <MudTextField T="string" InputType="InputType.Password" id="uiStreamElementsKey" Style="width: 100%" Placeholder="Enter the StreamElements JWT Token from the website..." @bind-Value="mBotSettings.StreamElementsToken" />
+                              <MudTextField T="string" InputType="InputType.Password" Style="width: 100%" Placeholder="Enter the StreamElements JWT Token from the website..." @bind-Value="mBotSettings.StreamElementsToken" />
                            </div>
                         </div>
                      </div>
@@ -214,25 +214,25 @@
                            <div class="form-group">
                               <label for="uiTiltifySlug"><b>Tiltify Slug:</b></label>
                               <small id="uiTiltifySlugDesc" class="form-text text-white-50">Your display name within the Tiltify system. Typically shows in the Tiltify dashboard URL.</small>
-                              <MudTextField T="string" id="uiTiltifySlug" @bind-Value="mBotSettings.TiltifySlug" />
+                              <MudTextField T="string" @bind-Value="mBotSettings.TiltifySlug" />
                            </div>
                            <div class="form-group">
                               <label for="uiTiltifyClientId"><b>Tiltify Application Client ID:</b></label>
-                              <MudTextField T="string" InputType="InputType.Password" id="uiTiltifyClientId" Style="width: 100%" Placeholder="Enter the Client ID from the Tiltify Dashboard..." @bind-Value="mBotSettings.TiltifyClientId" />
+                              <MudTextField T="string" InputType="InputType.Password" Style="width: 100%" Placeholder="Enter the Client ID from the Tiltify Dashboard..." @bind-Value="mBotSettings.TiltifyClientId" />
                            </div>
                            <div class="form-group">
                               <label for="uiTiltifyClientSecret"><b>Tiltify Application Client Secret:</b></label>
-                              <MudTextField T="string" InputType="InputType.Password" id="uiTiltifyClientSecret" Style="width: 100%" Placeholder="Enter the Client Secret from the Tiltify Dashboard..." @bind-Value="mBotSettings.TiltifyClientSecret" />
+                              <MudTextField T="string" InputType="InputType.Password" Style="width: 100%" Placeholder="Enter the Client Secret from the Tiltify Dashboard..." @bind-Value="mBotSettings.TiltifyClientSecret" />
                            </div>
                            <div class="form-group">
                               <label for="uiTiltifyCampaigns"><b>Active Campaign:</b></label><br />
                               <small id="uiTiltifyCampaigns" class="form-text text-white-50">Please select a campaign that you would like to listen to for donations. If you do not see campaigns in the list, please add your credentials above and save. The list should update if the provided information is correct.</small>
                               <MudSelect T="string" Placeholder="Select Active Campaign..." Style="background-color: #2c2241; color: #e5e5e5; font-weight: bold; width: 250px;"
-                                              Data="@mTiltifyCampaignNames" Value="@mSelectedTiltifyCampaignName" ValueChanged="@(args => OnTiltifyCampaignSelected(args))" />
+ Value="@mSelectedTiltifyCampaignName" ValueChanged="@(args => OnTiltifyCampaignSelected(args))" />
                            </div>
                            <div class="form-group form-check">
                               <label class="form-check-label">
-                                 <MudCheckBox T="bool" Id="uiTiltifyDonationAlertChat" @bind-Value="mBotSettings.TiltifyDonationAlertChat" /> Announce the donation in chat <i>after</i> the alert has played
+                                 <MudCheckBox T="bool" @bind-Value="mBotSettings.TiltifyDonationAlertChat" /> Announce the donation in chat <i>after</i> the alert has played
                               </label>
                            </div>
                         </div>
@@ -258,7 +258,7 @@
                                           <td valign="bottom">
                                              <label for="uiUserGroups"><b>User Groups:</b></label><br />
                                              <MudSelect T="string" Placeholder="Select User Group..." Style="background-color: #2c2241; color: #e5e5e5; font-weight: bold; width: 250px;"
-                                                             Data="@mUserGroupNames" Value="@mSelectedUserGroupName" ValueChanged="@(args => OnUserGroupSelected(args))" />
+ Value="@mSelectedUserGroupName" ValueChanged="@(args => OnUserGroupSelected(args))" />
                                           </td>
                                        </tr>
                                     </table>
@@ -270,7 +270,7 @@
                                        <tr>
                                           <td valign="top">
                                              <label for="uiNewGroup"><b>Group Name:</b></label>
-                                             <MudTextField T="string" Id="uiNewGroup" Enabled="true" @bind-Value="mNewGroupValue" />
+                                             <MudTextField T="string" @bind-Value="mNewGroupValue" />
                                           </td>
                                           <td valign="top">
                                              <button type="button" class="btn btn-secondary p-1 ml-2" style="background-color: #6c4872" @onclick="HandleAddNewGroup">Add New Group</button>
@@ -285,15 +285,15 @@
                      @if (mSelectedUserGroup != null)
                      {
                         <div class="container-fluid mt-3">
-                           <MudDataGrid T="UserEntry" Items="@mSelectedUserGroup.UserEntries" Sortable="true" Pageable="true" PageSize="10">
+                           <MudDataGrid T="UserEntry" Items="@mSelectedUserGroup.UserEntries" SortMode="SortMode.Single">
                               <Columns>
-                                 <PropertyColumn T="UserEntry" TProperty="string" Property="@(x => x.Name)" Title="Viewer Name" Width="400px" />
+                                 <PropertyColumn T="UserEntry" TProperty="string" Property="@(x => x.Name)" Title="Viewer Name" />
                                  @*
                                     <CellTemplate Context="data">
                                        <strong>@(data.Item)</strong>
                                     </CellTemplate>
                                     </PropertyColumn>*@
-                                 <TemplateColumn Width="50px" Title="">
+                                 <TemplateColumn Title="">
 <CellTemplate Context="data">
                                        <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleDeleteUserFromGroup((data.Item).Name))"><span class="oi oi-trash"></span></button>
                                     </CellTemplate>
@@ -306,7 +306,7 @@
                               <tr>
                                  <td align="left">
                                     <label for="uiNewUser"><b>Viewer Name:</b></label>
-                                    <MudTextField T="string" Id="uiNewUser" Enabled="true" @bind-Value="uiNewUserValue" />
+                                    <MudTextField T="string" @bind-Value="uiNewUserValue" />
                                     <button type="button" class="btn btn-secondary p-1" style="background-color: #6c4872" @onclick="HandleAddUserToGroup">Add User to Group</button>
                                  </td>
                                  <td />
@@ -345,19 +345,21 @@
                         execute animations like everyone else in chat.
                      </p>
                      <div class="container-fluid">
-                        <MudDataGrid T="ThrottledUserData" Items="@mBotSettings.ThrottledUsers" Pageable="true" PageSize="15">
+                        <MudDataGrid T="ThrottledUserData" Items="@mBotSettings.ThrottledUsers">
                            <ToolBarContent>
                               <MudButton Variant="Variant.Text" Size="Size.Small">Add Viewer</MudButton>
                               <MudTextField T="string" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
                            </ToolBarContent>
                            <Columns>
                               <PropertyColumn T="ThrottledUserData" TProperty="string" Property="@(x => x.Name)" Title="Name" Editable="true" />
-                              <PropertyColumn T="ThrottledUserData" TProperty="int" Property="@(x => x.PersonalThrottleRate)" Title="Throttle Rate (in sec)" Width="200px" Editable="true" />
-                              <PropertyColumn T="ThrottledUserData" TProperty="bool" Property="@(x => x.IsBanned)" Title="Is Banned" Width="120px" Editable="true" />
-                              <TemplateColumn Context="subcontext" Width="250px">
+                              <PropertyColumn T="ThrottledUserData" TProperty="int" Property="@(x => x.PersonalThrottleRate)" Title="Throttle Rate (in sec)" Editable="true" />
+                              <PropertyColumn T="ThrottledUserData" TProperty="bool" Property="@(x => x.IsBanned)" Title="Is Banned" Editable="true" />
+                              <TemplateColumn>
+   <CellTemplate Context="subcontext">
                                  <MudButton Variant="Variant.Text" Size="Size.Small">Edit</MudButton>
                                  <MudButton Variant="Variant.Text" Size="Size.Small">Delete</MudButton>
-                              </TemplateColumn>
+                                 </CellTemplate>
+</TemplateColumn>
                            </Columns>
                         </MudDataGrid>
                      </div>
@@ -388,7 +390,7 @@
                            </tr>
                            <tr>
                               <td width="600">
-                                 <MudTextField T="string" id="uiAnimsUrl" class="form-control" Style="background-color: #2c2241; color: #FFFFFF; width: 100%" ReadOnly="true" @bind-Value="mPrimaryAnimationsURL" />
+                                 <MudTextField T="string" class="form-control" Style="background-color: #2c2241; color: #FFFFFF; width: 100%" ReadOnly="true" @bind-Value="mPrimaryAnimationsURL" />
                               </td>
                               <td align="left">
                                  <button type="button" class="btn btn-secondary p-1 ml-2" style="background-color: #6c4872" @onclick='(() => HandleCopyUrl("uiAnimsUrl"))'>Copy to Clipboard</button>
@@ -405,7 +407,7 @@
                            </tr>
                            <tr>
                               <td width="600">
-                                 <MudTextField T="string" id="uiGoalBarUrl" class="form-control" Style="background-color: #2c2241; color: #FFFFFF; width: 100%" ReadOnly="true" @bind-Value="mGoalBarURL" />
+                                 <MudTextField T="string" class="form-control" Style="background-color: #2c2241; color: #FFFFFF; width: 100%" ReadOnly="true" @bind-Value="mGoalBarURL" />
                               </td>
                               <td align="left">
                                  <button type="button" class="btn btn-secondary p-1 ml-2" style="background-color: #6c4872" @onclick='(() => HandleCopyUrl("uiGoalBarUrl"))'>Copy to Clipboard</button>

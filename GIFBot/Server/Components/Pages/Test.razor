@@ -1,11 +1,11 @@
 ﻿@page "/test"
 <MudDataGrid T="Employee" Items="@Data" Filterable="true" SortMode="SortMode.Single" Groupable="false">
    <Columns>
-      <PropertyColumn T="Employee" TProperty="string" Property="@(x => x.Name)" Title="Name" Width="320px" />
-      <PropertyColumn T="Employee" TProperty="int" Property="@(x => x.Id)" Title="Id" Width="120px" />
-      <PropertyColumn T="Employee" TProperty="int?" Property="@(x => x.ParentId)" Title="ParentId" Width="120px" />
-      <PropertyColumn T="Employee" TProperty="string" Property="@(x => x.EmailAddress)" Title="EmailAddress" Width="120px" />
-      <PropertyColumn T="Employee" TProperty="DateTime" Property="@(x => x.HireDate)" Title="HireDate" Width="220px" />
+      <PropertyColumn T="Employee" TProperty="string" Property="@(x => x.Name)" Title="Name" />
+      <PropertyColumn T="Employee" TProperty="int" Property="@(x => x.Id)" Title="Id" />
+      <PropertyColumn T="Employee" TProperty="int?" Property="@(x => x.ParentId)" Title="ParentId" />
+      <PropertyColumn T="Employee" TProperty="string" Property="@(x => x.EmailAddress)" Title="EmailAddress" />
+      <PropertyColumn T="Employee" TProperty="DateTime" Property="@(x => x.HireDate)" Title="HireDate" />
    </Columns>
 </MudDataGrid>
 

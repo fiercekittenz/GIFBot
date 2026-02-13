@@ -14,7 +14,7 @@
 </div>
 
 <!-- Add New Action Window -->
-<MudDialog @bind-IsVisible="@mIsAddDialogVisible">
+<MudDialog @bind-Visible="@mIsAddDialogVisible">
    <TitleContent>
       <strong>Add New Action</strong>
    </TitleContent>
@@ -24,7 +24,7 @@
       </div>
       <div class="form-group">
          <label for="uiName"><b>Name:</b></label>
-         <MudTextField T="string" Id="uiName" @bind-Value="mTempData.Name" />
+         <MudTextField T="string" @bind-Value="mTempData.Name" />
       </div>
       <div class="container-fluid p-2">
          <p>
@@ -42,36 +42,36 @@
 </MudDialog>
 
 <!-- Edit Window -->
-<MudDialog @bind-IsVisible="@mIsEditDialogVisible">
+<MudDialog @bind-Visible="@mIsEditDialogVisible">
    <TitleContent>
       <strong>Edit Action: @mTempData.Name</strong>
    </TitleContent>
    <DialogContent>
       <div class="form-group form-check">
          <label class="form-check-label">
-            <MudCheckBox T="bool" Id="uiTempCommandEnabled" @bind-Value="mTempData.Enabled" /> Enabled
+            <MudCheckBox T="bool" @bind-Value="mTempData.Enabled" /> Enabled
             <small id="uiTempCommandEnabled" class="form-text text-muted">When enabled, this action is available for use.</small>
          </label>
       </div>
       <div class="form-group">
          <label for="uiTempCommand"><b>Name:</b></label>
          <small id="uiTempCommandLabel" class="form-text text-white-50">The name to identify this action.</small>
-         <MudTextField T="string" Id="uiTempName" @bind-Value="mTempData.Name" />
+         <MudTextField T="string" @bind-Value="mTempData.Name" />
       </div>
       <div class="form-group">
          <label for="uiTempAnimationLbl"><b>Animation to Play:</b></label>
          <small id="uiTempAnimationLbl" class="form-text text-white-50">The animation command to play along with this action.</small>
-         <MudTextField T="string" Id="uiTempAnimation" @bind-Value="mTempData.Animation" />
+         <MudTextField T="string" @bind-Value="mTempData.Animation" />
       </div>
       <div class="form-group">
          <label for="uiCommandRedemption">Redemption Type:</label>
          <small id="uiCommandRedemption" class="form-text text-muted">Actions can be triggered by your viewers using a variety of methods.</small>
          <MudRadioGroup @bind-Value="@CurrentlyEditedRedemption" T="int">
-<MudRadio T="int" Option="@(0)">Cheer</MudRadio>
-               <MudRadio T="int" Option="@(1)">Channel Points</MudRadio>
-               <MudRadio T="int" Option="@(2)">Tiltify Donation</MudRadio>
-               <MudRadio T="int" Option="@(3)">Tip</MudRadio>
-               <MudRadio T="int" Option="@(4)">Subscription</MudRadio>
+<MudRadio T="int" Value="@(0)">Cheer</MudRadio>
+               <MudRadio T="int" Value="@(1)">Channel Points</MudRadio>
+               <MudRadio T="int" Value="@(2)">Tiltify Donation</MudRadio>
+               <MudRadio T="int" Value="@(3)">Tip</MudRadio>
+               <MudRadio T="int" Value="@(4)">Subscription</MudRadio>
 </MudRadioGroup>
       </div>
 
@@ -81,11 +81,11 @@
             <label for="uiSubTier"><b>Subscription Tier:</b></label>
             <small id="uiSubTier" class="form-text text-white-50">What sub tier is this action for?</small>
             <MudRadioGroup @bind-Value="SubTierSelection" T="int">
-<MudRadio T="int" Option="@(0)">All</MudRadio>
-                  <MudRadio T="int" Option="@(1)">Prime</MudRadio>
-                  <MudRadio T="int" Option="@(2)">Tier 1</MudRadio>
-                  <MudRadio T="int" Option="@(3)">Tier 2</MudRadio>
-                  <MudRadio T="int" Option="@(4)">Tier 3</MudRadio>
+<MudRadio T="int" Value="@(0)">All</MudRadio>
+                  <MudRadio T="int" Value="@(1)">Prime</MudRadio>
+                  <MudRadio T="int" Value="@(2)">Tier 1</MudRadio>
+                  <MudRadio T="int" Value="@(3)">Tier 2</MudRadio>
+                  <MudRadio T="int" Value="@(4)">Tier 3</MudRadio>
 </MudRadioGroup>
          </div>
       }
@@ -94,7 +94,7 @@
          <div class="form-group">
             <label for="uiCommandCostLbl">Cost:</label>
             <small id="uiCommandCostLbl" class="form-text text-muted">The number of bits, channel points, etc. required to trigger this action. Must be an exact value!</small>
-            <MudNumericField T="double" Id="uiCommandCost" Min="0.01" Max="999999" @bind-Value="@mTempData.Cost" />
+            <MudNumericField T="double" Min="0.01" Max="999999" @bind-Value="@mTempData.Cost" />
          </div>
       }
 
@@ -102,11 +102,11 @@
          <label for="uiBehaviorType">Action Behavior:</label>
          <small id="uiBehaviorType" class="form-text text-muted">How does this action behave? Does it need a spanking? Kappa.</small>
          <MudRadioGroup @bind-Value="@CurrentlyEditedBehavior" T="int">
-<MudRadio T="int" Option="@(0)">Remove Time</MudRadio>
-               <MudRadio T="int" Option="@(1)">Add Time</MudRadio>
-               <MudRadio T="int" Option="@(2)">Slowdown Time</MudRadio>
-               <MudRadio T="int" Option="@(3)">Speed Up Time</MudRadio>
-               <MudRadio T="int" Option="@(4)">Pause Time</MudRadio>
+<MudRadio T="int" Value="@(0)">Remove Time</MudRadio>
+               <MudRadio T="int" Value="@(1)">Add Time</MudRadio>
+               <MudRadio T="int" Value="@(2)">Slowdown Time</MudRadio>
+               <MudRadio T="int" Value="@(3)">Speed Up Time</MudRadio>
+               <MudRadio T="int" Value="@(4)">Pause Time</MudRadio>
 </MudRadioGroup>
       </div>
       @if (mTempData.Behavior == CountdownTimerActionBehavior.AddTime || mTempData.Behavior == CountdownTimerActionBehavior.RemoveTime)
@@ -114,7 +114,7 @@
          <div class="form-group">
             <label for="uiActionValueLbl">Adjustment Value:</label>
             <small id="uiActionValueLbl" class="form-text text-muted">The number of seconds by which the time is adjusted on Add and Remove time behaviors.</small>
-            <MudNumericField T="int" Id="uiActionValue" Min="1" Max="999999" @bind-Value="@mTempData.SecondsValue" />
+            <MudNumericField T="int" Min="1" Max="999999" @bind-Value="@mTempData.SecondsValue" />
          </div>
       }
       else if (mTempData.Behavior == CountdownTimerActionBehavior.PauseTime)
@@ -122,7 +122,7 @@
          <div class="form-group">
             <label for="uiActionValueLbl">Pause Time:</label>
             <small id="uiActionValueLbl" class="form-text text-muted">The number of seconds to pause the countdown timer.</small>
-            <MudNumericField T="int" Id="uiActionValue" Min="1" Max="999999" @bind-Value="@mTempData.SecondsValue" />
+            <MudNumericField T="int" Min="1" Max="999999" @bind-Value="@mTempData.SecondsValue" />
          </div>
       }
       else if (mTempData.Behavior == CountdownTimerActionBehavior.SlowTime || mTempData.Behavior == CountdownTimerActionBehavior.SpeedUpTime)
@@ -133,22 +133,22 @@
             <MudRadioGroup @bind-Value="@CurrentlyEditedSpeedPreset" T="int">
 @if (mTempData.Behavior == CountdownTimerActionBehavior.SlowTime)
                   {
-                     <MudRadio T="int" Option="@(0)">Sloth</MudRadio>
-                     <MudRadio T="int" Option="@(1)">Slug</MudRadio>
-                     <MudRadio T="int" Option="@(2)">Turtle</MudRadio>
+                     <MudRadio T="int" Value="@(0)">Sloth</MudRadio>
+                     <MudRadio T="int" Value="@(1)">Slug</MudRadio>
+                     <MudRadio T="int" Value="@(2)">Turtle</MudRadio>
                   }
                   else if (mTempData.Behavior == CountdownTimerActionBehavior.SpeedUpTime)
                   {
-                     <MudRadio T="int" Option="@(3)">Rabbit</MudRadio>
-                     <MudRadio T="int" Option="@(4)">Ostrich</MudRadio>
-                     <MudRadio T="int" Option="@(5)">Sonic</MudRadio>
+                     <MudRadio T="int" Value="@(3)">Rabbit</MudRadio>
+                     <MudRadio T="int" Value="@(4)">Ostrich</MudRadio>
+                     <MudRadio T="int" Value="@(5)">Sonic</MudRadio>
                   }
 </MudRadioGroup>
          </div>
          <div class="form-group">
             <label for="uiActionValueLbl">Number of Seconds To Modify :</label>
             <small id="uiActionValueLbl" class="form-text text-muted">The number of seconds by which the speed at which the time ticks down will be modified.</small>
-            <MudNumericField T="int" Id="uiActionValue" Min="1" Max="999999" @bind-Value="@mTempData.SecondsValue" />
+            <MudNumericField T="int" Min="1" Max="999999" @bind-Value="@mTempData.SecondsValue" />
          </div>
       }
       <div class="container-fluid p-2">
@@ -192,7 +192,7 @@
       <div class="container-fluid p-2">
          <div class="form-group form-check">
             <label class="form-check-label">
-               <MudCheckBox T="bool" Id="uiEnabled" @bind-Value="Data.Enabled" OnChange="@(() => StateHasChanged())" /> Feature Enabled
+               <MudCheckBox T="bool" @bind-Value="Data.Enabled" /> Feature Enabled
                <small id="uiEnabled" class="form-text text-muted">When enabled, this feature is active and available to your users!</small>
             </label>
          </div>
@@ -200,7 +200,7 @@
       <div class="form-group">
          <label for="uiTimerValueInMinutes">Timer Start Value (in minutes):</label>
          <small id="uiTimerValueInMinutes" class="form-text text-muted">The number of minutes you want this countdown timer to tick.</small>
-         <MudNumericField T="int" Id="uiTimerStartValueInMinutesValue" Min="1" Max="999999" @bind-Value="Data.TimerStartValueInMinutes" />
+         <MudNumericField T="int" Min="1" Max="999999" @bind-Value="Data.TimerStartValueInMinutes" />
       </div>
       <div class="row">
          <div class="container-fluid text-right p-3">
@@ -212,14 +212,14 @@
 
    <MudTabPanel Text="Timer Actions">
       <div class="container-fluid p-2">
-         <MudDataGrid T="CountdownTimerAction" Items="@Data.Actions" Sortable="true" Pageable="true" PageSize="10">
+         <MudDataGrid T="CountdownTimerAction" Items="@Data.Actions" SortMode="SortMode.Single">
             <ToolBarContent>
                <MudTextField T="string" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
                <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleAddRequest">Add Action</MudButton>
             </ToolBarContent>
             <Columns>
-               <PropertyColumn T="CountdownTimerAction" TProperty="string" Property="@(x => x.Name)" Title="Value" Width="150px" />
-               <TemplateColumn Width="100px" Title="">
+               <PropertyColumn T="CountdownTimerAction" TProperty="string" Property="@(x => x.Name)" Title="Value" />
+               <TemplateColumn Title="">
 <CellTemplate Context="data">
                      <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandlePlayActionRequest((data.Item)))"><span class="oi oi-play-circle"></span></button>
                      <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleEditRequest((data.Item)))"><span class="oi oi-pencil"></span></button>
@@ -237,7 +237,7 @@
             <div class="form-group mt-2">
                <label for="uiCaptionFontSize"><b>Font Size:</b></label>
                <small id="uiCaptionFontSize" class="form-text text-white-50">The size of the font used (bigger = better).</small>
-               <MudNumericField T="int" Id="uiCaptionFontSize" Min="18" Max="100" @bind-Value="Data.Caption.FontSize" />
+               <MudNumericField T="int" Min="18" Max="100" @bind-Value="Data.Caption.FontSize" />
             </div>
             <div class="form-group mt-2">
                <label for="uiCaptionFontColor"><b>Font Color:</b></label>
@@ -247,7 +247,7 @@
             <div class="form-group mt-2">
                <label for="uiCaptionStrokeThickness"><b>Stroke Thickness:</b></label>
                <small id="uiCaptionStrokeThickness" class="form-text text-white-50">The width of the stroke (outline) on the text.</small>
-               <MudNumericField T="int" Id="uiCaptionStrokeThickness" Min="0" Max="5" @bind-Value="Data.Caption.StrokeThickness" />
+               <MudNumericField T="int" Min="0" Max="5" @bind-Value="Data.Caption.StrokeThickness" />
             </div>
             <div class="form-group mt-2">
                <label for="uiCaptionFontStrokeColor"><b>Stroke Color:</b></label>
@@ -258,36 +258,36 @@
                <label for="uiCaptionFont"><b>Font:</b></label>
                <small id="uiCaptionFont" class="form-text text-white-50">What font should you use?</small>
                <MudRadioGroup @bind-Value="mCaptionFontSelection" T="int">
-<MudRadio T="int" Option="@(0)">Arial</MudRadio>
-                     <MudRadio T="int" Option="@(1)">Comic Sans</MudRadio>
-                     <MudRadio T="int" Option="@(2)">Impact</MudRadio>
-                     <MudRadio T="int" Option="@(3)">Monospace</MudRadio>
-                     <MudRadio T="int" Option="@(4)">Aldrich</MudRadio>
-                     <MudRadio T="int" Option="@(5)">Anton</MudRadio>
-                     <MudRadio T="int" Option="@(6)">Barrio</MudRadio>
-                     <MudRadio T="int" Option="@(7)">Creepster</MudRadio>
-                     <MudRadio T="int" Option="@(8)">Eater</MudRadio>
-                     <MudRadio T="int" Option="@(9)">Galada</MudRadio>
-                     <MudRadio T="int" Option="@(10)">Ranchers</MudRadio>
-                     <MudRadio T="int" Option="@(11)">Lobster</MudRadio>
-                     <MudRadio T="int" Option="@(12)">Righteous</MudRadio>
-                     <MudRadio T="int" Option="@(13)">BenchNine</MudRadio>
-                     <MudRadio T="int" Option="@(14)">Oswald</MudRadio>
-                     <MudRadio T="int" Option="@(15)">Ultra</MudRadio>
-                     <MudRadio T="int" Option="@(16)">Frijole</MudRadio>
-                     <MudRadio T="int" Option="@(17)">Viga</MudRadio>
-                     <MudRadio T="int" Option="@(18)">Quantico</MudRadio>
-                     <MudRadio T="int" Option="@(19)">Bungee</MudRadio>
-                     <MudRadio T="int" Option="@(21)">Sriracha</MudRadio>
-                     <MudRadio T="int" Option="@(22)">Arsenal</MudRadio>
-                     <MudRadio T="int" Option="@(23)">Gaegu</MudRadio>
-                     <MudRadio T="int" Option="@(24)">VT323</MudRadio>
+<MudRadio T="int" Value="@(0)">Arial</MudRadio>
+                     <MudRadio T="int" Value="@(1)">Comic Sans</MudRadio>
+                     <MudRadio T="int" Value="@(2)">Impact</MudRadio>
+                     <MudRadio T="int" Value="@(3)">Monospace</MudRadio>
+                     <MudRadio T="int" Value="@(4)">Aldrich</MudRadio>
+                     <MudRadio T="int" Value="@(5)">Anton</MudRadio>
+                     <MudRadio T="int" Value="@(6)">Barrio</MudRadio>
+                     <MudRadio T="int" Value="@(7)">Creepster</MudRadio>
+                     <MudRadio T="int" Value="@(8)">Eater</MudRadio>
+                     <MudRadio T="int" Value="@(9)">Galada</MudRadio>
+                     <MudRadio T="int" Value="@(10)">Ranchers</MudRadio>
+                     <MudRadio T="int" Value="@(11)">Lobster</MudRadio>
+                     <MudRadio T="int" Value="@(12)">Righteous</MudRadio>
+                     <MudRadio T="int" Value="@(13)">BenchNine</MudRadio>
+                     <MudRadio T="int" Value="@(14)">Oswald</MudRadio>
+                     <MudRadio T="int" Value="@(15)">Ultra</MudRadio>
+                     <MudRadio T="int" Value="@(16)">Frijole</MudRadio>
+                     <MudRadio T="int" Value="@(17)">Viga</MudRadio>
+                     <MudRadio T="int" Value="@(18)">Quantico</MudRadio>
+                     <MudRadio T="int" Value="@(19)">Bungee</MudRadio>
+                     <MudRadio T="int" Value="@(21)">Sriracha</MudRadio>
+                     <MudRadio T="int" Value="@(22)">Arsenal</MudRadio>
+                     <MudRadio T="int" Value="@(23)">Gaegu</MudRadio>
+                     <MudRadio T="int" Value="@(24)">VT323</MudRadio>
 </MudRadioGroup>
             </div>
             <div class="form-group mt-2">
                <label for="uiCaptionIsBold"><b>Font Weight:</b></label>
                <small id="uiCaptionIsBold" class="form-text text-white-50">Would you like the font to be bold?</small>
-               <MudCheckBox T="bool" Id="uiCaptionIsBold" @bind-Value="Data.Caption.IsBold" />
+               <MudCheckBox T="bool" @bind-Value="Data.Caption.IsBold" />
                <label for="uiCaptionIsBold">Bolded Text</label>
             </div>
             <div class="mt-2">
@@ -317,7 +317,7 @@
                <table width="100%">
                   <tr>
                      <td width="600">
-                        <MudTextField T="string" id="uiURL" class="form-control" Style="background-color: #2c2241; color: #FFFFFF; width: 100%" ReadOnly="true" @bind-Value="WebPath" />
+                        <MudTextField T="string" class="form-control" Style="background-color: #2c2241; color: #FFFFFF; width: 100%" ReadOnly="true" @bind-Value="WebPath" />
                      </td>
                      <td align="left">
                         <button type="button" class="btn btn-secondary p-1 ml-2" style="background-color: #6c4872" @onclick='(() => HandleCopyUrl("uiURL"))'>Copy to Clipboard</button>

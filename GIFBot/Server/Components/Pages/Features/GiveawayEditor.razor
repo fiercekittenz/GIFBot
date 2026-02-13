@@ -15,7 +15,7 @@
 </div>
 
 <!-- Add New Banned User Window -->
-<MudDialog @bind-IsVisible="@mIsAddBannedUserDialogVisible">
+<MudDialog @bind-Visible="@mIsAddBannedUserDialogVisible">
     <TitleContent>
         <strong>Add New Banned User Entry</strong>
     </TitleContent>
@@ -25,7 +25,7 @@
         </div>
         <div class="form-group">
             <label for="uiName"><b>Name:</b></label>
-            <MudTextField T="string" Id="uiName" @bind-Value="mTempBannedUserName" />
+            <MudTextField T="string" @bind-Value="mTempBannedUserName" />
         </div>
         <div class="container-fluid p-2">
             <p>
@@ -70,9 +70,9 @@
             </div>
         }
         <div class="container-fluid p-2">
-            <MudDataGrid T="object" Items="@Data.Entrants" Sortable="true" Pageable="true" PageSize="50">
+            <MudDataGrid T="object" Items="@Data.Entrants" SortMode="SortMode.Single">
                 <Columns>
-                    <TemplateColumn Width="400px" Filterable="true" Title="Entrant Name">
+                    <TemplateColumn Filterable="true" Title="Entrant Name">
 <CellTemplate Context="data">
                             @(data.Item)
                         </CellTemplate>
@@ -89,8 +89,8 @@
                 How would you like viewers to enter your giveaway? You can use chat with subscriber luck benefits, or you can have a ticket-based system by using Channel Points. If you use Channel Points, the rewards will be created and destroyed for you as you open and close the giveaway so users cannot accidentally enter without a running giveaway.
             </small>
             <MudRadioGroup @bind-Value="mEntryBehaviorSelection" T="int">
-<MudRadio T="int" Option="@(0)">Command</MudRadio>
-                    <MudRadio T="int" Option="@(1)">Channel Points</MudRadio>
+<MudRadio T="int" Value="@(0)">Command</MudRadio>
+                    <MudRadio T="int" Value="@(1)">Channel Points</MudRadio>
 </MudRadioGroup>
         </div>
         @if (Data.EntryBehavior == GiveawayData.GiveawayEntryBehaviorType.Command)
@@ -98,12 +98,12 @@
             <div class="form-group">
                 <label for="uiCommand"><b>Command:</b></label>
                 <small id="uiCommandLabel" class="form-text text-white-50">The command that viewers type in chat to enter your giveaway. (Note: Does not have to have ! in front of it.)</small>
-                <MudTextField T="string" Id="uiCommand" @bind-Value="Data.Command" />
+                <MudTextField T="string" @bind-Value="Data.Command" />
             </div>
             <div class="form-group">
                 <label for="uiSubLuckMultiplier"><b>Sub Luck Multiplier:</b></label>
                 <small id="uiSubLuckMultiplierLabel" class="form-text text-white-50">The additional number of tickets that a subscriber gets when entering your giveaways (<i>e.g. 2 = 2 tickets vs the 1 ticket regulars get</i>).</small>
-                <MudNumericField T="int" Id="uiSubLuckMultiplier" Min="1" Max="1000" @bind-Value="Data.SubLuckMultiplier" />
+                <MudNumericField T="int" Min="1" Max="1000" @bind-Value="Data.SubLuckMultiplier" />
             </div>
             <div class="form-group">
                 <label for="uiAccess"><b>Access Type:</b></label>
@@ -111,10 +111,10 @@
                     You can limit what kind of viewer has access to use this giveaway. Your options are below.
                 </small>
                 <MudRadioGroup @bind-Value="mAccessSelection" T="int">
-<MudRadio T="int" Option="@(0)">Anyone</MudRadio>
-                        <MudRadio T="int" Option="@(2)">Subscriber</MudRadio>
-                        <MudRadio T="int" Option="@(3)">VIP</MudRadio>
-                        <MudRadio T="int" Option="@(4)">Moderator</MudRadio>
+<MudRadio T="int" Value="@(0)">Anyone</MudRadio>
+                        <MudRadio T="int" Value="@(2)">Subscriber</MudRadio>
+                        <MudRadio T="int" Value="@(3)">VIP</MudRadio>
+                        <MudRadio T="int" Value="@(4)">Moderator</MudRadio>
 </MudRadioGroup>
             </div>
         }
@@ -123,33 +123,33 @@
             <div class="form-group">
                 <label for="uiChannelPointRewardTitle"><b>Reward Title:</b></label>
                 <small id="uiChannelPointRewardTitleLabel" class="form-text text-white-50">The title of the channel point reward.</small>
-                <MudTextField T="string" Id="uiChannelPointRewardTitle" @bind-Value="Data.ChannelPointRewardTitle" />
+                <MudTextField T="string" @bind-Value="Data.ChannelPointRewardTitle" />
             </div>
             <div class="form-group">
                 <label for="uiChannelPoints"><b>Points Required:</b></label>
                 <small id="uiChannelPointsLabel" class="form-text text-white-50">The number of points required for the channel point reward redemption. Will be created automatically for you when you start the giveaway. Cannot be the same number of points as another channel point reward.</small>
-                <MudNumericField T="int" Id="uiChannelPoints" Min="1" Max="999999" @bind-Value="Data.ChannelPointsRequired" />
+                <MudNumericField T="int" Min="1" Max="999999" @bind-Value="Data.ChannelPointsRequired" />
             </div>
             <div class="form-group">
                 <label for="uiMaxNumberOfEntriesAllowed"><b>Number of Redemptions Allowed for Entry:</b></label>
                 <small id="uiMaxNumberOfEntriesAllowedLabel" class="form-text text-white-50">You can allow your viewers to redeem multiple times for multiple entries. Think of this as a "ticket" system for channel points.</small>
-                <MudNumericField T="int" Id="uiMaxNumberOfEntriesAllowed" Min="1" Max="1000" @bind-Value="Data.MaxNumberOfEntriesAllowed" />
+                <MudNumericField T="int" Min="1" Max="1000" @bind-Value="Data.MaxNumberOfEntriesAllowed" />
             </div>
         }
         <div class="form-group">
             <label for="uiGiveawayOpenAnnouncementText"><b>Giveaway Open Announcement Text:</b></label>
             <small id="uiGiveawayOpenAnnouncementTextLabel" class="form-text text-white-50">The text sent to chat when the giveaway is opened. Use $command if you want the command to be displayed in the output.</small>
-            <MudTextField T="string" Id="uiGiveawayOpenAnnouncementText" @bind-Value="Data.GiveawayOpenAnnouncementText" />
+            <MudTextField T="string" @bind-Value="Data.GiveawayOpenAnnouncementText" />
         </div>
         <div class="form-group">
             <label for="uiGiveawayClosedAnnouncementText"><b>Giveaway Closed Announcement Text:</b></label>
             <small id="uiGiveawayClosedAnnouncementTextLabel" class="form-text text-white-50">The text sent to chat when the giveaway is closed.</small>
-            <MudTextField T="string" Id="uiGiveawayClosedAnnouncementText" @bind-Value="Data.GiveawayClosedAnnouncementText" />
+            <MudTextField T="string" @bind-Value="Data.GiveawayClosedAnnouncementText" />
         </div>
         <div class="form-group">
             <label for="uiWinnerAnnouncementText"><b>Winner Announcement Text:</b></label>
             <small id="uiWinnerAnnouncementTextLabel" class="form-text text-white-50">The text sent to chat when the winner is selected. Use $user if you would like the winner's name to appear in the announcement.</small>
-            <MudTextField T="string" Id="uiWinnerAnnouncementText" @bind-Value="Data.WinnerAnnouncementText" />
+            <MudTextField T="string" @bind-Value="Data.WinnerAnnouncementText" />
         </div>
         <div class="form-group">
             <label for="uiDrumrollAnimation"><b>Drumroll Animation:</b></label>
@@ -171,18 +171,18 @@
 
     <MudTabPanel Text="Banned Users">
         <div class="container-fluid p-2">
-            <MudDataGrid T="string" Items="@Data.BannedUsers" Sortable="true" Pageable="true" PageSize="20">
+            <MudDataGrid T="string" Items="@Data.BannedUsers" SortMode="SortMode.Single">
                 <ToolBarContent>
                     <MudTextField T="string" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
                     <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleAddBannedUserRequest">Add New Banned User</MudButton>
                 </ToolBarContent>
                 <Columns>
-                    <TemplateColumn Width="400px" Title="Name">
+                    <TemplateColumn Title="Name">
 <CellTemplate Context="data">
                             @(data.Item)
                         </CellTemplate>
                     </TemplateColumn>
-                    <TemplateColumn Width="75px">
+                    <TemplateColumn>
 <CellTemplate Context="data">
                             <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleDeleteBannedUserRequest((string)data.Item))"><span class="oi oi-trash"></span></button>
                         </CellTemplate>

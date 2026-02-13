@@ -14,7 +14,7 @@
 </div>
 
 <!-- Add New Backdrop Window -->
-<MudDialog @bind-IsVisible="@mIsAddDialogVisible">
+<MudDialog @bind-Visible="@mIsAddDialogVisible">
    <TitleContent>
       <strong>Add New Backdrop</strong>
    </TitleContent>
@@ -24,7 +24,7 @@
       </div>
       <div class="form-group">
          <label for="uiName"><b>Name:</b></label>
-         <MudTextField T="string" Id="uiName" @bind-Value="mTempData.Name" />
+         <MudTextField T="string" @bind-Value="mTempData.Name" />
       </div>
       <div class="container-fluid p-2">
          <p>
@@ -42,21 +42,21 @@
 </MudDialog>
 
 <!-- Edit Window -->
-<MudDialog @bind-IsVisible="@mIsEditDialogVisible">
+<MudDialog @bind-Visible="@mIsEditDialogVisible">
    <TitleContent>
       <strong>Edit Backdrop: @mTempData.Name</strong>
    </TitleContent>
    <DialogContent>
       <div class="form-group form-check">
          <label class="form-check-label">
-            <MudCheckBox T="bool" Id="uiTempCommandEnabled" @bind-Value="mTempData.Enabled" /> Enabled
+            <MudCheckBox T="bool" @bind-Value="mTempData.Enabled" /> Enabled
             <small id="uiTempCommandEnabled" class="form-text text-muted">When enabled, this backdrop is available for use by viewers.</small>
          </label>
       </div>
       <div class="form-group">
          <label for="uiTempCommand"><b>Name:</b></label>
          <small id="uiTempCommandLabel" class="form-text text-white-50">The name to identify this backdrop. When executed in chat, users must cheer. If this is in a channel point reward, the backdrop name and Backdrop feature command needs to be in the title of the reward. </small>
-         <MudTextField T="string" Id="uiTempCommand" @bind-Value="mTempData.Name" />
+         <MudTextField T="string" @bind-Value="mTempData.Name" />
       </div>
       <div class="form-group">
          <label for="uiVisual"><b>Backdrop Visual:</b></label>
@@ -64,10 +64,13 @@
          <table>
             <tr>
                <td valign="top">
-                  <MudTextField T="string" Id="uiVisual" Disabled="true" @bind-Value="mTempData.Visual" />
+                  <MudTextField T="string" Disabled="true" @bind-Value="mTempData.Visual" />
                   @* TODO: Wire up file upload handler *@
 <InputFile accept="image/gif,image/jpeg,image/png,video/mp4,video/webm,video/mov" style="width: 100%; background-color: #1e1e1e" />
-                  <MudProgressLinear Value="@mUploadVisualProgress" Visible="@(mUploadVisualProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
+                  @if (mUploadVisualProgress > 0)
+                  {
+                      <MudProgressLinear Value="@mUploadVisualProgress" Style="margin-bottom: 20px; width: 100%" />
+                  }
                   @if (!String.IsNullOrEmpty(mUploadVisualErrorMessage))
                   {
                      <label class="text-danger">@mUploadVisualErrorMessage</label>
@@ -111,7 +114,7 @@
       <div class="container-fluid p-2">
          <div class="form-group form-check">
             <label class="form-check-label">
-               <MudCheckBox T="bool" Id="uiEnabled" @bind-Value="Data.Enabled" OnChange="@(() => StateHasChanged())" /> Feature Enabled
+               <MudCheckBox T="bool" @bind-Value="Data.Enabled" /> Feature Enabled
                <small id="uiEnabled" class="form-text text-muted">When enabled, this feature is active and available to your users!</small>
             </label>
          </div>
@@ -119,27 +122,27 @@
       <div class="form-group">
          <label for="uiCommandLbl"><b>Title (or Command if used in chat):</b></label>
          <small id="uiCommandLbl" class="form-text text-white-50">How should the bot look for this feature being activated? You can give it a title and mirror it in your channel points, or a ! command for chat!</small>
-         <MudTextField T="string" Id="uiCommand" @bind-Value="Data.Command" />
+         <MudTextField T="string" @bind-Value="Data.Command" />
       </div>
       <div class="form-group">
          <label for="uiCommandRedemption">Redemption Type:</label>
          <small id="uiCommandRedemption" class="form-text text-muted">Backdrops can be changed from a variety of methods. If using chat, you need to use the command otherwise the system won't recognize it as a deliberate backdrop change. Example chat usage: !backdrop cheer100</small>
          <MudRadioGroup @bind-Value="@CurrentlyEditedRedemption" T="int">
-<MudRadio T="int" Option="@(0)">Cheer</MudRadio>
-               <MudRadio T="int" Option="@(1)">Channel Points</MudRadio>
-               <MudRadio T="int" Option="@(2)">Tiltify Donation</MudRadio>
-               <MudRadio T="int" Option="@(3)">Tip</MudRadio>
+<MudRadio T="int" Value="@(0)">Cheer</MudRadio>
+               <MudRadio T="int" Value="@(1)">Channel Points</MudRadio>
+               <MudRadio T="int" Value="@(2)">Tiltify Donation</MudRadio>
+               <MudRadio T="int" Value="@(3)">Tip</MudRadio>
 </MudRadioGroup>
       </div>
       <div class="form-group">
          <label for="uiCommandCostLbl">Cost:</label>
          <small id="uiCommandCostLbl" class="form-text text-muted">The number of bits, channel points, etc. required to execute this command.</small>
-         <MudNumericField T="int" Id="uiCommandCost" Min="1" Max="999999" @bind-Value="Data.Cost" />
+         <MudNumericField T="int" Min="1" Max="999999" @bind-Value="Data.Cost" />
       </div>
       <div class="form-group">
          <label for="uiCommandMinMinutesLbl">Minimum Minutes Active:</label>
          <small id="uiCommandMinMinutesLbl" class="form-text text-muted">The number of minutes that an active backdrop should remain visible even if there are queued backdrops. Ensures viewers get their "cost's" worth at the very least.</small>
-         <MudNumericField T="int" Id="uiCommandMinMinutes" Min="1" Max="999999" @bind-Value="Data.MinimumMinutesActive" />
+         <MudNumericField T="int" Min="1" Max="999999" @bind-Value="Data.MinimumMinutesActive" />
       </div>
 
       <div class="row">
@@ -152,14 +155,14 @@
 
    <MudTabPanel Text="Backdrops">
       <div class="container-fluid p-2">
-         <MudDataGrid T="BackdropVideoEntryData" Items="@Data.Backdrops" Sortable="true" Pageable="true" PageSize="10">
+         <MudDataGrid T="BackdropVideoEntryData" Items="@Data.Backdrops" SortMode="SortMode.Single">
             <ToolBarContent>
                <MudTextField T="string" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
                <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleAddRequest">Add Backdrop</MudButton>
             </ToolBarContent>
             <Columns>
-               <PropertyColumn T="BackdropVideoEntryData" TProperty="string" Property="@(x => x.Name)" Title="Value" Width="150px" />
-               <TemplateColumn Width="100px" Title="">
+               <PropertyColumn T="BackdropVideoEntryData" TProperty="string" Property="@(x => x.Name)" Title="Value" />
+               <TemplateColumn Title="">
 <CellTemplate Context="data">
                      <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleHangRequest((data.Item)))"><span class="oi oi-play-circle"></span></button>
                      <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleEditRequest((data.Item)))"><span class="oi oi-pencil"></span></button>
@@ -184,7 +187,7 @@
                <table width="100%">
                   <tr>
                      <td width="600">
-                        <MudTextField T="string" id="uiURL" class="form-control" Style="background-color: #2c2241; color: #FFFFFF; width: 100%" ReadOnly="true" @bind-Value="WebPath" />
+                        <MudTextField T="string" class="form-control" Style="background-color: #2c2241; color: #FFFFFF; width: 100%" ReadOnly="true" @bind-Value="WebPath" />
                      </td>
                      <td align="left">
                         <button type="button" class="btn btn-secondary p-1 ml-2" style="background-color: #6c4872" @onclick='(() => HandleCopyUrl("uiURL"))'>Copy to Clipboard</button>

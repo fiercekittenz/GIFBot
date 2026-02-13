@@ -26,7 +26,7 @@
 }
 
 <!-- Bot Reauthentication Warning Dialog -->
-<MudDialog @bind-IsVisible="@mIsReauthWarningVisible">
+<MudDialog @bind-Visible="@mIsReauthWarningVisible">
    <TitleContent>
       <strong>Reauthentication Required</strong>
    </TitleContent>
@@ -96,10 +96,10 @@
 
             <div class="container-fluid">
                @*<div class="form-group" style="width: 100%">
-                  <MudTextField T="string" id="uiFilterText" class="form-control" Placeholder="Filter..." Style="color: #232323" @bind-Value="@mFilterText" Change="@(args => OnFilterTextChanged(args))" />
+                  <MudTextField T="string" class="form-control" Placeholder="Filter..." Style="color: #232323" @bind-Value="@mFilterText" Change="@(args => OnFilterTextChanged(args))" />
                </div>*@
                <div class="container-fluid">
-                  <MudTreeView T="AnimationTreeItem" id="uiTree" Data="@mFilteredData" Style="width: 100%; height: 100%; margin-top: -5px">
+                  <MudTreeView T="AnimationTreeItem" id="uiTree" Style="width: 100%; height: 100%; margin-top: -5px">
                      @foreach (var category in mFilteredData.Where(c => c.Tier == AnimationTreeTier.Category).OrderBy(c => c.Title))
                      {
                         <table>

@@ -11,7 +11,7 @@
 @inject HttpClient Http
 @implements IAsyncDisposable
 
-<MudDialog @bind-IsVisible="@mIsNewGoalPromptVisible">
+<MudDialog @bind-Visible="@mIsNewGoalPromptVisible">
    <TitleContent>
       <strong>Add New Goal</strong>
    </TitleContent>
@@ -19,7 +19,7 @@
       <div class="form-group">
          <label for="uiTitleLabel">Please provide the title for your new goal:</label>
          <small id="uiTitleLabel" class="form-text text-muted">The purpose of your goal (ex: "New Camera" or "Sweet Mic").</small>
-         <MudTextField T="string" Id="uiTitle" @bind-Value="mNewGoalTitle" />
+         <MudTextField T="string" @bind-Value="mNewGoalTitle" />
       </div>
       <div class="container-fluid p-2">
          <p>
@@ -50,15 +50,15 @@
 
                   <div class="form-group form-check">
                      <label class="form-check-label">
-                        <MudCheckBox T="bool" Id="uiEnabled" @bind-Value="mGoalBarData.Settings.Enabled" /> Feature Enabled
+                        <MudCheckBox T="bool" @bind-Value="mGoalBarData.Settings.Enabled" /> Feature Enabled
                         <small id="uiEnabled" class="form-text text-muted">When enabled, Twitch events will be computed and have their values applied to the goal.</small>
                      </label>
                   </div>
 
-                  <MudExpansionPanel Text="Goal Triggers" IsInitiallyExpanded="true">
+                  <MudExpansionPanel Text="Goal Triggers" Expanded="true">
                      <div class="form-group form-check">
                         <label class="form-check-label">
-                           <MudCheckBox T="bool" Id="uiIncludeCheers" @bind-Value="mGoalBarData.Settings.IncludeCheers" /> Include Cheers
+                           <MudCheckBox T="bool" @bind-Value="mGoalBarData.Settings.IncludeCheers" /> Include Cheers
                            <small id="uiIncludeCheers" class="form-text text-muted">When enabled, cheering will count toward the goal.</small>
                         </label>
                      </div>
@@ -70,13 +70,13 @@
                            <small id="uiBitPointsLabel" class="form-text text-muted">The number of points applied to the goal per bit cheered. If you would like to only count bits, make sure you either set this value to 1 <i>OR</i> make sure the goal is the dollar amount of bits you want to achieve.</small>
                            <DataAnnotationsValidator />
                            <ValidationSummary />
-                           <MudNumericField T="double" Id="uiBitPoints" Min="0.01" Max="1000" @bind-Value="mGoalBarData.Settings.BitPoints" />
+                           <MudNumericField T="double" Min="0.01" Max="1000" @bind-Value="mGoalBarData.Settings.BitPoints" />
                         </div>
                      }
 
                      <div class="form-group form-check">
                         <label class="form-check-label">
-                           <MudCheckBox T="bool" Id="uiIncludeTips" @bind-Value="mGoalBarData.Settings.IncludeTips" /> Include Streamlabs Tips
+                           <MudCheckBox T="bool" @bind-Value="mGoalBarData.Settings.IncludeTips" /> Include Streamlabs Tips
                            <small id="uiIncludeTips" class="form-text text-muted">When enabled, tipping via Streamlabs will count toward the goal (must authenticate with Streamlabs).</small>
                         </label>
                      </div>
@@ -88,13 +88,13 @@
                            <small id="uiTipPointsLabel" class="form-text text-muted">The number of points applied to the goal per 1 currency tipped (i.e. $1 = 1 point).</small>
                            <DataAnnotationsValidator />
                            <ValidationSummary />
-                           <MudNumericField T="double" Id="uiTipPoints" Min="0.01" Max="1000" @bind-Value="mGoalBarData.Settings.TipPoints" />
+                           <MudNumericField T="double" Min="0.01" Max="1000" @bind-Value="mGoalBarData.Settings.TipPoints" />
                         </div>
                      }
 
                      <div class="form-group form-check">
                         <label class="form-check-label">
-                           <MudCheckBox T="bool" Id="uiIncludeSubs" @bind-Value="mGoalBarData.Settings.IncludeSubs" /> Include Subscriptions
+                           <MudCheckBox T="bool" @bind-Value="mGoalBarData.Settings.IncludeSubs" /> Include Subscriptions
                            <small id="uiIncludeSubs" class="form-text text-muted">When enabled, subscriptions, resubscriptions, and gift subscriptions count toward the goal.</small>
                         </label>
                      </div>
@@ -106,21 +106,21 @@
                            <small id="uiSub1PointsLabel" class="form-text text-muted">The number of points applied to the goal tier 1 subscription.</small>
                            <DataAnnotationsValidator />
                            <ValidationSummary />
-                           <MudNumericField T="double" Id="uiSub1Points" Min="0.01" Max="1000" @bind-Value="mGoalBarData.Settings.SubTier1Points" />
+                           <MudNumericField T="double" Min="0.01" Max="1000" @bind-Value="mGoalBarData.Settings.SubTier1Points" />
                         </div>
                         <div class="form-group">
                            <label for="uiSub2PointsLabel">Tier 2 Point Amount:</label>
                            <small id="uiSub2PointsLabel" class="form-text text-muted">The number of points applied to the goal tier 2 subscription.</small>
                            <DataAnnotationsValidator />
                            <ValidationSummary />
-                           <MudNumericField T="double" Id="uiSub2Points" Min="0.01" Max="1000" @bind-Value="mGoalBarData.Settings.SubTier2Points" />
+                           <MudNumericField T="double" Min="0.01" Max="1000" @bind-Value="mGoalBarData.Settings.SubTier2Points" />
                         </div>
                         <div class="form-group">
                            <label for="uiSub3PointsLabel">Tier 3 Point Amount:</label>
                            <small id="uiSub3PointsLabel" class="form-text text-muted">The number of points applied to the goal tier 3 subscription.</small>
                            <DataAnnotationsValidator />
                            <ValidationSummary />
-                           <MudNumericField T="double" Id="uiSub3Points" Min="0.01" Max="1000" @bind-Value="mGoalBarData.Settings.SubTier3Points" />
+                           <MudNumericField T="double" Min="0.01" Max="1000" @bind-Value="mGoalBarData.Settings.SubTier3Points" />
                         </div>
                      }
                   </MudExpansionPanel>
@@ -134,13 +134,13 @@
             <div class="container-fluid p-2">
                <div class="form-group form-check">
                   <label class="form-check-label">
-                     <MudCheckBox T="bool" Id="uiHideGoalText" @bind-Value="mGoalBarData.Settings.HideGoalText" /> Hide Goal Text
+                     <MudCheckBox T="bool" @bind-Value="mGoalBarData.Settings.HideGoalText" /> Hide Goal Text
                      <small id="uiHideGoalText" class="form-text text-muted">When enabled, the text for the goal will not be visible on the bar overlay.</small>
                   </label>
                </div>
                <div class="form-group form-check">
                   <label class="form-check-label">
-                     <MudCheckBox T="bool" Id="uiPercentage" @bind-Value="mGoalBarData.Settings.ShowAmountAsPercentage" /> Show Current Amount as Percentage
+                     <MudCheckBox T="bool" @bind-Value="mGoalBarData.Settings.ShowAmountAsPercentage" /> Show Current Amount as Percentage
                      <small id="uiPercentage" class="form-text text-muted">When enabled, the current amount on the bar will be shown as a percentage value.</small>
                   </label>
                </div>
@@ -148,13 +148,13 @@
                {
                   <div class="form-group">
                      <label for="uiCurrencyLabel">The currency symbol to use:</label>
-                     <MudTextField T="string" Id="uiCurrencySymbol" @bind-Value="@mGoalBarData.Settings.CurrencySymbol" />
+                     <MudTextField T="string" @bind-Value="@mGoalBarData.Settings.CurrencySymbol" />
                   </div>
                }
                <div class="form-group mt-2">
                   <label for="uiWidth"><b>Bar Width:</b></label>
                   <small id="uiWidth" class="form-text text-white-50">The width of the whole goal bar.</small>
-                  <MudNumericField T="int" Id="uiWidth" Min="100" Max="9999" @bind-Value="mGoalBarData.Settings.Width" />
+                  <MudNumericField T="int" Min="100" Max="9999" @bind-Value="mGoalBarData.Settings.Width" />
                </div>
                <div class="form-group mt-2">
                   <label for="uiBarForeColorLabel"><b>Bar Forecolor:</b></label>
@@ -169,7 +169,7 @@
                <div class="form-group mt-2">
                   <label for="uiFontSize"><b>Font Size:</b></label>
                   <small id="uiFontSize" class="form-text text-white-50">The size of the font used (bigger = better).</small>
-                  <MudNumericField T="int" Id="uiFontSize" Min="18" Max="100" @bind-Value="mGoalBarData.Settings.Caption.FontSize" />
+                  <MudNumericField T="int" Min="18" Max="100" @bind-Value="mGoalBarData.Settings.Caption.FontSize" />
                </div>
                <div class="form-group mt-2">
                   <label for="uiFontColor"><b>Font Color:</b></label>
@@ -179,7 +179,7 @@
                <div class="form-group mt-2">
                   <label for="uiStrokeThickness"><b>Stroke Thickness:</b></label>
                   <small id="uiStrokeThickness" class="form-text text-white-50">The width of the stroke (outline) on the caption text.</small>
-                  <MudNumericField T="int" Id="uiStrokeThickness" Min="0" Max="5" @bind-Value="mGoalBarData.Settings.Caption.StrokeThickness" />
+                  <MudNumericField T="int" Min="0" Max="5" @bind-Value="mGoalBarData.Settings.Caption.StrokeThickness" />
                </div>
                <div class="form-group mt-2">
                   <label for="uiFontStrokeColor"><b>Stroke Color:</b></label>
@@ -190,36 +190,36 @@
                   <label for="uiFont"><b>Font:</b></label>
                   <small id="uiFont" class="form-text text-white-50">What font should you use?</small>
                   <MudRadioGroup @bind-Value="mCaptionFontSelection" T="int">
-<MudRadio T="int" Option="@(0)">Arial</MudRadio>
-                        <MudRadio T="int" Option="@(1)">Comic Sans</MudRadio>
-                        <MudRadio T="int" Option="@(2)">Impact</MudRadio>
-                        <MudRadio T="int" Option="@(3)">Monospace</MudRadio>
-                        <MudRadio T="int" Option="@(4)">Aldrich</MudRadio>
-                        <MudRadio T="int" Option="@(5)">Anton</MudRadio>
-                        <MudRadio T="int" Option="@(6)">Barrio</MudRadio>
-                        <MudRadio T="int" Option="@(7)">Creepster</MudRadio>
-                        <MudRadio T="int" Option="@(8)">Eater</MudRadio>
-                        <MudRadio T="int" Option="@(9)">Galada</MudRadio>
-                        <MudRadio T="int" Option="@(10)">Ranchers</MudRadio>
-                        <MudRadio T="int" Option="@(11)">Lobster</MudRadio>
-                        <MudRadio T="int" Option="@(12)">Righteous</MudRadio>
-                        <MudRadio T="int" Option="@(13)">BenchNine</MudRadio>
-                        <MudRadio T="int" Option="@(14)">Oswald</MudRadio>
-                        <MudRadio T="int" Option="@(15)">Ultra</MudRadio>
-                        <MudRadio T="int" Option="@(16)">Frijole</MudRadio>
-                        <MudRadio T="int" Option="@(17)">Viga</MudRadio>
-                        <MudRadio T="int" Option="@(18)">Quantico</MudRadio>
-                        <MudRadio T="int" Option="@(19)">Bungee</MudRadio>
-                        <MudRadio T="int" Option="@(21)">Sriracha</MudRadio>
-                        <MudRadio T="int" Option="@(22)">Arsenal</MudRadio>
-                        <MudRadio T="int" Option="@(23)">Gaegu</MudRadio>
-                        <MudRadio T="int" Option="@(24)">VT323</MudRadio>
+<MudRadio T="int" Value="@(0)">Arial</MudRadio>
+                        <MudRadio T="int" Value="@(1)">Comic Sans</MudRadio>
+                        <MudRadio T="int" Value="@(2)">Impact</MudRadio>
+                        <MudRadio T="int" Value="@(3)">Monospace</MudRadio>
+                        <MudRadio T="int" Value="@(4)">Aldrich</MudRadio>
+                        <MudRadio T="int" Value="@(5)">Anton</MudRadio>
+                        <MudRadio T="int" Value="@(6)">Barrio</MudRadio>
+                        <MudRadio T="int" Value="@(7)">Creepster</MudRadio>
+                        <MudRadio T="int" Value="@(8)">Eater</MudRadio>
+                        <MudRadio T="int" Value="@(9)">Galada</MudRadio>
+                        <MudRadio T="int" Value="@(10)">Ranchers</MudRadio>
+                        <MudRadio T="int" Value="@(11)">Lobster</MudRadio>
+                        <MudRadio T="int" Value="@(12)">Righteous</MudRadio>
+                        <MudRadio T="int" Value="@(13)">BenchNine</MudRadio>
+                        <MudRadio T="int" Value="@(14)">Oswald</MudRadio>
+                        <MudRadio T="int" Value="@(15)">Ultra</MudRadio>
+                        <MudRadio T="int" Value="@(16)">Frijole</MudRadio>
+                        <MudRadio T="int" Value="@(17)">Viga</MudRadio>
+                        <MudRadio T="int" Value="@(18)">Quantico</MudRadio>
+                        <MudRadio T="int" Value="@(19)">Bungee</MudRadio>
+                        <MudRadio T="int" Value="@(21)">Sriracha</MudRadio>
+                        <MudRadio T="int" Value="@(22)">Arsenal</MudRadio>
+                        <MudRadio T="int" Value="@(23)">Gaegu</MudRadio>
+                        <MudRadio T="int" Value="@(24)">VT323</MudRadio>
 </MudRadioGroup>
                </div>
                <div class="form-group mt-2">
                   <label for="uiIsBold"><b>Font Weight:</b></label>
                   <small id="uiIsBold" class="form-text text-white-50">Would you like the font to be bold?</small>
-                  <MudCheckBox T="bool" Id="uiIsBold" @bind-Value="mGoalBarData.Settings.Caption.IsBold" />
+                  <MudCheckBox T="bool" @bind-Value="mGoalBarData.Settings.Caption.IsBold" />
                   <label for="uiIsBold">Bolded Text</label>
                </div>
                <div class="mt-2">
@@ -289,7 +289,7 @@
             <table width="100%">
                <tr>
                   <td width="600">
-                     <MudTextField T="string" id="uiURL" class="form-control" Style="background-color: #2c2241; color: #FFFFFF; width: 100%" ReadOnly="true" @bind-Value="mURL" />
+                     <MudTextField T="string" class="form-control" Style="background-color: #2c2241; color: #FFFFFF; width: 100%" ReadOnly="true" @bind-Value="mURL" />
                   </td>
                   <td align="left">
                      <button type="button" class="btn btn-secondary p-1 ml-2" style="background-color: #6c4872" @onclick='(() => HandleCopyUrl("uiURL"))'>Copy to Clipboard</button>

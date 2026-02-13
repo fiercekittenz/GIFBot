@@ -21,22 +21,22 @@
          <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
             <div class="container-fluid p-2">
                <div class="mt-2">
-                  <MudCheckBox T="bool" Id="uiDisabled" @bind-Value="mData.Disabled" />
+                  <MudCheckBox T="bool" @bind-Value="mData.Disabled" />
                   <label for="uiDisabled">Disabled</label>
                   <small for="uiDisabled" class="form-text text-white-50 ml-4">When disabled, an animation can only be triggered by the broadcaster.</small>
                </div>
                <div class="mt-2">
-                  <MudCheckBox T="bool" Id="uiHideFromChat" @bind-Value="mData.HideFromChatOutput" />
+                  <MudCheckBox T="bool" @bind-Value="mData.HideFromChatOutput" />
                   <label for="uiHideFromChat">Hide from !animations Output</label>
                   <small id="uiHideFromChat" class="form-text text-white-50 ml-4">When enabled, the command will not appear in the list of chat output on the !animations command.</small>
                </div>
                <div class="mt-2">
                   <label for="uiCommand"><b>Command (Name):</b></label>
                   <small id="uiCommand" class="form-text text-white-50">The command viewers have to use in chat to trigger this animation. If your animation has special trigger requirements (sub, resub, tip, etc.) then this is just its name.</small>
-                  <MudTextField T="string" Id="uiCommand" @bind-Value="mData.Command" />
+                  <MudTextField T="string" @bind-Value="mData.Command" />
                </div>
 
-               <MudExpansionPanel Text="Audio/Visual" IsInitiallyExpanded="true">
+               <MudExpansionPanel Text="Audio/Visual" Expanded="true">
                   <table>
                      <tr>
                         <td style="width: 45%" valign="top">
@@ -46,10 +46,13 @@
                               <table>
                                  <tr>
                                     <td valign="top">
-                                       <MudTextField T="string" Id="uiVisual" Disabled="true" @bind-Value="mData.Visual" />
+                                       <MudTextField T="string" Disabled="true" @bind-Value="mData.Visual" />
                                        @* TODO: Wire up file upload handler *@
 <InputFile accept="image/gif,image/jpeg,image/png,video/mp4,video/webm,video/mov" style="width: 100%; background-color: #1e1e1e" />
-                                       <MudProgressLinear Value="@mUploadVisualProgress" Visible="@(mUploadVisualProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
+                                       @if (mUploadVisualProgress > 0)
+                                       {
+                                           <MudProgressLinear Value="@mUploadVisualProgress" Style="margin-bottom: 20px; width: 100%" />
+                                       }
                                        @if (!String.IsNullOrEmpty(mUploadVisualErrorMessage))
                                        {
                                           <label class="text-danger">@mUploadVisualErrorMessage</label>
@@ -68,10 +71,13 @@
                               <table>
                                  <tr>
                                     <td valign="top">
-                                       <MudTextField T="string" Id="uiAudio" Disabled="true" @bind-Value="mData.Audio" />
+                                       <MudTextField T="string" Disabled="true" @bind-Value="mData.Audio" />
                                        @* TODO: Wire up file upload handler *@
 <InputFile accept="audio/*" style="width: 100%; background-color: #1e1e1e" />
-                                       <MudProgressLinear Value="@mUploadAudioProgress" Visible="@(mUploadAudioProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
+                                       @if (mUploadAudioProgress > 0)
+                                       {
+                                           <MudProgressLinear Value="@mUploadAudioProgress" Style="margin-bottom: 20px; width: 100%" />
+                                       }
                                        @if (!String.IsNullOrEmpty(mUploadAudioErrorMessage))
                                        {
                                           <label class="text-danger">@mUploadAudioErrorMessage</label>
@@ -113,25 +119,25 @@
                   }
                </MudExpansionPanel>
 
-               <MudExpansionPanel Text="Timing" IsInitiallyExpanded="true">
+               <MudExpansionPanel Text="Timing" Expanded="true">
                   <div class="form-group">
                      <label for="uiDuration"><b>Duration (in milliseconds):</b></label>
                      <small id="uiDuration" class="form-text text-white-50">The number of milliseconds this animation should play for (<i>Math Reminder: 1 second = 1000ms</i>).</small>
-                     <MudNumericField T="int" Id="uiDuration" Min="1000" Max="9999999" @bind-Value="mData.DurationMilliseconds" />
+                     <MudNumericField T="int" Min="1000" Max="9999999" @bind-Value="mData.DurationMilliseconds" />
                   </div>
                   <div class="form-group">
                      <label for="uiCooldown"><b>Main Cooldown (in minutes):</b></label>
                      <small id="uiCooldown" class="form-text text-white-50">The number of minutes this command must wait before triggered again via chat. This cooldown does not apply if the animation is redeemed via Twitch events.</small>
-                     <MudNumericField T="int" Id="uiCooldown" Min="0" Max="300" @bind-Value="mData.MainCooldownMinutes" />
+                     <MudNumericField T="int" Min="0" Max="300" @bind-Value="mData.MainCooldownMinutes" />
                   </div>
                   <div class="form-group">
                      <label for="uiAudioOffset"><b>Audio Offset (in milliseconds):</b></label>
                      <small id="uiAudioOffset" class="form-text text-white-50">Plays the audio file on a delay <i>after</i> the visual is played (<i>Math Reminder: 1 second = 1000ms</i>).</small>
-                     <MudNumericField T="int" Id="uiAudioOffset" Min="0" Max="600000" @bind-Value="mData.AudioTimingOffsetMilliseconds" />
+                     <MudNumericField T="int" Min="0" Max="600000" @bind-Value="mData.AudioTimingOffsetMilliseconds" />
                   </div>
                </MudExpansionPanel>
 
-               <MudExpansionPanel Text="Access Level" IsInitiallyExpanded="true">
+               <MudExpansionPanel Text="Access Level" Expanded="true">
                   <div class="form-group">
                      <label for="uiAccess"><b>Access Type:</b></label>
                      <small id="uiAccess" class="form-text text-white-50">
@@ -139,13 +145,13 @@
                         this command to be used from within another command, it is recommended to flag it as Bot Only!
                      </small>
                      <MudRadioGroup @bind-Value="mAccessSelection" T="int">
-<MudRadio T="int" Option="@(0)">Anyone</MudRadio>
-                           <MudRadio T="int" Option="@(2)">Subscriber</MudRadio>
-                           <MudRadio T="int" Option="@(3)">VIP</MudRadio>
-                           <MudRadio T="int" Option="@(4)">Moderator</MudRadio>
-                           <MudRadio T="int" Option="@(5)">User Group</MudRadio>
-                           <MudRadio T="int" Option="@(6)">Specific Viewer</MudRadio>
-                           <MudRadio T="int" Option="@(7)">Bot Only</MudRadio>
+<MudRadio T="int" Value="@(0)">Anyone</MudRadio>
+                           <MudRadio T="int" Value="@(2)">Subscriber</MudRadio>
+                           <MudRadio T="int" Value="@(3)">VIP</MudRadio>
+                           <MudRadio T="int" Value="@(4)">Moderator</MudRadio>
+                           <MudRadio T="int" Value="@(5)">User Group</MudRadio>
+                           <MudRadio T="int" Value="@(6)">Specific Viewer</MudRadio>
+                           <MudRadio T="int" Value="@(7)">Bot Only</MudRadio>
 </MudRadioGroup>
                   </div>
 
@@ -156,7 +162,7 @@
                         <small id="uiUserGroup" class="form-text text-white-50">Access is restricted to a user group. Which one?</small>
 
                         <MudSelect T="string" Placeholder="Select User Group..." Style="background-color: #2c2241; color: #e5e5e5; font-weight: bold; width: 250px;"
-                                     Data="@UserGroupNames" Value="@mSelectedUserGroupName" ValueChanged="@(args => OnUserGroupSelected.InvokeAsync(args as string))" />
+ Value="@mSelectedUserGroupName" ValueChanged="@(args => OnUserGroupSelected.InvokeAsync(args as string))" />
                      </div>
                   }
                   else if (mData.Access == AnimationEnums.AccessType.SpecificViewer)
@@ -164,10 +170,10 @@
                      <div class="form-group">
                         <label for="uiRestrictedToUser"><b>Specific Viewer:</b></label>
                         <small id="uiRestrictedToUser" class="form-text text-white-50">Access is restricted to a specific viewer. Which one?</small>
-                        <MudTextField T="string" Id="uiRestrictedToUser" @bind-Value="@mData.RestrictedToUser" />
+                        <MudTextField T="string" @bind-Value="@mData.RestrictedToUser" />
                      </div>
                      <div class="mt-2">
-                        <MudCheckBox T="bool" Id="uiRestrictedUserMustBeSub" @bind-Value="mData.RestrictedUserMustBeSub" />
+                        <MudCheckBox T="bool" @bind-Value="mData.RestrictedUserMustBeSub" />
                         <label for="uiRestrictedUserMustBeSub">Viewer must be subscribed</label>
                      </div>
                   }
@@ -182,7 +188,7 @@
                <div class="container-fluid p-2">
                   <div class="form-group form-check">
                      <label class="form-check-label">
-                        <MudCheckBox T="bool" Id="uiMirrored" @bind-Value="mData.IsMirrored" /> Mirroring: This animation should be flipped horizontally.
+                        <MudCheckBox T="bool" @bind-Value="mData.IsMirrored" /> Mirroring: This animation should be flipped horizontally.
                      </label>
                   </div>
                </div>
@@ -206,17 +212,17 @@
                   <MudTabPanel Text="Twitch Events">
                      <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
                         <div class="container-fluid p-2">
-                           <MudExpansionPanel Text="Cheer Requirements" IsInitiallyExpanded="true">
+                           <MudExpansionPanel Text="Cheer Requirements" Expanded="true">
                               <div class="form-group form-check">
                                  <label class="form-check-label">
-                                    <MudCheckBox T="bool" Id="uiBitTriggerEnabled" @bind-Value="mData.IsBitAlert" /> Trigger when someone cheers bits
+                                    <MudCheckBox T="bool" @bind-Value="mData.IsBitAlert" /> Trigger when someone cheers bits
                                  </label>
                               </div>
                               @if (mData.IsBitAlert)
                               {
                                  <div class="form-group">
                                     <small id="uiRequirementBits" class="form-text text-white-50">Require an exact number of bits to be cheered before this animation will trigger. Leave at 0 if you would like this to trigger for all cheers.</small>
-                                    <MudNumericField T="int" Id="uiRequirementBits" Min="0" Max="999999" @bind-Value="mData.BitRequirement" />
+                                    <MudNumericField T="int" Min="0" Max="999999" @bind-Value="mData.BitRequirement" />
                                  </div>
                                  <div class="form-group">
                                     <label for="uiBitAlertBehavior"><b>Bit Alert Behavior:</b></label>
@@ -225,21 +231,21 @@
                                        you to create catch-all alerts for ranges of values, but an exact match alert for bits cheered will always be prioritized.
                                     </small>
                                     <MudRadioGroup @bind-Value="mBitBehaviorSelection" T="int">
-<MudRadio T="int" Option="@(0)">Exact Match</MudRadio>
-                                          <MudRadio T="int" Option="@(1)">Minimum (>= Your Value)</MudRadio>
+<MudRadio T="int" Value="@(0)">Exact Match</MudRadio>
+                                          <MudRadio T="int" Value="@(1)">Minimum (>= Your Value)</MudRadio>
 </MudRadioGroup>
                                  </div>
                                  <div class="form-group form-check">
                                     <label class="form-check-label">
-                                       <MudCheckBox T="bool" Id="uiRequireBitPairedWithCommand" @bind-Value="mData.BitsMustBePairedWithCommand" /> Cheering must be paired with the command. (Allows users to target a specific animation when there are multiple with the same cheer amount. Example: !commandname cheer25)
+                                       <MudCheckBox T="bool" @bind-Value="mData.BitsMustBePairedWithCommand" /> Cheering must be paired with the command. (Allows users to target a specific animation when there are multiple with the same cheer amount. Example: !commandname cheer25)
                                     </label>
                                  </div>
                               }
                            </MudExpansionPanel>
-                           <MudExpansionPanel Text="Raid Alerts" IsInitiallyExpanded="true">
+                           <MudExpansionPanel Text="Raid Alerts" Expanded="true">
                               <div class="form-group form-check">
                                  <label class="form-check-label">
-                                    <MudCheckBox T="bool" Id="uiRaidTriggerEnabled" @bind-Value="mData.IsRaidAlert" /> Trigger when someone raids the channel
+                                    <MudCheckBox T="bool" @bind-Value="mData.IsRaidAlert" /> Trigger when someone raids the channel
                                  </label>
                               </div>
                               @if (mData.IsRaidAlert)
@@ -247,14 +253,14 @@
                                  <div class="form-group">
                                     <label for="uiRestrictedToRaid"><b>Restricted to Raids By User:</b></label>
                                     <small id="uiRestrictedToRaid" class="form-text text-white-50">Only triggers if this specific user raids. You may leave this blank to trigger for all raids.</small>
-                                    <MudTextField T="string" Id="uiRestrictedToRaid" @bind-Value="mData.RaidRestrictedToUsername" />
+                                    <MudTextField T="string" @bind-Value="mData.RaidRestrictedToUsername" />
                                  </div>
                               }
                            </MudExpansionPanel>
-                           <MudExpansionPanel Text="Subscriber Alerts" IsInitiallyExpanded="true">
+                           <MudExpansionPanel Text="Subscriber Alerts" Expanded="true">
                               <div class="form-group form-check">
                                  <label class="form-check-label">
-                                    <MudCheckBox T="bool" Id="uiSubscriberTriggerEnabled" @bind-Value="mData.IsSubAlertTrigger" /> Trigger when someone subscribes/resubscribes
+                                    <MudCheckBox T="bool" @bind-Value="mData.IsSubAlertTrigger" /> Trigger when someone subscribes/resubscribes
                                  </label>
                               </div>
                               @if (mData.IsSubAlertTrigger)
@@ -262,25 +268,25 @@
                                  <div class="form-group">
                                     <label for="uiSubMonths"><b>Months Subscribed:</b></label>
                                     <small id="uiSubMonths" class="form-text text-white-50">A subscriber must subscribe or resubscribe with the number of months to trigger the animation. (0 = no restriction)</small>
-                                    <MudNumericField T="int" Id="uiSubMonths" Min="0" Max="2500" @bind-Value="mData.SubscriptionMonthsRequired" />
+                                    <MudNumericField T="int" Min="0" Max="2500" @bind-Value="mData.SubscriptionMonthsRequired" />
                                  </div>
                                  <div class="form-group">
                                     <label for="uiSubTier"><b>Tier:</b></label>
                                     <small id="uiSubTier" class="form-text text-white-50">What sub tier is this for?</small>
                                     <MudRadioGroup @bind-Value="mSubTierSelection" T="int">
-<MudRadio T="int" Option="@(0)">All</MudRadio>
-                                          <MudRadio T="int" Option="@(1)">Prime</MudRadio>
-                                          <MudRadio T="int" Option="@(2)">Tier 1</MudRadio>
-                                          <MudRadio T="int" Option="@(3)">Tier 2</MudRadio>
-                                          <MudRadio T="int" Option="@(4)">Tier 3</MudRadio>
+<MudRadio T="int" Value="@(0)">All</MudRadio>
+                                          <MudRadio T="int" Value="@(1)">Prime</MudRadio>
+                                          <MudRadio T="int" Value="@(2)">Tier 1</MudRadio>
+                                          <MudRadio T="int" Value="@(3)">Tier 2</MudRadio>
+                                          <MudRadio T="int" Value="@(4)">Tier 3</MudRadio>
 </MudRadioGroup>
                                  </div>
                               }
                            </MudExpansionPanel>
-                           <MudExpansionPanel Text="Gift Sub Bomb Alerts" IsInitiallyExpanded="true">
+                           <MudExpansionPanel Text="Gift Sub Bomb Alerts" Expanded="true">
                               <div class="form-group form-check">
                                  <label class="form-check-label">
-                                    <MudCheckBox T="bool" Id="uiGiftSubscriberTriggerEnabled" @bind-Value="mData.IsGiftSubAlertTrigger" /> Trigger when someone gifts subscriptions
+                                    <MudCheckBox T="bool" @bind-Value="mData.IsGiftSubAlertTrigger" /> Trigger when someone gifts subscriptions
                                  </label>
                               </div>
                               @if (mData.IsGiftSubAlertTrigger)
@@ -288,14 +294,14 @@
                                  <div class="form-group">
                                     <label for="uiNumGifted"><b>Number of Gift Subscriptions to Trigger</b></label>
                                     <small id="uiNumGifted" class="form-text text-white-50">The number of subscriptions that have to be gifted in one event to trigger. The number must match, or you may say 0 for this to fire on all gift subscription events.</small>
-                                    <MudNumericField T="int" Id="uiNumGifted" Min="0" Max="2500" @bind-Value="mData.GiftSubCountRequirement" />
+                                    <MudNumericField T="int" Min="0" Max="2500" @bind-Value="mData.GiftSubCountRequirement" />
                                  </div>
                               }
                            </MudExpansionPanel>
-                           @*<MudExpansionPanel Text="Hype Train Leveling" IsInitiallyExpanded="true">
+                           @*<MudExpansionPanel Text="Hype Train Leveling" Expanded="true">
                            <div class="form-group form-check">
                            <label class="form-check-label">
-                           <MudCheckBox T="bool" Id="uiHypeTrainEnabled" @bind-Value="mData.IsHypeTrainTrigger" /> Trigger when a new hype train level has been reached
+                           <MudCheckBox T="bool" @bind-Value="mData.IsHypeTrainTrigger" /> Trigger when a new hype train level has been reached
                            </label>
                            </div>
                            @if (mData.IsHypeTrainTrigger)
@@ -303,7 +309,7 @@
                            <div class="form-group">
                            <label for="uiHypeTrainLevel"><b>Hype Train Level:</b></label>
                            <small id="uiHypeTrainLevel" class="form-text text-white-50">The level of hype train that must be reached to trigger this animation.</small>
-                           <MudNumericField T="int" Id="uiHypeTrainLevel" Min="0" Max="2500" @bind-Value="mData.HypeTrainLevel" />
+                           <MudNumericField T="int" Min="0" Max="2500" @bind-Value="mData.HypeTrainLevel" />
                            </div>
                            }
                            </MudExpansionPanel>*@
@@ -328,10 +334,10 @@
                            <div class="form-group">
                               <label for="uiChannelPointLevel"><b>Options:</b></label>
                               <MudRadioGroup @bind-Value="mChannelPointSelection" T="int">
-<MudRadio T="int" Option="@(0)">Disabled</MudRadio>
-                                    <MudRadio T="int" Option="@(1)">Trigger on all channel point redemptions. Will be have as an alert and always be queued.</MudRadio>
-                                    <MudRadio T="int" Option="@(2)">Trigger by the redemption message. The command must be in the message (user input required).</MudRadio>
-                                    <MudRadio T="int" Option="@(3)">Trigger by the number of points spent (does not require user input).</MudRadio>
+<MudRadio T="int" Value="@(0)">Disabled</MudRadio>
+                                    <MudRadio T="int" Value="@(1)">Trigger on all channel point redemptions. Will be have as an alert and always be queued.</MudRadio>
+                                    <MudRadio T="int" Value="@(2)">Trigger by the redemption message. The command must be in the message (user input required).</MudRadio>
+                                    <MudRadio T="int" Value="@(3)">Trigger by the number of points spent (does not require user input).</MudRadio>
 </MudRadioGroup>
                            </div>
                            @if (mData.ChannelPointRedemptionType == AnimationEnums.ChannelPointRedemptionTriggerType.PointsUsed)
@@ -339,7 +345,7 @@
                               <div class="form-group">
                                  <label for="uiNumChannelPoints"><b>Number of Channel Points Spent to Trigger (exact match)</b></label>
                                  <small id="uiNumChannelPoints" class="form-text text-white-50">The number of points that must be spent in order to trigger this animation. The number must match the cost in your Stream Manager.</small>
-                                 <MudNumericField T="int" Id="uiNumChannelPoints" Min="1" Max="100000000" Value="@mData.ChannelPointsRequired" ValueChanged="@((int val) => { mData.ChannelPointsRequired = val; HandleChannelPointRequirementChanged(val); })" />
+                                 <MudNumericField T="int" Min="1" Max="100000000" Value="@mData.ChannelPointsRequired" ValueChanged="@((int val) => { mData.ChannelPointsRequired = val; HandleChannelPointRequirementChanged(val); })" />
                               </div>
                            }
                         </div>
@@ -355,17 +361,17 @@
                            </p>
                         </div>
                         <div class="container-fluid p-2">
-                           <MudExpansionPanel Text="Tip Requirement" IsInitiallyExpanded="true">
+                           <MudExpansionPanel Text="Tip Requirement" Expanded="true">
                               <div class="form-group form-check">
                                  <label class="form-check-label">
-                                    <MudCheckBox T="bool" Id="uiStreamlabsTipTrigger" @bind-Value="mData.IsStreamlabsTipTrigger" /> Trigger when tips are made through Streamlabs or StreamElements
+                                    <MudCheckBox T="bool" @bind-Value="mData.IsStreamlabsTipTrigger" /> Trigger when tips are made through Streamlabs or StreamElements
                                  </label>
                               </div>
                               @if (mData.IsStreamlabsTipTrigger)
                               {
                                  <div class="form-group">
                                     <small id="uiTipRequirement" class="form-text text-white-50">Amount of currency to be tipped before this animation will trigger (0 = all tips).</small>
-                                    <MudNumericField T="double" Id="uiTipRequirement" Min="0" Max="100000" @bind-Value="mData.StreamlabsTipRequirement" />
+                                    <MudNumericField T="double" Min="0" Max="100000" @bind-Value="mData.StreamlabsTipRequirement" />
                                  </div>
                               }
                            </MudExpansionPanel>
@@ -383,17 +389,17 @@
                            </p>
                         </div>
                         <div class="container-fluid p-2">
-                           <MudExpansionPanel Text="Tip Requirement" IsInitiallyExpanded="true">
+                           <MudExpansionPanel Text="Tip Requirement" Expanded="true">
                               <div class="form-group form-check">
                                  <label class="form-check-label">
-                                    <MudCheckBox T="bool" Id="uiStreamlabsTiltifyTrigger" @bind-Value="mData.IsTiltifyTrigger" /> Trigger when donations are made through Tiltify
+                                    <MudCheckBox T="bool" @bind-Value="mData.IsTiltifyTrigger" /> Trigger when donations are made through Tiltify
                                  </label>
                               </div>
                               @if (mData.IsTiltifyTrigger)
                               {
                                  <div class="form-group">
                                     <small id="uiTilitifyRequirement" class="form-text text-white-50">Amount of currency to be donated before this animation will trigger (0 = all donations).</small>
-                                    <MudNumericField T="double" Id="uiTiltifyRequirement" Min="0" Max="1000000" @bind-Value="mData.TiltifyDonationRequirement" />
+                                    <MudNumericField T="double" Min="0" Max="1000000" @bind-Value="mData.TiltifyDonationRequirement" />
                                  </div>
                               }
                            </MudExpansionPanel>
@@ -407,12 +413,12 @@
                            <div class="mt-2">
                               <label for="uiPrePlayText"><b>Pre Play Text:</b></label>
                               <small id="uiPrePlayText" class="form-text text-white-50">Text that is sent to chat just prior to playing the animation. If triggered from chat, use $user in the place where you would like to have the trigger's name appear in the message.</small>
-                              <MudTextField T="string" Id="uiPrePlayText" @bind-Value="mData.PrePlayText" />
+                              <MudTextField T="string" @bind-Value="mData.PrePlayText" />
                            </div>
                            <div class="mt-2">
                               <label for="uiPostPlayText"><b>Post Play Text:</b></label>
                               <small id="uiPostPlayText" class="form-text text-white-50">Text that is sent to chat after playing the animation. If triggered from chat, use $user in the place where you would like to have the trigger's name appear in the message.</small>
-                              <MudTextField T="string" Id="uiPostPlayText" @bind-Value="mData.PostPlayText" />
+                              <MudTextField T="string" @bind-Value="mData.PostPlayText" />
                            </div>
                         </div>
                      </div>
@@ -433,29 +439,31 @@
                <div class="form-group mt-2">
                   <label for="uiPlayAllVariantsBeforeRepeat"><b>Variations Repeat Behavior:</b></label>
                   <small id="uiPlayAllVariantsBeforeRepeat" class="form-text text-white-50">Would you like all variations to be played before they can repeat? If enabled, all variations in the grid below will have to play at least once before they can be played again. Otherwise, they stand a chance of being repeated with multiple command executions.</small>
-                  <MudCheckBox T="bool" Id="uiPlayAllVariantsBeforeRepeat" @bind-Value="mData.PlayAllVariantsBeforeRepeat" />
+                  <MudCheckBox T="bool" @bind-Value="mData.PlayAllVariantsBeforeRepeat" />
                   <label for="uiPlayAllVariantsBeforeRepeat">Play all variants before repeating</label>
                </div>
                <div class="form-group">
                   <label for="uiVariationsGrid"><b>Variations:</b></label>
-                  <MudDataGrid T="AnimationVariantData" Items="@mData.Variants" Sortable="true" Pageable="true" PageSize="10">
+                  <MudDataGrid T="AnimationVariantData" Items="@mData.Variants" SortMode="SortMode.Single">
                      <Columns>
-                        <PropertyColumn T="AnimationVariantData" TProperty="string" Property="@(x => x.Visual)" Title="Visual" Editable="false" Width="50px" />
-                        <PropertyColumn T="AnimationVariantData" TProperty="string" Property="@(x => x.Audio)" Title="Audio" Editable="false" Width="50px" />
-                        <PropertyColumn T="AnimationVariantData" TProperty="double" Property="@(x => x.Volume)" Title="Volume" Width="50px" />
-                        <PropertyColumn T="AnimationVariantData" TProperty="int" Property="@(x => x.DurationMilliseconds)" Title="Duration (in ms)" Width="50px" />
-                        <PropertyColumn T="AnimationVariantData" TProperty="int" Property="@(x => x.AudioTimingOffsetMilliseconds)" Title="Offset (in ms)" Width="50px" />
-                        <PropertyColumn T="AnimationVariantData" TProperty="string" Property="@(x => x.PrePlayText)" Title="PrePlayText" Width="50px" />
-                        <PropertyColumn T="AnimationVariantData" TProperty="string" Property="@(x => x.PostPlayText)" Title="PostPlayText" Width="50px" />
-                        <TemplateColumn Context="subcontext" Width="55px">
+                        <PropertyColumn T="AnimationVariantData" TProperty="string" Property="@(x => x.Visual)" Title="Visual" Editable="false" />
+                        <PropertyColumn T="AnimationVariantData" TProperty="string" Property="@(x => x.Audio)" Title="Audio" Editable="false" />
+                        <PropertyColumn T="AnimationVariantData" TProperty="double" Property="@(x => x.Volume)" Title="Volume" />
+                        <PropertyColumn T="AnimationVariantData" TProperty="int" Property="@(x => x.DurationMilliseconds)" Title="Duration (in ms)" />
+                        <PropertyColumn T="AnimationVariantData" TProperty="int" Property="@(x => x.AudioTimingOffsetMilliseconds)" Title="Offset (in ms)" />
+                        <PropertyColumn T="AnimationVariantData" TProperty="string" Property="@(x => x.PrePlayText)" Title="PrePlayText" />
+                        <PropertyColumn T="AnimationVariantData" TProperty="string" Property="@(x => x.PostPlayText)" Title="PostPlayText" />
+                        <TemplateColumn>
+   <CellTemplate Context="subcontext">
                            <MudButton Variant="Variant.Text" Size="Size.Small"></MudButton>
                            <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandlePlayVariant"></MudButton>
                            <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleDeleteVariant"></MudButton>
-                        </TemplateColumn>
+                           </CellTemplate>
+</TemplateColumn>
                      </Columns>
                   </MudDataGrid>
                </div>
-               <MudExpansionPanel Text="Add New Variant" IsInitiallyExpanded="true">
+               <MudExpansionPanel Text="Add New Variant" Expanded="true">
                   <table>
                      <tr>
                         <td style="width: 45%" valign="top">
@@ -465,10 +473,13 @@
                               <table>
                                  <tr>
                                     <td valign="top">
-                                       <MudTextField T="string" Id="uiVariantVisual" Disabled="true" @bind-Value="mVariantVisual" />
+                                       <MudTextField T="string" Disabled="true" @bind-Value="mVariantVisual" />
                                        @* TODO: Wire up file upload handler *@
 <InputFile accept="image/gif,image/jpeg,image/png,video/mp4,video/webm" style="width: 100%; background-color: #1e1e1e" />
-                                       <MudProgressLinear Value="@mUploadVariantVisualProgress" Visible="@(mUploadVariantVisualProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
+                                       @if (mUploadVariantVisualProgress > 0)
+                                       {
+                                           <MudProgressLinear Value="@mUploadVariantVisualProgress" Style="margin-bottom: 20px; width: 100%" />
+                                       }
                                        @if (!String.IsNullOrEmpty(mUploadVariantVisualErrorMessage))
                                        {
                                           <label class="text-danger">@mUploadVariantVisualErrorMessage</label>
@@ -486,10 +497,13 @@
                               <table>
                                  <tr>
                                     <td valign="top">
-                                       <MudTextField T="string" Id="uiVariantAudio" Disabled="true" @bind-Value="mVariantAudio" />
+                                       <MudTextField T="string" Disabled="true" @bind-Value="mVariantAudio" />
                                        @* TODO: Wire up file upload handler *@
 <InputFile accept="audio/*" style="width: 100%; background-color: #1e1e1e" />
-                                       <MudProgressLinear Value="@mUploadVariantAudioProgress" Visible="@(mUploadVariantAudioProgress > 0)" Style="margin-bottom: 20px; width: 100%" />
+                                       @if (mUploadVariantAudioProgress > 0)
+                                       {
+                                           <MudProgressLinear Value="@mUploadVariantAudioProgress" Style="margin-bottom: 20px; width: 100%" />
+                                       }
                                        @if (!String.IsNullOrEmpty(mUploadVariantAudioErrorMessage))
                                        {
                                           <label class="text-danger">@mUploadVariantAudioErrorMessage</label>
@@ -532,12 +546,12 @@
                   <div class="form-group">
                      <label for="uiVariantDuration"><b>Variant Duration (in milliseconds):</b></label>
                      <small id="uiVariantDuration" class="form-text text-white-50">The number of milliseconds this variant should play for (<i>Math Reminder: 1 second = 1000ms</i>).</small>
-                     <MudNumericField T="int" Id="uiVariantDuration" Min="1000" Max="600000" @bind-Value="mVariantDuration" />
+                     <MudNumericField T="int" Min="1000" Max="600000" @bind-Value="mVariantDuration" />
                   </div>
                   <div class="form-group">
                      <label for="uiVariantAudioOffset"><b>Variant Audio Offset (in milliseconds):</b></label>
                      <small id="uiVariantAudioOffset" class="form-text text-white-50">Plays the audio file on a delay <i>after</i> the visual is played (<i>Math Reminder: 1 second = 1000ms</i>).</small>
-                     <MudNumericField T="int" Id="uiVariantAudioOffset" Min="0" Max="600000" @bind-Value="mVariantAudioOffset" />
+                     <MudNumericField T="int" Min="0" Max="600000" @bind-Value="mVariantAudioOffset" />
                   </div>
                   @if (AnimationLibrary.GetFileTypeOfAnimation(mData.Visual) == AnimationEnums.FileType.Video ||
                   AnimationLibrary.GetFileTypeOfAnimation(mVariantVisual) == AnimationEnums.FileType.Video)
@@ -545,7 +559,7 @@
                      <div class="container-fluid p-2">
                         <div class="form-group form-check">
                            <label class="form-check-label">
-                              <MudCheckBox T="bool" Id="uiVariantMirrored" @bind-Value="mVariantMirrored" /> Mirroring: This animation should be flipped horizontally.
+                              <MudCheckBox T="bool" @bind-Value="mVariantMirrored" /> Mirroring: This animation should be flipped horizontally.
                            </label>
                         </div>
                      </div>
@@ -576,12 +590,12 @@
                <div class="mt-2">
                   <label for="uiCaption"><b>Caption:</b></label>
                   <small id="uiCaption" class="form-text text-white-50">The caption text to appear with the animation.</small>
-                  <MudTextField T="string" Id="uiCaption" Value="@mData.Caption.Text" ValueChanged="@((string val) => { mData.Caption.Text = val; UpdateCaptionPreview(val); })" />
+                  <MudTextField T="string" Value="@mData.Caption.Text" ValueChanged="@((string val) => { mData.Caption.Text = val; UpdateCaptionPreview(val); })" />
                </div>
                <div class="form-group mt-2">
                   <label for="uiCaptionFontSize"><b>Font Size:</b></label>
                   <small id="uiCaptionFontSize" class="form-text text-white-50">The size of the font used (bigger = better).</small>
-                  <MudNumericField T="int" Id="uiCaptionFontSize" Min="18" Max="100" @bind-Value="mData.Caption.FontSize" />
+                  <MudNumericField T="int" Min="18" Max="100" @bind-Value="mData.Caption.FontSize" />
                </div>
                <div class="form-group mt-2">
                   <label for="uiCaptionFontColor"><b>Font Color:</b></label>
@@ -591,7 +605,7 @@
                <div class="form-group mt-2">
                   <label for="uiCaptionStrokeThickness"><b>Stroke Thickness:</b></label>
                   <small id="uiCaptionStrokeThickness" class="form-text text-white-50">The width of the stroke (outline) on the caption text.</small>
-                  <MudNumericField T="int" Id="uiCaptionStrokeThickness" Min="0" Max="5" @bind-Value="mData.Caption.StrokeThickness" />
+                  <MudNumericField T="int" Min="0" Max="5" @bind-Value="mData.Caption.StrokeThickness" />
                </div>
                <div class="form-group mt-2">
                   <label for="uiCaptionFontStrokeColor"><b>Stroke Color:</b></label>
@@ -602,44 +616,44 @@
                   <label for="uiCaptionFont"><b>Font:</b></label>
                   <small id="uiCaptionFont" class="form-text text-white-50">What font should you use?</small>
                   <MudRadioGroup @bind-Value="mCaptionFontSelection" T="int">
-<MudRadio T="int" Option="@(0)">Arial</MudRadio>
-                        <MudRadio T="int" Option="@(1)">Comic Sans</MudRadio>
-                        <MudRadio T="int" Option="@(2)">Impact</MudRadio>
-                        <MudRadio T="int" Option="@(3)">Monospace</MudRadio>
-                        <MudRadio T="int" Option="@(4)">Aldrich</MudRadio>
-                        <MudRadio T="int" Option="@(5)">Anton</MudRadio>
-                        <MudRadio T="int" Option="@(6)">Barrio</MudRadio>
-                        <MudRadio T="int" Option="@(7)">Creepster</MudRadio>
-                        <MudRadio T="int" Option="@(8)">Eater</MudRadio>
-                        <MudRadio T="int" Option="@(9)">Galada</MudRadio>
-                        <MudRadio T="int" Option="@(10)">Ranchers</MudRadio>
-                        <MudRadio T="int" Option="@(11)">Lobster</MudRadio>
-                        <MudRadio T="int" Option="@(12)">Righteous</MudRadio>
-                        <MudRadio T="int" Option="@(13)">BenchNine</MudRadio>
-                        <MudRadio T="int" Option="@(14)">Oswald</MudRadio>
-                        <MudRadio T="int" Option="@(15)">Ultra</MudRadio>
-                        <MudRadio T="int" Option="@(16)">Frijole</MudRadio>
-                        <MudRadio T="int" Option="@(17)">Viga</MudRadio>
-                        <MudRadio T="int" Option="@(18)">Quantico</MudRadio>
-                        <MudRadio T="int" Option="@(19)">Bungee</MudRadio>
-                        <MudRadio T="int" Option="@(21)">Sriracha</MudRadio>
-                        <MudRadio T="int" Option="@(22)">Arsenal</MudRadio>
-                        <MudRadio T="int" Option="@(23)">Gaegu</MudRadio>
-                        <MudRadio T="int" Option="@(24)">VT323</MudRadio>
+<MudRadio T="int" Value="@(0)">Arial</MudRadio>
+                        <MudRadio T="int" Value="@(1)">Comic Sans</MudRadio>
+                        <MudRadio T="int" Value="@(2)">Impact</MudRadio>
+                        <MudRadio T="int" Value="@(3)">Monospace</MudRadio>
+                        <MudRadio T="int" Value="@(4)">Aldrich</MudRadio>
+                        <MudRadio T="int" Value="@(5)">Anton</MudRadio>
+                        <MudRadio T="int" Value="@(6)">Barrio</MudRadio>
+                        <MudRadio T="int" Value="@(7)">Creepster</MudRadio>
+                        <MudRadio T="int" Value="@(8)">Eater</MudRadio>
+                        <MudRadio T="int" Value="@(9)">Galada</MudRadio>
+                        <MudRadio T="int" Value="@(10)">Ranchers</MudRadio>
+                        <MudRadio T="int" Value="@(11)">Lobster</MudRadio>
+                        <MudRadio T="int" Value="@(12)">Righteous</MudRadio>
+                        <MudRadio T="int" Value="@(13)">BenchNine</MudRadio>
+                        <MudRadio T="int" Value="@(14)">Oswald</MudRadio>
+                        <MudRadio T="int" Value="@(15)">Ultra</MudRadio>
+                        <MudRadio T="int" Value="@(16)">Frijole</MudRadio>
+                        <MudRadio T="int" Value="@(17)">Viga</MudRadio>
+                        <MudRadio T="int" Value="@(18)">Quantico</MudRadio>
+                        <MudRadio T="int" Value="@(19)">Bungee</MudRadio>
+                        <MudRadio T="int" Value="@(21)">Sriracha</MudRadio>
+                        <MudRadio T="int" Value="@(22)">Arsenal</MudRadio>
+                        <MudRadio T="int" Value="@(23)">Gaegu</MudRadio>
+                        <MudRadio T="int" Value="@(24)">VT323</MudRadio>
 </MudRadioGroup>
                </div>
                <div class="form-group mt-2">
                   <label for="uiCaptionIsBold"><b>Font Weight:</b></label>
                   <small id="uiCaptionIsBold" class="form-text text-white-50">Would you like the font to be bold?</small>
-                  <MudCheckBox T="bool" Id="uiCaptionIsBold" @bind-Value="mData.Caption.IsBold" />
+                  <MudCheckBox T="bool" @bind-Value="mData.Caption.IsBold" />
                   <label for="uiCaptionIsBold">Bolded Text</label>
                </div>
                <div class="form-group mt-2">
                   <label for="uiCaptionLocation"><b>Caption Location:</b></label>
                   <small id="uiCaptionLocation" class="form-text text-white-50">Where would you like the caption to appear relative to the animation?</small>
                   <MudRadioGroup @bind-Value="mCaptionLocationSelection" T="int">
-<MudRadio T="int" Option="@(0)">Above</MudRadio>
-                        <MudRadio T="int" Option="@(1)">Below</MudRadio>
+<MudRadio T="int" Value="@(0)">Above</MudRadio>
+                        <MudRadio T="int" Value="@(1)">Below</MudRadio>
 </MudRadioGroup>
                </div>
                <div class="mt-2">
@@ -667,14 +681,14 @@
                </div>
                <div class="form-group">
                   <label for="uiChainsList"><b>Chained Animation Commands:</b></label>
-                  <MudDataGrid T="string" Items="@mData.ChainedAnimations" Sortable="true" Pageable="true" PageSize="10">
+                  <MudDataGrid T="string" Items="@mData.ChainedAnimations" SortMode="SortMode.Single">
                      <Columns>
-                        <TemplateColumn Width="400px" Title="Command">
+                        <TemplateColumn Title="Command">
 <CellTemplate Context="data">
                               @data.Item
                            </CellTemplate>
                         </TemplateColumn>
-                        <TemplateColumn Width="50px" Title="">
+                        <TemplateColumn Title="">
 <CellTemplate Context="data">
                               <button type="button" class="btn btn-secondary p-0 m-0" style="background-color: #6c4872; width: 25px; height: 25px" @onclick="(() => HandleDeleteChainedCommand(data.Item))"><span class="oi oi-trash"></span></button>
                            </CellTemplate>
@@ -682,11 +696,11 @@
                      </Columns>
                   </MudDataGrid>
                </div>
-               <MudExpansionPanel Text="Add Chained Command" IsInitiallyExpanded="true">
+               <MudExpansionPanel Text="Add Chained Command" Expanded="true">
                   <div class="form-group">
                      <label for="uiChainedCommand"><b>Command:</b></label>
                      <small id="uiChainedCommand" class="form-text text-white-50">The animation command that should be executed in the chain.</small>
-                     <MudTextField T="string" Id="uiChainedCommand" @bind-Value="mFormChainedCommand" />
+                     <MudTextField T="string" @bind-Value="mFormChainedCommand" />
                   </div>
                   <div class="container-fluid text-right p-3">
                      <button type="button" class="btn btn-secondary p-1" style="background-color: #6c4872; width: 150px" @onclick="HandleAddNewChainedCommand">Add</button>
