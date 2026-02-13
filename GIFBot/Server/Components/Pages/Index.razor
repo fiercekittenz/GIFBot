@@ -14,7 +14,7 @@
 @inject HttpClient Http
 @implements IAsyncDisposable
 
-<div class="pa-1 my-1" style="background-color:#36173e">
+<div class="pa-1 my-1 gifbot-page-header">
    <MudText Typo="Typo.h4">Dashboard</MudText>
 </div>
 
@@ -78,7 +78,7 @@
 
       <!-- Log -->
       <MudItem xs="12" sm="6">
-         <div class="text-light pa-1" style="background-color:#1d161f"><b>Output Log</b></div>
+         <div class="pa-1 gifbot-section-panel"><b>Output Log</b></div>
          <div class="overflow-auto" id="uiLogContainer" style="height: 500px; background-color:#1e1e1e">
             <div class="p-2">
                @foreach (var logMessage in mLogMessages)
@@ -91,7 +91,7 @@
 
       <!-- Animations -->
       <MudItem xs="12" sm="6">
-         <div class="text-light pa-1" style="background-color:#1d161f"><b>Animations Control Panel</b></div>
+         <div class="pa-1 gifbot-section-panel"><b>Animations Control Panel</b></div>
          <div class="overflow-auto">
 
             <div>

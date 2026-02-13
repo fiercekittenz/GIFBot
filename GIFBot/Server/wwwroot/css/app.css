@@ -50,6 +50,23 @@ a, .btn-link {
    overflow-y: scroll;
 }
 
+/* GIFBot UI theme classes — centralizes repeated inline background colors */
+.gifbot-page-header {
+    background-color: #36173e;
+}
+
+.gifbot-content-panel {
+    background-color: #211126;
+}
+
+.gifbot-section-panel {
+    background-color: #1d161f;
+}
+
+.gifbot-form-panel {
+    background-color: #1e1e1e;
+}
+
 .animationCanvas {
    width: 768px;
    height: 432px;

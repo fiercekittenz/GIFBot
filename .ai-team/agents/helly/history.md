@@ -164,3 +164,68 @@ UI: AnimationComponent, CategoryComponent, GoalComponent, PlacementComponent (mi
 - MudBlazor utility classes (pa-N, ma-N, mt-N, d-flex, justify-end) map well to Bootstrap spacing utilities but use a 4px scale.
 
 — Helly
+
+---
+
+📌 **Completed: M4 Task 4.5 — Clean up legacy CSS/JS files**
+
+### What was done
+- **Deleted 4 Telerik theme files:** `GIFBotPurple22.css` (1MB Kendo theme), `GIFBotPurple22.json`, `GIFBotPurple22.scss`, `variables.scss`
+- **Minimized `app.css`:** Removed ~120 lines of dead sidebar, main, top-row, navbar-toggler, content, and media query rules that MudLayout/MudDrawer/MudAppBar replaced. Kept: open-iconic import, validation styles, blazor-error-ui, container-scroll, animationCanvas.
+- **Cleaned `App.razor`:** Removed `<link>` to `GIFBotPurple22.css`. Removed 3 CDN `<script>` tags (jQuery slim, Popper.js, Bootstrap JS) — no Bootstrap JS features (`data-toggle`, `data-dismiss`) are used anywhere.
+- **Kept Bootstrap CSS** — 18 .razor files still use `btn btn-primary`, `btn btn-secondary`, `p-0`, `m-0`, etc.
+- **Kept open-iconic/** — 18 .razor files still use `oi-*` icon classes in page headers and action buttons.
+- **Kept all JS files** — jQuery used by all 6 browser source HTML files (OBS overlays). jQuery UI used by `ElementDrag.js` for `.draggable()`. All other JS actively used.
+- Build: 0 errors
+- Net deletion: ~39,000 lines (mostly the 1MB Telerik theme CSS)
+
+### Audit results for future cleanup
+| Asset | Status | Reason |
+|---|---|---|
+| GIFBotPurple22.css/json/scss | ❌ Removed | Telerik theme replaced by MudBlazor |
+| variables.scss | ❌ Removed | Telerik theme build variables |
+| bootstrap/bootstrap.min.css | ✅ Kept | 18 files use Bootstrap CSS classes |
+| open-iconic/ | ✅ Kept | 18 files use oi-* icon classes |
+| app.css sidebar/nav rules | ❌ Removed | MudLayout/MudDrawer/MudAppBar replaced |
+| CDN jQuery/Popper/Bootstrap JS | ❌ Removed | No data-toggle or Bootstrap JS features used |
+| Local jQuery + jQuery UI | ✅ Kept | Browser source HTMLs + ElementDrag.js |
+| All other JS files | ✅ Kept | Actively used |
+
+### Learnings
+- Browser source HTML files load their own jQuery from `js/jquery-3.3.1.min.js`, not CDN. The CDN jQuery slim in App.razor was redundant.
+- `ElementDrag.js` uses jQuery UI `.draggable()` — jQuery UI must stay as long as PlacementComponent exists.
+- Bootstrap CSS removal is blocked by ~18 files using `btn`, `btn-primary`, `btn-secondary` — future task to migrate to `<MudButton>`.
+- Open-iconic removal is blocked by ~18 files using `oi-*` icon spans — future task to replace with `<MudIcon>`.
+
+— Helly
+
+---
+
+📌 **Completed: M4 Task 4.6 — Final UI consistency review and polish**
+
+### What was done
+- **Audit results:** No remaining `<font>` tags, no `<h1>`–`<h6>` tags, no broken App.razor references. MainLayout MudLayout/MudDrawer/MudAppBar structure is clean. MudDialog and MudExpansionPanel usage is consistent.
+- **Added 4 CSS utility classes** to `app.css`: `.gifbot-page-header` (#36173e), `.gifbot-content-panel` (#211126), `.gifbot-section-panel` (#1d161f), `.gifbot-form-panel` (#1e1e1e) — centralizes repeated inline background colors into single-point-of-control classes
+- **Replaced inline `style="background-color:..."` with CSS classes** across 19 files (~65 instances): page title bars, content wrappers, section panels, and form panels
+- **Removed `text-light` Bootstrap class** from Index.razor (2x), EditAnimation.razor (1x), AnimationTutorial.razor (2x) — dark theme already provides light text
+- **Fixed NoNavMenuLayout.razor:** replaced `text-light` + `background-color:#101010` with theme-matching values (#121218 bg, rgba text)
+- **Replaced mixed-style patterns:** where `background-color` was combined with `width`, extracted bg to CSS class and kept width in style attr
+- Build: 0 errors, 32 pre-existing warnings
+- 22 files modified total (19 .razor + 1 .css + 1 layout + history)
+
+### Remaining for future cleanup (not in polish scope)
+| Pattern | Count | Reason kept |
+|---|---|---|
+| `text-white-50` on `<small>`/`<p>` | ~100+ | Consistent help text styling, works with dark theme, removal = structural |
+| `btn btn-*` + inline `background-color` | ~50+ | Intentionally color-coded buttons, needs MudButton migration |
+| `oi-*` icon spans | ~18 files | Needs MudIcon migration |
+| `<table>` layout elements | ~25 | Used for file input rows and tree layouts, not data tables |
+| `navbar navbar-expand-sm` | 3 | Quick action bars on Index, PlacementComponent — functional |
+
+### Learnings
+- Inline `background-color` patterns in GIFBot fall into 4 distinct tiers: page headers (#36173e), content panels (#211126), section panels (#1d161f), and form areas (#1e1e1e). Centralizing these into CSS classes makes future theme adjustments trivial.
+- `text-light` and `text-white-50` are Bootstrap text color utilities — `text-light` is redundant in dark theme (MudBlazor sets text color), but `text-white-50` on help text provides intentional 50% opacity that matches theme TextSecondary.
+- NoNavMenuLayout has its own MudThemeProvider without the custom theme — inline colors must stay until it's wired to the shared theme.
+- BrowserSource pages (OBS overlays) use BasicLayout and should never get theme classes — they render in transparent browser sources.
+
+— Helly

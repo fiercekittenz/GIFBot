@@ -14,11 +14,11 @@
 
 @if (mCurrentState == State.CategoryCreation)
 {
-   <div class="pa-1 my-1" style="background-color:#36173e">
+   <div class="pa-1 my-1 gifbot-page-header">
       <MudText Typo="Typo.h4"><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial (Step 1 of ?): Categories</MudText>
    </div>
 
-   <div class="text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+   <div class="text-left p-3 rounded gifbot-form-panel" style="width: 700px">
       <p>
          Woah! You don't have any data! That must mean you're new here. Welcome! Let's get you up and running with your first animation. Animations are organized
          by categories so it's easier for you to find what you need, <i>and</i> so you don't end up with a giant list of incoherent, yet meme-worthy terms for commands.
@@ -30,7 +30,7 @@
       <div class="text-left p-3" style="width: 600px">
          <EditForm Model="@mCategoryTitleModel" OnValidSubmit="HandleSubmitNewCategoryName">
             <div>
-               <MudText Typo="Typo.subtitle1" class="text-light">Category Name</MudText>
+               <MudText Typo="Typo.subtitle1">Category Name</MudText>
                <p class="text-white-50">Please enter the name of your category below:</p>
                <DataAnnotationsValidator />
                <ValidationSummary />
@@ -45,11 +45,11 @@
 }
 else if (mCurrentState == State.AnimationCommand)
 {
-   <div class="pa-1 my-1" style="background-color:#36173e">
+   <div class="pa-1 my-1 gifbot-page-header">
       <MudText Typo="Typo.h4"><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial (Step 2 of ?): Animation Command (a.k.a. "Name")</MudText>
    </div>
 
-   <div class="text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+   <div class="text-left p-3 rounded gifbot-form-panel" style="width: 700px">
       <p>
          Animations are typically triggered by your viewers in chat. They can also be triggered by actions such as a subscription or Streamlabs tip.
          You do not have to have '!' in front of the commands, though it is recommended if you intend for your viewers to be able to execute the
@@ -61,7 +61,7 @@ else if (mCurrentState == State.AnimationCommand)
       <div class="text-left p-3" style="width: 600px">
          <EditForm Model="@mAnimationCommandModel" OnValidSubmit="HandleSubmitNewAnimationCommand">
             <div>
-               <MudText Typo="Typo.subtitle1" class="text-light">Animation Command</MudText>
+               <MudText Typo="Typo.subtitle1">Animation Command</MudText>
                <p class="text-white-50">Please enter the command or name of your animation below (no spaces!):</p>
                <DataAnnotationsValidator />
                <ValidationSummary />
@@ -76,11 +76,11 @@ else if (mCurrentState == State.AnimationCommand)
 }
 else if (mCurrentState == State.AnimationVisual)
 {
-   <div class="pa-1 my-1" style="background-color:#36173e">
+   <div class="pa-1 my-1 gifbot-page-header">
       <MudText Typo="Typo.h4"><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial (Step 3 of ?): Animation Visual</MudText>
    </div>
 
-   <div class="text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+   <div class="text-left p-3 rounded gifbot-form-panel" style="width: 700px">
       <p>
          Your command will trigger the display of a visual. You can use traditional GIF, PNG, JPG files or you can
          supply movie files in MP4 and WEBM formats! If you're using a traditional image format, you'll most likely
@@ -118,11 +118,11 @@ else if (mCurrentState == State.AnimationVisual)
 }
 else if (mCurrentState == State.AnimationPlacement)
 {
-   <div class="pa-1 my-1" style="background-color:#36173e">
+   <div class="pa-1 my-1 gifbot-page-header">
       <MudText Typo="Typo.h4"><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial (Step 4 of ?): Placement</MudText>
    </div>
 
-   <div class="text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+   <div class="text-left p-3 rounded gifbot-form-panel" style="width: 700px">
       <p>
          An animation doesn't just appear at a random location on the screen. You can actually determine where it shows up as well as its width and height, so when you put it in your broadcaster
          software, it'll appear where you want it to. Use the canvas below to set your animation's position.
@@ -142,11 +142,11 @@ else if (mCurrentState == State.AnimationPlacement)
 }
 else if (mCurrentState == State.AnimationAudio)
 {
-   <div class="pa-1 my-1" style="background-color:#36173e">
+   <div class="pa-1 my-1 gifbot-page-header">
       <MudText Typo="Typo.h4"><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial (Step 5 of ?): Animation Audio</MudText>
    </div>
 
-   <div class="text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+   <div class="text-left p-3 rounded gifbot-form-panel" style="width: 700px">
       <p>
          You can pair an audio file with your visual! If you've selected a movie file (MP4, MOV, or WEBM) then you may not want to pair
          it with a secondary audio unless your movie doesn't have any of its own. This is not required, so if you like, you may
@@ -186,11 +186,11 @@ else if (mCurrentState == State.AnimationAudio)
 }
 else if (mCurrentState == State.AnimationVolume)
 {
-   <div class="pa-1 my-1" style="background-color:#36173e">
+   <div class="pa-1 my-1 gifbot-page-header">
       <MudText Typo="Typo.h4"><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial (Step 6 of ?): Volume</MudText>
    </div>
 
-   <div class="text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+   <div class="text-left p-3 rounded gifbot-form-panel" style="width: 700px">
       <p>
          It looks like you either have a video file selected as your visual, or decided to upload a sound file. You should probably set the volume of that now, otherwise it's going
          to slay your headphone users.
@@ -217,11 +217,11 @@ else if (mCurrentState == State.AnimationVolume)
 }
 else if (mCurrentState == State.AnimationBaseSettings)
 {
-   <div class="pa-1 my-1" style="background-color:#36173e">
+   <div class="pa-1 my-1 gifbot-page-header">
       <MudText Typo="Typo.h4"><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial (Step 7 of ?): Basic Settings</MudText>
    </div>
 
-   <div class="text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+   <div class="text-left p-3 rounded gifbot-form-panel" style="width: 700px">
       <p>
          Now that you have your files selected, it's time to get some of the very basic settings tuned. There's a LOT of other settings, but the ones
          listed below are the main ones you should care about when first setting up an animation command.
@@ -261,11 +261,11 @@ else if (mCurrentState == State.AnimationBaseSettings)
 }
 else if (mCurrentState == State.TutorialComplete)
 {
-   <div class="pa-1 my-1" style="background-color:#36173e">
+   <div class="pa-1 my-1 gifbot-page-header">
       <MudText Typo="Typo.h4"><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial Complete!</MudText>
    </div>
 
-   <div class="text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+   <div class="text-left p-3 rounded gifbot-form-panel" style="width: 700px">
       <p>
          Congratulations! You setup your first animation command! Your viewers can now use it in chat by sending <MudText Color="Color.Success"><b>@mAnimationFormModel.Command</b></MudText> in a chat message.
       </p>

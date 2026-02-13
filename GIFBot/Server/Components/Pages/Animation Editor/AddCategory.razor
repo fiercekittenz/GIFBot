@@ -6,12 +6,12 @@
 @inject ISnackbar Snackbar
 @implements IAsyncDisposable
 
-<div class="pa-1 my-1" style="background-color:#36173e">
+<div class="pa-1 my-1 gifbot-page-header">
    <MudText Typo="Typo.h4"><span class="oi oi-folder" aria-hidden="true"></span> Add New Category</MudText>
 </div>
 
 <center>
-   <div class="p-0 m-0 text-left" style="background-color: #1d161f; width: 600px">
+   <div class="p-0 m-0 text-left gifbot-section-panel" style="width: 600px">
       <div class="p-2">
          <EditForm Model="@Model" OnSubmit="@HandleSave">
             <div class="form-group">

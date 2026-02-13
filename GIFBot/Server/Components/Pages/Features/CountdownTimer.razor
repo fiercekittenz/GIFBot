@@ -9,7 +9,7 @@
 @inject IJSRuntime JSRuntime
 @inject HttpClient Http
 
-<div class="pa-1 my-1" style="background-color:#36173e">
+<div class="pa-1 my-1 gifbot-page-header">
    <MudText Typo="Typo.h4"><span class="oi oi-timer" aria-hidden="true"></span> Countdown</MudText>
 </div>
 
@@ -173,7 +173,7 @@
             <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e" @onclick="@OnSaveChanges">Save Changes</button>
          </div>
 
-      <div class="p-2 mb-2 rounded" style="background-color: #211126">
+      <div class="p-2 mb-2 rounded gifbot-content-panel">
          <div class="text-left" style="width: 100%">
             <button type="button" class="btn btn-secondary p-1" style="background-color: #484d72; margin-left: auto; margin-right: 0" @onclick="@OnStartTimer">Start Timer</button>
             <button type="button" class="btn btn-secondary p-1" style="background-color: #6c4872; margin-left: auto; margin-right: 0" @onclick="@OnPauseTimer">Pause Timer</button>
@@ -228,7 +228,7 @@
    </MudTabPanel>
 
    <MudTabPanel Text="Appearance">
-      <div class="p-0 m-0 rounded" style="background-color: #1d161f">
+      <div class="p-0 m-0 rounded gifbot-section-panel">
          <div class="p-2">
             <div class="form-group mt-2">
                <label for="uiCaptionFontSize"><b>Font Size:</b></label>
@@ -301,7 +301,7 @@
    </MudTabPanel>
 
    <MudTabPanel Text="Browsersource URL">
-      <div class="p-0 m-0 rounded" style="background-color: #1d161f">
+      <div class="p-0 m-0 rounded gifbot-section-panel">
          <div class="p-2">
             <p class="text-white-50">
                Below is the URL you will need to capture in your broadcaster software in order to see the Countdown on your scenes.

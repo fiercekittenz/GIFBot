@@ -33,7 +33,7 @@
    </DialogContent>
 </MudDialog>
 
-<div class="pa-1 my-1" style="background-color:#36173e">
+<div class="pa-1 my-1 gifbot-page-header">
    <MudText Typo="Typo.h4"><span class="oi oi-target" aria-hidden="true"></span> Goal Bar</MudText>
 </div>
 
@@ -41,12 +41,12 @@
    <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
       <MudTabPanel Text="Settings">
          <div style="width: 100%">
-            <div class="text-left p-3 rounded" style="width: 100%; background-color:#1e1e1e">
+            <div class="text-left p-3 rounded gifbot-form-panel" style="width: 100%">
                <p>
                   The <b>Goal Bar</b> is a feature of GIFBot where you can have a monetary or point-based goal that
                   takes into consideration multiple types of Twitch events (cheering, subbing, gift subbing, and tips).
                </p>
-               <div class="text-left p-3 rounded" style="background-color: #1d161f">
+               <div class="text-left p-3 rounded gifbot-section-panel">
 
                   <div class="form-group form-check">
                      <label class="form-check-label">
@@ -130,7 +130,7 @@
       </MudTabPanel>
 
       <MudTabPanel Text="Visual Settings">
-         <div class="p-0 m-0 rounded" style="background-color: #1d161f">
+         <div class="p-0 m-0 rounded gifbot-section-panel">
             <div class="p-2">
                <div class="form-group form-check">
                   <label class="form-check-label">
@@ -233,7 +233,7 @@
       </MudTabPanel>
 
       <MudTabPanel Text="Goals">
-         <div class="p-0 m-0 rounded" style="background-color: #1d161f">
+         <div class="p-0 m-0 rounded gifbot-section-panel">
             <div class="p-2">
                <div class="text-white-50 p-0">
                   <p>
