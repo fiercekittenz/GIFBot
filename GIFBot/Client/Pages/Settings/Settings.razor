@@ -1,4 +1,4 @@
-﻿@page "/settings/"
+@page "/settings/"
 @using System.Net.Http
 @using Microsoft.AspNetCore.Http.Connections
 @using Microsoft.AspNetCore.SignalR.Client
@@ -227,7 +227,7 @@
                            <div class="form-group">
                               <label for="uiTiltifyCampaigns"><b>Active Campaign:</b></label><br />
                               <small id="uiTiltifyCampaigns" class="form-text text-white-50">Please select a campaign that you would like to listen to for donations. If you do not see campaigns in the list, please add your credentials above and save. The list should update if the provided information is correct.</small>
-                              <MudSelect T="string" Placeholder="Select Active Campaign..." Style="background-color: #2c2241; color: #e5e5e5; font-weight: bold; width: 250px;"
+                              <MudSelect T="string" Placeholder="Select Active Campaign..." Style="width: 250px;"
                                               Data="@mTiltifyCampaignNames" Value="@mSelectedTiltifyCampaignName" ValueChanged="@(args => OnTiltifyCampaignSelected(args))" />
                            </div>
                            <div class="form-group form-check">
@@ -257,7 +257,7 @@
                                        <tr>
                                           <td valign="bottom">
                                              <label for="uiUserGroups"><b>User Groups:</b></label><br />
-                                             <MudSelect T="string" Placeholder="Select User Group..." Style="background-color: #2c2241; color: #e5e5e5; font-weight: bold; width: 250px;"
+                                             <MudSelect T="string" Placeholder="Select User Group..." Style="width: 250px;"
                                                              Data="@mUserGroupNames" Value="@mSelectedUserGroupName" ValueChanged="@(args => OnUserGroupSelected(args))" />
                                           </td>
                                        </tr>
@@ -388,7 +388,7 @@
                            </tr>
                            <tr>
                               <td width="600">
-                                 <MudTextField T="string" id="uiAnimsUrl" class="form-control" Style="background-color: #2c2241; color: #FFFFFF; width: 100%" ReadOnly="true" @bind-Value="mPrimaryAnimationsURL" />
+                                 <MudTextField T="string" id="uiAnimsUrl" class="form-control" Style="width: 100%" ReadOnly="true" @bind-Value="mPrimaryAnimationsURL" />
                               </td>
                               <td align="left">
                                  <button type="button" class="btn btn-secondary p-1 ml-2" style="background-color: #6c4872" @onclick='(() => HandleCopyUrl("uiAnimsUrl"))'>Copy to Clipboard</button>
@@ -405,7 +405,7 @@
                            </tr>
                            <tr>
                               <td width="600">
-                                 <MudTextField T="string" id="uiGoalBarUrl" class="form-control" Style="background-color: #2c2241; color: #FFFFFF; width: 100%" ReadOnly="true" @bind-Value="mGoalBarURL" />
+                                 <MudTextField T="string" id="uiGoalBarUrl" class="form-control" Style="width: 100%" ReadOnly="true" @bind-Value="mGoalBarURL" />
                               </td>
                               <td align="left">
                                  <button type="button" class="btn btn-secondary p-1 ml-2" style="background-color: #6c4872" @onclick='(() => HandleCopyUrl("uiGoalBarUrl"))'>Copy to Clipboard</button>

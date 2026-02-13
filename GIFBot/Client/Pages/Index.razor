@@ -1,4 +1,4 @@
-﻿@page "/"
+@page "/"
 @using Microsoft.AspNetCore.SignalR.Client
 @using GIFBot.Shared
 @using GIFBot.Client.Components
@@ -96,7 +96,7 @@
 
             <div class="container-fluid">
                @*<div class="form-group" style="width: 100%">
-                  <MudTextField T="string" id="uiFilterText" class="form-control" Placeholder="Filter..." Style="color: #232323" @bind-Value="@mFilterText" Change="@(args => OnFilterTextChanged(args))" />
+                  <MudTextField T="string" id="uiFilterText" class="form-control" Placeholder="Filter..." @bind-Value="@mFilterText" Change="@(args => OnFilterTextChanged(args))" />
                </div>*@
                <div class="container-fluid">
                   <MudTreeView T="AnimationTreeItem" id="uiTree" Data="@mFilteredData" Style="width: 100%; height: 100%; margin-top: -5px">

@@ -1,4 +1,4 @@
-﻿@page "/animationseditor/addcategory"
+@page "/animationseditor/addcategory"
 @using Microsoft.AspNetCore.Http.Connections
 @using Microsoft.AspNetCore.SignalR.Client
 @using GIFBot.Client.Pages.Setup.Models
@@ -17,7 +17,7 @@
             <div class="form-group">
                <label for="uiValue"><b>Category Name:</b></label>
                <small id="uiValue" class="form-text text-white-50">Pretty self-explanatory, right?</small>
-               <MudTextField T="string" id="uiValue" class="form-control" Style="color: #232323" @bind-Value="Model.Name" />
+               <MudTextField T="string" id="uiValue" class="form-control" @bind-Value="Model.Name" />
             </div>
             <div class="row">
                <div class="container-fluid text-right p-3">

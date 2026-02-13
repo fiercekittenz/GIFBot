@@ -1,4 +1,4 @@
-﻿@page "/stickerseditor/"
+@page "/stickerseditor/"
 @using Microsoft.AspNetCore.SignalR.Client
 @using GIFBot.Shared.Models.Features
 @using GIFBot.Shared.Models.Visualization
@@ -368,7 +368,7 @@
                                  <label for="uiUserGroup"><b>User Group:</b></label>
                                  <small id="uiUserGroup" class="form-text text-white-50">Access is restricted to a user group. Which one?</small>
 
-                                 <MudSelect T="string" Placeholder="Select User Group..." Style="background-color: #2c2241; color: #e5e5e5; font-weight: bold; width: 250px;"
+                                 <MudSelect T="string" Placeholder="Select User Group..." Style="width: 250px;"
                                                  Data="@mUserGroupNames" Value="@mUserGroupName" ValueChanged="@(args => HandleUserGroupSelected(args as string))" />
                               </div>
                            }
@@ -762,7 +762,7 @@
                </tr>
                <tr>
                   <td width="600">
-                     <MudTextField T="string" id="uiURL" class="form-control" Style="background-color: #2c2241; color: #FFFFFF; width: 100%" ReadOnly="true" @bind-Value="mURL" />
+                     <MudTextField T="string" id="uiURL" class="form-control" Style="width: 100%" ReadOnly="true" @bind-Value="mURL" />
                   </td>
                   <td align="left">
                      <button type="button" class="btn btn-secondary p-1 ml-2" style="background-color: #6c4872" @onclick='(() => HandleCopyUrl("uiURL"))'>Copy to Clipboard</button>
@@ -773,7 +773,7 @@
                </tr>
                <tr>
                   <td width="600">
-                     <MudTextField T="string" id="uiSecondaryURL" class="form-control" Style="background-color: #2c2241; color: #FFFFFF; width: 100%" ReadOnly="true" @bind-Value="mSecondaryURL" />
+                     <MudTextField T="string" id="uiSecondaryURL" class="form-control" Style="width: 100%" ReadOnly="true" @bind-Value="mSecondaryURL" />
                   </td>
                   <td align="left">
                      <button type="button" class="btn btn-secondary p-1 ml-2" style="background-color: #6c4872" @onclick='(() => HandleCopyUrl("uiSecondaryURL"))'>Copy to Clipboard</button>

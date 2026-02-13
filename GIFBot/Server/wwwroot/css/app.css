@@ -2,7 +2,7 @@
 
 html, body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
-    background-color: #0d0d1a;
+    background-color: #1a1a2e;
 }
 
 a, .btn-link {
@@ -66,6 +66,14 @@ a, .btn-link {
 
 .gifbot-form-panel {
     background-color: #1c1c34;
+}
+
+/* Give text inputs a visible filled background */
+.mud-input-control .mud-input {
+    background-color: #2a2a48 !important;
+    border-radius: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
 }
 
 .animationCanvas {
