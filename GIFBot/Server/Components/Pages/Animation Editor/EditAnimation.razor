@@ -7,8 +7,8 @@
 @inject ISnackbar Snackbar
 @inject IJSRuntime JSRuntime
 
-<div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
-   <h1><span class="oi oi-play-circle" aria-hidden="true"></span> <a href="animationseditor/">Animations</a> « Edit Animation</h1>
+<div class="pa-1 my-1" style="background-color:#36173e">
+   <MudText Typo="Typo.h4"><span class="oi oi-play-circle" aria-hidden="true"></span> <a href="animationseditor/">Animations</a> « Edit Animation</MudText>
 </div>
 
 <!-- Clone Animation Confirmation Window -->
@@ -22,7 +22,7 @@
          <small id="uiTitleLabel" class="form-text text-muted">The command that must be entered to activate this animation.</small>
          <MudTextField T="string" @bind-Value="@mTempAnimationCommand" />
       </div>
-      <div class="container-fluid p-2">
+      <div class="p-2">
          <p>
             <center>
                <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelClone">
@@ -37,10 +37,10 @@
    </DialogContent>
 </MudDialog>
 
-<div class="container-fluid p-3">
+<div class="p-3">
    @if (mSelectedAnimation != null)
    {
-      <div class="container-fluid text-light p-1 mb-2" style="background-color:#36173e"><b>Editing Animation: @mSelectedAnimation?.Command</b></div>
+      <div class="text-light p-1 mb-2" style="background-color:#36173e"><b>Editing Animation: @mSelectedAnimation?.Command</b></div>
 
       <AnimationComponent Data="@mSelectedAnimation" UserGroupNames="@mUserGroupNames" AnimUserGroup="@mSelectedAnimationUserGroupName" IsDisplayTestMode="@mIsDisplayTestMode"
                           OnTestAnimation="@HandleTestAnimation"

@@ -9,8 +9,8 @@
 @inject IJSRuntime JSRuntime
 @inject HttpClient Http
 
-<div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
-    <h1><span class="oi oi-thumb-up" aria-hidden="true"></span> Greeter</h1>
+<div class="pa-1 my-1" style="background-color:#36173e">
+    <MudText Typo="Typo.h4"><span class="oi oi-thumb-up" aria-hidden="true"></span> Greeter</MudText>
 </div>
 
 <!-- Add New Entry Window -->
@@ -20,13 +20,13 @@
     </TitleContent>
     <DialogContent>
         <div class="form-group">
-            <font class="text-white">What is the name of this greeter? This is a name only for your reference to describe the greeter.</font>
+            <MudText>What is the name of this greeter? This is a name only for your reference to describe the greeter.</MudText>
         </div>
         <div class="form-group">
             <label for="uiName"><b>Name:</b></label>
             <MudTextField T="string" @bind-Value="mTempGreeterEntry.Name" />
         </div>
-        <div class="container-fluid p-2">
+        <div class="p-2">
             <p>
                 <center>
                     <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelAddCommand">
@@ -91,7 +91,7 @@
             }
          </div>
 
-        <div class="container-fluid p-2">
+        <div class="p-2">
             <p>
                 <center>
                     <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelEditCommand">
@@ -108,7 +108,7 @@
 
 <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
     <MudTabPanel Text="Greeters">
-        <div class="container-fluid p-2">
+        <div class="p-2">
             <MudDataGrid T="GreeterEntry" Items="@Data.Entries" SortMode="SortMode.Single">
                <ToolBarContent>
                   <MudTextField T="string" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />

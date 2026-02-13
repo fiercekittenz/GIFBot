@@ -9,8 +9,8 @@
 @inject IJSRuntime JSRuntime
 @inject HttpClient Http
 
-<div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
-   <h1><span class="oi oi-timer" aria-hidden="true"></span> Countdown</h1>
+<div class="pa-1 my-1" style="background-color:#36173e">
+   <MudText Typo="Typo.h4"><span class="oi oi-timer" aria-hidden="true"></span> Countdown</MudText>
 </div>
 
 <!-- Add New Action Window -->
@@ -20,13 +20,13 @@
    </TitleContent>
    <DialogContent>
       <div class="form-group">
-         <font class="text-white">What is the name of the action?</font>
+         <MudText>What is the name of the action?</MudText>
       </div>
       <div class="form-group">
          <label for="uiName"><b>Name:</b></label>
          <MudTextField T="string" @bind-Value="mTempData.Name" />
       </div>
-      <div class="container-fluid p-2">
+      <div class="p-2">
          <p>
             <center>
                <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelAddCommand">
@@ -151,7 +151,7 @@
             <MudNumericField T="int" Min="1" Max="999999" @bind-Value="@mTempData.SecondsValue" />
          </div>
       }
-      <div class="container-fluid p-2">
+      <div class="p-2">
          <p>
             <center>
                <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelEditCommand">
@@ -168,15 +168,13 @@
 
 <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
    <MudTabPanel Text="General">
-      <div class="row">
-         <div class="container-fluid text-right p-3">
+               <div class="d-flex justify-end pa-3">
             <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnCancel">Cancel</button>
             <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e" @onclick="@OnSaveChanges">Save Changes</button>
          </div>
-      </div>
 
-      <div class="container-fluid p-2 mb-2 rounded" style="background-color: #211126">
-         <div class="container-fluid text-left" style="width: 100%">
+      <div class="p-2 mb-2 rounded" style="background-color: #211126">
+         <div class="text-left" style="width: 100%">
             <button type="button" class="btn btn-secondary p-1" style="background-color: #484d72; margin-left: auto; margin-right: 0" @onclick="@OnStartTimer">Start Timer</button>
             <button type="button" class="btn btn-secondary p-1" style="background-color: #6c4872; margin-left: auto; margin-right: 0" @onclick="@OnPauseTimer">Pause Timer</button>
             <button type="button" class="btn btn-secondary p-1" style="background-color: #6c4872; margin-left: auto; margin-right: 0" @onclick="@OnResetTimer">Reset Timer</button>
@@ -184,12 +182,12 @@
          </div>
       </div>
 
-      <div class="container-fluid p-2">
+      <div class="p-2">
          The countdown timer feature will allow you to have a timer on your broadcast software scene that the viewers may manipulate through actions. Actions are
          optional, but chaotic fun!
       </div>
 
-      <div class="container-fluid p-2">
+      <div class="p-2">
          <div class="form-group form-check">
             <label class="form-check-label">
                <MudCheckBox T="bool" @bind-Value="Data.Enabled" /> Feature Enabled
@@ -202,16 +200,14 @@
          <small id="uiTimerValueInMinutes" class="form-text text-muted">The number of minutes you want this countdown timer to tick.</small>
          <MudNumericField T="int" Min="1" Max="999999" @bind-Value="Data.TimerStartValueInMinutes" />
       </div>
-      <div class="row">
-         <div class="container-fluid text-right p-3">
+               <div class="d-flex justify-end pa-3">
             <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnCancel">Cancel</button>
             <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e" @onclick="@OnSaveChanges">Save Changes</button>
          </div>
-      </div>
    </MudTabPanel>
 
    <MudTabPanel Text="Timer Actions">
-      <div class="container-fluid p-2">
+      <div class="p-2">
          <MudDataGrid T="CountdownTimerAction" Items="@Data.Actions" SortMode="SortMode.Single">
             <ToolBarContent>
                <MudTextField T="string" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
@@ -232,8 +228,8 @@
    </MudTabPanel>
 
    <MudTabPanel Text="Appearance">
-      <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
-         <div class="container-fluid p-2">
+      <div class="p-0 m-0 rounded" style="background-color: #1d161f">
+         <div class="p-2">
             <div class="form-group mt-2">
                <label for="uiCaptionFontSize"><b>Font Size:</b></label>
                <small id="uiCaptionFontSize" class="form-text text-white-50">The size of the font used (bigger = better).</small>
@@ -305,15 +301,15 @@
    </MudTabPanel>
 
    <MudTabPanel Text="Browsersource URL">
-      <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
-         <div class="container-fluid p-2">
+      <div class="p-0 m-0 rounded" style="background-color: #1d161f">
+         <div class="p-2">
             <p class="text-white-50">
                Below is the URL you will need to capture in your broadcaster software in order to see the Countdown on your scenes.
             </p>
             <p class="text-white-50">
                <u>Note:</u> If you are using XSplit, you will need to add these as Media sources, not Browser sources. These are files installed by GIFBot and not hosted on a web server.
             </p>
-            <div class="container-fluid">
+            <div>
                <table width="100%">
                   <tr>
                      <td width="600">

@@ -14,11 +14,11 @@
 
 @if (mCurrentState == State.CategoryCreation)
 {
-   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
-      <h1><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial (Step 1 of ?): Categories</h1>
+   <div class="pa-1 my-1" style="background-color:#36173e">
+      <MudText Typo="Typo.h4"><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial (Step 1 of ?): Categories</MudText>
    </div>
 
-   <div class="container text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+   <div class="text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
       <p>
          Woah! You don't have any data! That must mean you're new here. Welcome! Let's get you up and running with your first animation. Animations are organized
          by categories so it's easier for you to find what you need, <i>and</i> so you don't end up with a giant list of incoherent, yet meme-worthy terms for commands.
@@ -27,15 +27,15 @@
       <p>
          What would you like to name this category?
       </p>
-      <div class="container text-left p-3" style="width: 600px">
+      <div class="text-left p-3" style="width: 600px">
          <EditForm Model="@mCategoryTitleModel" OnValidSubmit="HandleSubmitNewCategoryName">
-            <div class="container">
-               <h5 class="text-light">Category Name</h5>
+            <div>
+               <MudText Typo="Typo.subtitle1" class="text-light">Category Name</MudText>
                <p class="text-white-50">Please enter the name of your category below:</p>
                <DataAnnotationsValidator />
                <ValidationSummary />
                <MudTextField T="string" @bind-Value="@mCategoryTitleModel.Value" />
-               <div class="col-sm text-right p-3">
+               <div class="d-flex justify-end pa-3">
                   <button type="submit" class="btn btn-primary" style="background-color: #5c4872">Next Step</button>
                </div>
             </div>
@@ -45,11 +45,11 @@
 }
 else if (mCurrentState == State.AnimationCommand)
 {
-   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
-      <h1><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial (Step 2 of ?): Animation Command (a.k.a. "Name")</h1>
+   <div class="pa-1 my-1" style="background-color:#36173e">
+      <MudText Typo="Typo.h4"><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial (Step 2 of ?): Animation Command (a.k.a. "Name")</MudText>
    </div>
 
-   <div class="container text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+   <div class="text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
       <p>
          Animations are typically triggered by your viewers in chat. They can also be triggered by actions such as a subscription or Streamlabs tip.
          You do not have to have '!' in front of the commands, though it is recommended if you intend for your viewers to be able to execute the
@@ -58,15 +58,15 @@ else if (mCurrentState == State.AnimationCommand)
       <p>
          What would you like your animation's command to be?
       </p>
-      <div class="container text-left p-3" style="width: 600px">
+      <div class="text-left p-3" style="width: 600px">
          <EditForm Model="@mAnimationCommandModel" OnValidSubmit="HandleSubmitNewAnimationCommand">
-            <div class="container-fluid">
-               <h5 class="text-light">Animation Command</h5>
+            <div>
+               <MudText Typo="Typo.subtitle1" class="text-light">Animation Command</MudText>
                <p class="text-white-50">Please enter the command or name of your animation below (no spaces!):</p>
                <DataAnnotationsValidator />
                <ValidationSummary />
                <MudTextField T="string" @bind-Value="@mAnimationCommandModel.Value" />
-               <div class="col-sm text-right p-3">
+               <div class="d-flex justify-end pa-3">
                   <button type="submit" class="btn btn-primary" style="background-color: #5c4872">Next Step</button>
                </div>
             </div>
@@ -76,11 +76,11 @@ else if (mCurrentState == State.AnimationCommand)
 }
 else if (mCurrentState == State.AnimationVisual)
 {
-   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
-      <h1><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial (Step 3 of ?): Animation Visual</h1>
+   <div class="pa-1 my-1" style="background-color:#36173e">
+      <MudText Typo="Typo.h4"><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial (Step 3 of ?): Animation Visual</MudText>
    </div>
 
-   <div class="container text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+   <div class="text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
       <p>
          Your command will trigger the display of a visual. You can use traditional GIF, PNG, JPG files or you can
          supply movie files in MP4 and WEBM formats! If you're using a traditional image format, you'll most likely
@@ -105,11 +105,11 @@ else if (mCurrentState == State.AnimationVisual)
 
       @if (mUploadVisualComplete)
       {
-         <div class="container-fluid">
+         <div>
             <label class="text-success"><b>You have successfully uploaded:</b> @mAnimationFormModel.Visual</label>
          </div>
-         <div class="container-fluid text-left p-3" style="width: 600px">
-            <div class="col-sm text-right p-3">
+         <div class="text-left p-3" style="width: 600px">
+            <div class="d-flex justify-end pa-3">
                <button type="submit" class="btn btn-primary" style="background-color: #5c4872" @onclick="@HandleSubmitVisual">Next Step</button>
             </div>
          </div>
@@ -118,11 +118,11 @@ else if (mCurrentState == State.AnimationVisual)
 }
 else if (mCurrentState == State.AnimationPlacement)
 {
-   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
-      <h1><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial (Step 4 of ?): Placement</h1>
+   <div class="pa-1 my-1" style="background-color:#36173e">
+      <MudText Typo="Typo.h4"><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial (Step 4 of ?): Placement</MudText>
    </div>
 
-   <div class="container text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+   <div class="text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
       <p>
          An animation doesn't just appear at a random location on the screen. You can actually determine where it shows up as well as its width and height, so when you put it in your broadcaster
          software, it'll appear where you want it to. Use the canvas below to set your animation's position.
@@ -142,11 +142,11 @@ else if (mCurrentState == State.AnimationPlacement)
 }
 else if (mCurrentState == State.AnimationAudio)
 {
-   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
-      <h1><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial (Step 5 of ?): Animation Audio</h1>
+   <div class="pa-1 my-1" style="background-color:#36173e">
+      <MudText Typo="Typo.h4"><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial (Step 5 of ?): Animation Audio</MudText>
    </div>
 
-   <div class="container text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+   <div class="text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
       <p>
          You can pair an audio file with your visual! If you've selected a movie file (MP4, MOV, or WEBM) then you may not want to pair
          it with a secondary audio unless your movie doesn't have any of its own. This is not required, so if you like, you may
@@ -171,13 +171,13 @@ else if (mCurrentState == State.AnimationAudio)
 
       @if (mUploadAudioComplete)
       {
-         <div class="container-fluid">
+         <div>
             <label class="text-success"><b>You have successfully uploaded:</b> @mAnimationFormModel.Audio</label>
          </div>
       }
 
-      <div class="container-fluid text-left p-3" style="width: 600px">
-         <div class="col-sm text-right p-3">
+      <div class="text-left p-3" style="width: 600px">
+         <div class="d-flex justify-end pa-3">
             <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnSkipAudio">Skip Step</button>
             <button type="submit" class="btn btn-primary" style="background-color: #5c4872" @onclick="@HandleSubmitAudio" disabled="@(!mUploadAudioComplete)">Next Step</button>
          </div>
@@ -186,11 +186,11 @@ else if (mCurrentState == State.AnimationAudio)
 }
 else if (mCurrentState == State.AnimationVolume)
 {
-   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
-      <h1><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial (Step 6 of ?): Volume</h1>
+   <div class="pa-1 my-1" style="background-color:#36173e">
+      <MudText Typo="Typo.h4"><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial (Step 6 of ?): Volume</MudText>
    </div>
 
-   <div class="container text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+   <div class="text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
       <p>
          It looks like you either have a video file selected as your visual, or decided to upload a sound file. You should probably set the volume of that now, otherwise it's going
          to slay your headphone users.
@@ -208,8 +208,8 @@ else if (mCurrentState == State.AnimationVolume)
          </p>
       </div>
 
-      <div class="container-fluid text-left p-3" style="width: 600px">
-         <div class="col-sm text-right p-3">
+      <div class="text-left p-3" style="width: 600px">
+         <div class="d-flex justify-end pa-3">
             <button type="submit" class="btn btn-primary" style="background-color: #5c4872" @onclick="@HandleSubmitVolume">Next Step</button>
          </div>
       </div>
@@ -217,16 +217,16 @@ else if (mCurrentState == State.AnimationVolume)
 }
 else if (mCurrentState == State.AnimationBaseSettings)
 {
-   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
-      <h1><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial (Step 7 of ?): Basic Settings</h1>
+   <div class="pa-1 my-1" style="background-color:#36173e">
+      <MudText Typo="Typo.h4"><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial (Step 7 of ?): Basic Settings</MudText>
    </div>
 
-   <div class="container text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+   <div class="text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
       <p>
          Now that you have your files selected, it's time to get some of the very basic settings tuned. There's a LOT of other settings, but the ones
          listed below are the main ones you should care about when first setting up an animation command.
       </p>
-      <div class="container-fluid text-left p-3" style="width: 600px">
+      <div class="text-left p-3" style="width: 600px">
          <div class="form-group">
             <label for="uiDuration"><b>Duration (in milliseconds):</b></label>
             <small id="uiDuration" class="form-text text-white-50">The number of milliseconds this animation should play for (<i>Math Reminder: 1 second = 1000ms</i>).</small>
@@ -251,8 +251,8 @@ else if (mCurrentState == State.AnimationBaseSettings)
 </MudRadioGroup>
          </div>
 
-         <div class="container-fluid text-left p-3" style="width: 600px">
-            <div class="col-sm text-right p-3">
+         <div class="text-left p-3" style="width: 600px">
+            <div class="d-flex justify-end pa-3">
                <button type="submit" class="btn btn-primary" style="background-color: #5c4872" @onclick="@HandleCompleteTutorial">Finish!</button>
             </div>
          </div>
@@ -261,19 +261,19 @@ else if (mCurrentState == State.AnimationBaseSettings)
 }
 else if (mCurrentState == State.TutorialComplete)
 {
-   <div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
-      <h1><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial Complete!</h1>
+   <div class="pa-1 my-1" style="background-color:#36173e">
+      <MudText Typo="Typo.h4"><span class="oi oi-play-circle" aria-hidden="true"></span> Animation Tutorial Complete!</MudText>
    </div>
 
-   <div class="container text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
+   <div class="text-left p-3 rounded" style="width: 700px; background-color:#1e1e1e">
       <p>
-         Congratulations! You setup your first animation command! Your viewers can now use it in chat by sending <font class="text-success"><b>@mAnimationFormModel.Command</b></font> in a chat message.
+         Congratulations! You setup your first animation command! Your viewers can now use it in chat by sending <MudText Color="Color.Success"><b>@mAnimationFormModel.Command</b></MudText> in a chat message.
       </p>
       <p>
          Now to setup your broadcaster software! You will need to add a new Browser source to your scene. The URL is in the textbox below. Copy this and use it as the URL source of your Browser source
          element. Set the canvas size to be 1920x1080. Note: You may resize it, but your animations will render smaller. Set the framerate to 60fps and flag it to refresh when the scene is activated. Enjoy!
       </p>
-      <div class="container-fluid">
+      <div>
          <table width="100%">
             <tr>
                <td width="600">
@@ -285,8 +285,8 @@ else if (mCurrentState == State.TutorialComplete)
             </tr>
          </table>
       </div>
-      <div class="container-fluid text-left p-3" style="width: 600px">
-         <div class="col-sm text-right p-3">
+      <div class="text-left p-3" style="width: 600px">
+         <div class="d-flex justify-end pa-3">
             <button type="submit" class="btn btn-primary" style="background-color: #5c4872" @onclick="@HandleDashboardReturn">Go Back to the Dashboard</button>
          </div>
       </div>

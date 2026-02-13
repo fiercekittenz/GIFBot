@@ -1,31 +1,31 @@
-﻿@page "/about"
+@page "/about"
 @inject NavigationManager NavigationManager
 
-<div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
-   <h1><span class="oi oi-tag" aria-hidden="true"></span> About GIFBot-R</h1>
+<div class="pa-1 my-1" style="background-color:#36173e">
+   <MudText Typo="Typo.h4"><span class="oi oi-tag" aria-hidden="true"></span> About GIFBot-R</MudText>
 </div>
 
-<div class="container-fluid p-2 mb-2 rounded" style="background-color: #211126">
+<div class="p-2 mb-2 rounded" style="background-color: #211126">
    <MudTabs ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
       <MudTabPanel Text="General">
-         <div class="container text-white-50 mb-4" style="width: 700px">
+         <div class="text-white-50 mb-4" style="width: 700px">
             GIFBot-R is the next evolution of GIFBot. The application originally started out as a really crappy Java app. Then I wrote it in C# with WinForms. Then it just
             kept piling on highly customized features for specific streamers, becoming very difficult to distribute and maintain. As such, this is the new evolution.
             GIFBot-R is written as an ASP.NET service with a Blazor Web Assembly front-end. It's entirely self-hosted on your machine and doesn't have to be deployed anywhere
             else.
          </div>
-         <div class="container text-white-50 mb-4" style="width: 700px">
+         <div class="text-white-50 mb-4" style="width: 700px">
             This new version of the bot is also a lot faster. You don't have to keep the dashboard open at all times and you can simply run the console application, which
             will just run the basics of the bot.
          </div>
-         <div class="container text-white-50 mb-4" style="width: 700px">
+         <div class="text-white-50 mb-4" style="width: 700px">
             GIFBot-R is developed and maintained solely by twitch.tv/fiercekittenz. She does this for free in her spare time while raising a family and working a full-time job.
          </div>
       </MudTabPanel>
       <MudTabPanel Text="Version History">
 
          <MudExpansionPanel Text="Version 1.0f" Expanded="true">
-            <div class="container text-white-50 mb-4" style="width: 700px">
+            <div class="text-white-50 mb-4" style="width: 700px">
                <ul>
                   <li>Removed Twitch obsolete features (hosting, /ban and /timeout - Sorry, Snapper had to go because of this!)</li>
                   <li>Updated GIFBot to the latest TwitchLib API</li>
@@ -34,7 +34,7 @@
          </MudExpansionPanel>
 
          <MudExpansionPanel Text="Version 1.0e" Expanded="true">
-            <div class="container text-white-50 mb-4" style="width: 700px">
+            <div class="text-white-50 mb-4" style="width: 700px">
                <ul>
                   <li>Feature: Greeter - Create groups of viewers that you want to have an animation play when they say hello in chat!</li>
                   <li>Feature: Giveaway - Create giveaways using chat commands OR channel points! Includes popular features like sub luck and drawing multiple winners.</li>
@@ -48,7 +48,7 @@
          </MudExpansionPanel>
 
          <MudExpansionPanel Text="Version 1.0d" Expanded="true">
-            <div class="container text-white-50 mb-4" style="width: 700px">
+            <div class="text-white-50 mb-4" style="width: 700px">
                <ul>
                   <li>Feature: Countdown Timer - Have your community contribute bits, tips, charitable donations and more to add or remove time!</li>
                   <li>Feature: Snapper - Viewers can contribute to potentially snapping away a percentage of your chat! GREAT for charity drives!</li>
@@ -59,7 +59,7 @@
          </MudExpansionPanel>
 
          <MudExpansionPanel Text="Version 1.0c" Expanded="true">
-            <div class="container text-white-50 mb-4" style="width: 700px">
+            <div class="text-white-50 mb-4" style="width: 700px">
                <ul>
                   <li>Feature: Animations Editor Redesign!</li>
                   <li>Feature: Animations Bulk Recategorization Options!</li>
@@ -81,7 +81,7 @@
          </MudExpansionPanel>
 
          <MudExpansionPanel Text="Version 1.0b-1" Expanded="true">
-            <div class="container text-white-50 mb-4" style="width: 700px">
+            <div class="text-white-50 mb-4" style="width: 700px">
                <ul>
                   <li>Fixed a bug with the new kpop tags breaking cheering from chat.</li>
                </ul>
@@ -89,7 +89,7 @@
          </MudExpansionPanel>
 
          <MudExpansionPanel Text="Version 1.0b" Expanded="true">
-            <div class="container text-white-50 mb-4" style="width: 700px">
+            <div class="text-white-50 mb-4" style="width: 700px">
                <ul>
                   <li>Feature: Stickers!</li>
                   <li>Feature: Azure Cognitive services support for TTS on The Regurgitator</li>
@@ -108,7 +108,7 @@
          </MudExpansionPanel>
 
          <MudExpansionPanel Text="Version 1.0a" Expanded="true">
-            <div class="container text-white-50 mb-4" style="width: 700px">
+            <div class="text-white-50 mb-4" style="width: 700px">
                <ul>
                   <li>Initial Release!</li>
                </ul>

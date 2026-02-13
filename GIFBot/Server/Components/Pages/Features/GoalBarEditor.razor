@@ -21,7 +21,7 @@
          <small id="uiTitleLabel" class="form-text text-muted">The purpose of your goal (ex: "New Camera" or "Sweet Mic").</small>
          <MudTextField T="string" @bind-Value="mNewGoalTitle" />
       </div>
-      <div class="container-fluid p-2">
+      <div class="p-2">
          <p>
             <center>
                <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleAddNewGoal">
@@ -33,20 +33,20 @@
    </DialogContent>
 </MudDialog>
 
-<div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
-   <h1><span class="oi oi-target" aria-hidden="true"></span> Goal Bar</h1>
+<div class="pa-1 my-1" style="background-color:#36173e">
+   <MudText Typo="Typo.h4"><span class="oi oi-target" aria-hidden="true"></span> Goal Bar</MudText>
 </div>
 
 <EditForm Model="@mGoalBarData" OnSubmit="@OnSaveChanges">
    <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
       <MudTabPanel Text="Settings">
-         <div class="container-fluid" style="width: 100%">
-            <div class="container-fluid text-left p-3 rounded" style="width: 100%; background-color:#1e1e1e">
+         <div style="width: 100%">
+            <div class="text-left p-3 rounded" style="width: 100%; background-color:#1e1e1e">
                <p>
                   The <b>Goal Bar</b> is a feature of GIFBot where you can have a monetary or point-based goal that
                   takes into consideration multiple types of Twitch events (cheering, subbing, gift subbing, and tips).
                </p>
-               <div class="container text-left p-3 rounded" style="background-color: #1d161f">
+               <div class="text-left p-3 rounded" style="background-color: #1d161f">
 
                   <div class="form-group form-check">
                      <label class="form-check-label">
@@ -130,8 +130,8 @@
       </MudTabPanel>
 
       <MudTabPanel Text="Visual Settings">
-         <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
-            <div class="container-fluid p-2">
+         <div class="p-0 m-0 rounded" style="background-color: #1d161f">
+            <div class="p-2">
                <div class="form-group form-check">
                   <label class="form-check-label">
                      <MudCheckBox T="bool" @bind-Value="mGoalBarData.Settings.HideGoalText" /> Hide Goal Text
@@ -233,9 +233,9 @@
       </MudTabPanel>
 
       <MudTabPanel Text="Goals">
-         <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
-            <div class="container-fluid p-2">
-               <div class="container-fluid text-white-50 p-0">
+         <div class="p-0 m-0 rounded" style="background-color: #1d161f">
+            <div class="p-2">
+               <div class="text-white-50 p-0">
                   <p>
                      You can have more than one goal. When you have satisfied the requirements of one goal, the next goal in the list will
                      be activated. If there is any rollover amount, it will be applied to the next goal as well.
@@ -244,7 +244,7 @@
 
                @if (mGoalBarData.Goals.Any() && mGoalBarData.Goals.FirstOrDefault(g => g.IsActive == true) == null)
                {
-                  <div class="container-fluid text-warning p-0">
+                  <div class="text-warning p-0">
                      <p>
                         <b>
                            <i>
@@ -256,7 +256,7 @@
                   </div>
                }
 
-               <div class="container-fluid">
+               <div>
                   <p align="right"><button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@ShowAddNewGoalWindow">Add New Goal</button></p>
                </div>
                <MudTabs ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
@@ -279,8 +279,8 @@
       </MudTabPanel>
 
       <MudTabPanel Text="BrowserSource URL">
-         <div class="container-fluid">
-            <div class="container-fluid text-white-50 p-0">
+         <div>
+            <div class="text-white-50 p-0">
                <p>
                   To display the goal bar in your broadcaster software, copy this URL and use it as the input for a new Browser Source element. Note: If you set
                   this browser source to refresh when you switch scenes, the goal bar will flicker since it will rebuild as if you had refreshed in Chrome.
@@ -300,12 +300,10 @@
       </MudTabPanel>
    </MudTabs>
 
-   <div class="row">
-      <div class="container-fluid text-right p-3">
+         <div class="d-flex justify-end pa-3">
          <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnCancel">Cancel</button>
          <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e">Save Changes</button>
       </div>
-   </div>
 </EditForm>
 
 @code {

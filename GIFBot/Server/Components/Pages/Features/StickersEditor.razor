@@ -9,8 +9,8 @@
 @inject IJSRuntime JSRuntime
 @inject HttpClient Http
 
-<div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
-   <h1><span class="oi oi-badge" aria-hidden="true"></span> Stickers</h1>
+<div class="pa-1 my-1" style="background-color:#36173e">
+   <MudText Typo="Typo.h4"><span class="oi oi-badge" aria-hidden="true"></span> Stickers</MudText>
 </div>
 
 <!-- Add New Category Window -->
@@ -20,13 +20,13 @@
    </TitleContent>
    <DialogContent>
       <div class="form-group">
-         <font class="text-white">What is the name of the sticker category you would like to create?</font>
+         <MudText>What is the name of the sticker category you would like to create?</MudText>
       </div>
       <div class="form-group">
          <label for="uiCategoryName"><b>Name:</b></label>
          <MudTextField T="string" @bind-Value="mTempCategory.Name" />
       </div>
-      <div class="container-fluid p-2">
+      <div class="p-2">
          <p>
             <center>
                <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelAddCategory">
@@ -48,13 +48,13 @@
    </TitleContent>
    <DialogContent>
       <div class="form-group">
-         <font class="text-white">You can rename the category below. Please note that if you have any channel point rewards that use this category directly, you'll need to change that too!</font>
+         <MudText>You can rename the category below. Please note that if you have any channel point rewards that use this category directly, you'll need to change that too!</MudText>
       </div>
       <div class="form-group">
          <label for="uiCategoryName"><b>Name:</b></label>
          <MudTextField T="string" @bind-Value="mTempCategory.Name" />
       </div>
-      <div class="container-fluid p-2">
+      <div class="p-2">
          <p>
             <center>
                <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelEditCategory">
@@ -76,7 +76,7 @@
    </TitleContent>
    <DialogContent>
       <div class="form-group">
-         <font class="text-white">Choose the new category for the selected stickers from the list below:</font>
+         <MudText>Choose the new category for the selected stickers from the list below:</MudText>
       </div>
       <div class="form-group">
          <MudSelect T="Guid" Placeholder="Select Category..." @bind-Value="@mTempStickerCategoryId">
@@ -89,7 +89,7 @@
              }
          </MudSelect>
       </div>
-      <div class="container-fluid p-2">
+      <div class="p-2">
          <p>
             <center>
                <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelMoveCategory">
@@ -235,7 +235,7 @@
             }
          </MudTabPanel>
          <MudTabPanel Text="Dimensions and Placement">
-            <div class="container-fluid text-white-50 p-0">
+            <div class="text-white-50 p-0">
                <p>
                   If your sticker image is too big, you can resize it using the placement control below. You can provide a placement override and use that as well, should you
                   want this sticker to always appear in the same location.
@@ -256,7 +256,7 @@
 </MudRadioGroup>
             </div>
 
-            <div class="container-fluid p-2 text-center">
+            <div class="p-2 text-center">
                <PlacementComponent CanvasWidth="@mWorkingCanvasWidth"
                                    CanvasHeight="@mWorkingCanvasHeight"
                                    Width="@CurrentlyEditedSticker.Placement.Width"
@@ -303,8 +303,8 @@
 <EditForm Model="@mStickerData" OnSubmit="@OnSaveChanges">
    <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
       <MudTabPanel Text="Settings">
-         <div class="container-fluid" style="width: 100%">
-            <div class="container-fluid text-left p-3 rounded" style="width: 100%; background-color:#1e1e1e">
+         <div style="width: 100%">
+            <div class="text-left p-3 rounded" style="width: 100%; background-color:#1e1e1e">
                <p>
                   <b>Stickers</b> is a feature of GIFBot where you can have certain events place a sticker on the screen. Think of this as a
                   virtual way to torture yourself for your viewers' benefit. It's a great way to promote charitable events and to have viewers
@@ -315,7 +315,7 @@
                   or donations too! If you enable the command, you can even use that in a channel point reward. Hint: Have your viewers donate
                   to charity to put you in a virtual costume!
                </p>
-               <div class="container text-left p-3 rounded" style="background-color: #1d161f">
+               <div class="text-left p-3 rounded" style="background-color: #1d161f">
 
                   <div class="form-group form-check">
                      <label class="form-check-label">
@@ -482,9 +482,9 @@
       </MudTabPanel>
 
       <MudTabPanel Text="Randomized Stickers Behavior">
-         <div class="container-fluid" style="width: 100%">
-            <div class="container-fluid text-left p-3 rounded" style="width: 100%; background-color:#1e1e1e">
-               <div class="container text-left p-3 rounded" style="background-color: #1d161f">
+         <div style="width: 100%">
+            <div class="text-left p-3 rounded" style="width: 100%; background-color:#1e1e1e">
+               <div class="text-left p-3 rounded" style="background-color: #1d161f">
                   <p>
                      Stickers can be randomly placed or deliberately placed by name. For stickers with random placement enabled, you can have one of those stickers
                      appear when the following events happen (as long as they meet your thresholds!):
@@ -606,9 +606,9 @@
       <MudTabPanel Text="Sticker Images">
          @* MudBlazor: Use MudTooltip wrapping individual elements instead *@
 
-         <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
-            <div class="container-fluid p-2">
-               <div class="container-fluid text-white-50 p-0">
+         <div class="p-0 m-0 rounded" style="background-color: #1d161f">
+            <div class="p-2">
+               <div class="text-white-50 p-0">
                   <p>
                      There are two kinds of stickers - those that are placed randomly by the system based on events you configured in the Behavior tab or those stickers which have very specific, individual requirements. The stickers with trigger requirements are largely used
                      for fun things like costumes or stickers you only want to show up for very SPECIFIC requirements. Some examples:
@@ -740,7 +740,7 @@
                                  </tr>
                               </table>
                            </div>
-                           <div class="container-fluid text-right p-3">
+                           <div class="d-flex justify-end pa-3">
                               <button type="button" class="btn btn-secondary p-1" style="background-color: #6c4872" @onclick="HandleCancelNewSticker">Cancel</button>
                               <button type="button" class="btn btn-secondary p-1" style="background-color: #6c4872" @onclick="HandleAddNewSticker">Add New Sticker</button>
                            </div>
@@ -753,8 +753,8 @@
       </MudTabPanel>
 
       <MudTabPanel Text="BrowserSource URL">
-         <div class="container-fluid">
-            <div class="container-fluid text-white-50 p-0">
+         <div>
+            <div class="text-white-50 p-0">
                <p>
                   To display the stickers in your broadcaster software, copy these URLs and use them as the input for new Browser Source elements.
                   Make sure that the size of your browser source matches the working canvas size that you specified in the sticker settings!
@@ -791,10 +791,8 @@
       </MudTabPanel>
    </MudTabs>
 
-   <div class="row">
-      <div class="container-fluid text-right p-3">
+         <div class="d-flex justify-end pa-3">
          <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnCancel">Cancel</button>
          <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e">Save Changes</button>
       </div>
-   </div>
 </EditForm>

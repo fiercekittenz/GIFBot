@@ -6,25 +6,23 @@
 @inject ISnackbar Snackbar
 @implements IAsyncDisposable
 
-<div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
-   <h1><span class="oi oi-folder" aria-hidden="true"></span> Add New Category</h1>
+<div class="pa-1 my-1" style="background-color:#36173e">
+   <MudText Typo="Typo.h4"><span class="oi oi-folder" aria-hidden="true"></span> Add New Category</MudText>
 </div>
 
 <center>
-   <div class="container p-0 m-0 text-left" style="background-color: #1d161f; width: 600px">
-      <div class="container-fluid p-2">
+   <div class="p-0 m-0 text-left" style="background-color: #1d161f; width: 600px">
+      <div class="p-2">
          <EditForm Model="@Model" OnSubmit="@HandleSave">
             <div class="form-group">
                <label for="uiValue"><b>Category Name:</b></label>
                <small id="uiValue" class="form-text text-white-50">Pretty self-explanatory, right?</small>
                <MudTextField T="string" class="form-control" Style="color: #232323" @bind-Value="Model.Name" />
             </div>
-            <div class="row">
-               <div class="container-fluid text-right p-3">
+                           <div class="d-flex justify-end pa-3">
                   <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnCancel">Cancel</button>
                   <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e">OK</button>
                </div>
-            </div>
          </EditForm>
       </div>
    </div>

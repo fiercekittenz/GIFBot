@@ -10,8 +10,8 @@
 @inject IJSRuntime JSRuntime
 @inject HttpClient Http
 
-<div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
-    <h1><span class="oi oi-box" aria-hidden="true"></span> Giveaway</h1>
+<div class="pa-1 my-1" style="background-color:#36173e">
+    <MudText Typo="Typo.h4"><span class="oi oi-box" aria-hidden="true"></span> Giveaway</MudText>
 </div>
 
 <!-- Add New Banned User Window -->
@@ -21,13 +21,13 @@
     </TitleContent>
     <DialogContent>
         <div class="form-group">
-            <font class="text-white">What is the name of this banned user?</font>
+            <MudText>What is the name of this banned user?</MudText>
         </div>
         <div class="form-group">
             <label for="uiName"><b>Name:</b></label>
             <MudTextField T="string" @bind-Value="mTempBannedUserName" />
         </div>
-        <div class="container-fluid p-2">
+        <div class="p-2">
             <p>
                 <center>
                     <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelAddCommand">
@@ -44,8 +44,8 @@
 
 <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
     <MudTabPanel Text="Giveaway">
-        <div class="container-fluid p-2 mb-2 rounded" style="background-color: #211126">
-            <div class="container-fluid" style="width: 100%">
+        <div class="p-2 mb-2 rounded" style="background-color: #211126">
+            <div style="width: 100%">
                 @if (!Data.IsOpenForEntries)
                 {
                     <button type="button" class="btn btn-secondary p-1 mr-5" style="background-color: #484d72; margin-left: auto; margin-right: 0; width: 200px" @onclick="@OnStartGiveaway">Accept Entries</button>
@@ -65,11 +65,11 @@
         </div>
         @if (!String.IsNullOrEmpty(Winner))
         {
-            <div class="container-fluid p-2 mb-2 rounded" style="background-color: #211126">
-                <h4>The Winner is: @(Winner)</h4>
+            <div class="p-2 mb-2 rounded" style="background-color: #211126">
+                <MudText Typo="Typo.subtitle1">The Winner is: @(Winner)</MudText>
             </div>
         }
-        <div class="container-fluid p-2">
+        <div class="p-2">
             <MudDataGrid T="object" Items="@Data.Entrants" SortMode="SortMode.Single">
                 <Columns>
                     <TemplateColumn Filterable="true" Title="Entrant Name">
@@ -161,16 +161,14 @@
             <small id="uiWinnerAnimationLabel" class="form-text text-white-50">The animation that plays when the winner is announced.</small>
             <AnimationSelectorComponent Animations="@AnimationOptions" SelectedAnimation="Data.WinnerAnimation" OnSelectedAnimationChanged="@HandleWinnerAnimationSelectionChanged" />
         </div>
-        <div class="row">
-            <div class="container-fluid text-right p-3">
+                    <div class="d-flex justify-end pa-3">
                 <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnCancel">Cancel</button>
                 <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e" @onclick="@OnSaveChanges">Save Changes</button>
             </div>
-        </div>
     </MudTabPanel>
 
     <MudTabPanel Text="Banned Users">
-        <div class="container-fluid p-2">
+        <div class="p-2">
             <MudDataGrid T="string" Items="@Data.BannedUsers" SortMode="SortMode.Single">
                 <ToolBarContent>
                     <MudTextField T="string" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />

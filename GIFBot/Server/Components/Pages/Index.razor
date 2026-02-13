@@ -14,14 +14,14 @@
 @inject HttpClient Http
 @implements IAsyncDisposable
 
-<div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
-   <h1>Dashboard</h1>
+<div class="pa-1 my-1" style="background-color:#36173e">
+   <MudText Typo="Typo.h4">Dashboard</MudText>
 </div>
 
 @if (!IsConnected)
 {
-   <div class="jumbotron jumbotron-fluid text-warning" style="background-color: #230000">
-      <h1>WARNING: Disconnected from the bot! Are you running the GIFBot-R service?</h1>
+   <div class="pa-2 text-warning" style="background-color: #230000">
+      <MudText Typo="Typo.h4">WARNING: Disconnected from the bot! Are you running the GIFBot-R service?</MudText>
    </div>
 }
 
@@ -31,11 +31,11 @@
       <strong>Reauthentication Required</strong>
    </TitleContent>
    <DialogContent>
-      <div class="container-fluid p-2">
+      <div class="p-2">
          There are scope changes with the Twitch API that require you to reauthenticate to gain access
          to new features!
       </div>
-      <div class="container-fluid p-2">
+      <div class="p-2">
          <p>
             <center>
                <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@NavigateToReauthenticate">
@@ -73,12 +73,12 @@
    </ul>
 </nav>
 
-<div class="container-fluid p-3">
-   <div class="row">
+<div class="pa-3">
+   <MudGrid Spacing="3">
 
       <!-- Log -->
-      <div class="col-sm">
-         <div class="container-fluid text-light p-1" style="background-color:#1d161f"><b>Output Log</b></div>
+      <MudItem xs="12" sm="6">
+         <div class="text-light pa-1" style="background-color:#1d161f"><b>Output Log</b></div>
          <div class="overflow-auto" id="uiLogContainer" style="height: 500px; background-color:#1e1e1e">
             <div class="p-2">
                @foreach (var logMessage in mLogMessages)
@@ -87,18 +87,18 @@
                }
             </div>
          </div>
-      </div>
+      </MudItem>
 
       <!-- Animations -->
-      <div class="col-sm">
-         <div class="container-fluid text-light p-1" style="background-color:#1d161f"><b>Animations Control Panel</b></div>
+      <MudItem xs="12" sm="6">
+         <div class="text-light pa-1" style="background-color:#1d161f"><b>Animations Control Panel</b></div>
          <div class="overflow-auto">
 
-            <div class="container-fluid">
+            <div>
                @*<div class="form-group" style="width: 100%">
                   <MudTextField T="string" class="form-control" Placeholder="Filter..." Style="color: #232323" @bind-Value="@mFilterText" Change="@(args => OnFilterTextChanged(args))" />
                </div>*@
-               <div class="container-fluid">
+               <div>
                   <MudTreeView T="AnimationTreeItem" id="uiTree" Style="width: 100%; height: 100%; margin-top: -5px">
                      @foreach (var category in mFilteredData.Where(c => c.Tier == AnimationTreeTier.Category).OrderBy(c => c.Title))
                      {
@@ -130,9 +130,9 @@
                </div>
             </div>
          </div>
-      </div>
+      </MudItem>
 
-   </div>
+   </MudGrid>
 </div>
 
 @code

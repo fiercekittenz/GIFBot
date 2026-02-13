@@ -9,8 +9,8 @@
 @inject IJSRuntime JSRuntime
 @inject HttpClient Http
 
-<div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
-   <h1><span class="oi oi-image" aria-hidden="true"></span> Backdrop</h1>
+<div class="pa-1 my-1" style="background-color:#36173e">
+   <MudText Typo="Typo.h4"><span class="oi oi-image" aria-hidden="true"></span> Backdrop</MudText>
 </div>
 
 <!-- Add New Backdrop Window -->
@@ -20,13 +20,13 @@
    </TitleContent>
    <DialogContent>
       <div class="form-group">
-         <font class="text-white">What is the name of the backdrop?</font>
+         <MudText>What is the name of the backdrop?</MudText>
       </div>
       <div class="form-group">
          <label for="uiName"><b>Name:</b></label>
          <MudTextField T="string" @bind-Value="mTempData.Name" />
       </div>
-      <div class="container-fluid p-2">
+      <div class="p-2">
          <p>
             <center>
                <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelAddCommand">
@@ -79,7 +79,7 @@
             </tr>
          </table>
       </div>
-      <div class="container-fluid p-2">
+      <div class="p-2">
          <p>
             <center>
                <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelEditCommand">
@@ -96,22 +96,20 @@
 
 <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
    <MudTabPanel Text="General">
-      <div class="row">
-         <div class="container-fluid text-right p-3">
+               <div class="d-flex justify-end pa-3">
             <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnTakeDownBackdrop">Take Down Active Backdrop</button>
             <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnCancel">Cancel</button>
             <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e" @onclick="@OnSaveChanges">Save Changes</button>
          </div>
-      </div>
 
-      <div class="container-fluid p-2">
+      <div class="p-2">
          The Backdrop allows your community to control what is behind you or ON you if you're leveraging chroma key features in your content. Provide a
          variety of backdrops and give your community the tools to change your backdrop via tips, charitable donations, channel points, or cheers! Backdrops need
          to be 1080p. If not, they will be stretched to that size. Default behavior is to randomly choose one of the backdrops on command execution. The command
          usage may include the name of a backdrop to specifically choose that one!
       </div>
 
-      <div class="container-fluid p-2">
+      <div class="p-2">
          <div class="form-group form-check">
             <label class="form-check-label">
                <MudCheckBox T="bool" @bind-Value="Data.Enabled" /> Feature Enabled
@@ -145,16 +143,14 @@
          <MudNumericField T="int" Min="1" Max="999999" @bind-Value="Data.MinimumMinutesActive" />
       </div>
 
-      <div class="row">
-         <div class="container-fluid text-right p-3">
+               <div class="d-flex justify-end pa-3">
             <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnCancel">Cancel</button>
             <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e" @onclick="@OnSaveChanges">Save Changes</button>
          </div>
-      </div>
    </MudTabPanel>
 
    <MudTabPanel Text="Backdrops">
-      <div class="container-fluid p-2">
+      <div class="p-2">
          <MudDataGrid T="BackdropVideoEntryData" Items="@Data.Backdrops" SortMode="SortMode.Single">
             <ToolBarContent>
                <MudTextField T="string" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
@@ -175,15 +171,15 @@
    </MudTabPanel>
 
    <MudTabPanel Text="Browsersource URL">
-      <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
-         <div class="container-fluid p-2">
+      <div class="p-0 m-0 rounded" style="background-color: #1d161f">
+         <div class="p-2">
             <p class="text-white-50">
                Below is the URL you will need to capture in your broadcaster software in order to see the Backdrops on your scenes.
             </p>
             <p class="text-white-50">
                <u>Note:</u> If you are using XSplit, you will need to add these as Media sources, not Browser sources. These are files installed by GIFBot and not hosted on a web server.
             </p>
-            <div class="container-fluid">
+            <div>
                <table width="100%">
                   <tr>
                      <td width="600">

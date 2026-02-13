@@ -16,8 +16,8 @@
 @inject HttpClient Http
 @implements IAsyncDisposable
 
-<div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
-   <h1><span class="oi oi-cog" aria-hidden="true"></span> Bot Settings</h1>
+<div class="pa-1 my-1" style="background-color:#36173e">
+   <MudText Typo="Typo.h4"><span class="oi oi-cog" aria-hidden="true"></span> Bot Settings</MudText>
 </div>
 
 <!-- Clone Animation Confirmation Window -->
@@ -30,7 +30,7 @@
          <label for="uiTitleLabel">What is the new name for this group?</label>
          <MudTextField T="string" @bind-Value="@mRenamedUserGroupValue" />
       </div>
-      <div class="container-fluid p-2">
+      <div class="p-2">
          <p>
             <center>
                <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelRenameUserGroup">
@@ -45,14 +45,14 @@
    </DialogContent>
 </MudDialog>
 
-<div class="container-fluid" style="width: 100%">
-   <div class="container-fluid text-left p-3 rounded" style="width: 100%; background-color:#1e1e1e">
+<div style="width: 100%">
+   <div class="text-left p-3 rounded" style="width: 100%; background-color:#1e1e1e">
       <EditForm Model="@mBotSettings" OnSubmit="@OnSaveChanges">
          <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
 
             <MudTabPanel Text="Credentials">
-               <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
-                  <div class="container-fluid p-2">
+               <div class="p-0 m-0 rounded" style="background-color: #1d161f">
+                  <div class="p-2">
                      <p class="text-white-50">
                         Below are the credentials that are associated with your bot. For security reasons, your oauth tokens
                         are not displayed. If you would like to reauthorize, please use the 'Reauthorize' button and you can
@@ -67,7 +67,7 @@
                         <small id="uiChannelName" class="form-text text-white-50">The channel your bot will connect to. You can change this without needing to reauthorize.</small>
                         <MudTextField T="string" @bind-Value="mBotSettings.ChannelName" />
                      </div>
-                     <div class="container-fluid text-right p-3">
+                     <div class="d-flex justify-end pa-3">
                         <button type="button" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnReauthorize">Reauthorize Bot</button>
                      </div>
                   </div>
@@ -75,8 +75,8 @@
             </MudTabPanel>
 
             <MudTabPanel Text="Bot Behavior">
-               <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
-                  <div class="container-fluid p-2">
+               <div class="p-0 m-0 rounded" style="background-color: #1d161f">
+                  <div class="p-2">
                      <MudExpansionPanel Expanded="true">
 <MudText>Timing Mechanics</MudText>
 <div class="form-group">
@@ -137,8 +137,8 @@
             </MudTabPanel>
 
             <MudTabPanel Text="Global Positioning">
-               <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
-                  <div class="container-fluid p-2">
+               <div class="p-0 m-0 rounded" style="background-color: #1d161f">
+                  <div class="p-2">
                      <p class="text-white-50">
                         If you like, you may have a global placement for all of your animations. If you choose to enable this option, all animations,
                         regardless of their individual placement settings, will be placed according to the settings below:
@@ -165,8 +165,8 @@
                <MudTabs @bind-ActivePanelIndex="@ActiveIntegrationsTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
 
                   <MudTabPanel Text="Streamlabs">
-                     <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
-                        <div class="container-fluid p-2">
+                     <div class="p-0 m-0 rounded" style="background-color: #1d161f">
+                        <div class="p-2">
                            <p class="text-white-50">
                               In your Streamlabs account settings you may access API Tokens that are used to grant access to reading tips through their service. You go to Account -> Settings -> API Settings -> API Tokens. Copy the <b>Socket API Token</b> and paste it into the text field below.
                            </p>
@@ -182,8 +182,8 @@
                   </MudTabPanel>
 
                   <MudTabPanel Text="StreamElements">
-                     <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
-                        <div class="container-fluid p-2">
+                     <div class="p-0 m-0 rounded" style="background-color: #1d161f">
+                        <div class="p-2">
                            <p class="text-white-50">
                               To have GIFBot be able to listen for StreamElements events such as tipping, you need to provide your JWT token, which is available on your profile under "Channels". 
                               Once you are on that tab, toggle on "Show secrets" and you may copy the code into the text area below:
@@ -200,8 +200,8 @@
                   </MudTabPanel>
 
                   <MudTabPanel Text="Tiltify">
-                     <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
-                        <div class="container-fluid p-2">
+                     <div class="p-0 m-0 rounded" style="background-color: #1d161f">
+                        <div class="p-2">
                            <p class="text-white-50">
                               If you want to capture charitable donations through the <a href="https://www.tiltify.com/" target="_blank">Tiltify</a> service, you will need to provide your Tiltify slug (display name) and the client_id and client_secret from your dashboard. This information is only stored on your personal computer and not shared! It's needed to authenticate your copy of GIFBot since I'm not hosting it anywhere as a central application. Otherwise it would cost a lot of money and I would be sad. To access this information, log into Tiltify, go to your dashboard and choose "My Account". You can then click on "Connected Accounts" at the top of the page, followed by "Your Applications" on the left. From here you must create an application with the following information:
                            </p>
@@ -242,17 +242,17 @@
             </MudTabPanel>
 
             <MudTabPanel Text="User Groups">
-               <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
-                  <div class="container-fluid p-2">
+               <div class="p-0 m-0 rounded" style="background-color: #1d161f">
+                  <div class="p-2">
                      <p class="text-white-50">
                         User groups allow you to limit access to specific animations to a subset of viewers. This is great for rewarding people for supporting you via Patreon,
                         donating to charity campaigns, or just special people (let's admit it, they're ALL special).
                      </p>
-                     <div class="container-fluid">
+                     <div>
                         <table width="100%">
                            <tr>
                               <td valign="top" align="left" width="50%">
-                                 <div class="container-fluid" mt-5>
+                                 <div  mt-5>
                                     <table>
                                        <tr>
                                           <td valign="bottom">
@@ -265,7 +265,7 @@
                                  </div>
                               </td>
                               <td valign="bottom" align="right" width="50%">
-                                 <div class="container-fluid" mt-5>
+                                 <div  mt-5>
                                     <table>
                                        <tr>
                                           <td valign="top">
@@ -284,7 +284,7 @@
                      </div>
                      @if (mSelectedUserGroup != null)
                      {
-                        <div class="container-fluid mt-3">
+                        <div class="mt-3">
                            <MudDataGrid T="UserEntry" Items="@mSelectedUserGroup.UserEntries" SortMode="SortMode.Single">
                               <Columns>
                                  <PropertyColumn T="UserEntry" TProperty="string" Property="@(x => x.Name)" Title="Viewer Name" />
@@ -301,7 +301,7 @@
                               </Columns>
                            </MudDataGrid>
                         </div>
-                        <div class="container-fluid mt-3">
+                        <div class="mt-3">
                            <table width="100%">
                               <tr>
                                  <td align="left">
@@ -337,14 +337,14 @@
             </MudTabPanel>
 
             <MudTabPanel Text="Throttle List">
-               <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
-                  <div class="container-fluid p-2">
+               <div class="p-0 m-0 rounded" style="background-color: #1d161f">
+                  <div class="p-2">
                      <p class="text-white-50">
                         Sometimes we get some very enthusiastic viewers that take advantage of timing the animations and no matter how well you space out timeouts and such, they still find a way to interrupt
                         that very special moment in your stream with horrific beat boxing animations. You can ban users from using animations OR you can just apply a personal throttle to them so that they can't
                         execute animations like everyone else in chat.
                      </p>
-                     <div class="container-fluid">
+                     <div>
                         <MudDataGrid T="ThrottledUserData" Items="@mBotSettings.ThrottledUsers">
                            <ToolBarContent>
                               <MudButton Variant="Variant.Text" Size="Size.Small">Add Viewer</MudButton>
@@ -368,8 +368,8 @@
             </MudTabPanel>
 
             <MudTabPanel Text="Browsersource URLs">
-               <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
-                  <div class="container-fluid p-2">
+               <div class="p-0 m-0 rounded" style="background-color: #1d161f">
+                  <div class="p-2">
                      <p class="text-white-50">
                         Below are the URLs you need to capture for various GIFBot features. Click in the textbox to copy the URL. The only one that is absolutely required to use the bot
                         correctly is the GIFBot Main browser source. This will establish the appropriate connections.
@@ -381,7 +381,7 @@
                      <p class="text-white-50">
                         <u>Note:</u> If you are using XSplit, you will need to add these as Media sources, not Browser sources. These are files installed by GIFBot and not hosted on a web server.
                      </p>
-                     <div class="container-fluid">
+                     <div>
                         <table width="100%">
                            <tr>
                               <td colspan="2">
@@ -398,7 +398,7 @@
                            </tr>
                         </table>
                      </div>
-                     <div class="container-fluid">
+                     <div>
                         <table width="100%">
                            <tr>
                               <td colspan="2">
@@ -420,12 +420,10 @@
             </MudTabPanel>
          </MudTabs>
 
-         <div class="row">
-            <div class="container-fluid text-right p-3">
+                     <div class="d-flex justify-end pa-3">
                <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnCancel">Cancel</button>
                <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e">Save Changes</button>
             </div>
-         </div>
       </EditForm>
    </div>
 </div>

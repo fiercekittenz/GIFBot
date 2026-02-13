@@ -1,16 +1,16 @@
-﻿@page "/charity"
+@page "/charity"
 @inject NavigationManager NavigationManager
 
-<div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
-   <h1><span class="oi oi-tag" aria-hidden="true"></span> A Special Thanks...</h1>
+<div class="pa-1 my-1" style="background-color:#36173e">
+   <MudText Typo="Typo.h4"><span class="oi oi-tag" aria-hidden="true"></span> A Special Thanks...</MudText>
 </div>
 
-<div class="container-fluid p-2 mb-2 rounded" style="background-color: #211126">
-   <div class="container text-white-50 mb-4" style="width: 700px">
+<div class="p-2 mb-2 rounded" style="background-color: #211126">
+   <div class="text-white-50 mb-4" style="width: 700px">
       The Fiercekittenz community is small, but mighty! We have collectively raised over $36,000 since 2017! That's a lot of doll hairs for charity! This page is here
       to thank each and every donor to the various causes that we have helped over the years. Thank you. Truly. Every little bit helps, and I cannot thank you enough!
    </div>
-   <div class="container text-white-50 mb-4" style="width: 700px">
+   <div class="text-white-50 mb-4" style="width: 700px">
       <ul>
          @foreach (var donor in Donors)
          {

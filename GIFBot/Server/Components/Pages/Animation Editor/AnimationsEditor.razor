@@ -11,8 +11,8 @@
 @inject IJSRuntime JSRuntime
 @inject HttpClient Http
 
-<div class="jumbotron jumbotron-fluid p-1 my-1 text-left" style="background-color:#36173e">
-    <h1><span class="oi oi-play-circle" aria-hidden="true"></span> Animations</h1>
+<div class="pa-1 my-1" style="background-color:#36173e">
+    <MudText Typo="Typo.h4"><span class="oi oi-play-circle" aria-hidden="true"></span> Animations</MudText>
 </div>
 
 <!-- Delete Category Confirmation Window -->
@@ -22,9 +22,9 @@
     </TitleContent>
     <DialogContent>
         <div class="form-group">
-            <font class="text-white">Are you sure you want to delete the [@(mTempCategory?.Title)] category? If you have any animations in it, it will not succeed.</font>
+            <MudText>Are you sure you want to delete the [@(mTempCategory?.Title)] category? If you have any animations in it, it will not succeed.</MudText>
         </div>
-        <div class="container-fluid p-2">
+        <div class="p-2">
             <p>
                 <center>
                     <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelCategoryDeletion">
@@ -46,9 +46,9 @@
     </TitleContent>
     <DialogContent>
         <div class="form-group">
-            <font class="text-white">Are you sure you want to delete the selected animation(s)?</font>
+            <MudText>Are you sure you want to delete the selected animation(s)?</MudText>
         </div>
-        <div class="container-fluid p-2">
+        <div class="p-2">
             <p>
                 <center>
                     <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelDeletion">
@@ -70,7 +70,7 @@
     </TitleContent>
     <DialogContent>
         <div class="form-group">
-            <font class="text-white">Which category would you like to move the selected animation(s) into?</font>
+            <MudText>Which category would you like to move the selected animation(s) into?</MudText>
         </div>
         <div class="form-group">
             <label for="uiTitleLabel">Select the new category from the list below:</label>
@@ -82,7 +82,7 @@
                 }
             </MudSelect>
         </div>
-        <div class="container-fluid p-2">
+        <div class="p-2">
             <p>
                 <center>
                     <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelMove">
@@ -104,13 +104,13 @@
     </TitleContent>
     <DialogContent>
         <div class="form-group">
-            <font class="text-white">What is the name of the animation category you would like to create?</font>
+            <MudText>What is the name of the animation category you would like to create?</MudText>
         </div>
         <div class="form-group">
             <label for="uiCategoryName"><b>Name:</b></label>
             <MudTextField T="string" @bind-Value="mTempCategory.Title" />
         </div>
-        <div class="container-fluid p-2">
+        <div class="p-2">
             <p>
                 <center>
                     <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelAddCategory">
@@ -132,13 +132,13 @@
     </TitleContent>
     <DialogContent>
         <div class="form-group">
-            <font class="text-white">You can rename the category below.</font>
+            <MudText>You can rename the category below.</MudText>
         </div>
         <div class="form-group">
             <label for="uiCategoryName"><b>Name:</b></label>
             <MudTextField T="string" @bind-Value="mTempCategory.Title" />
         </div>
-        <div class="container-fluid p-2">
+        <div class="p-2">
             <p>
                 <center>
                     <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelEditCategory">
@@ -160,13 +160,13 @@
     </TitleContent>
     <DialogContent>
         <div class="form-group">
-            <font class="text-white">What is the name of the animation you would like to create? If you want this to be a command, make sure to include "!" in front of it.</font>
+            <MudText>What is the name of the animation you would like to create? If you want this to be a command, make sure to include "!" in front of it.</MudText>
         </div>
         <div class="form-group">
             <label for="uiName"><b>Name or Command Value:</b></label>
             <MudTextField T="string" @bind-Value="mTempAnimationCommand" />
         </div>
-        <div class="container-fluid p-2">
+        <div class="p-2">
             <p>
                 <center>
                     <button type="button" class="btn btn-secondary nav-item p-1 mr-3" style="background-color: #5c4872" @onclick="@HandleCancelAddAnimationToCategory">
@@ -182,12 +182,12 @@
 </MudDialog>
 
 <!-- Main Layout for the Animations Editor -->
-<div class="container-fluid p-3">
+<div class="p-3">
 
     @* MudBlazor: Use MudTooltip wrapping individual elements instead *@
 
-    <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
-        <div class="container-fluid p-2">
+    <div class="p-0 m-0 rounded" style="background-color: #1d161f">
+        <div class="p-2">
             <div class="form-group">
                 <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
                     <MudTabPanel Text="Animations">

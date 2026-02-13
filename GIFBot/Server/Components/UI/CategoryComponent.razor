@@ -2,10 +2,10 @@
 @using global::GIFBot.Server.Components.UI
 @using global::GIFBot.Server.Components.Pages.Setup.Models
 
-<div style="margin-top: 2px">
+<div class="mt-1">
    <EditForm Model="@mCategoryNameModel" OnSubmit="@HandleSave">
-      <div class="container-fluid p-2 mb-2 rounded" style="background-color: #211126">
-         <div class="container-fluid text-left" style="width: 100%">
+      <div class="p-2 mb-2 rounded" style="background-color: #211126">
+         <div class="text-left" style="width: 100%">
             <button type="button" class="btn btn-secondary p-1" style="background-color: #724859; margin-left: auto; margin-right: 0" @onclick="@OnDeleteCategory">Delete</button>
             <button type="button" class="btn btn-secondary p-1" style="background-color: #485472; margin-left: auto; margin-right: 0" @onclick="@(() => OnToggleEnabledAll.InvokeAsync(true))">Enable All Animations</button>
             <button type="button" class="btn btn-secondary p-1" style="background-color: #485472; margin-left: auto; margin-right: 0" @onclick="@(() => OnToggleEnabledAll.InvokeAsync(false))">Disable All Animations</button>
@@ -13,8 +13,8 @@
       </div>
       <MudTabs ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
          <MudTabPanel Text="General">
-            <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
-               <div class="container-fluid p-2">
+            <div class="p-0 m-0 rounded" style="background-color: #1d161f">
+               <div class="p-2">
                   <div class="form-group">
                      <label for="uiTitle"><b>Category Name:</b></label>
                      <small id="uiTitle" class="form-text text-white-50">It's pretty self-explanatory. Basically it's the title of the category.</small>
@@ -24,19 +24,17 @@
             </div>
          </MudTabPanel>
          @*<MudTabPanel Text="Bulk Actions">
-            <div class="container-fluid p-0 m-0 rounded" style="background-color: #1d161f">
-               <div class="container-fluid p-2">
+            <div class="p-0 m-0 rounded" style="background-color: #1d161f">
+               <div class="p-2">
                </div>
             </div>
          </MudTabPanel>*@
       </MudTabs>
 
-      <div class="row">
-         <div class="container-fluid text-right p-3">
+               <div class="d-flex justify-end pa-3">
             <button type="reset" class="btn btn-secondary p-2" style="background-color: #6c4872" @onclick="@OnCancel">Cancel</button>
             <button type="submit" class="btn btn-primary p-2" style="background-color: #8f269e">Save Changes</button>
          </div>
-      </div>
    </EditForm>
 </div>
 
