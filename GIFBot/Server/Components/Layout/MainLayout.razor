@@ -4,18 +4,37 @@
 <MudPopoverProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
-   <div class="sidebar">
-      <NavMenu />
-   </div>
 
-   <div class="main text-light" style="background-color:#101010">
-      <div class="content px-4">
-         
-         @Body
-      </div>
-   </div>
+<MudLayout>
+    <MudAppBar Elevation="1">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />
+        <MudText Typo="Typo.h5" Class="ml-3">GIFBot</MudText>
+        <MudSpacer />
+    </MudAppBar>
+    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
+        <NavMenu />
+        <MudSpacer />
+        <div class="pa-4 d-flex justify-center">
+            <a href="https://www.gifbot.io/" target="_blank">
+                <img src="gifbot_logo.png" width="120" />
+            </a>
+        </div>
+    </MudDrawer>
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.False" Class="pa-4">
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
 
 @code {
+    private bool _drawerOpen = true;
+
+    private void ToggleDrawer()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
     private static bool _isDarkMode = true;
 
     private static MudTheme _theme = new MudTheme
