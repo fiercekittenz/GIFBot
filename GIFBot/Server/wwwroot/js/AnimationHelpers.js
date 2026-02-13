@@ -82,6 +82,13 @@ function StopVideoElement(videoElement, videoFile) {
    video.setAttribute("src", "");
 }
 
+// Opens a URL in a new browser window/tab (used for OAuth to avoid
+// navigating away from the Blazor app and triggering debugger issues
+// with third-party scripts like Twitch's Kasada bot protection).
+function OpenInNewWindow(url) {
+   window.open(url, '_blank');
+}
+
 // Scrolls the logs down to the bottom.
 function UpdateScroll() {
    var element = document.getElementById("uiLogContainer");

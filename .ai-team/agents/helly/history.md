@@ -25,5 +25,10 @@
 - Browser source HTML files (OBS) have separate jQuery; CDN load was redundant
 - 18 files still use Bootstrap `btn` classes and `oi-*` icons — blocking full Bootstrap/Open Iconic removal
 - Inline background color patterns fall into 4 tiers; centralizing into CSS classes enables easy theme updates
+- NoNavMenuLayout needs its own MudTheme definition (duplicated from MainLayout) since the theme is a private static field — extracting to a shared static class would be cleaner if more layouts appear
+- Setup wizard panels use `max-width: 700px; width: 100%` with `d-flex justify-center` parent for responsive centering
+- `html, body` background set to `#121218` globally in app.css; browser source pages are unaffected since they set their own backgrounds via inline styles
+- Deprecated `<center>` tags replaced with MudBlazor utility classes (`d-flex justify-center`)
+- Bare `<button>` elements replaced with `<MudButton Variant="Variant.Filled" Color="Color.Primary">` for consistent theming
 
 — Helly

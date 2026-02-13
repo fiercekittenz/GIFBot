@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 using System;
 using System.Threading.Tasks;
 
+using Microsoft.JSInterop;
 using MudBlazor;
 namespace GIFBot.Server.Components.Pages.Setup
 {
@@ -65,10 +66,10 @@ namespace GIFBot.Server.Components.Pages.Setup
          // from the server when we circle back.
          await mHubConnection.InvokeAsync("UpdateBotSettings", Newtonsoft.Json.JsonConvert.SerializeObject(mBotSettings), false);
 
-         // Forcibly forward the user to the correct URL for authentication. This is necessary,
-         // because Twitch will redirect them and it will be a CORS error otherwise.
+         // Open the Twitch OAuth page in a new window so the Blazor app stays alive
+         // and the VS debugger doesn't break on Twitch's third-party JS exceptions.
          string botAuthUrl = $"https://id.twitch.tv/oauth2/authorize?client_id={Common.skTwitchClientId}&redirect_uri=https://gifbot.azurewebsites.net/twitchoauth&response_type=code&force_verify=true&scope=chat_login chat:edit chat:read whispers:read whispers:edit channel_subscriptions channel:read:redemptions channel:read:hype_train channel:manage:redemptions";
-         NavigationManager.NavigateTo(botAuthUrl);
+         await JSRuntime.InvokeVoidAsync("OpenInNewWindow", botAuthUrl);
       }
 
       private async Task HandleSkipTwitchStreamerAuth()
@@ -84,10 +85,10 @@ namespace GIFBot.Server.Components.Pages.Setup
          // from the server when we circle back.
          await mHubConnection.InvokeAsync("UpdateBotSettings", Newtonsoft.Json.JsonConvert.SerializeObject(mBotSettings), false);
 
-         // Forcibly forward the user to the correct URL for authentication. This is necessary,
-         // because Twitch will redirect them and it will be a CORS error otherwise.
+         // Open the Twitch OAuth page in a new window so the Blazor app stays alive
+         // and the VS debugger doesn't break on Twitch's third-party JS exceptions.
          string streamerAuthUrl = $"https://id.twitch.tv/oauth2/authorize?client_id={Common.skTwitchClientId}&redirect_uri=https://gifbot.azurewebsites.net/twitchoauth&response_type=code&force_verify=true&scope=chat_login chat:edit chat:read whispers:read whispers:edit channel_subscriptions channel:read:redemptions channel:read:hype_train channel:manage:redemptions";
-         NavigationManager.NavigateTo(streamerAuthUrl);
+         await JSRuntime.InvokeVoidAsync("OpenInNewWindow", streamerAuthUrl);
       }
 
       private async Task HandleSkipStreamlabsAuth()
