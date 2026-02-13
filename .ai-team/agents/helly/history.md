@@ -66,3 +66,30 @@
 - MudSelect doesn't have `Data=` attribute — items must be rendered as child `<MudSelectItem>` elements.
 
 — Helly
+
+---
+
+📌 **Completed: M4 Task 4.1 — Custom MudBlazor dark theme**
+
+### What was done
+- Added a full custom `MudTheme` to `MainLayout.razor` with `IsDarkMode = true`
+- Configured `PaletteDark` with GIFBot's identity purple (`#7e57c2` primary, `#b39ddb` secondary) sourced from the original Telerik theme's accent color (`#5d3e9c`) and App.razor's slider thumb (`#651298`)
+- Dark surface/background colors (`#1e1e2d` / `#121218`) with subtle purple tinting to match the MudBlazor website aesthetic
+- Drawer/appbar use `#1a1a2e` — coordinated with the existing sidebar gradient (`rgb(47,39,103)` → `#22003d`)
+- Set `PaletteLight` with basic purple colors as fallback, but dark mode is the default
+- Typography set to Roboto (already loaded in App.razor `<head>`)
+- All four MudBlazor providers already existed — updated `MudThemeProvider` with `Theme` and `IsDarkMode` bindings
+
+### Key file paths
+- `GIFBot/Server/Components/Layout/MainLayout.razor` — theme definition lives here in `@code` block
+- `GIFBot/Server/wwwroot/css/GIFBotPurple22.css` — Telerik/Kendo theme (1MB), identity purple is `#5d3e9c`, base dark is `#2a1538`
+- `GIFBot/Server/wwwroot/css/app.css` — sidebar gradient uses `rgb(47,39,103)` → `#22003d`
+- `GIFBot/Server/Components/App.razor` — slider thumb uses `#651298` (another GIFBot purple reference)
+
+### Learnings
+- MudBlazor 8.5.0 uses `PaletteLight` and `PaletteDark` (not the older `Palette` class)
+- GIFBot's purple identity is spread across multiple files with slightly different hex values — standardized on `#7e57c2` (deep purple 400) for MudBlazor primary
+- Existing layout structure (sidebar div + main div) was left intact — nav restructuring is task 4.2
+- Existing CSS not removed — cleanup is task 4.5
+
+— Helly
