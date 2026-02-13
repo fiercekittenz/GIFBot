@@ -1,0 +1,21 @@
+{
+  "universe_usage_history": [
+    {
+      "assignment_id": "2026-02-13-gifbot-modernization",
+      "universe": "Severance",
+      "timestamp": "2026-02-13T13:25:26Z"
+    }
+  ],
+  "assignment_cast_snapshots": {
+    "2026-02-13-gifbot-modernization": {
+      "universe": "Severance",
+      "agent_map": {
+        "mark": "Mark",
+        "helly": "Helly",
+        "irving": "Irving",
+        "dylan": "Dylan"
+      },
+      "created_at": "2026-02-13T13:25:26Z"
+    }
+  }
+}
