@@ -60,3 +60,13 @@
 - Pattern: `StateHasChanged()` → `await InvokeAsync(StateHasChanged)`; `JSRuntime.InvokeVoidAsync(...)` → `await InvokeAsync(async () => await JSRuntime.InvokeVoidAsync(...))`. For callbacks calling helper methods that internally use StateHasChanged/JSRuntime, wrapped the helper call with `await InvokeAsync(async () => await HelperMethod(...))`.
 - Did NOT touch `StateHasChanged()` in lifecycle methods (OnInitializedAsync), event handlers, or non-hub-callback code.
 - Build: 0 errors. 11 files changed, 56 insertions, 55 deletions. Committed on `feature/modernization`.
+
+---
+
+### Prerendering Disabled for Local Desktop App (2026-02-13)
+- GIFBot is a local desktop app with no benefit from SSR/prerendering.
+- `App.razor` had `@rendermode="RenderMode.InteractiveServer"` on both `<HeadOutlet>` and `<Routes>`, which enables prerendering by default.
+- Prerendering caused two issues: (1) JS interop crash (`InvalidOperationException`) during static render phase when `Index.razor` line 162 called `JSRuntime.InvokeVoidAsync("UpdateScroll")` inside a hub callback in `OnInitializedAsync`, and (2) two browser tabs opening on startup (server prerender + Blazor circuit connect = double navigation).
+- Fix: Changed both to `new InteractiveServerRenderMode(prerender: false)` — 2-line change in `GIFBot\Server\Components\App.razor`.
+- With prerendering disabled, the Blazor circuit is immediately interactive — no static render phase means JS interop is available from the start, hub callbacks only fire once, and only one tab opens.
+- Build: 0 errors. 1 file changed. Committed on `feature/modernization`.
