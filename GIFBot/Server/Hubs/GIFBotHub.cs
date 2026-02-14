@@ -1492,6 +1492,37 @@ namespace GIFBot.Server.Hubs
          return false;
       }
 
+      public string SaveStickerVisualFile(string fileName, string base64Data)
+      {
+         if (Bot != null && !String.IsNullOrEmpty(fileName) && !String.IsNullOrEmpty(base64Data))
+         {
+            try
+            {
+               string mediaPath = AnimationLibrary.GetMediaRootPath();
+               string filePath = Path.Combine(mediaPath, fileName);
+
+               // If a file with the same name exists, generate a unique name
+               if (File.Exists(filePath))
+               {
+                  string nameWithoutExt = Path.GetFileNameWithoutExtension(fileName);
+                  string ext = Path.GetExtension(fileName);
+                  fileName = $"{nameWithoutExt}_{Guid.NewGuid().ToString("N").Substring(0, 8)}{ext}";
+                  filePath = Path.Combine(mediaPath, fileName);
+               }
+
+               byte[] fileBytes = Convert.FromBase64String(base64Data);
+               File.WriteAllBytes(filePath, fileBytes);
+               return fileName;
+            }
+            catch (Exception ex)
+            {
+               Console.WriteLine($"Error saving sticker visual file: {ex.Message}");
+            }
+         }
+
+         return String.Empty;
+      }
+
       public bool AddStickerEntry(string stickerData, Guid categoryId)
       {
          if (Bot != null && Bot.StickersManager != null && !String.IsNullOrEmpty(stickerData))

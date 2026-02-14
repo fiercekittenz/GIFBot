@@ -101,6 +101,8 @@ namespace GIFBot.Server.Components.Pages.Features
                Type = StickerTreeListItem.ItemType.Category,
             };
 
+            mStickerTreeListData.Add(parent);
+
             int stickerCount = 1;
             foreach (var entry in category.Entries)
             {
@@ -118,7 +120,7 @@ namespace GIFBot.Server.Components.Pages.Features
                ++stickerCount;
             }
 
-            mStickerTreeListData.Add(parent);
+            // Parent already added above before children
             ++categoryCount;
          }
       }
@@ -761,20 +763,31 @@ namespace GIFBot.Server.Components.Pages.Features
          using var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024);
          using var ms = new System.IO.MemoryStream();
          await stream.CopyToAsync(ms);
-         dataToEdit.Visual = Convert.ToBase64String(ms.ToArray());
-         mUploadStickerVisualProgress = 100;
+         string base64Data = Convert.ToBase64String(ms.ToArray());
 
-         string result = await mHubConnection.InvokeAsync<string>("GetStickerFileDimensions", dataToEdit.Visual);
-         if (!String.IsNullOrEmpty(result))
+         // Save the file to the media folder and get back the filename
+         string savedFileName = await mHubConnection.InvokeAsync<string>("SaveStickerVisualFile", file.Name, base64Data);
+         if (!String.IsNullOrEmpty(savedFileName))
          {
-            Tuple<int, int> dimensions = JsonConvert.DeserializeObject<Tuple<int, int>>(result);
-            dataToEdit.Placement.Width = dimensions.Item1;
-            dataToEdit.Placement.Height = dimensions.Item2;
+            dataToEdit.Visual = savedFileName;
+            mUploadStickerVisualProgress = 100;
 
-            if (mIsPlacementBeingEdited)
+            string result = await mHubConnection.InvokeAsync<string>("GetStickerFileDimensions", savedFileName);
+            if (!String.IsNullOrEmpty(result))
             {
-               await mHubConnection.InvokeAsync("UpdateStickerDisplayTestDimensions", dimensions.Item1, dimensions.Item2);
+               Tuple<int, int> dimensions = JsonConvert.DeserializeObject<Tuple<int, int>>(result);
+               dataToEdit.Placement.Width = dimensions.Item1;
+               dataToEdit.Placement.Height = dimensions.Item2;
+
+               if (mIsPlacementBeingEdited)
+               {
+                  await mHubConnection.InvokeAsync("UpdateStickerDisplayTestDimensions", dimensions.Item1, dimensions.Item2);
+               }
             }
+         }
+         else
+         {
+            mUploadStickerVisualErrorMessage = "Failed to save the sticker file.";
          }
 
          StateHasChanged();
