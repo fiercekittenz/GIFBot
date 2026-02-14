@@ -18,40 +18,37 @@
     </MudStack>
 </div>
 
-<nav class="navbar navbar-expand-sm gifbot-quick-actions">
-   <ul class="navbar-nav">
-      <li class="nav-item">
-         <span class="navbar-text mr-3">
-            <b>Package:</b>
-         </span>
-         <MudSelect T="Guid" Placeholder="Select Package to Edit..." @bind-Value="@CurrentPackage">
-             @if (AvailablePackages != null)
-             {
-                 @foreach (var pkg in AvailablePackages)
-                 {
-                     <MudSelectItem T="Guid" Value="@pkg.Id">@pkg.Name</MudSelectItem>
-                 }
-             }
-         </MudSelect>
-          <MudButton Variant="Variant.Filled" Class="gifbot-action-btn nav-item p-1 ml-2 mr-1" Style="width:100px" OnClick="@AddNewPackage">Add</MudButton>
-          <MudButton Variant="Variant.Filled" Class="gifbot-action-btn nav-item p-1 mr-1" Style="width:100px" OnClick="@DeletePackage">Delete</MudButton>
-      </li>
-   </ul>
-</nav>
+<MudPaper Class="pa-2 mb-2" Elevation="0" Style="background-color: #1c1c34">
+    <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+        <MudText Typo="Typo.subtitle1" Class="mr-2"><b>Package:</b></MudText>
+        <MudSelect T="Guid" Placeholder="Select Package to Edit..." @bind-Value="@CurrentPackage">
+            @if (AvailablePackages != null)
+            {
+                @foreach (var pkg in AvailablePackages)
+                {
+                    <MudSelectItem T="Guid" Value="@pkg.Id">@pkg.Name</MudSelectItem>
+                }
+            }
+        </MudSelect>
+        <MudButton Variant="Variant.Filled" Class="gifbot-action-btn" Style="width:100px" OnClick="@AddNewPackage">Add</MudButton>
+        <MudButton Variant="Variant.Filled" Class="gifbot-action-btn" Style="width:100px" OnClick="@DeletePackage">Delete</MudButton>
+    </MudStack>
+</MudPaper>
 
 @if (CurrentPackage != Guid.Empty)
 {
     <EditForm Model="@mRegurgitatorSettings" OnSubmit="@OnSaveChanges">
-        <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
-            <MudTabPanel Text="Settings">
-                <div style="width: 100%">
-                    <div class="text-left p-3 rounded gifbot-form-panel" style="width: 100%">
-                        <p>
-                            The <b>Regurgitator</b> is a feature of GIFBot where you can have a command
-                            or timed event to regurgitate a random entry (fact, pun, dad joke, etc.) to chat. To use, simply enable and
-                            provide a text file of sentences, separated by a line feed (return/enter).
-                        </p>
-                        <div class="text-left p-3 rounded gifbot-section-panel">
+        <div style="width: 100%">
+            <div class="text-left p-3 rounded gifbot-form-panel" style="width: 100%">
+                <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
+                    <MudTabPanel Text="Settings">
+                        <div class="p-0 m-0 rounded gifbot-section-panel">
+                            <div class="p-2">
+                                <p>
+                                    The <b>Regurgitator</b> is a feature of GIFBot where you can have a command
+                                    or timed event to regurgitate a random entry (fact, pun, dad joke, etc.) to chat. To use, simply enable and
+                                    provide a text file of sentences, separated by a line feed (return/enter).
+                                </p>
 
                             <div class="form-group form-check">
                                 <MudCheckBox T="bool" @bind-Value="mRegurgitatorSettings.Enabled" Label="Package Enabled" />
@@ -126,7 +123,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="uiVolumeSlider" class="ml-2 mt-2"><b>TTS Volume:</b></label>
-                                        <center><MudSlider T="int" @bind-Value="mFormVolume" Min="0" Max="100" /></center>
+                                        <MudSlider T="int" @bind-Value="mFormVolume" Min="0" Max="100" />
                                     </div>
                                     <div class="form-group">
                                         <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="p-1 mr-2 mb-2 text-center gifbot-action-btn" Style="width: 200px" OnClick="@HandleTestTTSVolume">
@@ -145,10 +142,9 @@
                                     <MudNumericField T="int" @bind-Value="mRegurgitatorSettings.TimerFrequencyInSeconds" />
                                 </div>
                             }
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </MudTabPanel>
+                    </MudTabPanel>
 
             <MudTabPanel Text="Trigger Costs">
                 <div class="p-0 m-0 rounded gifbot-section-panel">
@@ -190,59 +186,83 @@
             </MudTabPanel>
 
             <MudTabPanel Text="Data Entries">
-                <div class="form-group">
-                    <label for="uiEntries">Entries:</label>
-                    <span id="uiEntries" class="gifbot-field-desc">These are the items that will be randomly regurgitated. You can add or delete entries here.</span>
+                <div class="p-0 m-0 rounded gifbot-section-panel">
+                    <div class="p-2">
+                        <div class="form-group">
+                            <label for="uiEntries">Entries:</label>
+                            <span id="uiEntries" class="gifbot-field-desc">These are the items that will be randomly regurgitated. You can add or delete entries here.</span>
 
-                    <MudDataGrid T="RegurgitatorEntry" Items="@CurrentEntries" SortMode="SortMode.Single">
-                        <Columns>
-                            <PropertyColumn T="RegurgitatorEntry" TProperty="string" Property="@(x => x.Value)" Title="Value" />
-                            <TemplateColumn Title="">
+                            <MudDataGrid T="RegurgitatorEntry" Items="@CurrentEntries" SortMode="SortMode.Single">
+                                <Columns>
+                                    <PropertyColumn T="RegurgitatorEntry" TProperty="string" Property="@(x => x.Value)" Title="Value" />
+                                    <TemplateColumn Title="">
 <CellTemplate Context="data">
-                                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Class="gifbot-neutral-btn" OnClick="(() => OnDeleteEntry((data.Item)))" title="Delete" />
-                                </CellTemplate>
-                            </TemplateColumn>
-                        </Columns>
-                    </MudDataGrid>
+                                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Class="gifbot-neutral-btn" OnClick="(() => OnDeleteEntry((data.Item)))" title="Delete" />
+                                        </CellTemplate>
+                                    </TemplateColumn>
+                                </Columns>
+                            </MudDataGrid>
 
-                    <div class="row container-fluid mt-2">
-                        <table width="100%">
-                            <tr>
-                                <td valign="top" align="left">
-                                    <MudTextField T="string" @bind-Value="@mNewEntryText" />
-                                    <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="p-1 gifbot-action-btn" Style="width: 200px" StartIcon="@Icons.Material.Filled.Add" OnClick="@OnAddNewEntry">Add New Entry</MudButton>
-                                </td>
-                                <td></td>
-                                <td valign="top" width="150" align="right">
-                                    <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="p-1 gifbot-action-btn" Style="width: 150px" OnClick="@OnClearList">Clear List</MudButton>
-                                </td>
-                            </tr>
-                        </table>
+                            <div class="d-flex align-center gap-2 mt-2">
+                                <MudTextField T="string" @bind-Value="@mNewEntryText" Style="flex-grow: 1" />
+                                <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="gifbot-action-btn" Style="width: 200px" StartIcon="@Icons.Material.Filled.Add" OnClick="@OnAddNewEntry">Add New Entry</MudButton>
+                                <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="gifbot-action-btn" Style="width: 150px" OnClick="@OnClearList">Clear List</MudButton>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="uiImport">Import from Text File:</label>
+                            <span id="uiImport" class="gifbot-field-desc">
+                                You can import directly from a text file. Each entry should be on its own line in the text file.
+                            </span>
+                            @* TODO: Wire up file upload handler *@
+<InputFile accept="text/*" style="width: 100%; background-color: #16162e" />
+                            @if (mUploadProgress > 0)
+                            {
+                                <MudProgressLinear Value="@mUploadProgress" Style="margin-bottom: 20px; width: 100%" />
+                            }
+                            @if (!String.IsNullOrEmpty(mUploadErrorMessage))
+                            {
+                                <label class="text-danger">@mUploadErrorMessage</label>
+                            }
+                        </div>
                     </div>
                 </div>
-
-                <div class="form-group">
-                    <label for="uiImport">Import from Text File:</label>
-                    <span id="uiImport" class="gifbot-field-desc">
-                        You can import directly from a text file. Each entry should be on its own line in the text file.
-                    </span>
-                    @* TODO: Wire up file upload handler *@
-<InputFile accept="text/*" style="width: 100%; background-color: #16162e" />
-                    @if (mUploadProgress > 0)
-                    {
-                        <MudProgressLinear Value="@mUploadProgress" Style="margin-bottom: 20px; width: 100%" />
-                    }
-                    @if (!String.IsNullOrEmpty(mUploadErrorMessage))
-                    {
-                        <label class="text-danger">@mUploadErrorMessage</label>
-                    }
-                </div>
             </MudTabPanel>
-        </MudTabs>
-
-                    <div class="d-flex justify-end pa-3 gap-4">
-                <MudButton Variant="Variant.Outlined" Color="Color.Default" OnClick="@OnCancel">Cancel</MudButton>
-                <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit">Save Changes</MudButton>
+                </MudTabs>
+                <div class="d-flex justify-end pa-3 gap-4">
+                    <MudButton Variant="Variant.Outlined" Color="Color.Default" OnClick="@OnCancel">Cancel</MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit">Save Changes</MudButton>
+                </div>
             </div>
+        </div>
     </EditForm>
 }
+
+<!-- Delete Package Dialog -->
+<MudDialog @bind-Visible="@mIsDeletePackageDialogVisible">
+    <TitleContent>
+        <MudText Typo="Typo.h6">Confirm Delete</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudText>Are you sure you want to delete the package <b>@mPendingDeletePackageName</b>?</MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@(() => mIsDeletePackageDialogVisible = false)">Cancel</MudButton>
+        <MudButton Color="Color.Error" OnClick="@HandleConfirmDeletePackage">Delete</MudButton>
+    </DialogActions>
+</MudDialog>
+
+<!-- Clear List Dialog -->
+<MudDialog @bind-Visible="@mIsClearListDialogVisible">
+    <TitleContent>
+        <MudText Typo="Typo.h6">Confirm Clear List</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudText>Are you sure you want to clear all entries from this package? This action cannot be undone.</MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@(() => mIsClearListDialogVisible = false)">Cancel</MudButton>
+        <MudButton Color="Color.Error" OnClick="@HandleConfirmClearList">Clear List</MudButton>
+    </DialogActions>
+</MudDialog>

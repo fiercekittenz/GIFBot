@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using MudBlazor;
 namespace GIFBot.Server.Components.Pages.Features
@@ -167,17 +168,26 @@ namespace GIFBot.Server.Components.Pages.Features
       {
          if (CurrentPackage != Guid.Empty)
          { 
-            bool confirmed = await Task.FromResult(true); // TODO: Replace with MudBlazor dialog confirmation
-         // was: await Task.FromResult(true); // TODO: Replace with MudBlazor IDialogService confirmation
-
-         // was: await Task.FromResult(true) /* TODO: MudBlazor dialog confirm was: Dialogs.ConfirmAsync($"Are you user you want to delete the selected package?", "Delete Package?") */;
-            if (confirmed)
+            // Find package name for confirmation dialog
+            var package = AvailablePackages.FirstOrDefault(p => p.Id == CurrentPackage);
+            if (package != null)
             {
-               await mHubConnection.InvokeAsync("DeleteRegurgitatorPackage", CurrentPackage);
-               await FetchRegurgitatorPackages();
-               CurrentPackage = Guid.Empty;
-               StateHasChanged();
+               mPendingDeletePackageName = package.Name;
+               mIsDeletePackageDialogVisible = true;
             }
+         }
+      }
+
+      private async Task HandleConfirmDeletePackage()
+      {
+         mIsDeletePackageDialogVisible = false;
+         if (CurrentPackage != Guid.Empty)
+         {
+            await mHubConnection.InvokeAsync("DeleteRegurgitatorPackage", CurrentPackage);
+            await FetchRegurgitatorPackages();
+            CurrentPackage = Guid.Empty;
+            mPendingDeletePackageName = string.Empty;
+            StateHasChanged();
          }
       }
 
@@ -285,6 +295,15 @@ namespace GIFBot.Server.Components.Pages.Features
       {
          if (CurrentPackage != Guid.Empty)
          { 
+            mIsClearListDialogVisible = true;
+         }
+      }
+
+      private async Task HandleConfirmClearList()
+      {
+         mIsClearListDialogVisible = false;
+         if (CurrentPackage != Guid.Empty)
+         {
             await mHubConnection.InvokeAsync("ClearRegurgitatorEntries", CurrentPackage);
             await ReadEntries();
             StateHasChanged();
@@ -339,5 +358,8 @@ namespace GIFBot.Server.Components.Pages.Features
       private string mSelectedUserGroupName = String.Empty;
       private string mUploadErrorMessage = String.Empty;
       private List<string> mUserGroupNames = new List<string>();
+      private bool mIsDeletePackageDialogVisible = false;
+      private string mPendingDeletePackageName = string.Empty;
+      private bool mIsClearListDialogVisible = false;
    }
 }
