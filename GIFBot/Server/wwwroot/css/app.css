@@ -84,8 +84,8 @@ a, .btn-link {
 }
 
 /* Ensure description text under form fields is readable */
-small {
-    font-size: 0.8125rem !important;
+small, small.form-text {
+    font-size: 0.875rem !important;
 }
 
 /* Ensure main content container fills the viewport */
