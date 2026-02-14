@@ -1,18 +1,26 @@
 @using global::GIFBot.Shared.Models.Features
 
+<MudDialog @bind-Visible="@mIsAddMilestoneVisible">
+   <TitleContent>
+      <MudText Typo="Typo.h6">Add Milestone</MudText>
+   </TitleContent>
+   <DialogContent>
+      <MudNumericField T="int" Label="Percentage Trigger Point" Min="1" Max="100" @bind-Value="mNewMilestonePercentage" />
+      <MudTextField T="string" Label="Animation Command" @bind-Value="mNewMilestoneCommand" Class="mt-2" />
+   </DialogContent>
+   <DialogActions>
+      <MudButton OnClick="@HandleCancelAddMilestone">Cancel</MudButton>
+      <MudButton Color="Color.Primary" OnClick="@HandleAddMilestone">Add</MudButton>
+   </DialogActions>
+</MudDialog>
+
 <div>
-   <div class="form-group">
-      <table width="100%">
-         <tr>
-            <td align="right">
-               @if (!mGoal.IsActive)
-               {
-                  <MudButton Variant="Variant.Filled" Class="nav-item p-1 mr-1 gifbot-action-btn" OnClick="@HandleSetAsActiveGoal">Set As Active Goal</MudButton>
-               }
-               <MudButton Variant="Variant.Filled" Class="nav-item p-1 mr-1 gifbot-danger-btn" OnClick="@HandleDeleteGoal">Delete</MudButton>
-            </td>
-         </tr>
-      </table>
+   <div class="d-flex justify-end gap-2 mb-3">
+      @if (!mGoal.IsActive)
+      {
+         <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@HandleSetAsActiveGoal">Set As Active Goal</MudButton>
+      }
+      <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@HandleDeleteGoal">Delete</MudButton>
    </div>
    <div class="form-group">
       <label for="uiGoalTitleLabel">Title of Goal:</label>
@@ -38,20 +46,18 @@
       <span id="uiResetWhenComplete" class="gifbot-field-desc">When enabled, the goal will reset back to 0 after the goal amount is reached. Note that doing this means that any additional goals in the chain after this one will not be activated.</span>
    </div>
 
-   <MudExpansionPanel Text="Milestones" Expanded="true">
+   <MudExpansionPanel Text="Milestones" Style="font-weight: bold; font-size: 1rem;" Expanded="true">
       <div class="form-group">
-         <label for="uiGoalsGrid"><b>Milestones:</b></label>
          <MudDataGrid T="GoalMilestone" Items="@mGoal.Milestones" SortMode="SortMode.Single">
             <ToolBarContent>
-               <MudButton Variant="Variant.Text" Size="Size.Small">Add Milestone</MudButton>
+               <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" OnClick="@(() => { mIsAddMilestoneVisible = true; })">Add Milestone</MudButton>
             </ToolBarContent>
             <Columns>
                <PropertyColumn T="GoalMilestone" TProperty="int" Property="@(x => x.PercentageTriggerPoint)" Title="Percentage Trigger Point" />
                <PropertyColumn T="GoalMilestone" TProperty="string" Property="@(x => x.AnimationCommand)" Title="Animation Command to Fire" />
                <TemplateColumn>
    <CellTemplate Context="subcontext">
-                  <MudButton Variant="Variant.Text" Size="Size.Small"></MudButton>
-                  <MudButton Variant="Variant.Text" Size="Size.Small"></MudButton>
+                  <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" OnClick="@(() => DeleteMilestoneHandler(subcontext.Item))" />
                   </CellTemplate>
 </TemplateColumn>
             </Columns>
@@ -114,5 +120,32 @@
    }
 
    private GoalData mGoal = new GoalData();
+
+   private bool mIsAddMilestoneVisible = false;
+   private int mNewMilestonePercentage = 50;
+   private string mNewMilestoneCommand = string.Empty;
+
+   private void HandleAddMilestone()
+   {
+      if (string.IsNullOrWhiteSpace(mNewMilestoneCommand))
+         return;
+      
+      var milestone = new GoalMilestone
+      {
+         PercentageTriggerPoint = mNewMilestonePercentage,
+         AnimationCommand = mNewMilestoneCommand
+      };
+      AddMilestoneHandler(milestone);
+      mIsAddMilestoneVisible = false;
+      mNewMilestonePercentage = 50;
+      mNewMilestoneCommand = string.Empty;
+   }
+
+   private void HandleCancelAddMilestone()
+   {
+      mIsAddMilestoneVisible = false;
+      mNewMilestonePercentage = 50;
+      mNewMilestoneCommand = string.Empty;
+   }
 
 }

@@ -218,7 +218,7 @@
                    <span id="uiIsBold" class="gifbot-field-desc">Would you like the font to be bold?</span>
                    <MudCheckBox T="bool" Value="mGoalBarData.Settings.Caption.IsBold" ValueChanged="@(v => { mGoalBarData.Settings.Caption.IsBold = v; UpdateCaptionPreview(null); })" Label="Bolded Text" />
                 </div>
-               <div class="mt-2">
+               <div class="mt-2" style="position: relative; z-index: 0;">
                   <label for="uiPreview"><b>Text Preview:</b></label>
                   <div class="d-flex justify-center">
                      <ProgressBarComponent Width="@mGoalBarData.Settings.Width" TitleCaptionData="@mGoalBarData.Settings.Caption" PercentageCaptionData="@mPercentageCaptionData" TotalCaptionData="@mTotalCaptionData" CurrentPercentage="35" BackColor="@mGoalBarData.Settings.BarBackcolor" ProgressColor="@mGoalBarData.Settings.BarForecolor" />
