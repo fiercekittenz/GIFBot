@@ -1,6 +1,6 @@
 @using global::GIFBot.Shared.Models.Animation
 
-<MudSelect T="Guid" @bind-Value="SelectedAnimation" AnchorOrigin="Origin.BottomCenter" 
+<MudSelect T="Guid" @bind-Value="SelectedAnimation" 
            Placeholder="None" ToStringFunc="@GetAnimationDisplayName">
     @if (Animations != null)
     {
