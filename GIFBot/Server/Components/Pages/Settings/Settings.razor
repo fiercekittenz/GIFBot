@@ -358,15 +358,15 @@
                      <div class="mb-4">
                         <label for="uiAnimsUrl"><b>[<u>Required</u>] GIFBot Main (Animations):</b></label>
                         <div class="d-flex align-center mt-1" style="max-width: 700px">
-                           <MudTextField T="string" Variant="Variant.Filled" Margin="Margin.Dense" Style="flex: 1" ReadOnly="true" @bind-Value="mPrimaryAnimationsURL" />
-                           <MudButton Variant="Variant.Filled" Class="gifbot-action-btn p-1 ml-3" OnClick='(() => HandleCopyUrl("uiAnimsUrl"))'>Copy to Clipboard</MudButton>
+                           <MudTextField T="string" Style="flex: 1" ReadOnly="true" @bind-Value="mPrimaryAnimationsURL" />
+                           <MudButton Variant="Variant.Filled" Class="gifbot-action-btn p-1 ml-3" OnClick='(() => HandleCopyUrl(mPrimaryAnimationsURL))'>Copy to Clipboard</MudButton>
                         </div>
                      </div>
                      <div class="mb-4">
                         <label for="uiGoalBarUrl"><b>Goal Bar:</b></label>
                         <div class="d-flex align-center mt-1" style="max-width: 700px">
-                           <MudTextField T="string" Variant="Variant.Filled" Margin="Margin.Dense" Style="flex: 1" ReadOnly="true" @bind-Value="mGoalBarURL" />
-                           <MudButton Variant="Variant.Filled" Class="gifbot-action-btn p-1 ml-3" OnClick='(() => HandleCopyUrl("uiGoalBarUrl"))'>Copy to Clipboard</MudButton>
+                           <MudTextField T="string" Style="flex: 1" ReadOnly="true" @bind-Value="mGoalBarURL" />
+                           <MudButton Variant="Variant.Filled" Class="gifbot-action-btn p-1 ml-3" OnClick='(() => HandleCopyUrl(mGoalBarURL))'>Copy to Clipboard</MudButton>
                         </div>
                      </div>
                   </div>
@@ -489,11 +489,17 @@
       StateHasChanged();
    }
 
-   private async Task HandleCopyUrl(string elementName)
+   private async Task HandleCopyUrl(string url)
    {
-      await JSRuntime.InvokeVoidAsync("CopyToClipboard", elementName);
-      Snackbar.Add("Success - The URL was copied to your clipboard!", Severity.Success);
-      await InvokeAsync(() => { StateHasChanged(); });
+      try
+      {
+         await JSRuntime.InvokeVoidAsync("navigator.clipboard.writeText", url);
+         Snackbar.Add("Success - The URL was copied to your clipboard!", Severity.Success);
+      }
+      catch (Exception)
+      {
+         Snackbar.Add("Failed to copy URL to clipboard.", Severity.Error);
+      }
    }
 
    private void OnUserGroupSelected(object args)
