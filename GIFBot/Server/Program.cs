@@ -42,7 +42,10 @@ builder.Services.AddControllers();
 builder.Services.AddRazorPages();
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
-builder.Services.AddSignalR();
+builder.Services.AddSignalR(options =>
+{
+    options.MaximumReceiveMessageSize = 10 * 1024 * 1024; // 10 MB to support sticker image uploads
+});
 builder.Services.AddMudServices();
 
 builder.Services.AddResponseCompression(opts =>
