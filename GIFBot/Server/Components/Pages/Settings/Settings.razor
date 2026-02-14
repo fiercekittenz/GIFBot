@@ -357,15 +357,15 @@
                      </p>
                      <div class="mb-4">
                         <label for="uiAnimsUrl"><b>[<u>Required</u>] GIFBot Main (Animations):</b></label>
-                        <div class="d-flex align-center mt-1">
-                           <MudTextField T="string" Variant="Variant.Outlined" Style="max-width: 600px" ReadOnly="true" @bind-Value="mPrimaryAnimationsURL" />
+                        <div class="d-flex align-center mt-1" style="max-width: 700px">
+                           <MudTextField T="string" Variant="Variant.Filled" Margin="Margin.Dense" Style="flex: 1" ReadOnly="true" @bind-Value="mPrimaryAnimationsURL" />
                            <MudButton Variant="Variant.Filled" Class="gifbot-action-btn p-1 ml-3" OnClick='(() => HandleCopyUrl("uiAnimsUrl"))'>Copy to Clipboard</MudButton>
                         </div>
                      </div>
                      <div class="mb-4">
                         <label for="uiGoalBarUrl"><b>Goal Bar:</b></label>
-                        <div class="d-flex align-center mt-1">
-                           <MudTextField T="string" Variant="Variant.Outlined" Style="max-width: 600px" ReadOnly="true" @bind-Value="mGoalBarURL" />
+                        <div class="d-flex align-center mt-1" style="max-width: 700px">
+                           <MudTextField T="string" Variant="Variant.Filled" Margin="Margin.Dense" Style="flex: 1" ReadOnly="true" @bind-Value="mGoalBarURL" />
                            <MudButton Variant="Variant.Filled" Class="gifbot-action-btn p-1 ml-3" OnClick='(() => HandleCopyUrl("uiGoalBarUrl"))'>Copy to Clipboard</MudButton>
                         </div>
                      </div>
