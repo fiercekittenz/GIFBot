@@ -7,9 +7,9 @@
             <td align="right">
                @if (!mGoal.IsActive)
                {
-                  <button type="button" class="btn btn-secondary nav-item p-1 mr-1 gifbot-action-btn" @onclick="@HandleSetAsActiveGoal">Set As Active Goal</button>
+                  <MudButton Variant="Variant.Filled" Class="nav-item p-1 mr-1 gifbot-action-btn" OnClick="@HandleSetAsActiveGoal">Set As Active Goal</MudButton>
                }
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-1 gifbot-danger-btn" @onclick="@HandleDeleteGoal">Delete</button>
+               <MudButton Variant="Variant.Filled" Class="nav-item p-1 mr-1 gifbot-danger-btn" OnClick="@HandleDeleteGoal">Delete</MudButton>
             </td>
          </tr>
       </table>

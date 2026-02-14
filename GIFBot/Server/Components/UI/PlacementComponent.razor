@@ -6,13 +6,13 @@
          <nav class="navbar navbar-expand-sm mb-3 gifbot-quick-actions">
             <ul class="navbar-nav">
                <li class="nav-item">
-                  <button class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@SetFullScreen">Set Full Screen</button>
+                  <MudButton Variant="Variant.Filled" Class="nav-item p-1 mr-3 gifbot-action-btn" OnClick="@SetFullScreen">Set Full Screen</MudButton>
                </li>
                <li class="nav-item">
-                  <button class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@ResetPosition">Move to Top/Left</button>
+                  <MudButton Variant="Variant.Filled" Class="nav-item p-1 mr-3 gifbot-action-btn" OnClick="@ResetPosition">Move to Top/Left</MudButton>
                </li>
                <li class="nav-item">
-                  <button class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@ResetDimensions">Reset Size</button>
+                  <MudButton Variant="Variant.Filled" Class="nav-item p-1 mr-3 gifbot-action-btn" OnClick="@ResetDimensions">Reset Size</MudButton>
                </li>
             </ul>
          </nav>
@@ -67,7 +67,7 @@
                   @if (ShowCommitButton)
                   {
                      <div class="col-sm" style="width: 300px">
-                        <button class="btn btn-primary p-1 mr-3 gifbot-action-btn" @onclick="@CommitChanges" style="width: auto">@CommitButtonText</button>
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="p-1 mr-3 gifbot-action-btn" Style="width: auto" OnClick="@CommitChanges">@CommitButtonText</MudButton>
                      </div>
                   }
                   <div class="form-group form-check">

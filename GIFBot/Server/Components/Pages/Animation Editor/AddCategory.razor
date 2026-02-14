@@ -7,7 +7,7 @@
 @implements IAsyncDisposable
 
 <div class="pa-1 my-1 gifbot-page-header">
-   <MudText Typo="Typo.h4"><span class="oi oi-folder" aria-hidden="true"></span> Add New Category</MudText>
+   <MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Folder" Size="Size.Small" /> Add New Category</MudText>
 </div>
 
 <center>
@@ -20,8 +20,8 @@
                <MudTextField T="string" class="form-control" @bind-Value="Model.Name" />
             </div>
                            <div class="d-flex justify-end pa-3">
-                  <button type="reset" class="btn btn-secondary p-2 gifbot-secondary-btn" @onclick="@OnCancel">Cancel</button>
-                  <button type="submit" class="btn btn-primary p-2 gifbot-primary-btn">OK</button>
+                  <MudButton Variant="Variant.Filled" Class="p-2 gifbot-secondary-btn" ButtonType="ButtonType.Reset" OnClick="@OnCancel">Cancel</MudButton>
+                  <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="p-2" ButtonType="ButtonType.Submit">OK</MudButton>
                </div>
          </EditForm>
       </div>

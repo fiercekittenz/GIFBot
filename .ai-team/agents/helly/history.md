@@ -72,6 +72,8 @@
 - **Dashboard quick actions pattern:** Use `<MudPaper>` + `<MudStack Row="true" Wrap="Wrap.Wrap">` with `MudButton Variant="Variant.Filled"` and `.gifbot-action-btn` for action bars.
 - **Font selector pattern:** Replace large font radio groups with `MudSelect` dropdowns for compact form layouts.
 - **Form action placement:** Standardize Save/Cancel actions in a bottom-right MudButton bar with outlined Cancel and filled Primary Save.
+- Applied MudBlazor button/icon swaps in nested components, using Variant="Filled" MudButton/MudIconButton and Material icons (Folder, PlayArrow, Close, Delete, Stop).
+- Remaining legacy references: open-iconic `oi-cog` spans in `Server/Components/Pages/Setup/Setup.razor`; no `btn btn-*` matches left under `Server/Components`.
 
 — Helly
 

@@ -8,12 +8,12 @@
 <EditForm Model="@mData" OnSubmit="@HandleSave">
    <div class="p-2 mb-2 rounded gifbot-content-panel">
       <div class="text-left" style="width: 100%">
-         <button type="button" class="btn btn-secondary p-1 gifbot-special-btn" style="margin-left: auto; margin-right: 0" @onclick="@OnTestAnimation">Test Animation</button>
-         <button type="button" class="btn btn-secondary p-1 gifbot-secondary-btn" style="margin-left: auto; margin-right: 0" @onclick="@OnChangeCategory">Change Category</button>
-         <button type="button" class="btn btn-secondary p-1 gifbot-secondary-btn" style="margin-left: auto; margin-right: 0" @onclick="@OnCloneAnimation">Clone</button>
-         <button type="button" class="btn btn-secondary p-1 gifbot-danger-btn" style="margin-left: auto; margin-right: 0" @onclick="@OnDeleteAnimation">Delete</button>
-         <button type="reset" class="btn btn-secondary p-1 gifbot-secondary-btn" @onclick="@OnCancel">Cancel</button>
-         <button type="submit" class="btn btn-primary p-1 gifbot-primary-btn">Save Changes</button>
+         <MudButton Variant="Variant.Filled" Class="p-1 gifbot-special-btn" Style="margin-left: auto; margin-right: 0" OnClick="@OnTestAnimation">Test Animation</MudButton>
+         <MudButton Variant="Variant.Filled" Class="p-1 gifbot-secondary-btn" Style="margin-left: auto; margin-right: 0" OnClick="@OnChangeCategory">Change Category</MudButton>
+         <MudButton Variant="Variant.Filled" Class="p-1 gifbot-secondary-btn" Style="margin-left: auto; margin-right: 0" OnClick="@OnCloneAnimation">Clone</MudButton>
+         <MudButton Variant="Variant.Filled" Class="p-1 gifbot-danger-btn" Style="margin-left: auto; margin-right: 0" OnClick="@OnDeleteAnimation">Delete</MudButton>
+         <MudButton Variant="Variant.Filled" Class="p-1 gifbot-secondary-btn" ButtonType="ButtonType.Reset" OnClick="@OnCancel">Cancel</MudButton>
+         <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="p-1" ButtonType="ButtonType.Submit">Save Changes</MudButton>
       </div>
    </div>
    <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
@@ -58,7 +58,7 @@
                                           <label class="text-danger">@mUploadVisualErrorMessage</label>
                                        }
                                     </td>
-                                    <td style="text-align: left; vertical-align: top"><button type="button" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 25px; height: 25px" @onclick="ClearVisualFile"><span class="oi oi-x"></span></button></td>
+                                    <td style="text-align: left; vertical-align: top"><MudIconButton Icon="@Icons.Material.Filled.Close" Size="Size.Small" Class="p-0 m-0 gifbot-secondary-btn" OnClick="@ClearVisualFile" Title="Clear Visual" /></td>
                                  </tr>
                               </table>
                            </div>
@@ -83,7 +83,7 @@
                                           <label class="text-danger">@mUploadAudioErrorMessage</label>
                                        }
                                     </td>
-                                    <td style="width: 30px; text-align: center; vertical-align: top"><button type="button" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 25px; height: 25px" @onclick="ClearAudioFile"><span class="oi oi-x"></span></button></td>
+                                    <td style="width: 30px; text-align: center; vertical-align: top"><MudIconButton Icon="@Icons.Material.Filled.Close" Size="Size.Small" Class="p-0 m-0 gifbot-secondary-btn" OnClick="@ClearAudioFile" Title="Clear Audio" /></td>
                                  </tr>
                               </table>
                            </div>
@@ -98,18 +98,16 @@
                         <p align="right">
                            @if (!String.IsNullOrEmpty(mData.Audio))
                            {
-                              <button type="button" class="btn btn-primary p-1 mr-2 mb-2 text-center gifbot-action-btn" style="width: 200px" @onclick="@HandleTestAudioVolume">
-                                 Test Audio File Volume
-                              </button>
+                               <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="p-1 mr-2 mb-2 text-center gifbot-action-btn" Style="width: 200px" OnClick="@HandleTestAudioVolume">
+                                  Test Audio File Volume
+                               </MudButton>
                            }
                            else if (!String.IsNullOrEmpty(mData.Visual) && AnimationLibrary.GetFileTypeOfAnimation(mData.Visual) == AnimationEnums.FileType.Video)
                            {
-                              <button type="button" class="btn btn-primary p-1 mr-2 mb-2 mt-2 text-center gifbot-action-btn" style="width: 200px" @onclick="@HandleTestVideoVolume">
-                                 Test Video File Volume
-                              </button>
-                              <button type="button" class="btn btn-primary p-1 mr-2 mb-2 mt-2 text-center gifbot-action-btn" style="width: 50px" @onclick="@HandleStopTestVideoVolume">
-                                 <span class="oi oi-media-stop"></span>
-                              </button>
+                               <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="p-1 mr-2 mb-2 mt-2 text-center gifbot-action-btn" Style="width: 200px" OnClick="@HandleTestVideoVolume">
+                                  Test Video File Volume
+                               </MudButton>
+                               <MudIconButton Icon="@Icons.Material.Filled.Stop" Size="Size.Small" Color="Color.Primary" Class="p-1 mr-2 mb-2 mt-2 text-center gifbot-action-btn" OnClick="@HandleStopTestVideoVolume" Title="Stop Video" />
                               <video id="videoAnimationAudioPreview" width="0" height="0" style="position:absolute;top:0;left:0;visibility: hidden;background-color: transparent">
                                  <source src="">
                               </video>
@@ -524,18 +522,16 @@
 
                            @if (!String.IsNullOrEmpty(mVariantAudio))
                            {
-                              <button type="button" class="btn btn-primary p-1 mr-2 mb-2 text-center gifbot-action-btn" style="width: 200px" @onclick="@HandleTestVariantAudioVolume">
-                                 Test Audio File Volume
-                              </button>
+                               <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="p-1 mr-2 mb-2 text-center gifbot-action-btn" Style="width: 200px" OnClick="@HandleTestVariantAudioVolume">
+                                  Test Audio File Volume
+                               </MudButton>
                            }
                            else if (!String.IsNullOrEmpty(mVariantVisual) && AnimationLibrary.GetFileTypeOfAnimation(mVariantVisual) == AnimationEnums.FileType.Video)
                            {
-                              <button type="button" class="btn btn-primary p-1 mr-2 mb-2 mt-2 text-center gifbot-action-btn" style="width: 200px" @onclick="@HandleTestVariantVideoVolume">
-                                 Test Video File Volume
-                              </button>
-                              <button type="button" class="btn btn-primary p-1 mr-2 mb-2 mt-2 text-center gifbot-action-btn" style="width: 50px" @onclick="@HandleStopTestVariantVideoVolume">
-                                 <span class="oi oi-media-stop"></span>
-                              </button>
+                               <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="p-1 mr-2 mb-2 mt-2 text-center gifbot-action-btn" Style="width: 200px" OnClick="@HandleTestVariantVideoVolume">
+                                  Test Video File Volume
+                               </MudButton>
+                               <MudIconButton Icon="@Icons.Material.Filled.Stop" Size="Size.Small" Color="Color.Primary" Class="p-1 mr-2 mb-2 mt-2 text-center gifbot-action-btn" OnClick="@HandleStopTestVariantVideoVolume" Title="Stop Video" />
                               <video id="variantVideoAnimationAudioPreview" width="0" height="0" style="position:absolute;top:0;left:0;visibility: hidden;background-color: transparent">
                                  <source src="">
                               </video>
@@ -565,7 +561,7 @@
                      </div>
                   }
                   <div class="d-flex justify-end pa-3">
-                     <button type="button" class="btn btn-secondary p-1 gifbot-secondary-btn" @onclick="HandleAddNewVariant">Add New Variant</button>
+                     <MudButton Variant="Variant.Filled" Class="p-1 gifbot-secondary-btn" OnClick="@HandleAddNewVariant">Add New Variant</MudButton>
                   </div>
                </MudExpansionPanel>
             </div>
@@ -690,7 +686,7 @@
                         </TemplateColumn>
                         <TemplateColumn Title="">
 <CellTemplate Context="data">
-                              <button type="button" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 25px; height: 25px" @onclick="(() => HandleDeleteChainedCommand(data.Item))"><span class="oi oi-trash"></span></button>
+                              <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Class="p-0 m-0 gifbot-secondary-btn" OnClick="@(() => HandleDeleteChainedCommand(data.Item))" Title="Delete" />
                            </CellTemplate>
                         </TemplateColumn>
                      </Columns>
@@ -703,7 +699,7 @@
                      <MudTextField T="string" @bind-Value="mFormChainedCommand" />
                   </div>
                   <div class="d-flex justify-end pa-3">
-                     <button type="button" class="btn btn-secondary p-1 gifbot-secondary-btn" style="width: 150px" @onclick="HandleAddNewChainedCommand">Add</button>
+                     <MudButton Variant="Variant.Filled" Class="p-1 gifbot-secondary-btn" Style="width: 150px" OnClick="@HandleAddNewChainedCommand">Add</MudButton>
                   </div>
                </MudExpansionPanel>
             </div>
@@ -712,8 +708,8 @@
    </MudTabs>
 
          <div class="d-flex justify-end pa-3">
-         <button type="reset" class="btn btn-secondary p-2 gifbot-secondary-btn" @onclick="@OnCancel">Cancel</button>
-         <button type="submit" class="btn btn-primary p-2 gifbot-primary-btn">Save Changes</button>
+         <MudButton Variant="Variant.Filled" Class="p-2 gifbot-secondary-btn" ButtonType="ButtonType.Reset" OnClick="@OnCancel">Cancel</MudButton>
+         <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="p-2" ButtonType="ButtonType.Submit">Save Changes</MudButton>
       </div>
 </EditForm>
 
