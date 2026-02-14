@@ -94,6 +94,7 @@
 
 ## Learnings
 - Added MudBlazor page header + content panel framing on the remaining test/error pages for consistent layout polish.
+- Client project references were fully removed — all media now lives in Server/wwwroot/media/. Removed all `.Replace("Server", "Client")` path hacks from AnimationLibrary.GetMediaRootPath(), 5 GIFBotHub methods, and the PhysicalFileProvider workaround in Program.cs. The default `UseStaticFiles()` serves Server/wwwroot/media/ automatically.
 - Standardized MudCheckBox labels with inline Label usage and added inline-flex styling to keep labels aligned.
 - Restyled GiveawayEditor.razor to match Settings.razor panel structure: wrapped MudTabs in `gifbot-form-panel`, all tab content sections in `gifbot-section-panel` > `p-2` divs, moved Cancel/Save buttons outside tabs but inside form panel. Pattern: outer `gifbot-form-panel` → `MudTabs` → each tab's content in `gifbot-section-panel`. This is the standard for all editor pages going forward.
 - **AnimationSelectorComponent GUID fix:** Added `Placeholder="None"` and `ToStringFunc` to MudSelect so `Guid.Empty` renders as "None" instead of `00000000-...`. Also added an explicit "None" `MudSelectItem` for clearing selection. Pattern: any MudSelect with a GUID type should use a `ToStringFunc` to resolve display names.
