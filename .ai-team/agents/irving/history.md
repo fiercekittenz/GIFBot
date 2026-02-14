@@ -70,3 +70,7 @@
 - Fix: Changed both to `new InteractiveServerRenderMode(prerender: false)` — 2-line change in `GIFBot\Server\Components\App.razor`.
 - With prerendering disabled, the Blazor circuit is immediately interactive — no static render phase means JS interop is available from the start, hub callbacks only fire once, and only one tab opens.
 - Build: 0 errors. 1 file changed. Committed on `feature/modernization`.
+
+---
+
+📌 **Team update (2026-02-13):** Decisions merged from session log: StreamDeck plugin removed from feature/modernization branch (committed), prerendering disabled for local desktop app (App.razor InteractiveServerRenderMode), Blazor Server Dispatcher threading pattern established (InvokeAsync StateHasChanged requirement). These unblock the modernization workflow. — Scribe

@@ -1,4 +1,0 @@
-### 2026-02-14: GIFBot MudBlazor theme uses deep purple palette with dark mode default
-**By:** Helly
-**What:** Created a custom `MudTheme` in `MainLayout.razor` with `PaletteDark` as the active palette. Primary color is `#7e57c2` (deep purple 400), surfaces are dark blue-grays (`#1e1e2d`, `#1a1a2e`, `#121218`). Secondary is `#b39ddb` (light purple). Drawer icons use secondary purple for accent.
-**Why:** GIFBot is a desktop Twitch bot — dark mode is the natural default. The purple identity color (`#5d3e9c` from the old Telerik theme) was adapted to `#7e57c2` which provides better contrast and readability on dark surfaces while staying recognizably GIFBot purple. The dark surface colors are inspired by the MudBlazor website's own aesthetic as requested. `PaletteLight` is set with basic purples as a fallback but is not the active palette.

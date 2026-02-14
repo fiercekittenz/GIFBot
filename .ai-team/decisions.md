@@ -313,8 +313,71 @@ All milestones are sequential. Within each milestone, tasks can be parallelized 
 7. **jQuery dependency** — Several JS files (ElementDrag.js, AnimationHelpers.js) and browser source pages may depend on jQuery. Must verify before removing in M4.
 
 
-### 2026-02-13: Unified color scheme around deep blue/purple palette
-**By:** Helly
-**What:** Replaced all neutral grays and maroon/pink tones in PaletteDark and `.gifbot-*` CSS classes with a monochromatic blue/purple palette anchored on #1a1a2e (the drawer/appbar color Georgia liked). Key values: Background #0d0d1a, Surface #22223a, BackgroundGray #161628. CSS panels shifted to #2d2b52 / #1e1e38 / #161630 / #1c1c34. Text opacity raised to 87% (#ffffffde) and input borders brightened to #ffffff80. Typography FontFamily synced to system font stack from app.css. NoNavMenuLayout kept in sync.
-**Why:** Georgia requested the entire site match the blue/purple tones of the drawer/appbar area. The previous Background (#121218), Surface (#1e1e2d), and CSS panel colors (#36173e, #211126, #1d161f, #1e1e1e) were either neutral gray or maroon-shifted, creating visual inconsistency. The new palette is fully monochromatic blue/purple for a cohesive dark theme.
+### 2026-02-13: StreamDeck plugin removed
+**By:** Irving
+**What:** Deleted GIFBot/GIFBotStreamDeckPlugin/ directory and removed the StreamDeck feature mention from Client/Pages/About.razor. Committed on eature/modernization branch.
+**Why:** Per Georgia's directive and team consensus — the plugin was on netcoreapp3.1, not in the main solution, and out of scope for modernization.
+**Impact:** No other projects referenced StreamDeck. The Installer project is clean. Solution structure unchanged (plugin was never in GIFBot.sln).
+**Note:** dotnet build fails on Telerik.UI.for.Blazor NuGet restore — pre-existing, not caused by this change. Team needs the Telerik private feed configured to validate builds.
 
+---
+
+### 2026-02-13: Prerendering disabled for local desktop app
+**By:** Irving
+**What:** Set prerender: false on InteractiveServerRenderMode in App.razor
+**Why:** GIFBot is a local desktop app — prerendering causes JS interop crashes during static render and opens duplicate browser tabs. No SEO or first-paint benefit.
+
+---
+
+### 2026-02-13: Blazor Server Dispatcher threading pattern
+**By:** Irving
+**What:** All SignalR hub callbacks must use InvokeAsync(StateHasChanged) under Blazor Server
+**Why:** Hub callbacks run on non-UI threads; StateHasChanged requires Dispatcher access
+
+---
+
+### 2025-07-24: User Groups Tab — MudDialog Pattern for CRUD Actions
+**By:** Helly
+**What:** All CRUD actions on the User Groups tab (Add Group, Add User, Delete Group, Rename Group) now use inline <MudDialog @bind-Visible> with <DialogActions> instead of inline form fields or immediate execution.
+**Why:** Inline text fields + buttons cluttered the layout and offered no validation before submission. Dialog pattern centralizes input, gives room for validation (disabled Add when duplicate/empty), and matches the confirmation UX users expect for destructive actions (Delete). This is now the standard pattern for any future modal interactions on Settings or similar pages.
+
+**Also decided:**
+- Action buttons (Rename, Clone, Delete) grouped in a <MudStack Row> below the DataGrid — keeps the "add" action visually separated from "manage existing" actions.
+- Cancel/Save page-level buttons migrated from Bootstrap <button> to <MudButton> with gap-4 spacing — last Bootstrap button instances on this page are now gone.
+- MudSelect for User Groups now properly populates with <MudSelectItem> children — this was a bug from the original Telerik migration.
+
+---
+
+### 2026-02-14: GIFBot MudBlazor theme uses deep purple palette with dark mode default
+**By:** Helly
+**What:** Created a custom MudTheme in MainLayout.razor with PaletteDark as the active palette. Primary color is #7e57c2 (deep purple 400), surfaces are dark blue-grays (#1e1e2d, #1a1a2e, #121218). Secondary is #b39ddb (light purple). Drawer icons use secondary purple for accent.
+**Why:** GIFBot is a desktop Twitch bot — dark mode is the natural default. The purple identity color (#5d3e9c from the old Telerik theme) was adapted to #7e57c2 which provides better contrast and readability on dark surfaces while staying recognizably GIFBot purple. The dark surface colors are inspired by the MudBlazor website's own aesthetic as requested. PaletteLight is set with basic purples as a fallback but is not the active palette.
+
+**Implementation notes:**
+- NoNavMenuLayout.razor was updated to use MudBlazor components (MudThemeProvider, MudLayout, MudMainContent) with a duplicated dark theme definition matching MainLayout's PaletteDark. The theme is a private static field in MainLayout and can't be shared directly, but a future refactor could extract it to a shared static class (e.g., GIFBotTheme.cs).
+- html, body background in app.css and App.razor now set to #121218 to eliminate white gaps. Browser source pages are unaffected — they override backgrounds via inline styles.
+
+---
+
+---
+
+### 2026-02-13: Baseline Build and Telerik Dependency Strategy
+**By:** Dylan (Tester) + Georgia Nelson (User Decision)
+**Status:** Resolved by user directive
+
+**Problem:** The baseline `dotnet build GIFBot.sln` fails at NuGet restore because `Telerik.UI.for.Blazor` v6.0.2 requires a private feed. No `NuGet.config` with the Telerik source exists in the repo.
+
+**Initial Recommendation (Dylan):** 
+- Option 1: Configure a repo-level `NuGet.config` pointing to the Telerik feed (with credentials via environment variables)
+- Option 2: Defer baseline build validation until after M3 (when Telerik is replaced with MudBlazor)
+
+**User Decision (Georgia Nelson):** Skip configuring the Telerik feed entirely. Remove Telerik and Radzen packages first, replace with MudBlazor, and get the build working. This resequences milestones: component migration moves to M1 instead of M3, and .NET 10 upgrade happens after MudBlazor replacement rather than before.
+
+**Rationale:** The Telerik license/feed is unavailable. Removing Telerik first unblocks the build for the entire team and eliminates the private feed dependency entirely.
+
+---
+
+### 2026-02-13: User directive — Remove StreamDeck support
+**By:** Georgia Nelson (via Copilot)
+**What:** Remove StreamDeck plugin support in its entirety. The GIFBotStreamDeckPlugin project and any related code should be deleted, not deferred.
+**Why:** User request — captured for team memory

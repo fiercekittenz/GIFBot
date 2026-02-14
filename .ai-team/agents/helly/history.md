@@ -65,3 +65,7 @@
 - **Dialog validation:** `IsAddGroupDisabled` checks empty + case-insensitive duplicate group name. `IsAddUserDisabled` checks empty + user already in current group.
 
 — Helly
+
+---
+
+📌 **Team update (2026-02-13):** Decisions merged from session log: User Groups tab redesigned with MudDialog popups for CRUD (Add/Delete with validation), replaced Bootstrap buttons with MudButton, HTML tables with MudGrid, fixed MudSelect population. Theme decision consolidated: custom MudTheme with #7e57c2 deep purple, dark surfaces; NoNavMenuLayout kept in sync with MainLayout theme (duplicated, future refactor candidate). — Scribe

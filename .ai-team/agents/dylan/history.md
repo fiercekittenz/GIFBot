@@ -47,3 +47,7 @@
 - **MudText adoption:** Used across 18+ page files. MudGrid in Dashboard Index.razor
 - **SMOKE-TESTS.md:** Updated Section 14 (removed Telerik references), added Section 17 (M4 UI Polish checklist with 13 items)
 - **Verdict:** ✅ APPROVED — M4 milestone passes all validation checks
+
+---
+
+📌 **Team update (2026-02-13):** Decision consolidated: Baseline build Telerik feed issue resolved by Georgia's directive to remove Telerik/Radzen first (before .NET 10 upgrade). This unblocks baseline validation — build validation can now proceed at M1 instead of being blocked by missing Telerik feed. Remove Telerik → MudBlazor migration moves to M1 priority. — Scribe
