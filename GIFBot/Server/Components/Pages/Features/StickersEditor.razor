@@ -542,7 +542,7 @@
       <MudTabPanel Text="Sticker Images">
          @* MudBlazor: Use MudTooltip wrapping individual elements instead *@
 
-         <div class="p-0 m-0 rounded gifbot-section-panel">
+         <div class="p-0 m-0 mb-3 rounded gifbot-section-panel">
             <div class="p-2">
                <div class="text-white-50 p-0">
                   <p>
@@ -556,6 +556,10 @@
                      </ul>
                   </p>
                </div>
+            </div>
+         </div>
+         <div class="p-0 m-0 rounded gifbot-section-panel">
+            <div class="p-2">
                <div class="form-group">
                   <MudTabs @bind-ActivePanelIndex="@ActiveStickerTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
                      <MudTabPanel Text="Stickers">
