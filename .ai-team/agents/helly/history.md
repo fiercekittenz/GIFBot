@@ -57,4 +57,11 @@
 - InputFile elements kept inline styles but shifted from grey #1e1e1e to blue-tinted #16162e
 - Exceptions preserved: #230000 warning reds, transparent video backgrounds, canvas editor (#dedede/#45356f), BrowserSource pages
 
+- **MudDialog patterns used:** Inline `<MudDialog @bind-Visible>` with `<TitleContent>`, `<DialogContent>`, and `<DialogActions>` sections for Add Group, Add User, Delete Group, and Rename Group dialogs. Cancel always on LEFT, action on RIGHT. Validation via `Disabled` prop with computed properties.
+- **Bootstrap→MudBlazor replacements on User Groups tab:** All `<button class="btn ...">` replaced with `<MudButton Variant/Color>`. Trash icon `<span class="oi oi-trash">` replaced with `<MudIconButton Icon="@Icons.Material.Filled.Delete">`. Cancel/Save page buttons also migrated to MudButton.
+- **HTML table→MudBlazor layout:** Nested `<table>` elements replaced with `<MudGrid>`/`<MudItem>` for the select+button row, and `<MudStack Row="true">` for grouping action buttons (Rename, Clone, Delete).
+- **MudSelect population fix:** Added `@foreach` over `mUserGroupNames` with `<MudSelectItem>` children — the dropdown was rendering empty before.
+- **CSS:** Added `.gifbot-bordered-table` with `border: 1px solid #2d2b52; border-radius: 4px` for the DataGrid wrapper.
+- **Dialog validation:** `IsAddGroupDisabled` checks empty + case-insensitive duplicate group name. `IsAddUserDisabled` checks empty + user already in current group.
+
 — Helly
