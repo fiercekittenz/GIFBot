@@ -1,4 +1,4 @@
-﻿@using global::GIFBot.Shared
+@using global::GIFBot.Shared
 @using global::GIFBot.Server.Components.UI
 @using global::GIFBot.Server.Components.Pages.Setup.Models
 
@@ -17,7 +17,7 @@
                <div class="p-2">
                   <div class="form-group">
                      <label for="uiTitle"><b>Category Name:</b></label>
-                     <small id="uiTitle" class="form-text text-white-50">It's pretty self-explanatory. Basically it's the title of the category.</small>
+                     <span id="uiTitle" class="gifbot-field-desc">It's pretty self-explanatory. Basically it's the title of the category.</span>
                      <MudTextField T="string" @bind-Value="mCategoryNameModel.Name" />
                   </div>
                </div>

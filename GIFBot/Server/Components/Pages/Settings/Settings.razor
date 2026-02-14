@@ -1,4 +1,4 @@
-﻿@page "/settings/"
+@page "/settings/"
 @using System.Net.Http
 @using Microsoft.AspNetCore.Http.Connections
 @using Microsoft.AspNetCore.SignalR.Client
@@ -97,7 +97,7 @@
                      </div>
                      <div class="form-group">
                         <label for="uiChannelName"><b>Channel Name:</b></label>
-                        <small id="uiChannelName" class="form-text text-white-50">The channel your bot will connect to. You can change this without needing to reauthorize.</small>
+                        <span id="uiChannelName" class="gifbot-field-desc">The channel your bot will connect to. You can change this without needing to reauthorize.</span>
                         <MudTextField T="string" @bind-Value="mBotSettings.ChannelName" />
                      </div>
                      <div class="d-flex justify-end pa-3">
@@ -114,12 +114,12 @@
 <MudText>Timing Mechanics</MudText>
 <div class="form-group">
                               <label for="uiGlobalCooldown"><b>Global Cooldown (in seconds):</b></label>
-                              <small id="uiGlobalCooldown" class="form-text text-white-50">The number of seconds users will have to wait between executing animation commands.</small>
+                              <span id="uiGlobalCooldown" class="gifbot-field-desc">The number of seconds users will have to wait between executing animation commands.</span>
                               <MudNumericField T="int" Min="0" Max="100000" @bind-Value="mBotSettings.GlobalCooldownInSeconds" />
                            </div>
                            <div class="form-group">
                               <label for="uiTimeBetweenAnimations"><b>Time Between Animations (in ms):</b></label>
-                              <small id="uiTimeBetweenAnimations" class="form-text text-white-50">The number of milliseconds when spacing queued animations.</small>
+                              <span id="uiTimeBetweenAnimations" class="gifbot-field-desc">The number of milliseconds when spacing queued animations.</span>
                               <MudNumericField T="int" Min="0" Max="100000" @bind-Value="mBotSettings.TimeBetweenAnimationsMs" />
                            </div>
 </MudExpansionPanel>
@@ -128,15 +128,15 @@
 <MudText>Flags</MudText>
                            <div class="form-group form-check">
                               <MudCheckBox T="bool" @bind-Value="mBotSettings.AnnounceAnimationCooldown" Label="Announce Animation Cooldown" />
-                              <small id="uiAnnounceCooldowns" class="form-text text-white-50">When enabled, the bot will let chat know if it is in cooldown mode.</small>
+                              <span id="uiAnnounceCooldowns" class="gifbot-field-desc">When enabled, the bot will let chat know if it is in cooldown mode.</span>
                            </div>
                            <div class="form-group form-check">
                               <MudCheckBox T="bool" @bind-Value="mBotSettings.AnimationRouletteChatEnabled" Label="Can Execute !animationroulette from Chat" />
-                              <small id="uiCanExecuteRoulette" class="form-text text-white-50">When enabled, viewers can execute !animationroulette from chat. Disable this if you want it to be a channel point-exclusive feature.</small>
+                              <span id="uiCanExecuteRoulette" class="gifbot-field-desc">When enabled, viewers can execute !animationroulette from chat. Disable this if you want it to be a channel point-exclusive feature.</span>
                            </div>
                            <div class="form-group form-check">
                               <MudCheckBox T="bool" @bind-Value="mBotSettings.CanTriggerAnimationsByWhisper" Label="Allow Commands via Whisper" />
-                              <small id="uiAllowWhispers" class="form-text text-white-50">When enabled, the bot will accept commands from the channel account (e.g. your account) via whisper.</small>
+                              <span id="uiAllowWhispers" class="gifbot-field-desc">When enabled, the bot will accept commands from the channel account (e.g. your account) via whisper.</span>
                            </div>
 </MudExpansionPanel>
 
@@ -144,16 +144,16 @@
 <MudText>Animation Command</MudText>
                            <div class="form-group form-check">
                               <MudCheckBox T="bool" @bind-Value="mBotSettings.AnimationCommandEnabled" Label="Animation Command Enabled" />
-                              <small id="uiAnimationCommandEnabled" class="form-text text-white-50">When enabled, the animation command allows viewers to see a list of your available animations. The list will ONLY include animations that are able to be triggered by users via the command in chat. The list will not include any that behave as alerts for events such as cheering. The command will spit out a list of them to chat as a result.</small>
+                              <span id="uiAnimationCommandEnabled" class="gifbot-field-desc">When enabled, the animation command allows viewers to see a list of your available animations. The list will ONLY include animations that are able to be triggered by users via the command in chat. The list will not include any that behave as alerts for events such as cheering. The command will spit out a list of them to chat as a result.</span>
                            </div>
                            <div class="form-group">
                               <label for="uiAnimationCommandCooldown"><b>Animation Command:</b></label>
-                              <small id="uiAnimationCommandCooldown" class="form-text text-white-50">What viewers need to type in chat to see a list of animations.</small>
+                              <span id="uiAnimationCommandCooldown" class="gifbot-field-desc">What viewers need to type in chat to see a list of animations.</span>
                               <MudTextField T="string" @bind-Value="mBotSettings.AnimationCommand" />
                            </div>
                            <div class="form-group">
                               <label for="uiAnimationCommandCooldown"><b>Animation Command Cooldown (in minutes):</b></label>
-                              <small id="uiAnimationCommandCooldown" class="form-text text-white-50">The number of minutes the animation command is on cooldown.</small>
+                              <span id="uiAnimationCommandCooldown" class="gifbot-field-desc">The number of minutes the animation command is on cooldown.</span>
                               <MudNumericField T="int" Min="0" Max="100000" @bind-Value="mBotSettings.AnimationCommandCooldownSeconds" />
                            </div>
 </MudExpansionPanel>
@@ -170,7 +170,7 @@
                      </p>
                      <div class="form-group form-check">
                         <MudCheckBox T="bool" @bind-Value="mBotSettings.UseGlobalPositioning" Label="Use Global Positioning" />
-                        <small id="uiUseGlobalPositioning" class="form-text text-white-50">When enabled, all animations will use the same positioning data as set below.</small>
+                        <span id="uiUseGlobalPositioning" class="gifbot-field-desc">When enabled, all animations will use the same positioning data as set below.</span>
                      </div>
                      <PlacementComponent Width="@mBotSettings.GlobalPlacement.Width"
                                          Height="@mBotSettings.GlobalPlacement.Height"
@@ -236,7 +236,7 @@
                            </p>
                            <div class="form-group">
                               <label for="uiTiltifySlug"><b>Tiltify Slug:</b></label>
-                              <small id="uiTiltifySlugDesc" class="form-text text-white-50">Your display name within the Tiltify system. Typically shows in the Tiltify dashboard URL.</small>
+                              <span id="uiTiltifySlugDesc" class="gifbot-field-desc">Your display name within the Tiltify system. Typically shows in the Tiltify dashboard URL.</span>
                               <MudTextField T="string" @bind-Value="mBotSettings.TiltifySlug" />
                            </div>
                            <div class="form-group">
@@ -249,7 +249,7 @@
                            </div>
                            <div class="form-group">
                               <label for="uiTiltifyCampaigns"><b>Active Campaign:</b></label><br />
-                              <small id="uiTiltifyCampaigns" class="form-text text-white-50">Please select a campaign that you would like to listen to for donations. If you do not see campaigns in the list, please add your credentials above and save. The list should update if the provided information is correct.</small>
+                              <span id="uiTiltifyCampaigns" class="gifbot-field-desc">Please select a campaign that you would like to listen to for donations. If you do not see campaigns in the list, please add your credentials above and save. The list should update if the provided information is correct.</span>
                               <MudSelect T="string" Placeholder="Select Active Campaign..." Style="width: 250px;"
  Value="@mSelectedTiltifyCampaignName" ValueChanged="@(args => OnTiltifyCampaignSelected(args))" />
                            </div>

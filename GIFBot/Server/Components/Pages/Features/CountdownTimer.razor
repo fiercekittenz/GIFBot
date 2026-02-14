@@ -1,4 +1,4 @@
-﻿@page "/countdowneditor/"
+@page "/countdowneditor/"
 @using Microsoft.AspNetCore.SignalR.Client
 @using global::GIFBot.Shared.Models.Features
 @using global::GIFBot.Shared.Models.Visualization
@@ -40,7 +40,7 @@
    <DialogContent>
       <div class="form-group form-check">
          <MudCheckBox T="bool" @bind-Value="mTempData.Enabled" Label="Enabled" />
-         <small id="uiTempCommandEnabled" class="form-text text-muted">When enabled, this action is available for use.</small>
+         <span id="uiTempCommandEnabled" class="gifbot-field-desc">When enabled, this action is available for use.</span>
       </div>
       <div class="form-group">
          <MudText Typo="Typo.subtitle1"><b>Name</b></MudText>
@@ -54,7 +54,7 @@
       </div>
       <div class="form-group">
          <label for="uiCommandRedemption">Redemption Type:</label>
-         <small id="uiCommandRedemption" class="form-text text-muted">Actions can be triggered by your viewers using a variety of methods.</small>
+         <span id="uiCommandRedemption" class="gifbot-field-desc">Actions can be triggered by your viewers using a variety of methods.</span>
          <MudRadioGroup @bind-Value="@CurrentlyEditedRedemption" T="int">
 <MudRadio T="int" Value="@(0)">Cheer</MudRadio>
                <MudRadio T="int" Value="@(1)">Channel Points</MudRadio>
@@ -166,12 +166,12 @@
       <div class="p-2">
          <div class="form-group form-check">
             <MudCheckBox T="bool" @bind-Value="Data.Enabled" Label="Feature Enabled" />
-            <small id="uiEnabled" class="form-text text-muted">When enabled, this feature is active and available to your users!</small>
+            <span id="uiEnabled" class="gifbot-field-desc">When enabled, this feature is active and available to your users!</span>
          </div>
       </div>
       <div class="form-group">
          <label for="uiTimerValueInMinutes">Timer Start Value (in minutes):</label>
-         <small id="uiTimerValueInMinutes" class="form-text text-muted">The number of minutes you want this countdown timer to tick.</small>
+         <span id="uiTimerValueInMinutes" class="gifbot-field-desc">The number of minutes you want this countdown timer to tick.</span>
          <MudNumericField T="int" Min="1" Max="999999" @bind-Value="Data.TimerStartValueInMinutes" />
       </div>
                <div class="d-flex justify-end pa-3 gap-4">
@@ -206,27 +206,27 @@
          <div class="p-2">
             <div class="form-group mt-2">
                <label for="uiCaptionFontSize"><b>Font Size:</b></label>
-               <small id="uiCaptionFontSize" class="form-text text-white-50">The size of the font used (bigger = better).</small>
+               <span id="uiCaptionFontSize" class="gifbot-field-desc">The size of the font used (bigger = better).</span>
                <MudNumericField T="int" Min="18" Max="100" @bind-Value="Data.Caption.FontSize" />
             </div>
             <div class="form-group mt-2">
                <label for="uiCaptionFontColor"><b>Font Color:</b></label>
-               <small id="uiCaptionFontColor" class="form-text text-white-50">The forecolor for the text.</small>
+               <span id="uiCaptionFontColor" class="gifbot-field-desc">The forecolor for the text.</span>
                <input type="color" id="uiCaptionFontColor" @bind="@Data.Caption.FontColor" />
             </div>
             <div class="form-group mt-2">
                <label for="uiCaptionStrokeThickness"><b>Stroke Thickness:</b></label>
-               <small id="uiCaptionStrokeThickness" class="form-text text-white-50">The width of the stroke (outline) on the text.</small>
+               <span id="uiCaptionStrokeThickness" class="gifbot-field-desc">The width of the stroke (outline) on the text.</span>
                <MudNumericField T="int" Min="0" Max="5" @bind-Value="Data.Caption.StrokeThickness" />
             </div>
             <div class="form-group mt-2">
                <label for="uiCaptionFontStrokeColor"><b>Stroke Color:</b></label>
-               <small id="uiCaptionFontStrokeColor" class="form-text text-white-50">The stroke or outline color for the text.</small>
+               <span id="uiCaptionFontStrokeColor" class="gifbot-field-desc">The stroke or outline color for the text.</span>
                <input type="color" id="uiCaptionFontStrokeColor" @bind="@Data.Caption.FontStrokeColor" />
             </div>
             <div class="form-group mt-2">
                <label for="uiCaptionFont"><b>Font:</b></label>
-               <small id="uiCaptionFont" class="form-text text-white-50">What font should you use?</small>
+               <span id="uiCaptionFont" class="gifbot-field-desc">What font should you use?</span>
                <MudSelect T="int" @bind-Value="mCaptionFontSelection" Label="Font" Variant="Variant.Filled">
                   <MudSelectItem T="int" Value="0">Arial</MudSelectItem>
                   <MudSelectItem T="int" Value="1">Comic Sans</MudSelectItem>
@@ -256,7 +256,7 @@
             </div>
             <div class="form-group mt-2">
                <label for="uiCaptionIsBold"><b>Font Weight:</b></label>
-               <small id="uiCaptionIsBold" class="form-text text-white-50">Would you like the font to be bold?</small>
+               <span id="uiCaptionIsBold" class="gifbot-field-desc">Would you like the font to be bold?</span>
                <MudCheckBox T="bool" @bind-Value="Data.Caption.IsBold" Label="Bolded Text" />
             </div>
             <div class="mt-2">

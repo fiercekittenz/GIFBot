@@ -1,4 +1,4 @@
-﻿@page "/greetereditor/"
+@page "/greetereditor/"
 @using Microsoft.AspNetCore.SignalR.Client
 @using global::GIFBot.Shared.Models.Features
 @using global::GIFBot.Shared.Models.Visualization
@@ -40,7 +40,7 @@
     <DialogContent>
         <div class="form-group form-check">
             <MudCheckBox T="bool" @bind-Value="mTempGreeterEntry.Enabled" Label="Enabled" />
-            <small id="uiTempEntryEnabled" class="form-text text-muted">When enabled, this greeter active.</small>
+            <span id="uiTempEntryEnabled" class="gifbot-field-desc">When enabled, this greeter active.</span>
         </div>
         <div class="form-group">
             <MudText Typo="Typo.subtitle1"><b>Name</b></MudText>
@@ -65,9 +65,9 @@
 
          <div class="form-group">
             <label for="uiImport">Bulk Import Recipients from Text File:</label>
-            <small id="uiImport" class="form-text text-muted">
+            <span id="uiImport" class="gifbot-field-desc">
                You can import directly from a text file. Each entry should be on its own line in the text file.
-            </small>
+            </span>
             @* TODO: Wire up file upload handler *@
 <InputFile accept="text/*" style="width: 100%; background-color: #16162e" />
             @if (mUploadProgress > 0)

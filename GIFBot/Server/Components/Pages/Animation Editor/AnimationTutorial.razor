@@ -1,4 +1,4 @@
-﻿@page "/animationtutorial/"
+@page "/animationtutorial/"
 @using Microsoft.AspNetCore.SignalR.Client
 @using global::GIFBot.Shared
 @using global::GIFBot.Shared.Utility
@@ -229,20 +229,20 @@ else if (mCurrentState == State.AnimationBaseSettings)
       <div class="text-left p-3" style="width: 600px">
          <div class="form-group">
             <label for="uiDuration"><b>Duration (in milliseconds):</b></label>
-            <small id="uiDuration" class="form-text text-white-50">The number of milliseconds this animation should play for (<i>Math Reminder: 1 second = 1000ms</i>).</small>
+            <span id="uiDuration" class="gifbot-field-desc">The number of milliseconds this animation should play for (<i>Math Reminder: 1 second = 1000ms</i>).</span>
             <MudNumericField T="int" class="form-control" Min="1000" Max="600000" @bind-Value="mAnimationFormModel.DurationMilliseconds" />
          </div>
          <div class="form-group">
             <label for="uiCooldown"><b>Main Cooldown (in minutes):</b></label>
-            <small id="uiCooldown" class="form-text text-white-50">The number of minutes this command must wait before triggered again.</small>
+            <span id="uiCooldown" class="gifbot-field-desc">The number of minutes this command must wait before triggered again.</span>
             <MudNumericField T="int" class="form-control" Min="0" Max="300" @bind-Value="mAnimationFormModel.MainCooldownMinutes" />
          </div>
          <div class="form-group">
             <label for="uiAccess"><b>Access Type:</b></label>
-            <small id="uiAccess" class="form-text text-white-50">
+            <span id="uiAccess" class="gifbot-field-desc">
                You can limit what kind of viewer has access to use this animation. The buttons below have some of the more basic options.
                Advanced options will be available when you edit through the big animations editor!
-            </small>
+            </span>
             <MudRadioGroup @bind-Value="mAccessSelection" T="int">
 <MudRadio T="int" Value="@(0)">Anyone</MudRadio>
                   <MudRadio T="int" Value="@(2)">Subscriber</MudRadio>

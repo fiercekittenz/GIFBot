@@ -1,4 +1,4 @@
-﻿@page "/stickerseditor/"
+@page "/stickerseditor/"
 @using Microsoft.AspNetCore.SignalR.Client
 @using global::GIFBot.Shared.Models.Features
 @using global::GIFBot.Shared.Models.Visualization
@@ -87,7 +87,7 @@
             </div>
             <div class="form-group form-check">
                <MudCheckBox T="bool" @bind-Value="CurrentlyEditedSticker.Enabled" Label="Enabled" />
-               <small id="uiNewStickerEnabled" class="form-text text-muted">When enabled, this sticker can be used! You can disable if you are creating a large batch for later use.</small>
+               <span id="uiNewStickerEnabled" class="gifbot-field-desc">When enabled, this sticker can be used! You can disable if you are creating a large batch for later use.</span>
             </div>
             <div class="form-group">
                <MudText Typo="Typo.subtitle1"><b>Sticker Visual</b></MudText>
@@ -114,63 +114,63 @@
          <MudTabPanel Text="Behavior Override">
             <div class="form-group form-check">
                <MudCheckBox T="bool" @bind-Value="CurrentlyEditedSticker.AllowRandomPlacement" Label="Allow Random Placement (Only use global Stickers behavior)" />
-               <small id="uiAllowRandom" class="form-text text-muted">When enabled, the sticker will be able to be randomly placed per events configured from the Stickers global behaviors tab. If you want this sticker to only display for sticker-specific cheers/tips/donations then toggle this off and update the custom configurations to override the global behaviors!</small>
+               <span id="uiAllowRandom" class="gifbot-field-desc">When enabled, the sticker will be able to be randomly placed per events configured from the Stickers global behaviors tab. If you want this sticker to only display for sticker-specific cheers/tips/donations then toggle this off and update the custom configurations to override the global behaviors!</span>
             </div>
 
             @if (!CurrentlyEditedSticker.AllowRandomPlacement)
             {
             <div class="form-group form-check">
                <MudCheckBox T="bool" @bind-Value="CurrentlyEditedSticker.IncludeBits" Label="Include Bits" />
-               <small id="uiNewStickerIncludeCheers" class="form-text text-muted">When enabled, cheering will count as a sticker.</small>
+               <span id="uiNewStickerIncludeCheers" class="gifbot-field-desc">When enabled, cheering will count as a sticker.</span>
             </div>
 
             @if (CurrentlyEditedSticker.IncludeBits)
                {
             <div class="form-group">
                <label for="uiNewStickerBitPointsLabel">Bits Amount:</label>
-               <small id="uiNewStickerBitPointsLabel" class="form-text text-muted">The exact number of bits that need to be cheered to make this sticker appear.</small>
+               <span id="uiNewStickerBitPointsLabel" class="gifbot-field-desc">The exact number of bits that need to be cheered to make this sticker appear.</span>
                <MudNumericField T="int" Min="0" Max="999999" @bind-Value="CurrentlyEditedSticker.BitAmount" />
             </div>
                }
 
             <div class="form-group form-check">
                <MudCheckBox T="bool" @bind-Value="CurrentlyEditedSticker.IncludeTips" Label="Include Streamlabs Tips" />
-               <small id="uiNewStickerIncludeTips" class="form-text text-muted">When enabled, tipping via Streamlabs will create this sticker.</small>
+               <span id="uiNewStickerIncludeTips" class="gifbot-field-desc">When enabled, tipping via Streamlabs will create this sticker.</span>
             </div>
 
             @if (CurrentlyEditedSticker.IncludeTips)
                {
             <div class="form-group">
                <label for="uiNewStickerTipPointsLabel">Tip Amount:</label>
-               <small id="uiNewStickerTipPointsLabel" class="form-text text-muted">The exact tip amount to make this sticker appear.</small>
+               <span id="uiNewStickerTipPointsLabel" class="gifbot-field-desc">The exact tip amount to make this sticker appear.</span>
                <MudNumericField T="double" Min="0" Max="999999" @bind-Value="CurrentlyEditedSticker.TipAmount" />
             </div>
                }
 
             <div class="form-group form-check">
                <MudCheckBox T="bool" @bind-Value="CurrentlyEditedSticker.IncludeTiltifyDonations" Label="Include Tiltify Donations" />
-               <small id="uiNewStickerIncludeTiltify" class="form-text text-muted">When enabled, donating to charity via Tiltify will create a sticker.</small>
+               <span id="uiNewStickerIncludeTiltify" class="gifbot-field-desc">When enabled, donating to charity via Tiltify will create a sticker.</span>
             </div>
 
             @if (CurrentlyEditedSticker.IncludeTiltifyDonations)
                {
             <div class="form-group">
                <label for="uiNewStickerDonationsPointsLabel">Donation Amount:</label>
-               <small id="uiNewStickerDonationsPointsLabel" class="form-text text-muted">The exact donation amount to make this sticker appear.</small>
+               <span id="uiNewStickerDonationsPointsLabel" class="gifbot-field-desc">The exact donation amount to make this sticker appear.</span>
                <MudNumericField T="double" Min="0" Max="999999" @bind-Value="CurrentlyEditedSticker.TiltifyDonationAmount" />
             </div>
                }
 
             <div class="form-group form-check">
                <MudCheckBox T="bool" @bind-Value="CurrentlyEditedSticker.UseVisibilityTimeoutOverride" Label="Override Global Sticker Timeout" />
-               <small id="uiNewStickerOverrideTimeout" class="form-text text-muted">When enabled, this sticker will use a different timeout than the global one configured in the behavior tab.</small>
+               <span id="uiNewStickerOverrideTimeout" class="gifbot-field-desc">When enabled, this sticker will use a different timeout than the global one configured in the behavior tab.</span>
             </div>
 
             @if (CurrentlyEditedSticker.UseVisibilityTimeoutOverride)
                {
             <div class="form-group">
                <label for="uiNumSecondsVisibleOverride"><b>Number of Seconds this Sticker is Visible:</b></label>
-               <small id="uiNumSecondsVisibleOverride" class="form-text text-white-50">The sticker will only remain visible for the number of seconds you specify below. If you do not want them to disappear, set this to 0.</small>
+               <span id="uiNumSecondsVisibleOverride" class="gifbot-field-desc">The sticker will only remain visible for the number of seconds you specify below. If you do not want them to disappear, set this to 0.</span>
                <MudNumericField T="int" Min="0" Max="999999" @bind-Value="CurrentlyEditedSticker.NumSecondsStickerVisibleOverride" />
             </div>
                }
@@ -185,11 +185,11 @@
             </div>
             <div class="form-group form-check">
                <MudCheckBox T="bool" @bind-Value="CurrentlyEditedSticker.UsePlacementOverride" Label="Always use the position below for this sticker." />
-               <small id="uiNewStickerOverridePosition" class="form-text text-muted">When enabled, this sticker will always appear in the same location as illustrated on the control below:</small>
+               <span id="uiNewStickerOverridePosition" class="gifbot-field-desc">When enabled, this sticker will always appear in the same location as illustrated on the control below:</span>
             </div>
             <div class="form-group">
                <label for="uiStickerLayer">Layer:</label>
-               <small id="uiStickerLayer" class="form-text text-muted">The sticker can appear on a primary or secondary layer (browser source) that you can capture in your broadcaster software.</small>
+               <span id="uiStickerLayer" class="gifbot-field-desc">The sticker can appear on a primary or secondary layer (browser source) that you can capture in your broadcaster software.</span>
                <MudRadioGroup @bind-Value="@CurrentlyEditedStickerLayer" T="int">
 <MudRadio T="int" Value="@(0)">Primary</MudRadio>
                      <MudRadio T="int" Value="@(1)">Secondary</MudRadio>
@@ -249,7 +249,7 @@
 
                   <div class="form-group form-check">
                      <MudCheckBox T="bool" @bind-Value="mStickerData.Enabled" Label="Feature Enabled" />
-                     <small id="uiEnabled" class="form-text text-muted">When enabled, Twitch events will be able to contribute to the stickers overlay.</small>
+                     <span id="uiEnabled" class="gifbot-field-desc">When enabled, Twitch events will be able to contribute to the stickers overlay.</span>
                   </div>
 
                   @if (mStickerData.Enabled)
@@ -257,29 +257,29 @@
                      <MudExpansionPanel Text="Chat Command" Expanded="true">
                         <div class="form-group form-check">
                            <MudCheckBox T="bool" @bind-Value="mStickerData.CanUseCommand" Label="Allow Chat Command Access" />
-                           <small id="uiUseChatCommand" class="form-text text-muted">When enabled, the system can place stickers using the chat command. You can also use this command in a bot-only mode to have channel point rewards activating special stickers by name. Just put "!stickers [name of sticker]" in your reward title!</small>
+                           <span id="uiUseChatCommand" class="gifbot-field-desc">When enabled, the system can place stickers using the chat command. You can also use this command in a bot-only mode to have channel point rewards activating special stickers by name. Just put "!stickers [name of sticker]" in your reward title!</span>
                         </div>
 
                         @if (mStickerData.CanUseCommand)
                         {
                            <div class="form-group">
                               <label for="uiChatCommand">Chat Command:</label>
-                              <small id="uiChatCommand" class="form-text text-muted">The command used to access this feature.</small>
+                              <span id="uiChatCommand" class="gifbot-field-desc">The command used to access this feature.</span>
                               <MudTextField T="string" @bind-Value="mStickerData.Command" />
                            </div>
                            <div class="form-group">
                               <label for="uiSecondsBetweenCommandUses">Command Cooldown:</label>
-                              <small id="uiSecondsBetweenCommandUses" class="form-text text-muted">The number of seconds between command uses. Helps space out the zany. Does not affect placement from channel point redemptions.</small>
+                              <span id="uiSecondsBetweenCommandUses" class="gifbot-field-desc">The number of seconds between command uses. Helps space out the zany. Does not affect placement from channel point redemptions.</span>
                               <DataAnnotationsValidator />
                               <ValidationSummary />
                               <MudNumericField T="int" Min="0" Max="999999" @bind-Value="mStickerData.CommandCooldownSeconds" />
                            </div>
                            <div class="form-group">
                               <label for="uiAccess"><b>Access Type:</b></label>
-                              <small id="uiAccess" class="form-text text-white-50">
+                              <span id="uiAccess" class="gifbot-field-desc">
                                  You can limit what kind of viewer has access to use this command. Your options are below. If you are making
                                  this command to be used from channel point rewards, it is recommended to flag it as Bot Only!
-                              </small>
+                              </span>
                               <MudRadioGroup @bind-Value="mAccessSelection" T="int">
 <MudRadio T="int" Value="@(0)">Anyone</MudRadio>
                                     <MudRadio T="int" Value="@(2)">Subscriber</MudRadio>
@@ -295,7 +295,7 @@
                            {
                               <div class="form-group">
                                  <label for="uiUserGroup"><b>User Group:</b></label>
-                                 <small id="uiUserGroup" class="form-text text-white-50">Access is restricted to a user group. Which one?</small>
+                                 <span id="uiUserGroup" class="gifbot-field-desc">Access is restricted to a user group. Which one?</span>
 
                                  <MudSelect T="string" Placeholder="Select User Group..." Style="width: 250px;"
  Value="@mUserGroupName" ValueChanged="@(args => HandleUserGroupSelected(args as string))" />
@@ -305,7 +305,7 @@
                            {
                               <div class="form-group">
                                  <label for="uiRestrictedToUser"><b>Specific Viewer:</b></label>
-                                 <small id="uiRestrictedToUser" class="form-text text-white-50">Access is restricted to a specific viewer. Which one?</small>
+                                 <span id="uiRestrictedToUser" class="gifbot-field-desc">Access is restricted to a specific viewer. Which one?</span>
                                  <MudTextField T="string" @bind-Value="@mStickerData.RestrictedToUser" />
                               </div>
                               <div class="mt-2">
@@ -317,7 +317,7 @@
 
                      <div class="form-group">
                         <label for="uiAudio"><b>Audio:</b></label>
-                        <small id="uiAudio" class="form-text text-white-50">The audio file played when a sticker appears.</small>
+                        <span id="uiAudio" class="gifbot-field-desc">The audio file played when a sticker appears.</span>
                         <table>
                            <tr>
                               <td valign="top">
@@ -356,13 +356,13 @@
 
                      <div class="form-group">
                         <label for="uiNumSecondsVisible"><b>Number of Seconds a Sticker is Visible:</b></label>
-                        <small id="uiNumSecondsVisible" class="form-text text-white-50">The sticker will only remain visible for the number of seconds you specify below. If you do not want them to disappear, set this to 0.</small>
+                        <span id="uiNumSecondsVisible" class="gifbot-field-desc">The sticker will only remain visible for the number of seconds you specify below. If you do not want them to disappear, set this to 0.</span>
                         <MudNumericField T="int" Min="0" Max="999999" @bind-Value="mStickerData.NumSecondsStickerVisible" />
                      </div>
 
                      <div class="form-group">
                         <label for="uiMaxStickers"><b>Max Stickers:</b></label>
-                        <small id="uiMaxStickers" class="form-text text-white-50">The max number of visible stickers at any time. If exceeded, older stickers will be removed.</small>
+                        <span id="uiMaxStickers" class="gifbot-field-desc">The max number of visible stickers at any time. If exceeded, older stickers will be removed.</span>
                         <MudNumericField T="int" Min="1" Max="300" @bind-Value="mStickerData.MaxStickers" />
                      </div>
 
@@ -373,13 +373,13 @@
                         </p>
                         <div class="form-group">
                            <label for="uiCanvasWidth"><b>Max Canvas Width:</b></label>
-                           <small id="uiCanvasWidth" class="form-text text-white-50">The max width of your overlay area where you want stickers to be visible.</small>
+                           <span id="uiCanvasWidth" class="gifbot-field-desc">The max width of your overlay area where you want stickers to be visible.</span>
                            <MudNumericField T="int" Min="100" Max="999999" @bind-Value="mStickerData.CanvasWidth" />
                         </div>
 
                         <div class="form-group">
                            <label for="uiCanvasHeight"><b>Max Canvas Height:</b></label>
-                           <small id="uiCanvasHeight" class="form-text text-white-50">The max height of your overlay area where you want stickers to be visible.</small>
+                           <span id="uiCanvasHeight" class="gifbot-field-desc">The max height of your overlay area where you want stickers to be visible.</span>
                            <MudNumericField T="int" Min="100" Max="999999" @bind-Value="mStickerData.CanvasHeight" />
                         </div>
                      </MudExpansionPanel>
@@ -390,13 +390,13 @@
                         </p>
                         <div class="form-group">
                            <label for="uiSecondaryCanvasWidth"><b>Max Canvas Width:</b></label>
-                           <small id="uiSecondaryCanvasWidth" class="form-text text-white-50">The max width of your overlay area where you want stickers to be visible.</small>
+                           <span id="uiSecondaryCanvasWidth" class="gifbot-field-desc">The max width of your overlay area where you want stickers to be visible.</span>
                            <MudNumericField T="int" Min="100" Max="999999" @bind-Value="mStickerData.SecondaryCanvasWidth" />
                         </div>
 
                         <div class="form-group">
                            <label for="uiSecondaryCanvasHeight"><b>Max Canvas Height:</b></label>
-                           <small id="uiSecondaryCanvasHeight" class="form-text text-white-50">The max height of your overlay area where you want stickers to be visible.</small>
+                           <span id="uiSecondaryCanvasHeight" class="gifbot-field-desc">The max height of your overlay area where you want stickers to be visible.</span>
                            <MudNumericField T="int" Min="100" Max="999999" @bind-Value="mStickerData.SecondaryCanvasHeight" />
                         </div>
                      </MudExpansionPanel>
@@ -417,14 +417,14 @@
 
                   <div class="form-group form-check">
                      <MudCheckBox T="bool" @bind-Value="mStickerData.IncludeBits" Label="Include Bits" />
-                     <small id="uiIncludeCheers" class="form-text text-muted">When enabled, cheering will count as a sticker.</small>
+                     <span id="uiIncludeCheers" class="gifbot-field-desc">When enabled, cheering will count as a sticker.</span>
                   </div>
 
                   @if (mStickerData.IncludeBits)
                   {
                      <div class="form-group">
                         <label for="uiBitPointsLabel">Bits Minimum:</label>
-                        <small id="uiBitPointsLabel" class="form-text text-muted">The minimum number of bits that need to be cheered to make a sticker. Must be non-zero to work.</small>
+                        <span id="uiBitPointsLabel" class="gifbot-field-desc">The minimum number of bits that need to be cheered to make a sticker. Must be non-zero to work.</span>
                         <DataAnnotationsValidator />
                         <ValidationSummary />
                         <MudNumericField T="int" Min="1" Max="999999" @bind-Value="mStickerData.BitMinimum" />
@@ -433,14 +433,14 @@
 
                   <div class="form-group form-check">
                      <MudCheckBox T="bool" @bind-Value="mStickerData.IncludeTips" Label="Include Streamlabs Tips" />
-                     <small id="uiIncludeTips" class="form-text text-muted">When enabled, tipping via Streamlabs will create a sticker.</small>
+                     <span id="uiIncludeTips" class="gifbot-field-desc">When enabled, tipping via Streamlabs will create a sticker.</span>
                   </div>
 
                   @if (mStickerData.IncludeTips)
                   {
                      <div class="form-group">
                         <label for="uiTipPointsLabel">Tip Minimum:</label>
-                        <small id="uiTipPointsLabel" class="form-text text-muted">The minimum tip amount to make a sticker.</small>
+                        <span id="uiTipPointsLabel" class="gifbot-field-desc">The minimum tip amount to make a sticker.</span>
                         <DataAnnotationsValidator />
                         <ValidationSummary />
                         <MudNumericField T="double" Min="0" Max="999999" @bind-Value="mStickerData.TipMinimum" />
@@ -449,14 +449,14 @@
 
                   <div class="form-group form-check">
                      <MudCheckBox T="bool" @bind-Value="mStickerData.IncludeTiltifyDonations" Label="Include Tiltify Donations" />
-                     <small id="uiIncludeTiltify" class="form-text text-muted">When enabled, donating to charity via Tiltify will create a sticker.</small>
+                     <span id="uiIncludeTiltify" class="gifbot-field-desc">When enabled, donating to charity via Tiltify will create a sticker.</span>
                   </div>
 
                   @if (mStickerData.IncludeTiltifyDonations)
                   {
                      <div class="form-group">
                         <label for="uiDonationsPointsLabel">Donation Minimum:</label>
-                        <small id="uiDonationsPointsLabel" class="form-text text-muted">The minimum donation amount to make a sticker.</small>
+                        <span id="uiDonationsPointsLabel" class="gifbot-field-desc">The minimum donation amount to make a sticker.</span>
                         <DataAnnotationsValidator />
                         <ValidationSummary />
                         <MudNumericField T="double" Min="0" Max="999999" @bind-Value="mStickerData.TiltifyDonationMinimum" />
@@ -465,19 +465,19 @@
 
                   <div class="form-group form-check">
                      <MudCheckBox T="bool" @bind-Value="mStickerData.IncludeSubs" Label="Include Subscriptions" />
-                     <small id="uiIncludeSubs" class="form-text text-muted">When enabled, subscriptions and resubscriptions create stickers.</small>
+                     <span id="uiIncludeSubs" class="gifbot-field-desc">When enabled, subscriptions and resubscriptions create stickers.</span>
                   </div>
 
                   <div class="form-group form-check">
                      <MudCheckBox T="bool" @bind-Value="mStickerData.IncludeGiftSubs" Label="Include Gifted Subscriptions" />
-                     <small id="uiIncludeGiftSubs" class="form-text text-muted">When enabled, gifted subscriptions create stickers.</small>
+                     <span id="uiIncludeGiftSubs" class="gifbot-field-desc">When enabled, gifted subscriptions create stickers.</span>
                   </div>
 
                   @if (mStickerData.IncludeGiftSubs)
                   {
                      <div class="form-group">
                         <label for="uiGiftSubPointsLabel">Gift Sub Count Minimum:</label>
-                        <small id="uiGiftSubPointsLabel" class="form-text text-muted">The minimum number of gifted subscriptions to make a sticker.</small>
+                        <span id="uiGiftSubPointsLabel" class="gifbot-field-desc">The minimum number of gifted subscriptions to make a sticker.</span>
                         <DataAnnotationsValidator />
                         <ValidationSummary />
                         <MudNumericField T="int" Min="0" Max="999999" @bind-Value="mStickerData.GiftSubMinimum" />
@@ -486,26 +486,26 @@
 
                   <div class="form-group form-check">
                      <MudCheckBox T="bool" @bind-Value="mStickerData.IncludeChannelPoints" Label="Include Channel Points" />
-                     <small id="uiIncludeChannelPoints" class="form-text text-muted">When enabled, channel point redemptions will create stickers.</small>
+                     <span id="uiIncludeChannelPoints" class="gifbot-field-desc">When enabled, channel point redemptions will create stickers.</span>
                   </div>
 
                   @if (mStickerData.IncludeChannelPoints)
                   {
                      <div class="form-group">
                         <label for="uiNumChannelPoints"><b>Channel Point Minimum</b></label>
-                        <small id="uiNumChannelPoints" class="form-text text-white-50">The minimum number of points that must be spent in order to create a sticker.</small>
+                        <span id="uiNumChannelPoints" class="gifbot-field-desc">The minimum number of points that must be spent in order to create a sticker.</span>
                         <MudNumericField T="int" Min="0" Max="999999" @bind-Value="mStickerData.ChannelPointsMinimum" />
                      </div>
                   }
 
                   <div class="form-group form-check">
                      <MudCheckBox T="bool" @bind-Value="mStickerData.IncludeFollows" Label="Include Follows" />
-                     <small id="uiIncludeFollows" class="form-text text-muted">When enabled, follows will create stickers.</small>
+                     <span id="uiIncludeFollows" class="gifbot-field-desc">When enabled, follows will create stickers.</span>
                   </div>
 
                   <div class="form-group form-check">
                      <MudCheckBox T="bool" @bind-Value="mStickerData.IncludeRaids" Label="Include Raids" />
-                     <small id="uiIncludeRaids" class="form-text text-muted">When enabled, raids will create stickers.</small>
+                     <span id="uiIncludeRaids" class="gifbot-field-desc">When enabled, raids will create stickers.</span>
                   </div>
                </div>
             </div>
@@ -612,12 +612,12 @@
                         <MudTabPanel Text="Add New Sticker...">
                            <div class="form-group">
                               <label for="uiTempStickerName"><b>Name (optional):</b></label>
-                              <small id="uiTempStickerName" class="form-text text-white-50">The name of this sticker. If you enable the chat command, it can be specifically requested. Also required for channel point redemptions to target specific stickers OR you can even use the same name to target multiple stickers and a random one will be picked (i.e. "!sticker costume" to choose from a pool of costumes).</small>
+                              <span id="uiTempStickerName" class="gifbot-field-desc">The name of this sticker. If you enable the chat command, it can be specifically requested. Also required for channel point redemptions to target specific stickers OR you can even use the same name to target multiple stickers and a random one will be picked (i.e. "!sticker costume" to choose from a pool of costumes).</span>
                               <MudTextField T="string" @bind-Value="mTempStickerToAdd.Name" />
                            </div>
                            <div class="form-group">
                               <label for="uiTempStickerCategory">Select the new category from the list below:</label>
-                              <small id="uiTempStickerCategory" class="form-text text-muted">Once moved, the animation data will be immediately saved.</small>
+                              <span id="uiTempStickerCategory" class="gifbot-field-desc">Once moved, the animation data will be immediately saved.</span>
                               <MudSelect T="Guid" Placeholder="Select Category..." @bind-Value="@mTempStickerCategoryId">
                                   @if (mStickerData?.Categories != null)
                                   {
@@ -630,7 +630,7 @@
                            </div>
                            <div class="form-group">
                               <label for="uiStickerVisual"><b>Sticker Visual:</b></label>
-                              <small id="uiStickerVisual" class="form-text text-white-50">The visual file displayed with this sticker.</small>
+                              <span id="uiStickerVisual" class="gifbot-field-desc">The visual file displayed with this sticker.</span>
                               <table>
                                  <tr>
                                     <td valign="top">

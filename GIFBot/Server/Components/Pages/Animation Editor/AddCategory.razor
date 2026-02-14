@@ -1,4 +1,4 @@
-﻿@page "/animationseditor/addcategory"
+@page "/animationseditor/addcategory"
 @using Microsoft.AspNetCore.Http.Connections
 @using Microsoft.AspNetCore.SignalR.Client
 @using global::GIFBot.Server.Components.Pages.Setup.Models
@@ -16,7 +16,7 @@
          <EditForm Model="@Model" OnSubmit="@HandleSave">
             <div class="form-group">
                <label for="uiValue"><b>Category Name:</b></label>
-               <small id="uiValue" class="form-text text-white-50">Pretty self-explanatory, right?</small>
+               <span id="uiValue" class="gifbot-field-desc">Pretty self-explanatory, right?</span>
                <MudTextField T="string" class="form-control" @bind-Value="Model.Name" />
             </div>
                            <div class="d-flex justify-end pa-3">

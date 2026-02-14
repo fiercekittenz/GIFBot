@@ -1,4 +1,4 @@
-﻿@page "/goalbareditor/"
+@page "/goalbareditor/"
 @using Microsoft.AspNetCore.SignalR.Client
 @using global::GIFBot.Shared.Models.Features
 @using global::GIFBot.Shared.Models.Visualization
@@ -45,20 +45,20 @@
 
                   <div class="form-group form-check">
                      <MudCheckBox T="bool" @bind-Value="mGoalBarData.Settings.Enabled" Label="Feature Enabled" />
-                     <small id="uiEnabled" class="form-text text-muted">When enabled, Twitch events will be computed and have their values applied to the goal.</small>
+                     <span id="uiEnabled" class="gifbot-field-desc">When enabled, Twitch events will be computed and have their values applied to the goal.</span>
                   </div>
 
                   <MudExpansionPanel Text="Goal Triggers" Expanded="true">
                      <div class="form-group form-check">
                         <MudCheckBox T="bool" @bind-Value="mGoalBarData.Settings.IncludeCheers" Label="Include Cheers" />
-                        <small id="uiIncludeCheers" class="form-text text-muted">When enabled, cheering will count toward the goal.</small>
+                        <span id="uiIncludeCheers" class="gifbot-field-desc">When enabled, cheering will count toward the goal.</span>
                      </div>
 
                      @if (mGoalBarData.Settings.IncludeCheers)
                      {
                         <div class="form-group">
                            <label for="uiBitPointsLabel">Bit Point Amount:</label>
-                           <small id="uiBitPointsLabel" class="form-text text-muted">The number of points applied to the goal per bit cheered. If you would like to only count bits, make sure you either set this value to 1 <i>OR</i> make sure the goal is the dollar amount of bits you want to achieve.</small>
+                           <span id="uiBitPointsLabel" class="gifbot-field-desc">The number of points applied to the goal per bit cheered. If you would like to only count bits, make sure you either set this value to 1 <i>OR</i> make sure the goal is the dollar amount of bits you want to achieve.</span>
                            <DataAnnotationsValidator />
                            <ValidationSummary />
                            <MudNumericField T="double" Min="0.01" Max="1000" @bind-Value="mGoalBarData.Settings.BitPoints" />
@@ -67,14 +67,14 @@
 
                      <div class="form-group form-check">
                         <MudCheckBox T="bool" @bind-Value="mGoalBarData.Settings.IncludeTips" Label="Include Streamlabs Tips" />
-                        <small id="uiIncludeTips" class="form-text text-muted">When enabled, tipping via Streamlabs will count toward the goal (must authenticate with Streamlabs).</small>
+                        <span id="uiIncludeTips" class="gifbot-field-desc">When enabled, tipping via Streamlabs will count toward the goal (must authenticate with Streamlabs).</span>
                      </div>
 
                      @if (mGoalBarData.Settings.IncludeTips)
                      {
                         <div class="form-group">
                            <label for="uiTipPointsLabel">Tip Point Amount:</label>
-                           <small id="uiTipPointsLabel" class="form-text text-muted">The number of points applied to the goal per 1 currency tipped (i.e. $1 = 1 point).</small>
+                           <span id="uiTipPointsLabel" class="gifbot-field-desc">The number of points applied to the goal per 1 currency tipped (i.e. $1 = 1 point).</span>
                            <DataAnnotationsValidator />
                            <ValidationSummary />
                            <MudNumericField T="double" Min="0.01" Max="1000" @bind-Value="mGoalBarData.Settings.TipPoints" />
@@ -83,28 +83,28 @@
 
                      <div class="form-group form-check">
                         <MudCheckBox T="bool" @bind-Value="mGoalBarData.Settings.IncludeSubs" Label="Include Subscriptions" />
-                        <small id="uiIncludeSubs" class="form-text text-muted">When enabled, subscriptions, resubscriptions, and gift subscriptions count toward the goal.</small>
+                        <span id="uiIncludeSubs" class="gifbot-field-desc">When enabled, subscriptions, resubscriptions, and gift subscriptions count toward the goal.</span>
                      </div>
 
                      @if (mGoalBarData.Settings.IncludeSubs)
                      {
                         <div class="form-group">
                            <label for="uiSub1PointsLabel">Tier 1 Point Amount:</label>
-                           <small id="uiSub1PointsLabel" class="form-text text-muted">The number of points applied to the goal tier 1 subscription.</small>
+                           <span id="uiSub1PointsLabel" class="gifbot-field-desc">The number of points applied to the goal tier 1 subscription.</span>
                            <DataAnnotationsValidator />
                            <ValidationSummary />
                            <MudNumericField T="double" Min="0.01" Max="1000" @bind-Value="mGoalBarData.Settings.SubTier1Points" />
                         </div>
                         <div class="form-group">
                            <label for="uiSub2PointsLabel">Tier 2 Point Amount:</label>
-                           <small id="uiSub2PointsLabel" class="form-text text-muted">The number of points applied to the goal tier 2 subscription.</small>
+                           <span id="uiSub2PointsLabel" class="gifbot-field-desc">The number of points applied to the goal tier 2 subscription.</span>
                            <DataAnnotationsValidator />
                            <ValidationSummary />
                            <MudNumericField T="double" Min="0.01" Max="1000" @bind-Value="mGoalBarData.Settings.SubTier2Points" />
                         </div>
                         <div class="form-group">
                            <label for="uiSub3PointsLabel">Tier 3 Point Amount:</label>
-                           <small id="uiSub3PointsLabel" class="form-text text-muted">The number of points applied to the goal tier 3 subscription.</small>
+                           <span id="uiSub3PointsLabel" class="gifbot-field-desc">The number of points applied to the goal tier 3 subscription.</span>
                            <DataAnnotationsValidator />
                            <ValidationSummary />
                            <MudNumericField T="double" Min="0.01" Max="1000" @bind-Value="mGoalBarData.Settings.SubTier3Points" />
@@ -121,11 +121,11 @@
             <div class="p-2">
                <div class="form-group form-check">
                   <MudCheckBox T="bool" @bind-Value="mGoalBarData.Settings.HideGoalText" Label="Hide Goal Text" />
-                  <small id="uiHideGoalText" class="form-text text-muted">When enabled, the text for the goal will not be visible on the bar overlay.</small>
+                  <span id="uiHideGoalText" class="gifbot-field-desc">When enabled, the text for the goal will not be visible on the bar overlay.</span>
                </div>
                <div class="form-group form-check">
                   <MudCheckBox T="bool" @bind-Value="mGoalBarData.Settings.ShowAmountAsPercentage" Label="Show Current Amount as Percentage" />
-                  <small id="uiPercentage" class="form-text text-muted">When enabled, the current amount on the bar will be shown as a percentage value.</small>
+                  <span id="uiPercentage" class="gifbot-field-desc">When enabled, the current amount on the bar will be shown as a percentage value.</span>
                </div>
                @if (!mGoalBarData.Settings.ShowAmountAsPercentage)
                {
@@ -136,42 +136,42 @@
                }
                <div class="form-group mt-2">
                   <label for="uiWidth"><b>Bar Width:</b></label>
-                  <small id="uiWidth" class="form-text text-white-50">The width of the whole goal bar.</small>
+                  <span id="uiWidth" class="gifbot-field-desc">The width of the whole goal bar.</span>
                   <MudNumericField T="int" Min="100" Max="9999" @bind-Value="mGoalBarData.Settings.Width" />
                </div>
                <div class="form-group mt-2">
                   <label for="uiBarForeColorLabel"><b>Bar Forecolor:</b></label>
-                  <small id="uiBarForeColorLabel" class="form-text text-white-50">The forecolor for the bar.</small>
+                  <span id="uiBarForeColorLabel" class="gifbot-field-desc">The forecolor for the bar.</span>
                   <input type="color" id="uiBarForeColor" @bind="@mGoalBarData.Settings.BarForecolor" />
                </div>
                <div class="form-group mt-2">
                   <label for="uiBarBackColorLabel"><b>Bar Backcolor:</b></label>
-                  <small id="uiBarBackColorLabel" class="form-text text-white-50">The backcolor for the bar.</small>
+                  <span id="uiBarBackColorLabel" class="gifbot-field-desc">The backcolor for the bar.</span>
                   <input type="color" id="uiBarBackColor" @bind="@mGoalBarData.Settings.BarBackcolor" />
                </div>
                <div class="form-group mt-2">
                   <label for="uiFontSize"><b>Font Size:</b></label>
-                  <small id="uiFontSize" class="form-text text-white-50">The size of the font used (bigger = better).</small>
+                  <span id="uiFontSize" class="gifbot-field-desc">The size of the font used (bigger = better).</span>
                   <MudNumericField T="int" Min="18" Max="100" @bind-Value="mGoalBarData.Settings.Caption.FontSize" />
                </div>
                <div class="form-group mt-2">
                   <label for="uiFontColor"><b>Font Color:</b></label>
-                  <small id="uiFontColor" class="form-text text-white-50">The forecolor for the caption text.</small>
+                  <span id="uiFontColor" class="gifbot-field-desc">The forecolor for the caption text.</span>
                   <input type="color" id="uiFontColor" @bind="@mGoalBarData.Settings.Caption.FontColor" />
                </div>
                <div class="form-group mt-2">
                   <label for="uiStrokeThickness"><b>Stroke Thickness:</b></label>
-                  <small id="uiStrokeThickness" class="form-text text-white-50">The width of the stroke (outline) on the caption text.</small>
+                  <span id="uiStrokeThickness" class="gifbot-field-desc">The width of the stroke (outline) on the caption text.</span>
                   <MudNumericField T="int" Min="0" Max="5" @bind-Value="mGoalBarData.Settings.Caption.StrokeThickness" />
                </div>
                <div class="form-group mt-2">
                   <label for="uiFontStrokeColor"><b>Stroke Color:</b></label>
-                  <small id="uiFontStrokeColor" class="form-text text-white-50">The stroke or outline color for the caption text.</small>
+                  <span id="uiFontStrokeColor" class="gifbot-field-desc">The stroke or outline color for the caption text.</span>
                   <input type="color" id="uiFontStrokeColor" @bind="@mGoalBarData.Settings.Caption.FontStrokeColor" />
                </div>
                <div class="form-group mt-2">
                   <label for="uiFont"><b>Font:</b></label>
-                  <small id="uiFont" class="form-text text-white-50">What font should you use?</small>
+                  <span id="uiFont" class="gifbot-field-desc">What font should you use?</span>
                   <MudSelect T="int" @bind-Value="mCaptionFontSelection" Label="Font" Variant="Variant.Filled">
                      <MudSelectItem T="int" Value="0">Arial</MudSelectItem>
                      <MudSelectItem T="int" Value="1">Comic Sans</MudSelectItem>
@@ -201,7 +201,7 @@
                </div>
                 <div class="form-group mt-2">
                    <label for="uiIsBold"><b>Font Weight:</b></label>
-                   <small id="uiIsBold" class="form-text text-white-50">Would you like the font to be bold?</small>
+                   <span id="uiIsBold" class="gifbot-field-desc">Would you like the font to be bold?</span>
                    <MudCheckBox T="bool" @bind-Value="mGoalBarData.Settings.Caption.IsBold" Label="Bolded Text" />
                 </div>
                <div class="mt-2">

@@ -83,9 +83,12 @@ a, .btn-link {
     align-items: center !important;
 }
 
-/* Ensure description text under form fields is readable */
-small, small.form-text {
-    font-size: 0.875rem !important;
+/* Field description text under form inputs */
+.gifbot-field-desc {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.5);
 }
 
 /* Ensure main content container fills the viewport */

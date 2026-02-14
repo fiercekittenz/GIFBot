@@ -1,4 +1,4 @@
-﻿@page "/regurgitator/"
+@page "/regurgitator/"
 @using Microsoft.AspNetCore.SignalR.Client
 @using global::GIFBot.Shared
 @using global::GIFBot.Shared.Models.Animation
@@ -55,19 +55,19 @@
 
                             <div class="form-group form-check">
                                 <MudCheckBox T="bool" @bind-Value="mRegurgitatorSettings.Enabled" Label="Package Enabled" />
-                                <small id="uiEnabled" class="form-text text-muted">When enabled, the bot will allow this package's command to regurgitate to chat. Sounds nasty, right? Thanks dewritten.</small>
+                                <span id="uiEnabled" class="gifbot-field-desc">When enabled, the bot will allow this package's command to regurgitate to chat. Sounds nasty, right? Thanks dewritten.</span>
                             </div>
 
                             <div class="form-group form-check">
                                 <MudCheckBox T="bool" @bind-Value="mRegurgitatorSettings.PlayOnTimer" Label="Play on Timer" />
-                                <small id="uiPlayOnTimer" class="form-text text-muted">When enabled, the package will periodically send one of its entries to chat. The chat command is disabled when this is on.</small>
+                                <span id="uiPlayOnTimer" class="gifbot-field-desc">When enabled, the package will periodically send one of its entries to chat. The chat command is disabled when this is on.</span>
                             </div>
 
                             @if (!mRegurgitatorSettings.PlayOnTimer)
                             {
                                 <div class="form-group">
                                     <label for="uiCommand">Command:</label>
-                                    <small id="uiCommand" class="form-text text-muted">This is the command viewers can use in chat to regurgitate a random entry from this package.</small>
+                                    <span id="uiCommand" class="gifbot-field-desc">This is the command viewers can use in chat to regurgitate a random entry from this package.</span>
                                     <DataAnnotationsValidator />
                                     <ValidationSummary />
                                     <MudTextField T="string" @bind-Value="mRegurgitatorSettings.Command" />
@@ -75,7 +75,7 @@
 
                                 <div class="form-group">
                                     <label for="uiMinutesBetweenChatRequests">Cooldown for Chat Command (in minutes):</label>
-                                    <small id="uiMinutesBetweenChatRequests" class="form-text text-muted">The number of minutes that must pass before this chat command can be used again.</small>
+                                    <span id="uiMinutesBetweenChatRequests" class="gifbot-field-desc">The number of minutes that must pass before this chat command can be used again.</span>
                                     <DataAnnotationsValidator />
                                     <ValidationSummary />
                                     <MudNumericField T="int" Min="0" Max="120" @bind-Value="mRegurgitatorSettings.MinutesBetweenChatRequests" />
@@ -83,10 +83,10 @@
 
                                 <div class="form-group">
                                     <label for="uiAccess"><b>Access Type:</b></label>
-                                    <small id="uiAccess" class="form-text text-white-50">
+                                    <span id="uiAccess" class="gifbot-field-desc">
                                         You can limit what kind of viewer has access to use this feature when used from chat commands. Your options are below. If you want
                                         the regurgitator to be used by any feature other than chat, you should set it as "Bot Only".
-                                    </small>
+                                    </span>
                                     <MudRadioGroup @bind-Value="mAccessSelection" T="int">
 <MudRadio T="int" Value="@(0)">Anyone</MudRadio>
                                             <MudRadio T="int" Value="@(2)">Subscriber</MudRadio>
@@ -102,7 +102,7 @@
                                 {
                                     <div class="form-group">
                                         <label for="uiUserGroup"><b>User Group:</b></label>
-                                        <small id="uiUserGroup" class="form-text text-white-50">Access is restricted to a user group. Which one?</small>
+                                        <span id="uiUserGroup" class="gifbot-field-desc">Access is restricted to a user group. Which one?</span>
 
                                         <MudSelect T="string" Placeholder="Select User Group..." Style="width: 250px;"
  Value="@mSelectedUserGroupName" ValueChanged="@(args => HandleUserGroupSelected(args as string))" />
@@ -112,7 +112,7 @@
                                 {
                                     <div class="form-group">
                                         <label for="uiRestrictedToUser"><b>Specific Viewer:</b></label>
-                                        <small id="uiRestrictedToUser" class="form-text text-white-50">Access is restricted to a specific viewer. Which one?</small>
+                                        <span id="uiRestrictedToUser" class="gifbot-field-desc">Access is restricted to a specific viewer. Which one?</span>
                                         <MudTextField T="string" @bind-Value="@mRegurgitatorSettings.RestrictedToUser" />
                                     </div>
                                     <div class="mt-2">
@@ -139,7 +139,7 @@
                             {
                                 <div class="form-group">
                                     <label for="uiFrequencyInSeconds">Frequency in Seconds:</label>
-                                    <small id="uiFrequencyInSeconds" class="form-text text-muted">The number of seconds in between entries being sent to chat, when Play On Timer is enabled.</small>
+                                    <span id="uiFrequencyInSeconds" class="gifbot-field-desc">The number of seconds in between entries being sent to chat, when Play On Timer is enabled.</span>
                                     <DataAnnotationsValidator />
                                     <ValidationSummary />
                                     <MudNumericField T="int" @bind-Value="mRegurgitatorSettings.TimerFrequencyInSeconds" />
@@ -155,7 +155,7 @@
                     <div class="p-2">
                         <MudExpansionPanel Text="Cheer Requirements" Expanded="true">
                             <div class="form-group">
-                                <small id="uiRequirementBits" class="form-text text-white-50">Require an exact number of bits to be cheered before the regurgitator will trigger. Leave the value at 0 to disable.</small>
+                                <span id="uiRequirementBits" class="gifbot-field-desc">Require an exact number of bits to be cheered before the regurgitator will trigger. Leave the value at 0 to disable.</span>
                                 <MudNumericField T="int" Min="0" Max="100000" @bind-Value="mRegurgitatorSettings.BitRequirement" />
                             </div>
                         </MudExpansionPanel>
@@ -167,7 +167,7 @@
                             @if (mRegurgitatorSettings.IsStreamlabsTipTrigger)
                             {
                                 <div class="form-group">
-                                    <small id="uiTipRequirement" class="form-text text-white-50">Amount of currency to be tipped before the regurgitator will trigger (0 = all tips).</small>
+                                    <span id="uiTipRequirement" class="gifbot-field-desc">Amount of currency to be tipped before the regurgitator will trigger (0 = all tips).</span>
                                     <MudNumericField T="double" Min="0" Max="100000" @bind-Value="mRegurgitatorSettings.StreamlabsTipRequirement" />
                                 </div>
                             }
@@ -180,7 +180,7 @@
                             @if (mRegurgitatorSettings.IsTiltifyTrigger)
                             {
                                 <div class="form-group">
-                                    <small id="uiDonationAmount" class="form-text text-white-50">Amount of currency to be donated before this animation will trigger (0 = all donations).</small>
+                                    <span id="uiDonationAmount" class="gifbot-field-desc">Amount of currency to be donated before this animation will trigger (0 = all donations).</span>
                                     <MudNumericField T="double" Min="0" Max="100000" @bind-Value="mRegurgitatorSettings.TiltifyDonationRequirement" />
                                 </div>
                             }
@@ -192,7 +192,7 @@
             <MudTabPanel Text="Data Entries">
                 <div class="form-group">
                     <label for="uiEntries">Entries:</label>
-                    <small id="uiEntries" class="form-text text-muted">These are the items that will be randomly regurgitated. You can add or delete entries here.</small>
+                    <span id="uiEntries" class="gifbot-field-desc">These are the items that will be randomly regurgitated. You can add or delete entries here.</span>
 
                     <MudDataGrid T="RegurgitatorEntry" Items="@CurrentEntries" SortMode="SortMode.Single">
                         <Columns>
@@ -223,9 +223,9 @@
 
                 <div class="form-group">
                     <label for="uiImport">Import from Text File:</label>
-                    <small id="uiImport" class="form-text text-muted">
+                    <span id="uiImport" class="gifbot-field-desc">
                         You can import directly from a text file. Each entry should be on its own line in the text file.
-                    </small>
+                    </span>
                     @* TODO: Wire up file upload handler *@
 <InputFile accept="text/*" style="width: 100%; background-color: #16162e" />
                     @if (mUploadProgress > 0)
