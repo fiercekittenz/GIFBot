@@ -380,7 +380,7 @@ namespace GIFBot.Server.Hubs
             htmlPage = "animations_secondary.html";
          }
 
-         string currentDirectory = System.Environment.CurrentDirectory.Replace("Server", "Client");
+         string currentDirectory = System.Environment.CurrentDirectory;
          return Path.Combine(currentDirectory, "wwwroot", htmlPage);
       }
 
@@ -1665,7 +1665,7 @@ namespace GIFBot.Server.Hubs
       /// </summary>
       public string GetStickersWebPaths()
       {
-         string currentDirectory = System.Environment.CurrentDirectory.Replace("Server", "Client");
+         string currentDirectory = System.Environment.CurrentDirectory;
          string paths = $"{Path.Combine(currentDirectory, "wwwroot", "stickers.html")},{Path.Combine(currentDirectory, "wwwroot", "secondarystickers.html")}";
          return paths;
       }
@@ -1679,7 +1679,7 @@ namespace GIFBot.Server.Hubs
       /// </summary>
       public string GetBackdropWebPath()
       {
-         string currentDirectory = System.Environment.CurrentDirectory.Replace("Server", "Client");
+         string currentDirectory = System.Environment.CurrentDirectory;
          return $"{Path.Combine(currentDirectory, "wwwroot", "backdrop.html")}";
       }
 
@@ -1809,7 +1809,7 @@ namespace GIFBot.Server.Hubs
       /// </summary>
       public string GetCountdownTimerWebPath()
       {
-         string currentDirectory = System.Environment.CurrentDirectory.Replace("Server", "Client");
+         string currentDirectory = System.Environment.CurrentDirectory;
          return $"{Path.Combine(currentDirectory, "wwwroot", "countdowntimer.html")}";
       }
 
@@ -2049,7 +2049,7 @@ namespace GIFBot.Server.Hubs
       /// </summary>
       public string GetGoalBarWebPath()
       {
-         string currentDirectory = System.Environment.CurrentDirectory.Replace("Server", "Client");
+         string currentDirectory = System.Environment.CurrentDirectory;
          return Path.Combine(currentDirectory, "wwwroot", "goalbar.html");
       }
 

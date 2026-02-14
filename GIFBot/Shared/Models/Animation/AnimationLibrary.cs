@@ -134,8 +134,7 @@ namespace GIFBot.Shared
       /// <returns></returns>
       public static string GetMediaRootPath()
       {
-         string currentDirectory = System.Environment.CurrentDirectory.Replace("Server", "Client");
-         return Path.Combine(currentDirectory, "wwwroot", AnimationLibrary.kMediaDirectoryName);
+         return Path.Combine(System.Environment.CurrentDirectory, "wwwroot", AnimationLibrary.kMediaDirectoryName);
       }
 
       /// <summary>

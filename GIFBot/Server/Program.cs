@@ -76,22 +76,6 @@ app.UseStaticFiles(new StaticFileOptions
     }
 });
 
-// Serve media files from the Client wwwroot (media folder for animations, stickers, etc.)
-var clientMediaPath = Path.Combine(Directory.GetCurrentDirectory().Replace("Server", "Client"), "wwwroot", "media");
-Directory.CreateDirectory(clientMediaPath);
-if (Directory.Exists(clientMediaPath))
-{
-    app.UseStaticFiles(new StaticFileOptions
-    {
-        FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(clientMediaPath),
-        RequestPath = "/media",
-        OnPrepareResponse = context =>
-        {
-            context.Context.Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate, max-age=0";
-            context.Context.Response.Headers["Expires"] = "-1";
-        }
-    });
-}
 
 app.UseRouting();
 app.UseCors("AllowedOrigins");
