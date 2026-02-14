@@ -1,8 +1,10 @@
 @using global::GIFBot.Shared.Models.Animation
 
-<MudSelect T="Guid" @bind-Value="SelectedAnimation" AnchorOrigin="Origin.BottomCenter">
+<MudSelect T="Guid" @bind-Value="SelectedAnimation" AnchorOrigin="Origin.BottomCenter" 
+           Placeholder="None" ToStringFunc="@GetAnimationDisplayName">
     @if (Animations != null)
     {
+        <MudSelectItem T="Guid" Value="@Guid.Empty">None</MudSelectItem>
         @foreach (var item in Animations)
         {
             <MudSelectItem T="Guid" Value="@item.Id">@item.DisplayName</MudSelectItem>
@@ -54,4 +56,11 @@
    private Guid mSelectedAnimation = Guid.Empty;
 
    #endregion
+
+   private string GetAnimationDisplayName(Guid id)
+   {
+      if (id == Guid.Empty) return "None";
+      var anim = mAnimations?.FirstOrDefault(a => a.Id == id);
+      return anim?.DisplayName ?? "None";
+   }
 }

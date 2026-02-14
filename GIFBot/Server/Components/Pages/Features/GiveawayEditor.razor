@@ -24,12 +24,26 @@
     </TitleContent>
     <DialogContent>
         <MudText Typo="Typo.subtitle1"><b>Username</b></MudText>
-        <MudText Typo="Typo.caption" Class="text-white-50 mb-2">Enter the Twitch username of the user to ban from giveaways.</MudText>
-        <MudTextField T="string" @bind-Value="mTempBannedUserName" Placeholder="Enter username..." />
+        <MudText Typo="Typo.caption" Class="text-white-50 mb-2">Enter the Twitch username of the viewer to ban from giveaways.</MudText>
+        <MudTextField T="string" @bind-Value="mTempBannedUserName" Placeholder="Enter username..." Immediate="true" />
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="@HandleCancelAddCommand">Cancel</MudButton>
-        <MudButton Color="Color.Primary" OnClick="@HandleConfirmAddCommand">Add</MudButton>
+        <MudButton Color="Color.Primary" Disabled="@(string.IsNullOrWhiteSpace(mTempBannedUserName) || Data.BannedUsers.Contains(mTempBannedUserName))" OnClick="@HandleConfirmAddCommand">Add</MudButton>
+    </DialogActions>
+</MudDialog>
+
+<!-- Confirm Delete Banned User Window -->
+<MudDialog @bind-Visible="@mIsDeleteBannedUserDialogVisible">
+    <TitleContent>
+        <MudText Typo="Typo.h6">Confirm Delete</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudText>Are you sure you want to remove <b>@mPendingDeleteBannedUser</b> from the banned users list?</MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@(() => mIsDeleteBannedUserDialogVisible = false)">Cancel</MudButton>
+        <MudButton Color="Color.Error" OnClick="@HandleConfirmDeleteBannedUser">Delete</MudButton>
     </DialogActions>
 </MudDialog>
 
@@ -167,24 +181,28 @@
             <MudTabPanel Text="Banned Users">
                 <div class="p-0 m-0 rounded gifbot-section-panel">
                     <div class="p-2">
-                        <MudDataGrid T="string" Items="@Data.BannedUsers" SortMode="SortMode.Single">
-                            <ToolBarContent>
-                                <MudTextField T="string" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
-                                <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleAddBannedUserRequest">Add New Banned User</MudButton>
-                            </ToolBarContent>
-                            <Columns>
-                                <TemplateColumn Title="Name">
-<CellTemplate Context="data">
-                                        @(data.Item)
-                                    </CellTemplate>
-                                </TemplateColumn>
-                                <TemplateColumn>
-<CellTemplate Context="data">
-                                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Class="gifbot-neutral-btn" OnClick="@(() => HandleDeleteBannedUserRequest((string)data.Item))" Title="Delete" />
-                                    </CellTemplate>
-                                </TemplateColumn>
-                            </Columns>
-                        </MudDataGrid>
+                        <p class="text-white-50">
+                            Banned users are permanently excluded from entering giveaways. Add viewers here to prevent them from participating.
+                        </p>
+                        <div class="mt-3 gifbot-bordered-table">
+                            <MudDataGrid T="string" Items="@Data.BannedUsers" SortMode="SortMode.Single" Dense="true">
+                                <Columns>
+                                    <TemplateColumn Title="Username">
+                                        <CellTemplate Context="data">
+                                            @(data.Item)
+                                        </CellTemplate>
+                                    </TemplateColumn>
+                                    <TemplateColumn Title="">
+                                        <CellTemplate Context="data">
+                                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Color="Color.Error" OnClick="@(() => HandleDeleteBannedUserRequest((string)data.Item))" />
+                                        </CellTemplate>
+                                    </TemplateColumn>
+                                </Columns>
+                            </MudDataGrid>
+                        </div>
+                        <div class="mt-3 d-flex justify-end">
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@HandleAddBannedUserRequest">Add Banned User</MudButton>
+                        </div>
                     </div>
                 </div>
             </MudTabPanel>

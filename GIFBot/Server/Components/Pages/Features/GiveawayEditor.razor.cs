@@ -183,22 +183,29 @@ namespace GIFBot.Server.Components.Pages.Features
          }
       }
 
-      private async Task HandleDeleteBannedUserRequest(string bannedUserName)
+      private void HandleDeleteBannedUserRequest(string bannedUserName)
       {
-         bool result = await mHubConnection.InvokeAsync<bool>("RemoveBannedGiveawayUser", bannedUserName);
+         mPendingDeleteBannedUser = bannedUserName;
+         mIsDeleteBannedUserDialogVisible = true;
+         StateHasChanged();
+      }
+
+      private async Task HandleConfirmDeleteBannedUser()
+      {
+         bool result = await mHubConnection.InvokeAsync<bool>("RemoveBannedGiveawayUser", mPendingDeleteBannedUser);
          if (result == true)
          {
             Snackbar.Add("Success - The banned user has been removed.", Severity.Success);
-
             await GetGiveawayDataFromHub();
-
-            await InvokeAsync(() => { StateHasChanged(); });
          }
          else
          {
-            Snackbar.Add($"Error - The banned user could not be removed. Either there was no text or the name doesn't exist in the list.", Severity.Error);
-            await InvokeAsync(() => { StateHasChanged(); });
+            Snackbar.Add("Error - The banned user could not be removed.", Severity.Error);
          }
+
+         mIsDeleteBannedUserDialogVisible = false;
+         mPendingDeleteBannedUser = String.Empty;
+         await InvokeAsync(() => { StateHasChanged(); });
       }
 
       private void HandleDrumrollAnimationSelectionChanged(Guid id)
@@ -235,6 +242,8 @@ namespace GIFBot.Server.Components.Pages.Features
       private int mEntryBehaviorSelection = 0;
       private bool mIsAddBannedUserDialogVisible = false;
       private string mTempBannedUserName = String.Empty;
+      private bool mIsDeleteBannedUserDialogVisible = false;
+      private string mPendingDeleteBannedUser = String.Empty;
 
       #endregion
    }
