@@ -1,0 +1,3 @@
+# Allow .ai-team files even though Log/ is gitignored at root
+!log/
+!log/**
