@@ -20,29 +20,52 @@
    <MudText Typo="Typo.h4"><span class="oi oi-cog" aria-hidden="true"></span> Bot Settings</MudText>
 </div>
 
-<!-- Clone Animation Confirmation Window -->
+<!-- Rename Group Dialog -->
 <MudDialog @bind-Visible="@mIsRenameGroupDialogVisible">
-   <TitleContent>
-      <strong>Rename User Group?</strong>
-   </TitleContent>
+   <TitleContent><MudText Typo="Typo.h6">Rename User Group</MudText></TitleContent>
    <DialogContent>
-      <div class="form-group">
-         <label for="uiTitleLabel">What is the new name for this group?</label>
-         <MudTextField T="string" @bind-Value="@mRenamedUserGroupValue" />
-      </div>
-      <div class="p-2">
-         <p>
-            <center>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleCancelRenameUserGroup">
-                  Cancel
-               </button>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleConfirmRenameUserGroup">
-                  Yes, Rename!
-               </button>
-            </center>
-         </p>
-      </div>
+      <MudTextField T="string" @bind-Value="@mRenamedUserGroupValue" Label="New Group Name" Immediate="true" />
    </DialogContent>
+   <DialogActions>
+      <MudButton OnClick="@HandleCancelRenameUserGroup">Cancel</MudButton>
+      <MudButton Color="Color.Primary" Disabled="@(string.IsNullOrWhiteSpace(mRenamedUserGroupValue))" OnClick="@HandleConfirmRenameUserGroup">Rename</MudButton>
+   </DialogActions>
+</MudDialog>
+
+<!-- Add New Group Dialog -->
+<MudDialog @bind-Visible="@mIsAddGroupDialogVisible">
+   <TitleContent><MudText Typo="Typo.h6">Add New Group</MudText></TitleContent>
+   <DialogContent>
+      <MudTextField T="string" @bind-Value="@mNewGroupValue" Label="Group Name" Immediate="true" />
+   </DialogContent>
+   <DialogActions>
+      <MudButton OnClick="@(() => mIsAddGroupDialogVisible = false)">Cancel</MudButton>
+      <MudButton Color="Color.Primary" Disabled="@IsAddGroupDisabled" OnClick="@HandleAddNewGroup">Add</MudButton>
+   </DialogActions>
+</MudDialog>
+
+<!-- Add User to Group Dialog -->
+<MudDialog @bind-Visible="@mIsAddUserDialogVisible">
+   <TitleContent><MudText Typo="Typo.h6">Add User to Group</MudText></TitleContent>
+   <DialogContent>
+      <MudTextField T="string" @bind-Value="@uiNewUserValue" Label="Viewer Name" Immediate="true" />
+   </DialogContent>
+   <DialogActions>
+      <MudButton OnClick="@(() => mIsAddUserDialogVisible = false)">Cancel</MudButton>
+      <MudButton Color="Color.Primary" Disabled="@IsAddUserDisabled" OnClick="@HandleAddUserToGroup">Add</MudButton>
+   </DialogActions>
+</MudDialog>
+
+<!-- Delete Group Confirmation Dialog -->
+<MudDialog @bind-Visible="@mIsDeleteGroupDialogVisible">
+   <TitleContent><MudText Typo="Typo.h6">Delete Group</MudText></TitleContent>
+   <DialogContent>
+      <MudText>Are you sure you want to delete the group '@(mSelectedUserGroup?.Name)'?</MudText>
+   </DialogContent>
+   <DialogActions>
+      <MudButton OnClick="@(() => mIsDeleteGroupDialogVisible = false)">Cancel</MudButton>
+      <MudButton Color="Color.Error" OnClick="@HandleConfirmDeleteGroup">Delete</MudButton>
+   </DialogActions>
 </MudDialog>
 
 <div style="width: 100%">
@@ -248,88 +271,41 @@
                         User groups allow you to limit access to specific animations to a subset of viewers. This is great for rewarding people for supporting you via Patreon,
                         donating to charity campaigns, or just special people (let's admit it, they're ALL special).
                      </p>
-                     <div>
-                        <table width="100%">
-                           <tr>
-                              <td valign="top" align="left" width="50%">
-                                 <div  mt-5>
-                                    <table>
-                                       <tr>
-                                          <td valign="bottom">
-                                             <label for="uiUserGroups"><b>User Groups:</b></label><br />
-                                             <MudSelect T="string" Placeholder="Select User Group..." Style="width: 250px;"
- Value="@mSelectedUserGroupName" ValueChanged="@(args => OnUserGroupSelected(args))" />
-                                          </td>
-                                       </tr>
-                                    </table>
-                                 </div>
-                              </td>
-                              <td valign="bottom" align="right" width="50%">
-                                 <div  mt-5>
-                                    <table>
-                                       <tr>
-                                          <td valign="top">
-                                             <label for="uiNewGroup"><b>Group Name:</b></label>
-                                             <MudTextField T="string" @bind-Value="mNewGroupValue" />
-                                          </td>
-                                          <td valign="top">
-                                             <button type="button" class="btn btn-secondary p-1 ml-2 gifbot-secondary-btn" @onclick="HandleAddNewGroup">Add New Group</button>
-                                          </td>
-                                       </tr>
-                                    </table>
-                                 </div>
-                              </td>
-                           </tr>
-                        </table>
-                     </div>
+                     <MudGrid Class="mt-3">
+                        <MudItem xs="6">
+                           <MudSelect T="string" Label="User Groups" Placeholder="Select User Group..." Style="max-width: 300px;"
+                                      Value="@mSelectedUserGroupName" ValueChanged="@(args => OnUserGroupSelected(args))">
+                              @foreach (var groupName in mUserGroupNames)
+                              {
+                                 <MudSelectItem T="string" Value="@groupName">@groupName</MudSelectItem>
+                              }
+                           </MudSelect>
+                        </MudItem>
+                        <MudItem xs="6" Class="d-flex align-end justify-end">
+                           <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => mIsAddGroupDialogVisible = true)">Add New Group</MudButton>
+                        </MudItem>
+                     </MudGrid>
                      @if (mSelectedUserGroup != null)
                      {
-                        <div class="mt-3">
-                           <MudDataGrid T="UserEntry" Items="@mSelectedUserGroup.UserEntries" SortMode="SortMode.Single">
+                        <div class="mt-3 gifbot-bordered-table">
+                           <MudDataGrid T="UserEntry" Items="@mSelectedUserGroup.UserEntries" SortMode="SortMode.Single" Dense="true">
                               <Columns>
                                  <PropertyColumn T="UserEntry" TProperty="string" Property="@(x => x.Name)" Title="Viewer Name" />
-                                 @*
-                                    <CellTemplate Context="data">
-                                       <strong>@(data.Item)</strong>
-                                    </CellTemplate>
-                                    </PropertyColumn>*@
                                  <TemplateColumn Title="">
-<CellTemplate Context="data">
-                                       <button type="button" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 25px; height: 25px" @onclick="(() => HandleDeleteUserFromGroup((data.Item).Name))"><span class="oi oi-trash"></span></button>
+                                    <CellTemplate Context="data">
+                                       <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Color="Color.Error" OnClick="@(() => HandleDeleteUserFromGroup((data.Item).Name))" />
                                     </CellTemplate>
                                  </TemplateColumn>
                               </Columns>
                            </MudDataGrid>
                         </div>
-                        <div class="mt-3">
-                           <table width="100%">
-                              <tr>
-                                 <td align="left">
-                                    <label for="uiNewUser"><b>Viewer Name:</b></label>
-                                    <MudTextField T="string" @bind-Value="uiNewUserValue" />
-                                    <button type="button" class="btn btn-secondary p-1 gifbot-secondary-btn" @onclick="HandleAddUserToGroup">Add User to Group</button>
-                                 </td>
-                                 <td />
-                                 <td align="right">
-                                    @if (mSelectedUserGroup != null)
-                                    {
-                                       <button type="button" id="uiRenameGroup" class="btn btn-secondary p-1 ml-2 gifbot-danger-btn" style="margin-top: -3px" @onclick="HandleRenameGroup">Rename Group</button>
-                                    }
-                                 </td>
-                                 <td align="right">
-                                    @if (mSelectedUserGroup != null)
-                                    {
-                                       <button type="button" id="uiCloneGroup" class="btn btn-secondary p-1 ml-2 gifbot-danger-btn" style="margin-top: -3px" @onclick="HandleCloneGroup">Clone Group</button>
-                                    }
-                                 </td>
-                                 <td align="right">
-                                    @if (mSelectedUserGroup != null)
-                                    {
-                                       <button type="button" id="uiDeleteGroup" class="btn btn-secondary p-1 ml-2 gifbot-danger-btn" style="margin-top: -3px" @onclick="HandleDeleteGroup">Delete Group</button>
-                                    }
-                                 </td>
-                              </tr>
-                           </table>
+                        <div class="mt-3 d-flex justify-space-between align-center">
+                           <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => mIsAddUserDialogVisible = true)">Add User to Group</MudButton>
+                           <MudStack Row="true" Spacing="2">
+                              <MudButton Variant="Variant.Outlined" Color="Color.Primary" OnClick="@HandleRenameGroup">Rename Group</MudButton>
+                              <MudButton Variant="Variant.Outlined" Color="Color.Primary" OnClick="@HandleCloneGroup">Clone Group</MudButton>
+                              <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@(() => mIsDeleteGroupDialogVisible = true)">Delete Group</MudButton>
+                           </MudStack>
                         </div>
                      }
                   </div>
@@ -420,9 +396,9 @@
             </MudTabPanel>
          </MudTabs>
 
-                     <div class="d-flex justify-end pa-3">
-               <button type="reset" class="btn btn-secondary p-2 gifbot-secondary-btn" @onclick="@OnCancel">Cancel</button>
-               <button type="submit" class="btn btn-primary p-2 gifbot-primary-btn">Save Changes</button>
+                     <div class="d-flex justify-end pa-3 gap-4">
+               <MudButton Variant="Variant.Outlined" Color="Color.Default" OnClick="@OnCancel">Cancel</MudButton>
+               <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit">Save Changes</MudButton>
             </div>
       </EditForm>
    </div>
@@ -593,11 +569,13 @@
 
    private async Task HandleAddNewGroup()
    {
+      mIsAddGroupDialogVisible = false;
       Guid result = await mHubConnection.InvokeAsync<Guid>
          ("AddUserGroup", mNewGroupValue);
       if (result != Guid.Empty)
       {
          Snackbar.Add($"Success - {mNewGroupValue} was added!", Severity.Success);
+         mNewGroupValue = String.Empty;
          await UpdateClientBotSettingsData();
          mSelectedUserGroup = mBotSettings.UserGroups.FirstOrDefault(g => g.Id == result);
          if (mSelectedUserGroup != null)
@@ -633,6 +611,12 @@
 
          await InvokeAsync(() => { StateHasChanged(); });
       }
+   }
+
+   private async Task HandleConfirmDeleteGroup()
+   {
+      mIsDeleteGroupDialogVisible = false;
+      await HandleDeleteGroup();
    }
 
    private async Task HandleCloneGroup()
@@ -695,6 +679,7 @@
    {
       if (mSelectedUserGroup != null && !String.IsNullOrEmpty(uiNewUserValue))
       {
+         mIsAddUserDialogVisible = false;
          bool result = await mHubConnection.InvokeAsync<bool>("AddUserToGroup", mSelectedUserGroup.Id, uiNewUserValue);
          if (result)
          {
@@ -794,6 +779,15 @@
    private string mNewGroupValue = String.Empty;
    private string mRenamedUserGroupValue = String.Empty;
    private bool mIsRenameGroupDialogVisible = false;
+   private bool mIsAddGroupDialogVisible = false;
+   private bool mIsAddUserDialogVisible = false;
+   private bool mIsDeleteGroupDialogVisible = false;
+
+   private bool IsAddGroupDisabled => string.IsNullOrWhiteSpace(mNewGroupValue) ||
+      mUserGroupNames.Any(n => n.Equals(mNewGroupValue.Trim(), StringComparison.OrdinalIgnoreCase));
+
+   private bool IsAddUserDisabled => string.IsNullOrWhiteSpace(uiNewUserValue) ||
+      (mSelectedUserGroup?.UserEntries?.Any(e => e.Name.Equals(uiNewUserValue.Trim(), StringComparison.OrdinalIgnoreCase)) ?? false);
 
    // Some jank crap I had to do in order to get the dropdown to work.
    private List<string> mUserGroupNames = new List<string>();

@@ -117,6 +117,11 @@ a, .btn-link {
     background-color: #0e0e1e;
 }
 
+.gifbot-bordered-table {
+    border: 1px solid #2d2b52;
+    border-radius: 4px;
+}
+
 .animationCanvas {
    width: 768px;
    height: 432px;
