@@ -296,32 +296,34 @@ namespace GIFBot.Server.Components.Pages.Features
 
       private async Task HandleDeleteSelectedRequest()
       {
-         bool confirmed = await Task.FromResult(true); // TODO: Replace with MudBlazor IDialogService confirmation
+         mIsDeleteSelectedDialogVisible = true;
+         await InvokeAsync(() => { StateHasChanged(); });
+      }
 
-         // was: await Dialogs.ConfirmAsync($"Are you sure you want to delete the selected stickers?", "Delete?");
-         if (confirmed)
+      private async Task HandleConfirmDeleteSelected()
+      {
+         mIsDeleteSelectedDialogVisible = false;
+
+         List<StickerTreeListItem> selectedStickers = mSelectedTreeItems.Where(t => t.Type == StickerTreeListItem.ItemType.Entry).ToList();
+         if (selectedStickers.Any())
          {
-            List<StickerTreeListItem> selectedStickers = mSelectedTreeItems.Where(t => t.Type == StickerTreeListItem.ItemType.Entry).ToList();
-            if (selectedStickers.Any())
+            List<Guid> stickersToDelete = new List<Guid>();
+            foreach (var sticker in selectedStickers)
             {
-               List<Guid> stickersToDelete = new List<Guid>();
-               foreach (var sticker in selectedStickers)
-               {
-                  stickersToDelete.Add(sticker.Id);
-               }
+               stickersToDelete.Add(sticker.Id);
+            }
 
-               bool result = await mHubConnection.InvokeAsync<bool>("DeleteStickers", JsonConvert.SerializeObject(stickersToDelete));
-               if (result)
-               {
-                  Snackbar.Add("Success - The stickers have been deleted.", Severity.Success);
-                  await GetStickerDataFromHub();
-                  await InvokeAsync(() => { StateHasChanged(); });
-               }
-               else
-               {
-                  Snackbar.Add($"Error - The stickers could not be deleted.", Severity.Error);
-                  await InvokeAsync(() => { StateHasChanged(); });
-               }
+            bool result = await mHubConnection.InvokeAsync<bool>("DeleteStickers", JsonConvert.SerializeObject(stickersToDelete));
+            if (result)
+            {
+               Snackbar.Add("Success - The stickers have been deleted.", Severity.Success);
+               await GetStickerDataFromHub();
+               await InvokeAsync(() => { StateHasChanged(); });
+            }
+            else
+            {
+               Snackbar.Add($"Error - The stickers could not be deleted.", Severity.Error);
+               await InvokeAsync(() => { StateHasChanged(); });
             }
          }
       }
@@ -635,57 +637,62 @@ namespace GIFBot.Server.Components.Pages.Features
       /// </summary>
       private async Task HandleDeleteSticker(StickerTreeListItem treeItem)
       {
-         bool confirmed = await Task.FromResult(true); // TODO: Replace with MudBlazor IDialogService confirmation
+         mPendingDeleteStickerItem = treeItem;
+         mIsDeleteStickerDialogVisible = true;
+         await InvokeAsync(() => { StateHasChanged(); });
+      }
 
-         // was: await Dialogs.ConfirmAsync($"Are you sure you want to delete the sticker?", "Delete?");
-         if (confirmed)
+      private async Task HandleConfirmDeleteSticker()
+      {
+         mIsDeleteStickerDialogVisible = false;
+         var treeItem = mPendingDeleteStickerItem;
+         mPendingDeleteStickerItem = null;
+
+         await HandleDisplayTestModeChanged(false, null);
+
+         if (treeItem != null)
          {
-            await HandleDisplayTestModeChanged(false, null);
-
-            if (treeItem != null)
+            if (treeItem.Type == StickerTreeListItem.ItemType.Entry)
             {
-               if (treeItem.Type == StickerTreeListItem.ItemType.Entry)
+               StickerEntryData sticker = null;
+               foreach (var category in mStickerData.Categories)
                {
-                  StickerEntryData sticker = null;
-                  foreach (var category in mStickerData.Categories)
-                  {
-                     sticker = category.Entries.FirstOrDefault(s => s.Id == treeItem.Id);
-                     if (sticker != null)
-                     {
-                        break;
-                     }
-                  }
-
+                  sticker = category.Entries.FirstOrDefault(s => s.Id == treeItem.Id);
                   if (sticker != null)
                   {
-                     bool result = await mHubConnection.InvokeAsync<bool>("DeleteStickerEntry", sticker.Id);
-                     if (result)
-                     {
-                        Snackbar.Add("Success - The sticker has been deleted.", Severity.Success);
-                        await GetStickerDataFromHub();
-                        await InvokeAsync(() => { StateHasChanged(); });
-                     }
-                     else
-                     {
-                        Snackbar.Add($"Error - The sticker could not be deleted.", Severity.Error);
-                        await InvokeAsync(() => { StateHasChanged(); });
-                     }
+                     break;
                   }
                }
-               else if (treeItem.Type == StickerTreeListItem.ItemType.Category)
+
+               if (sticker != null)
                {
-                  bool result = await mHubConnection.InvokeAsync<bool>("DeleteStickerCategory", treeItem.Id);
+                  bool result = await mHubConnection.InvokeAsync<bool>("DeleteStickerEntry", sticker.Id);
                   if (result)
                   {
-                     Snackbar.Add("Success - The category has been deleted.", Severity.Success);
+                     Snackbar.Add("Success - The sticker has been deleted.", Severity.Success);
                      await GetStickerDataFromHub();
                      await InvokeAsync(() => { StateHasChanged(); });
                   }
                   else
                   {
-                     Snackbar.Add($"Error - The category could not be deleted. Does it have stickers in it? Move them first!", Severity.Error);
+                     Snackbar.Add($"Error - The sticker could not be deleted.", Severity.Error);
                      await InvokeAsync(() => { StateHasChanged(); });
                   }
+               }
+            }
+            else if (treeItem.Type == StickerTreeListItem.ItemType.Category)
+            {
+               bool result = await mHubConnection.InvokeAsync<bool>("DeleteStickerCategory", treeItem.Id);
+               if (result)
+               {
+                  Snackbar.Add("Success - The category has been deleted.", Severity.Success);
+                  await GetStickerDataFromHub();
+                  await InvokeAsync(() => { StateHasChanged(); });
+               }
+               else
+               {
+                  Snackbar.Add($"Error - The category could not be deleted. Does it have stickers in it? Move them first!", Severity.Error);
+                  await InvokeAsync(() => { StateHasChanged(); });
                }
             }
          }
@@ -805,6 +812,11 @@ namespace GIFBot.Server.Components.Pages.Features
       private string mUploadAudioErrorMessage = String.Empty;
       private int mUploadAudioProgress = 0;
       private int mFormVolume = 50;
+
+      // Delete confirmation dialog state
+      private bool mIsDeleteStickerDialogVisible = false;
+      private StickerTreeListItem mPendingDeleteStickerItem = null;
+      private bool mIsDeleteSelectedDialogVisible = false;
 
       // Sticker Upload Variables
       private StickerEntryData mTempStickerToAdd = new StickerEntryData();

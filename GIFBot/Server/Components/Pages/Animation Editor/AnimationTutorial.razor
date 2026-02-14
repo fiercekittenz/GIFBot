@@ -198,7 +198,7 @@ else if (mCurrentState == State.AnimationVolume)
 
       <div class="form-group mt-3">
          <label for="uiVolumeSlider"><b>Volume:</b></label>
-         <center><input type="range" class="slider" min="0" max="100" value="@mFormVolume" id="uiVolumeSlider" @onchange="@(args => OnVolumeChanged(args))"></center>
+         <MudSlider T="int" @bind-Value="mFormVolume" Min="0" Max="100" />
          <p align="right">
             <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="p-2 text-center gifbot-action-btn" Style="width: 100px"
                        OnClick="@HandleTestAudioVolume"
@@ -273,17 +273,9 @@ else if (mCurrentState == State.TutorialComplete)
          Now to setup your broadcaster software! You will need to add a new Browser source to your scene. The URL is in the textbox below. Copy this and use it as the URL source of your Browser source
          element. Set the canvas size to be 1920x1080. Note: You may resize it, but your animations will render smaller. Set the framerate to 60fps and flag it to refresh when the scene is activated. Enjoy!
       </p>
-      <div>
-         <table width="100%">
-            <tr>
-               <td width="600">
-                  <MudTextField T="string" class="form-control" Style="width: 100%" ReadOnly="true" @bind-Value="mPrimaryAnimationsURL" />
-               </td>
-               <td align="left">
-                  <MudButton Variant="Variant.Filled" Class="p-1 ml-2 gifbot-secondary-btn" OnClick='(() => HandleCopyUrl("uiAnimsUrl"))'>Copy to Clipboard</MudButton>
-               </td>
-            </tr>
-         </table>
+      <div class="d-flex align-center gap-2 mb-3">
+         <MudTextField T="string" Style="flex-grow: 1" ReadOnly="true" @bind-Value="mPrimaryAnimationsURL" />
+         <MudButton Variant="Variant.Filled" Class="gifbot-secondary-btn" OnClick="@(() => HandleCopyUrl(mPrimaryAnimationsURL))">Copy to Clipboard</MudButton>
       </div>
       <div class="text-left p-3" style="width: 600px">
          <div class="d-flex justify-end pa-3">
@@ -419,6 +411,7 @@ else if (mCurrentState == State.TutorialComplete)
 
    private async Task HandleTestAudioVolume()
    {
+      mAnimationFormModel.Volume = (double)mFormVolume / 100.0;
       await JSRuntime.InvokeVoidAsync("PlaySound", $"media/{mAnimationFormModel.Audio}", mAnimationFormModel.Volume, 0);
    }
 
@@ -439,6 +432,7 @@ else if (mCurrentState == State.TutorialComplete)
 
    private async Task HandleSubmitVolume()
    {
+      mAnimationFormModel.Volume = (double)mFormVolume / 100.0;
       bool result = await mHubConnection.InvokeAsync<bool>("SetAnimationVolume", mAnimationFormModel.Command, mAnimationFormModel.Volume);
       if (result)
       {
@@ -480,11 +474,17 @@ else if (mCurrentState == State.TutorialComplete)
 
    #region Form Handling
 
-   private async Task HandleCopyUrl(string elementName)
+   private async Task HandleCopyUrl(string url)
    {
-      await JSRuntime.InvokeVoidAsync("CopyToClipboard", elementName);
-      Snackbar.Add("Success - The URL was copied to your clipboard!", Severity.Success);
-      await InvokeAsync(() => { StateHasChanged(); });
+      try
+      {
+         await JSRuntime.InvokeVoidAsync("navigator.clipboard.writeText", url);
+         Snackbar.Add("Success - The URL was copied to your clipboard!", Severity.Success);
+      }
+      catch (Exception)
+      {
+         Snackbar.Add("Error - Could not copy URL to clipboard.", Severity.Error);
+      }
    }
 
    private void OnImportVisualFileProgress(EventArgs e)
@@ -537,15 +537,6 @@ else if (mCurrentState == State.TutorialComplete)
    {
       mUploadAudioErrorMessage = $"There was an error uploading the file.";
       StateHasChanged();
-   }
-
-   private void OnVolumeChanged(dynamic value)
-   {
-      if (value is ChangeEventArgs changeEventArgs)
-      {
-         mAnimationFormModel.Volume = (double)((double)(Int32.Parse(changeEventArgs.Value.ToString())) / 100);
-         StateHasChanged();
-      }
    }
 
    private void OnAccessLevelChange(int? value)

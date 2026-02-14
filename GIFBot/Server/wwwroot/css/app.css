@@ -191,3 +191,7 @@ a, .btn-link {
    border: 1px solid #999;
    z-index: initial;
 }
+
+.gifbot-modal-window {
+   z-index: 44444;
+}
