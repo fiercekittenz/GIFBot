@@ -33,151 +33,165 @@
     </DialogActions>
 </MudDialog>
 
-<MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
-    <MudTabPanel Text="Giveaway">
-        <div class="p-2 mb-2 rounded gifbot-content-panel">
-            <div style="width: 100%">
-                @if (!Data.IsOpenForEntries)
-                {
-                    <MudButton Variant="Variant.Filled" Class="gifbot-action-btn gifbot-special-btn p-1 mr-5" Style="margin-left: auto; margin-right: 0; width: 200px" OnClick="@OnStartGiveaway">Accept Entries</MudButton>
+<div style="width: 100%">
+    <div class="text-left p-3 rounded gifbot-form-panel" style="width: 100%">
+        <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
+            <MudTabPanel Text="Giveaway">
+                <div class="p-0 m-0 rounded gifbot-section-panel">
+                    <div class="p-2">
+                        @if (!Data.IsOpenForEntries)
+                        {
+                            <MudButton Variant="Variant.Filled" Class="gifbot-action-btn gifbot-special-btn p-1 mr-5" Style="margin-left: auto; margin-right: 0; width: 200px" OnClick="@OnStartGiveaway">Accept Entries</MudButton>
 
-                    @if (Data.Entrants.Any())
-                    {
-                        <MudButton Variant="Variant.Filled" Class="gifbot-action-btn gifbot-secondary-btn p-1 mr-5" Style="margin-left: auto; margin-right: 0; width: 200px" OnClick="@OnDrawWinner">Draw Winner</MudButton>
-                    }
+                            @if (Data.Entrants.Any())
+                            {
+                                <MudButton Variant="Variant.Filled" Class="gifbot-action-btn gifbot-secondary-btn p-1 mr-5" Style="margin-left: auto; margin-right: 0; width: 200px" OnClick="@OnDrawWinner">Draw Winner</MudButton>
+                            }
 
-                    <MudButton Variant="Variant.Filled" Class="gifbot-action-btn gifbot-danger-btn p-1 mr-5" Style="margin-left: auto; margin-right: 0; width: 200px" OnClick="@OnResetGiveaway">Reset</MudButton>
-                }
-                else
+                            <MudButton Variant="Variant.Filled" Class="gifbot-action-btn gifbot-danger-btn p-1 mr-5" Style="margin-left: auto; margin-right: 0; width: 200px" OnClick="@OnResetGiveaway">Reset</MudButton>
+                        }
+                        else
+                        {
+                            <MudButton Variant="Variant.Filled" Class="gifbot-action-btn gifbot-secondary-btn p-1 mr-5" Style="margin-left: auto; margin-right: 0; width: 200px" OnClick="@OnCloseGiveaway">Close Giveaway</MudButton>
+                        }
+                    </div>
+                </div>
+                @if (!String.IsNullOrEmpty(Winner))
                 {
-                    <MudButton Variant="Variant.Filled" Class="gifbot-action-btn gifbot-secondary-btn p-1 mr-5" Style="margin-left: auto; margin-right: 0; width: 200px" OnClick="@OnCloseGiveaway">Close Giveaway</MudButton>
+                    <div class="p-0 m-0 mt-2 rounded gifbot-section-panel">
+                        <div class="p-2">
+                            <MudText Typo="Typo.subtitle1">The Winner is: @(Winner)</MudText>
+                        </div>
+                    </div>
                 }
-            </div>
-        </div>
-        @if (!String.IsNullOrEmpty(Winner))
-        {
-            <div class="p-2 mb-2 rounded gifbot-content-panel">
-                <MudText Typo="Typo.subtitle1">The Winner is: @(Winner)</MudText>
-            </div>
-        }
-        <div class="p-2">
-            <MudDataGrid T="object" Items="@Data.Entrants" SortMode="SortMode.Single">
-                <Columns>
-                    <TemplateColumn Filterable="true" Title="Entrant Name">
+                <div class="p-0 m-0 mt-2 rounded gifbot-section-panel">
+                    <div class="p-2">
+                        <MudDataGrid T="object" Items="@Data.Entrants" SortMode="SortMode.Single">
+                            <Columns>
+                                <TemplateColumn Filterable="true" Title="Entrant Name">
 <CellTemplate Context="data">
-                            @(data.Item)
-                        </CellTemplate>
-                    </TemplateColumn>
-                </Columns>
-            </MudDataGrid>
-        </div>
-    </MudTabPanel>
+                                        @(data.Item)
+                                    </CellTemplate>
+                                </TemplateColumn>
+                            </Columns>
+                        </MudDataGrid>
+                    </div>
+                </div>
+            </MudTabPanel>
 
-    <MudTabPanel Text="Settings">
-        <div class="form-group">
-            <label for="uiEntryBehavior"><b>Entry Behavior:</b></label>
-            <span id="uiEntryBehavior" class="gifbot-field-desc">
-                How would you like viewers to enter your giveaway? You can use chat with subscriber luck benefits, or you can have a ticket-based system by using Channel Points. If you use Channel Points, the rewards will be created and destroyed for you as you open and close the giveaway so users cannot accidentally enter without a running giveaway.
-            </span>
-            <MudRadioGroup @bind-Value="mEntryBehaviorSelection" T="int">
+            <MudTabPanel Text="Settings">
+                <div class="p-0 m-0 rounded gifbot-section-panel">
+                    <div class="p-2">
+                        <div class="form-group">
+                            <label for="uiEntryBehavior"><b>Entry Behavior:</b></label>
+                            <span id="uiEntryBehavior" class="gifbot-field-desc">
+                                How would you like viewers to enter your giveaway? You can use chat with subscriber luck benefits, or you can have a ticket-based system by using Channel Points. If you use Channel Points, the rewards will be created and destroyed for you as you open and close the giveaway so users cannot accidentally enter without a running giveaway.
+                            </span>
+                            <MudRadioGroup @bind-Value="mEntryBehaviorSelection" T="int">
 <MudRadio T="int" Value="@(0)">Command</MudRadio>
-                    <MudRadio T="int" Value="@(1)">Channel Points</MudRadio>
+                                    <MudRadio T="int" Value="@(1)">Channel Points</MudRadio>
 </MudRadioGroup>
-        </div>
-        @if (Data.EntryBehavior == GiveawayData.GiveawayEntryBehaviorType.Command)
-        {
-            <div class="form-group">
-                <label for="uiCommand"><b>Command:</b></label>
-                <span id="uiCommandLabel" class="gifbot-field-desc">The command that viewers type in chat to enter your giveaway. (Note: Does not have to have ! in front of it.)</span>
-                <MudTextField T="string" @bind-Value="Data.Command" />
-            </div>
-            <div class="form-group">
-                <label for="uiSubLuckMultiplier"><b>Sub Luck Multiplier:</b></label>
-                <span id="uiSubLuckMultiplierLabel" class="gifbot-field-desc">The additional number of tickets that a subscriber gets when entering your giveaways (<i>e.g. 2 = 2 tickets vs the 1 ticket regulars get</i>).</span>
-                <MudNumericField T="int" Min="1" Max="1000" @bind-Value="Data.SubLuckMultiplier" />
-            </div>
-            <div class="form-group">
-                <label for="uiAccess"><b>Access Type:</b></label>
-                <span id="uiAccess" class="gifbot-field-desc">
-                    You can limit what kind of viewer has access to use this giveaway. Your options are below.
-                </span>
-                <MudRadioGroup @bind-Value="mAccessSelection" T="int">
+                        </div>
+                        @if (Data.EntryBehavior == GiveawayData.GiveawayEntryBehaviorType.Command)
+                        {
+                            <div class="form-group">
+                                <label for="uiCommand"><b>Command:</b></label>
+                                <span id="uiCommandLabel" class="gifbot-field-desc">The command that viewers type in chat to enter your giveaway. (Note: Does not have to have ! in front of it.)</span>
+                                <MudTextField T="string" @bind-Value="Data.Command" />
+                            </div>
+                            <div class="form-group">
+                                <label for="uiSubLuckMultiplier"><b>Sub Luck Multiplier:</b></label>
+                                <span id="uiSubLuckMultiplierLabel" class="gifbot-field-desc">The additional number of tickets that a subscriber gets when entering your giveaways (<i>e.g. 2 = 2 tickets vs the 1 ticket regulars get</i>).</span>
+                                <MudNumericField T="int" Min="1" Max="1000" @bind-Value="Data.SubLuckMultiplier" />
+                            </div>
+                            <div class="form-group">
+                                <label for="uiAccess"><b>Access Type:</b></label>
+                                <span id="uiAccess" class="gifbot-field-desc">
+                                    You can limit what kind of viewer has access to use this giveaway. Your options are below.
+                                </span>
+                                <MudRadioGroup @bind-Value="mAccessSelection" T="int">
 <MudRadio T="int" Value="@(0)">Anyone</MudRadio>
-                        <MudRadio T="int" Value="@(2)">Subscriber</MudRadio>
-                        <MudRadio T="int" Value="@(3)">VIP</MudRadio>
-                        <MudRadio T="int" Value="@(4)">Moderator</MudRadio>
+                                        <MudRadio T="int" Value="@(2)">Subscriber</MudRadio>
+                                        <MudRadio T="int" Value="@(3)">VIP</MudRadio>
+                                        <MudRadio T="int" Value="@(4)">Moderator</MudRadio>
 </MudRadioGroup>
-            </div>
-        }
-        else if (Data.EntryBehavior == GiveawayData.GiveawayEntryBehaviorType.ChannelPoints)
-        {
-            <div class="form-group">
-                <label for="uiChannelPointRewardTitle"><b>Reward Title:</b></label>
-                <span id="uiChannelPointRewardTitleLabel" class="gifbot-field-desc">The title of the channel point reward.</span>
-                <MudTextField T="string" @bind-Value="Data.ChannelPointRewardTitle" />
-            </div>
-            <div class="form-group">
-                <label for="uiChannelPoints"><b>Points Required:</b></label>
-                <span id="uiChannelPointsLabel" class="gifbot-field-desc">The number of points required for the channel point reward redemption. Will be created automatically for you when you start the giveaway. Cannot be the same number of points as another channel point reward.</span>
-                <MudNumericField T="int" Min="1" Max="999999" @bind-Value="Data.ChannelPointsRequired" />
-            </div>
-            <div class="form-group">
-                <label for="uiMaxNumberOfEntriesAllowed"><b>Number of Redemptions Allowed for Entry:</b></label>
-                <span id="uiMaxNumberOfEntriesAllowedLabel" class="gifbot-field-desc">You can allow your viewers to redeem multiple times for multiple entries. Think of this as a "ticket" system for channel points.</span>
-                <MudNumericField T="int" Min="1" Max="1000" @bind-Value="Data.MaxNumberOfEntriesAllowed" />
-            </div>
-        }
-        <div class="form-group">
-            <label for="uiGiveawayOpenAnnouncementText"><b>Giveaway Open Announcement Text:</b></label>
-            <span id="uiGiveawayOpenAnnouncementTextLabel" class="gifbot-field-desc">The text sent to chat when the giveaway is opened. Use $command if you want the command to be displayed in the output.</span>
-            <MudTextField T="string" @bind-Value="Data.GiveawayOpenAnnouncementText" />
-        </div>
-        <div class="form-group">
-            <label for="uiGiveawayClosedAnnouncementText"><b>Giveaway Closed Announcement Text:</b></label>
-            <span id="uiGiveawayClosedAnnouncementTextLabel" class="gifbot-field-desc">The text sent to chat when the giveaway is closed.</span>
-            <MudTextField T="string" @bind-Value="Data.GiveawayClosedAnnouncementText" />
-        </div>
-        <div class="form-group">
-            <label for="uiWinnerAnnouncementText"><b>Winner Announcement Text:</b></label>
-            <span id="uiWinnerAnnouncementTextLabel" class="gifbot-field-desc">The text sent to chat when the winner is selected. Use $user if you would like the winner's name to appear in the announcement.</span>
-            <MudTextField T="string" @bind-Value="Data.WinnerAnnouncementText" />
-        </div>
-        <div class="form-group">
-            <label for="uiDrumrollAnimation"><b>Drumroll Animation:</b></label>
-            <span id="uiDrumrollAnimationLabel" class="gifbot-field-desc">The animation that plays when you draw the winner of a giveaway. The winner won't be drawn or announced until this animation has finished playing.</span>
-            <AnimationSelectorComponent Animations="@AnimationOptions" SelectedAnimation="Data.DrumrollAnimation" OnSelectedAnimationChanged="@HandleDrumrollAnimationSelectionChanged" />
-        </div>
-        <div class="form-group">
-            <label for="uiWinnerAnimation"><b>Winner Animation:</b></label>
-            <span id="uiWinnerAnimationLabel" class="gifbot-field-desc">The animation that plays when the winner is announced.</span>
-            <AnimationSelectorComponent Animations="@AnimationOptions" SelectedAnimation="Data.WinnerAnimation" OnSelectedAnimationChanged="@HandleWinnerAnimationSelectionChanged" />
-        </div>
-                    <div class="d-flex justify-end pa-3 gap-4">
-                <MudButton Variant="Variant.Outlined" Color="Color.Default" OnClick="@OnCancel">Cancel</MudButton>
-                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@OnSaveChanges">Save Changes</MudButton>
-            </div>
-    </MudTabPanel>
+                            </div>
+                        }
+                        else if (Data.EntryBehavior == GiveawayData.GiveawayEntryBehaviorType.ChannelPoints)
+                        {
+                            <div class="form-group">
+                                <label for="uiChannelPointRewardTitle"><b>Reward Title:</b></label>
+                                <span id="uiChannelPointRewardTitleLabel" class="gifbot-field-desc">The title of the channel point reward.</span>
+                                <MudTextField T="string" @bind-Value="Data.ChannelPointRewardTitle" />
+                            </div>
+                            <div class="form-group">
+                                <label for="uiChannelPoints"><b>Points Required:</b></label>
+                                <span id="uiChannelPointsLabel" class="gifbot-field-desc">The number of points required for the channel point reward redemption. Will be created automatically for you when you start the giveaway. Cannot be the same number of points as another channel point reward.</span>
+                                <MudNumericField T="int" Min="1" Max="999999" @bind-Value="Data.ChannelPointsRequired" />
+                            </div>
+                            <div class="form-group">
+                                <label for="uiMaxNumberOfEntriesAllowed"><b>Number of Redemptions Allowed for Entry:</b></label>
+                                <span id="uiMaxNumberOfEntriesAllowedLabel" class="gifbot-field-desc">You can allow your viewers to redeem multiple times for multiple entries. Think of this as a "ticket" system for channel points.</span>
+                                <MudNumericField T="int" Min="1" Max="1000" @bind-Value="Data.MaxNumberOfEntriesAllowed" />
+                            </div>
+                        }
+                        <div class="form-group">
+                            <label for="uiGiveawayOpenAnnouncementText"><b>Giveaway Open Announcement Text:</b></label>
+                            <span id="uiGiveawayOpenAnnouncementTextLabel" class="gifbot-field-desc">The text sent to chat when the giveaway is opened. Use $command if you want the command to be displayed in the output.</span>
+                            <MudTextField T="string" @bind-Value="Data.GiveawayOpenAnnouncementText" />
+                        </div>
+                        <div class="form-group">
+                            <label for="uiGiveawayClosedAnnouncementText"><b>Giveaway Closed Announcement Text:</b></label>
+                            <span id="uiGiveawayClosedAnnouncementTextLabel" class="gifbot-field-desc">The text sent to chat when the giveaway is closed.</span>
+                            <MudTextField T="string" @bind-Value="Data.GiveawayClosedAnnouncementText" />
+                        </div>
+                        <div class="form-group">
+                            <label for="uiWinnerAnnouncementText"><b>Winner Announcement Text:</b></label>
+                            <span id="uiWinnerAnnouncementTextLabel" class="gifbot-field-desc">The text sent to chat when the winner is selected. Use $user if you would like the winner's name to appear in the announcement.</span>
+                            <MudTextField T="string" @bind-Value="Data.WinnerAnnouncementText" />
+                        </div>
+                        <div class="form-group">
+                            <label for="uiDrumrollAnimation"><b>Drumroll Animation:</b></label>
+                            <span id="uiDrumrollAnimationLabel" class="gifbot-field-desc">The animation that plays when you draw the winner of a giveaway. The winner won't be drawn or announced until this animation has finished playing.</span>
+                            <AnimationSelectorComponent Animations="@AnimationOptions" SelectedAnimation="Data.DrumrollAnimation" OnSelectedAnimationChanged="@HandleDrumrollAnimationSelectionChanged" />
+                        </div>
+                        <div class="form-group">
+                            <label for="uiWinnerAnimation"><b>Winner Animation:</b></label>
+                            <span id="uiWinnerAnimationLabel" class="gifbot-field-desc">The animation that plays when the winner is announced.</span>
+                            <AnimationSelectorComponent Animations="@AnimationOptions" SelectedAnimation="Data.WinnerAnimation" OnSelectedAnimationChanged="@HandleWinnerAnimationSelectionChanged" />
+                        </div>
+                    </div>
+                </div>
+            </MudTabPanel>
 
-    <MudTabPanel Text="Banned Users">
-        <div class="p-2">
-            <MudDataGrid T="string" Items="@Data.BannedUsers" SortMode="SortMode.Single">
-                <ToolBarContent>
-                    <MudTextField T="string" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
-                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleAddBannedUserRequest">Add New Banned User</MudButton>
-                </ToolBarContent>
-                <Columns>
-                    <TemplateColumn Title="Name">
+            <MudTabPanel Text="Banned Users">
+                <div class="p-0 m-0 rounded gifbot-section-panel">
+                    <div class="p-2">
+                        <MudDataGrid T="string" Items="@Data.BannedUsers" SortMode="SortMode.Single">
+                            <ToolBarContent>
+                                <MudTextField T="string" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
+                                <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleAddBannedUserRequest">Add New Banned User</MudButton>
+                            </ToolBarContent>
+                            <Columns>
+                                <TemplateColumn Title="Name">
 <CellTemplate Context="data">
-                            @(data.Item)
-                        </CellTemplate>
-                    </TemplateColumn>
-                    <TemplateColumn>
+                                        @(data.Item)
+                                    </CellTemplate>
+                                </TemplateColumn>
+                                <TemplateColumn>
 <CellTemplate Context="data">
-                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Class="gifbot-neutral-btn" OnClick="@(() => HandleDeleteBannedUserRequest((string)data.Item))" Title="Delete" />
-                        </CellTemplate>
-                    </TemplateColumn>
-                </Columns>
-            </MudDataGrid>
+                                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Class="gifbot-neutral-btn" OnClick="@(() => HandleDeleteBannedUserRequest((string)data.Item))" Title="Delete" />
+                                    </CellTemplate>
+                                </TemplateColumn>
+                            </Columns>
+                        </MudDataGrid>
+                    </div>
+                </div>
+            </MudTabPanel>
+        </MudTabs>
+        <div class="d-flex justify-end pa-3 gap-4">
+            <MudButton Variant="Variant.Outlined" Color="Color.Default" OnClick="@OnCancel">Cancel</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@OnSaveChanges">Save Changes</MudButton>
         </div>
-    </MudTabPanel>
-</MudTabs>
+    </div>
+</div>
