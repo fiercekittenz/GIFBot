@@ -435,6 +435,7 @@ namespace GIFBot.Server.Components.Pages.Features
             Guid newStickerId = mTempStickerToAdd.Id;
 
             mTempStickerToAdd = new StickerEntryData();
+            mSelectedStickerVisualFileName = String.Empty;
             mUploadStickerVisualProgress = 0;
 
             CurrentlyEditedSticker = null;
@@ -474,6 +475,7 @@ namespace GIFBot.Server.Components.Pages.Features
       {
          mTempStickerToAdd = new StickerEntryData();
          mTempStickerCategoryId = Guid.Empty;
+         mSelectedStickerVisualFileName = String.Empty;
          mUploadStickerVisualProgress = 0;
          ActiveStickerTabIndex = 0;
          StateHasChanged();
@@ -577,6 +579,7 @@ namespace GIFBot.Server.Components.Pages.Features
       private void HandleAddStickerRequest(Guid id)
       {
          mTempStickerToAdd = new StickerEntryData();
+         mSelectedStickerVisualFileName = String.Empty;
          mTempStickerCategoryId = id;
          ActiveStickerTabIndex = 1;
          StateHasChanged();
@@ -754,6 +757,7 @@ namespace GIFBot.Server.Components.Pages.Features
          }
 
          var file = e.File;
+         mSelectedStickerVisualFileName = file.Name;
          using var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024);
          using var ms = new System.IO.MemoryStream();
          await stream.CopyToAsync(ms);
@@ -827,6 +831,7 @@ namespace GIFBot.Server.Components.Pages.Features
       // Sticker Upload Variables
       private StickerEntryData mTempStickerToAdd = new StickerEntryData();
       private Guid mTempStickerCategoryId = Guid.Empty;
+      private string mSelectedStickerVisualFileName = String.Empty;
       private string mUploadStickerVisualErrorMessage = String.Empty;
       private int mUploadStickerVisualProgress = 0;
       private int mStickerPage = 1;

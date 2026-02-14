@@ -127,7 +127,7 @@
                         @* TODO: Wire up file upload handler *@
                         <MudButton HtmlTag="label" Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.UploadFile" Class="mt-2">
                            Choose File
-                           <InputFile accept="image/gif,image/jpeg,image/png" style="display: none;" />
+                           <InputFile OnChange="@OnImportStickerVisualFileComplete" accept="image/gif,image/jpeg,image/png" style="display: none;" />
                         </MudButton>
                         @if (mUploadStickerVisualProgress > 0)
                         {
@@ -351,7 +351,7 @@
                                  @* TODO: Wire up file upload handler *@
                                  <MudButton HtmlTag="label" Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.UploadFile" Class="mt-2">
                                     Choose File
-                                    <InputFile accept="audio/*" style="display: none;" />
+                                    <InputFile OnChange="@OnImportAudioFileComplete" accept="audio/*" style="display: none;" />
                                  </MudButton>
                                  @if (mUploadAudioProgress > 0)
                                  {
@@ -663,11 +663,11 @@
                               <table>
                                  <tr>
                                     <td valign="top">
-                                       <MudTextField T="string" Disabled="true" @bind-Value="mTempStickerToAdd.Visual" />
+                                       <MudTextField T="string" Disabled="true" @bind-Value="mSelectedStickerVisualFileName" />
                                        @* TODO: Wire up file upload handler *@
                                        <MudButton HtmlTag="label" Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.UploadFile" Class="mt-2">
                                           Choose File
-                                          <InputFile accept="image/gif,image/jpeg,image/png" style="display: none;" />
+                                          <InputFile OnChange="@OnImportStickerVisualFileComplete" accept="image/gif,image/jpeg,image/png" style="display: none;" />
                                        </MudButton>
                                        @if (mUploadStickerVisualProgress > 0)
                                        {
