@@ -25,6 +25,19 @@
    </DialogActions>
 </MudDialog>
 
+<MudDialog @bind-Visible="@mIsDeleteGoalDialogVisible">
+   <TitleContent>
+      <MudText Typo="Typo.h6">Confirm Delete</MudText>
+   </TitleContent>
+   <DialogContent>
+      <MudText>Are you sure you want to delete this goal? This action cannot be undone.</MudText>
+   </DialogContent>
+   <DialogActions>
+      <MudButton OnClick="@(() => mIsDeleteGoalDialogVisible = false)">Cancel</MudButton>
+      <MudButton Color="Color.Error" OnClick="@HandleConfirmDeleteGoal">Delete</MudButton>
+   </DialogActions>
+</MudDialog>
+
 <div class="pa-1 my-1 gifbot-page-header">
    <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
       <MudIcon Icon="@Icons.Material.Filled.TrackChanges" />
@@ -33,15 +46,16 @@
 </div>
 
 <EditForm Model="@mGoalBarData" OnSubmit="@OnSaveChanges">
+   <div style="width: 100%">
+      <div class="text-left p-3 rounded gifbot-form-panel" style="width: 100%">
    <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
       <MudTabPanel Text="Settings">
-         <div style="width: 100%">
-            <div class="text-left p-3 rounded gifbot-form-panel" style="width: 100%">
                <p>
                   The <b>Goal Bar</b> is a feature of GIFBot where you can have a monetary or point-based goal that
                   takes into consideration multiple types of Twitch events (cheering, subbing, gift subbing, and tips).
                </p>
-               <div class="text-left p-3 rounded gifbot-section-panel">
+               <div class="p-0 m-0 rounded gifbot-section-panel">
+                  <div class="p-2">
 
                   <div class="form-group form-check">
                      <MudCheckBox T="bool" @bind-Value="mGoalBarData.Settings.Enabled" Label="Feature Enabled" />
@@ -111,9 +125,8 @@
                         </div>
                      }
                   </MudExpansionPanel>
+                  </div>
                </div>
-            </div>
-         </div>
       </MudTabPanel>
 
       <MudTabPanel Text="Visual Settings">
@@ -172,7 +185,7 @@
                <div class="form-group mt-2">
                   <label for="uiFont"><b>Font:</b></label>
                   <span id="uiFont" class="gifbot-field-desc">What font should you use?</span>
-                  <MudSelect T="int" @bind-Value="mCaptionFontSelection" Label="Font" Variant="Variant.Filled">
+                  <MudSelect T="int" @bind-Value="mCaptionFontSelection" Label="Font">
                      <MudSelectItem T="int" Value="0">Arial</MudSelectItem>
                      <MudSelectItem T="int" Value="1">Comic Sans</MudSelectItem>
                      <MudSelectItem T="int" Value="2">Impact</MudSelectItem>
@@ -261,23 +274,19 @@
       </MudTabPanel>
 
       <MudTabPanel Text="BrowserSource URL">
-         <div>
+         <div class="p-0 m-0 rounded gifbot-section-panel">
+            <div class="p-2">
             <div class="text-white-50 p-0">
                <p>
                   To display the goal bar in your broadcaster software, copy this URL and use it as the input for a new Browser Source element. Note: If you set
                   this browser source to refresh when you switch scenes, the goal bar will flicker since it will rebuild as if you had refreshed in Chrome.
                </p>
             </div>
-            <table width="100%">
-               <tr>
-                  <td width="600">
-                     <MudTextField T="string" class="form-control" Style="width: 100%" ReadOnly="true" @bind-Value="mURL" />
-                  </td>
-                  <td align="left">
-                     <MudButton Variant="Variant.Filled" Class="gifbot-action-btn p-1 ml-2" OnClick='(() => HandleCopyUrl("uiURL"))'>Copy to Clipboard</MudButton>
-                  </td>
-               </tr>
-            </table>
+            <div class="d-flex align-center gap-2">
+               <MudTextField T="string" Style="flex: 1" ReadOnly="true" @bind-Value="mURL" />
+               <MudButton Variant="Variant.Filled" Class="gifbot-action-btn" OnClick="@(() => HandleCopyUrl(mURL))">Copy to Clipboard</MudButton>
+            </div>
+            </div>
          </div>
       </MudTabPanel>
    </MudTabs>
@@ -286,6 +295,8 @@
           <MudButton Variant="Variant.Outlined" Color="Color.Default" OnClick="@OnCancel">Cancel</MudButton>
           <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit">Save Changes</MudButton>
        </div>
+      </div>
+   </div>
 </EditForm>
 
 @code {
@@ -419,9 +430,17 @@
       }
    }
 
-   private async Task HandleDeleteGoal(Guid goalId)
+   private void HandleDeleteGoal(Guid goalId)
    {
-      bool result = await mHubConnection.InvokeAsync<bool>("DeleteGoal", goalId);
+      mPendingDeleteGoalId = goalId;
+      mIsDeleteGoalDialogVisible = true;
+      StateHasChanged();
+   }
+
+   private async Task HandleConfirmDeleteGoal()
+   {
+      mIsDeleteGoalDialogVisible = false;
+      bool result = await mHubConnection.InvokeAsync<bool>("DeleteGoal", mPendingDeleteGoalId);
       if (result)
       {
          Snackbar.Add("Success - The goal was deleted!", Severity.Success);
@@ -451,11 +470,17 @@
       mGoalPage = page;
    }
 
-   private async Task HandleCopyUrl(string elementName)
+   private async Task HandleCopyUrl(string url)
    {
-      await JSRuntime.InvokeVoidAsync("CopyToClipboard", elementName);
-      Snackbar.Add("Success - The URL was copied to your clipboard!", Severity.Success);
-      await InvokeAsync(() => { StateHasChanged(); });
+      try
+      {
+         await JSRuntime.InvokeVoidAsync("navigator.clipboard.writeText", url);
+         Snackbar.Add("Success - The URL was copied to your clipboard!", Severity.Success);
+      }
+      catch (Exception)
+      {
+         Snackbar.Add("Error - Could not copy to clipboard.", Severity.Error);
+      }
    }
 
    private void OnCancel()
@@ -479,6 +504,8 @@
    private int mCaptionFontSelection = 0;
    private string mURL = String.Empty;
    private bool mIsNewGoalPromptVisible = false;
+   private bool mIsDeleteGoalDialogVisible = false;
+   private Guid mPendingDeleteGoalId;
 
    // Adding Goals Variables
    private string mNewGoalTitle = String.Empty;
