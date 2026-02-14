@@ -7,8 +7,9 @@
    </MudStack>
 </div>
 
-<div class="p-2 mb-2 rounded gifbot-content-panel">
-   <MudDataGrid T="Employee" Items="@Data" Filterable="true" SortMode="SortMode.Single" Groupable="false">
+<div style="width: 100%">
+   <div class="text-left p-3 rounded gifbot-form-panel" style="width: 100%">
+      <MudDataGrid T="Employee" Items="@Data" Filterable="true" SortMode="SortMode.Single" Groupable="false">
       <Columns>
          <PropertyColumn T="Employee" TProperty="string" Property="@(x => x.Name)" Title="Name" />
          <PropertyColumn T="Employee" TProperty="int" Property="@(x => x.Id)" Title="Id" />
@@ -16,7 +17,8 @@
          <PropertyColumn T="Employee" TProperty="string" Property="@(x => x.EmailAddress)" Title="EmailAddress" />
          <PropertyColumn T="Employee" TProperty="DateTime" Property="@(x => x.HireDate)" Title="HireDate" />
       </Columns>
-   </MudDataGrid>
+      </MudDataGrid>
+   </div>
 </div>
 
 @code {

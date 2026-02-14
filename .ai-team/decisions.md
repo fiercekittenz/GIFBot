@@ -425,3 +425,15 @@ Recommend creating `<PageHeader Icon="..." Title="..." />` component for consist
 - Standard web convention is bottom-right for form actions
 - Top area reserved for feature-specific actions (e.g., "Take Down Backdrop") if needed
 
+
+---
+
+
+### 2026-02-14: StickersEditor page restructured to match standard panel hierarchy
+
+**By:** Helly
+
+**What:** Restructured StickersEditor.razor to follow the established page styling standard — replaced Bootstrap navbar with MudBlazor flex layout, fixed panel hierarchy with single outer `gifbot-form-panel` wrapping MudTabs (removed nested panels inside tabs), added delete confirmation dialogs, fixed clipboard copy to use `navigator.clipboard.writeText`, replaced deprecated HTML elements.
+
+**Why:** Part of P2.2 page style audit work. The page had multiple violations: Bootstrap navbar instead of MudBlazor layout, inverted panel hierarchy (form-panel inside tabs instead of wrapping them), placeholder confirmations that always returned true, old clipboard JS pattern incompatible with MudBlazor, deprecated `<center>` tags, and bare `<table>` elements. Changes ensure consistency with GiveawayEditor/BackdropEditor/GoalBarEditor standard and eliminate Bootstrap dependencies.
+
