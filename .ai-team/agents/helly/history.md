@@ -64,6 +64,9 @@
 - **CSS:** Added `.gifbot-bordered-table` with `border: 1px solid #2d2b52; border-radius: 4px` for the DataGrid wrapper.
 - **Dialog validation:** `IsAddGroupDisabled` checks empty + case-insensitive duplicate group name. `IsAddUserDisabled` checks empty + user already in current group.
 
+- **Global MudDialog CSS styling:** Added rules in app.css targeting `.mud-dialog`, `.mud-dialog .mud-dialog-title`, `.mud-dialog .mud-dialog-content`, and `.mud-dialog .mud-dialog-actions`. Key properties: `min-width: 450px` (wider dialogs), `background-color: #1c1c34` (matches `.gifbot-form-panel`), title bar gets `background-color: #2d2b52` (matches `.gifbot-page-header`), `border: 1px solid #2d2b52`, `border-radius: 8px`. These are global — every MudDialog across the app benefits automatically.
+- **Dialog field title+description pattern:** Replaced `<label><b>Name:</b></label>` + `<small class="form-text">` with `<MudText Typo="Typo.subtitle1"><b>Title</b></MudText>` + `<MudText Typo="Typo.caption" Class="text-white-50 mb-2">description</MudText>` above each input field. Applied to 10 files: Settings (4 dialogs), AnimationsEditor (6 dialogs), EditAnimation (1), BackdropEditor (2), CountdownTimer (2), GiveawayEditor (1), GoalBarEditor (1), GreeterEditor (2), StickersEditor (4), Index (1). Confirmation dialogs get `<MudText Typo="Typo.subtitle1"><b>Confirm Deletion</b></MudText>` subtitle. Bootstrap `<button>` + `<center>` replaced with `<DialogActions>` + `<MudButton>` in dialog action areas.
+
 — Helly
 
 ---
