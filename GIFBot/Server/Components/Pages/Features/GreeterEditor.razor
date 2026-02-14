@@ -39,10 +39,8 @@
     </TitleContent>
     <DialogContent>
         <div class="form-group form-check">
-            <label class="form-check-label">
-                <MudCheckBox T="bool" @bind-Value="mTempGreeterEntry.Enabled" /> Enabled
-                <small id="uiTempEntryEnabled" class="form-text text-muted">When enabled, this greeter active.</small>
-            </label>
+            <MudCheckBox T="bool" @bind-Value="mTempGreeterEntry.Enabled" Label="Enabled" />
+            <small id="uiTempEntryEnabled" class="form-text text-muted">When enabled, this greeter active.</small>
         </div>
         <div class="form-group">
             <MudText Typo="Typo.subtitle1"><b>Name</b></MudText>

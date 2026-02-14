@@ -76,6 +76,12 @@ a, .btn-link {
     padding-right: 8px;
 }
 
+/* Ensure MudCheckBox labels render inline */
+.mud-checkbox {
+    display: inline-flex !important;
+    align-items: center !important;
+}
+
 /* Ensure main content container fills the viewport */
 .mud-main-content .mud-container {
     min-height: calc(100vh - 64px);

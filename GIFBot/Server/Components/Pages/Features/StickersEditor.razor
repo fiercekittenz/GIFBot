@@ -86,10 +86,8 @@
                <MudTextField T="string" @bind-Value="CurrentlyEditedSticker.Name" />
             </div>
             <div class="form-group form-check">
-               <label class="form-check-label">
-                  <MudCheckBox T="bool" @bind-Value="CurrentlyEditedSticker.Enabled" /> Enabled
-                  <small id="uiNewStickerEnabled" class="form-text text-muted">When enabled, this sticker can be used! You can disable if you are creating a large batch for later use.</small>
-               </label>
+               <MudCheckBox T="bool" @bind-Value="CurrentlyEditedSticker.Enabled" Label="Enabled" />
+               <small id="uiNewStickerEnabled" class="form-text text-muted">When enabled, this sticker can be used! You can disable if you are creating a large batch for later use.</small>
             </div>
             <div class="form-group">
                <MudText Typo="Typo.subtitle1"><b>Sticker Visual</b></MudText>
@@ -115,19 +113,15 @@
          </MudTabPanel>
          <MudTabPanel Text="Behavior Override">
             <div class="form-group form-check">
-               <label class="form-check-label">
-                  <MudCheckBox T="bool" @bind-Value="CurrentlyEditedSticker.AllowRandomPlacement" /> Allow Random Placement (Only use global Stickers behavior)
-                  <small id="uiAllowRandom" class="form-text text-muted">When enabled, the sticker will be able to be randomly placed per events configured from the Stickers global behaviors tab. If you want this sticker to only display for sticker-specific cheers/tips/donations then toggle this off and update the custom configurations to override the global behaviors!</small>
-               </label>
+               <MudCheckBox T="bool" @bind-Value="CurrentlyEditedSticker.AllowRandomPlacement" Label="Allow Random Placement (Only use global Stickers behavior)" />
+               <small id="uiAllowRandom" class="form-text text-muted">When enabled, the sticker will be able to be randomly placed per events configured from the Stickers global behaviors tab. If you want this sticker to only display for sticker-specific cheers/tips/donations then toggle this off and update the custom configurations to override the global behaviors!</small>
             </div>
 
             @if (!CurrentlyEditedSticker.AllowRandomPlacement)
             {
             <div class="form-group form-check">
-               <label class="form-check-label">
-                  <MudCheckBox T="bool" @bind-Value="CurrentlyEditedSticker.IncludeBits" /> Include Bits
-                  <small id="uiNewStickerIncludeCheers" class="form-text text-muted">When enabled, cheering will count as a sticker.</small>
-               </label>
+               <MudCheckBox T="bool" @bind-Value="CurrentlyEditedSticker.IncludeBits" Label="Include Bits" />
+               <small id="uiNewStickerIncludeCheers" class="form-text text-muted">When enabled, cheering will count as a sticker.</small>
             </div>
 
             @if (CurrentlyEditedSticker.IncludeBits)
@@ -140,10 +134,8 @@
                }
 
             <div class="form-group form-check">
-               <label class="form-check-label">
-                  <MudCheckBox T="bool" @bind-Value="CurrentlyEditedSticker.IncludeTips" /> Include Streamlabs Tips
-                  <small id="uiNewStickerIncludeTips" class="form-text text-muted">When enabled, tipping via Streamlabs will create this sticker.</small>
-               </label>
+               <MudCheckBox T="bool" @bind-Value="CurrentlyEditedSticker.IncludeTips" Label="Include Streamlabs Tips" />
+               <small id="uiNewStickerIncludeTips" class="form-text text-muted">When enabled, tipping via Streamlabs will create this sticker.</small>
             </div>
 
             @if (CurrentlyEditedSticker.IncludeTips)
@@ -156,10 +148,8 @@
                }
 
             <div class="form-group form-check">
-               <label class="form-check-label">
-                  <MudCheckBox T="bool" @bind-Value="CurrentlyEditedSticker.IncludeTiltifyDonations" /> Include Tiltify Donations
-                  <small id="uiNewStickerIncludeTiltify" class="form-text text-muted">When enabled, donating to charity via Tiltify will create a sticker.</small>
-               </label>
+               <MudCheckBox T="bool" @bind-Value="CurrentlyEditedSticker.IncludeTiltifyDonations" Label="Include Tiltify Donations" />
+               <small id="uiNewStickerIncludeTiltify" class="form-text text-muted">When enabled, donating to charity via Tiltify will create a sticker.</small>
             </div>
 
             @if (CurrentlyEditedSticker.IncludeTiltifyDonations)
@@ -172,10 +162,8 @@
                }
 
             <div class="form-group form-check">
-               <label class="form-check-label">
-                  <MudCheckBox T="bool" @bind-Value="CurrentlyEditedSticker.UseVisibilityTimeoutOverride" /> Override Global Sticker Timeout
-                  <small id="uiNewStickerOverrideTimeout" class="form-text text-muted">When enabled, this sticker will use a different timeout than the global one configured in the behavior tab.</small>
-               </label>
+               <MudCheckBox T="bool" @bind-Value="CurrentlyEditedSticker.UseVisibilityTimeoutOverride" Label="Override Global Sticker Timeout" />
+               <small id="uiNewStickerOverrideTimeout" class="form-text text-muted">When enabled, this sticker will use a different timeout than the global one configured in the behavior tab.</small>
             </div>
 
             @if (CurrentlyEditedSticker.UseVisibilityTimeoutOverride)
@@ -196,10 +184,8 @@
                </p>
             </div>
             <div class="form-group form-check">
-               <label class="form-check-label">
-                  <MudCheckBox T="bool" @bind-Value="CurrentlyEditedSticker.UsePlacementOverride" /> Always use the position below for this sticker.
-                  <small id="uiNewStickerOverridePosition" class="form-text text-muted">When enabled, this sticker will always appear in the same location as illustrated on the control below:</small>
-               </label>
+               <MudCheckBox T="bool" @bind-Value="CurrentlyEditedSticker.UsePlacementOverride" Label="Always use the position below for this sticker." />
+               <small id="uiNewStickerOverridePosition" class="form-text text-muted">When enabled, this sticker will always appear in the same location as illustrated on the control below:</small>
             </div>
             <div class="form-group">
                <label for="uiStickerLayer">Layer:</label>
@@ -262,20 +248,16 @@
                <div class="text-left p-3 rounded gifbot-section-panel">
 
                   <div class="form-group form-check">
-                     <label class="form-check-label">
-                        <MudCheckBox T="bool" @bind-Value="mStickerData.Enabled" /> Feature Enabled
-                        <small id="uiEnabled" class="form-text text-muted">When enabled, Twitch events will be able to contribute to the stickers overlay.</small>
-                     </label>
+                     <MudCheckBox T="bool" @bind-Value="mStickerData.Enabled" Label="Feature Enabled" />
+                     <small id="uiEnabled" class="form-text text-muted">When enabled, Twitch events will be able to contribute to the stickers overlay.</small>
                   </div>
 
                   @if (mStickerData.Enabled)
                   {
                      <MudExpansionPanel Text="Chat Command" Expanded="true">
                         <div class="form-group form-check">
-                           <label class="form-check-label">
-                              <MudCheckBox T="bool" @bind-Value="mStickerData.CanUseCommand" /> Allow Chat Command Access
-                              <small id="uiUseChatCommand" class="form-text text-muted">When enabled, the system can place stickers using the chat command. You can also use this command in a bot-only mode to have channel point rewards activating special stickers by name. Just put "!stickers [name of sticker]" in your reward title!</small>
-                           </label>
+                           <MudCheckBox T="bool" @bind-Value="mStickerData.CanUseCommand" Label="Allow Chat Command Access" />
+                           <small id="uiUseChatCommand" class="form-text text-muted">When enabled, the system can place stickers using the chat command. You can also use this command in a bot-only mode to have channel point rewards activating special stickers by name. Just put "!stickers [name of sticker]" in your reward title!</small>
                         </div>
 
                         @if (mStickerData.CanUseCommand)
@@ -327,8 +309,7 @@
                                  <MudTextField T="string" @bind-Value="@mStickerData.RestrictedToUser" />
                               </div>
                               <div class="mt-2">
-                                 <MudCheckBox T="bool" @bind-Value="mStickerData.RestrictedUserMustBeSub" />
-                                 <label for="uiRestrictedUserMustBeSub">Viewer must be subscribed</label>
+                                 <MudCheckBox T="bool" @bind-Value="mStickerData.RestrictedUserMustBeSub" Label="Viewer must be subscribed" />
                               </div>
                            }
                         }
@@ -435,10 +416,8 @@
                   </p>
 
                   <div class="form-group form-check">
-                     <label class="form-check-label">
-                        <MudCheckBox T="bool" @bind-Value="mStickerData.IncludeBits" /> Include Bits
-                        <small id="uiIncludeCheers" class="form-text text-muted">When enabled, cheering will count as a sticker.</small>
-                     </label>
+                     <MudCheckBox T="bool" @bind-Value="mStickerData.IncludeBits" Label="Include Bits" />
+                     <small id="uiIncludeCheers" class="form-text text-muted">When enabled, cheering will count as a sticker.</small>
                   </div>
 
                   @if (mStickerData.IncludeBits)
@@ -453,10 +432,8 @@
                   }
 
                   <div class="form-group form-check">
-                     <label class="form-check-label">
-                        <MudCheckBox T="bool" @bind-Value="mStickerData.IncludeTips" /> Include Streamlabs Tips
-                        <small id="uiIncludeTips" class="form-text text-muted">When enabled, tipping via Streamlabs will create a sticker.</small>
-                     </label>
+                     <MudCheckBox T="bool" @bind-Value="mStickerData.IncludeTips" Label="Include Streamlabs Tips" />
+                     <small id="uiIncludeTips" class="form-text text-muted">When enabled, tipping via Streamlabs will create a sticker.</small>
                   </div>
 
                   @if (mStickerData.IncludeTips)
@@ -471,10 +448,8 @@
                   }
 
                   <div class="form-group form-check">
-                     <label class="form-check-label">
-                        <MudCheckBox T="bool" @bind-Value="mStickerData.IncludeTiltifyDonations" /> Include Tiltify Donations
-                        <small id="uiIncludeTiltify" class="form-text text-muted">When enabled, donating to charity via Tiltify will create a sticker.</small>
-                     </label>
+                     <MudCheckBox T="bool" @bind-Value="mStickerData.IncludeTiltifyDonations" Label="Include Tiltify Donations" />
+                     <small id="uiIncludeTiltify" class="form-text text-muted">When enabled, donating to charity via Tiltify will create a sticker.</small>
                   </div>
 
                   @if (mStickerData.IncludeTiltifyDonations)
@@ -489,17 +464,13 @@
                   }
 
                   <div class="form-group form-check">
-                     <label class="form-check-label">
-                        <MudCheckBox T="bool" @bind-Value="mStickerData.IncludeSubs" /> Include Subscriptions
-                        <small id="uiIncludeSubs" class="form-text text-muted">When enabled, subscriptions and resubscriptions create stickers.</small>
-                     </label>
+                     <MudCheckBox T="bool" @bind-Value="mStickerData.IncludeSubs" Label="Include Subscriptions" />
+                     <small id="uiIncludeSubs" class="form-text text-muted">When enabled, subscriptions and resubscriptions create stickers.</small>
                   </div>
 
                   <div class="form-group form-check">
-                     <label class="form-check-label">
-                        <MudCheckBox T="bool" @bind-Value="mStickerData.IncludeGiftSubs" /> Include Gifted Subscriptions
-                        <small id="uiIncludeGiftSubs" class="form-text text-muted">When enabled, gifted subscriptions create stickers.</small>
-                     </label>
+                     <MudCheckBox T="bool" @bind-Value="mStickerData.IncludeGiftSubs" Label="Include Gifted Subscriptions" />
+                     <small id="uiIncludeGiftSubs" class="form-text text-muted">When enabled, gifted subscriptions create stickers.</small>
                   </div>
 
                   @if (mStickerData.IncludeGiftSubs)
@@ -514,10 +485,8 @@
                   }
 
                   <div class="form-group form-check">
-                     <label class="form-check-label">
-                        <MudCheckBox T="bool" @bind-Value="mStickerData.IncludeChannelPoints" /> Include Channel Points
-                        <small id="uiIncludeChannelPoints" class="form-text text-muted">When enabled, channel point redemptions will create stickers.</small>
-                     </label>
+                     <MudCheckBox T="bool" @bind-Value="mStickerData.IncludeChannelPoints" Label="Include Channel Points" />
+                     <small id="uiIncludeChannelPoints" class="form-text text-muted">When enabled, channel point redemptions will create stickers.</small>
                   </div>
 
                   @if (mStickerData.IncludeChannelPoints)
@@ -530,17 +499,13 @@
                   }
 
                   <div class="form-group form-check">
-                     <label class="form-check-label">
-                        <MudCheckBox T="bool" @bind-Value="mStickerData.IncludeFollows" /> Include Follows
-                        <small id="uiIncludeFollows" class="form-text text-muted">When enabled, follows will create stickers.</small>
-                     </label>
+                     <MudCheckBox T="bool" @bind-Value="mStickerData.IncludeFollows" Label="Include Follows" />
+                     <small id="uiIncludeFollows" class="form-text text-muted">When enabled, follows will create stickers.</small>
                   </div>
 
                   <div class="form-group form-check">
-                     <label class="form-check-label">
-                        <MudCheckBox T="bool" @bind-Value="mStickerData.IncludeRaids" /> Include Raids
-                        <small id="uiIncludeRaids" class="form-text text-muted">When enabled, raids will create stickers.</small>
-                     </label>
+                     <MudCheckBox T="bool" @bind-Value="mStickerData.IncludeRaids" Label="Include Raids" />
+                     <small id="uiIncludeRaids" class="form-text text-muted">When enabled, raids will create stickers.</small>
                   </div>
                </div>
             </div>

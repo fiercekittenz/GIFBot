@@ -54,17 +54,13 @@
                         <div class="text-left p-3 rounded gifbot-section-panel">
 
                             <div class="form-group form-check">
-                                <label class="form-check-label">
-                                    <MudCheckBox T="bool" @bind-Value="mRegurgitatorSettings.Enabled" /> Package Enabled
-                                    <small id="uiEnabled" class="form-text text-muted">When enabled, the bot will allow this package's command to regurgitate to chat. Sounds nasty, right? Thanks dewritten.</small>
-                                </label>
+                                <MudCheckBox T="bool" @bind-Value="mRegurgitatorSettings.Enabled" Label="Package Enabled" />
+                                <small id="uiEnabled" class="form-text text-muted">When enabled, the bot will allow this package's command to regurgitate to chat. Sounds nasty, right? Thanks dewritten.</small>
                             </div>
 
                             <div class="form-group form-check">
-                                <label class="form-check-label">
-                                    <MudCheckBox T="bool" @bind-Value="mRegurgitatorSettings.PlayOnTimer" /> Play on Timer
-                                    <small id="uiPlayOnTimer" class="form-text text-muted">When enabled, the package will periodically send one of its entries to chat. The chat command is disabled when this is on.</small>
-                                </label>
+                                <MudCheckBox T="bool" @bind-Value="mRegurgitatorSettings.PlayOnTimer" Label="Play on Timer" />
+                                <small id="uiPlayOnTimer" class="form-text text-muted">When enabled, the package will periodically send one of its entries to chat. The chat command is disabled when this is on.</small>
                             </div>
 
                             @if (!mRegurgitatorSettings.PlayOnTimer)
@@ -120,16 +116,13 @@
                                         <MudTextField T="string" @bind-Value="@mRegurgitatorSettings.RestrictedToUser" />
                                     </div>
                                     <div class="mt-2">
-                                        <MudCheckBox T="bool" @bind-Value="mRegurgitatorSettings.RestrictedUserMustBeSub" />
-                                        <label for="uiRestrictedUserMustBeSub">Viewer must be subscribed</label>
+                                        <MudCheckBox T="bool" @bind-Value="mRegurgitatorSettings.RestrictedUserMustBeSub" Label="Viewer must be subscribed" />
                                     </div>
                                 }
 
                                 <MudExpansionPanel Text="Text-to-Speech (TTS)" Expanded="true">
                                     <div class="form-group form-check">
-                                        <label class="form-check-label">
-                                            <MudCheckBox T="bool" @bind-Value="mRegurgitatorSettings.AllowTTSReading" /> Use Text-to-Speech to read selected entries as a sound-only Animation instead of sending to chat.
-                                        </label>
+                                        <MudCheckBox T="bool" @bind-Value="mRegurgitatorSettings.AllowTTSReading" Label="Use Text-to-Speech to read selected entries as a sound-only Animation instead of sending to chat." />
                                     </div>
                                     <div class="form-group">
                                         <label for="uiVolumeSlider" class="ml-2 mt-2"><b>TTS Volume:</b></label>
@@ -169,9 +162,7 @@
 
                         <MudExpansionPanel Text="Streamlabs Tip Requirement" Expanded="true">
                             <div class="form-group form-check">
-                                <label class="form-check-label">
-                                    <MudCheckBox T="bool" @bind-Value="mRegurgitatorSettings.IsStreamlabsTipTrigger" /> Trigger when tips are made through Streamlabs
-                                </label>
+                                <MudCheckBox T="bool" @bind-Value="mRegurgitatorSettings.IsStreamlabsTipTrigger" Label="Trigger when tips are made through Streamlabs" />
                             </div>
                             @if (mRegurgitatorSettings.IsStreamlabsTipTrigger)
                             {
@@ -184,9 +175,7 @@
 
                         <MudExpansionPanel Text="Tiltify via Streamlabs Donation Requirement" Expanded="true">
                             <div class="form-group form-check">
-                                <label class="form-check-label">
-                                    <MudCheckBox T="bool" @bind-Value="mRegurgitatorSettings.IsTiltifyTrigger" /> Trigger when charitable donations are made through Tiltify
-                                </label>
+                                <MudCheckBox T="bool" @bind-Value="mRegurgitatorSettings.IsTiltifyTrigger" Label="Trigger when charitable donations are made through Tiltify" />
                             </div>
                             @if (mRegurgitatorSettings.IsTiltifyTrigger)
                             {

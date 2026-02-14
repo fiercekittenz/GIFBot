@@ -21,13 +21,11 @@
          <div class="p-0 m-0 rounded gifbot-section-panel">
             <div class="p-2">
                <div class="mt-2">
-                  <MudCheckBox T="bool" @bind-Value="mData.Disabled" />
-                  <label for="uiDisabled">Disabled</label>
+                  <MudCheckBox T="bool" @bind-Value="mData.Disabled" Label="Disabled" />
                   <small for="uiDisabled" class="form-text text-white-50 ml-4">When disabled, an animation can only be triggered by the broadcaster.</small>
                </div>
                <div class="mt-2">
-                  <MudCheckBox T="bool" @bind-Value="mData.HideFromChatOutput" />
-                  <label for="uiHideFromChat">Hide from !animations Output</label>
+                  <MudCheckBox T="bool" @bind-Value="mData.HideFromChatOutput" Label="Hide from !animations Output" />
                   <small id="uiHideFromChat" class="form-text text-white-50 ml-4">When enabled, the command will not appear in the list of chat output on the !animations command.</small>
                </div>
                <div class="mt-2">
@@ -171,8 +169,7 @@
                         <MudTextField T="string" @bind-Value="@mData.RestrictedToUser" />
                      </div>
                      <div class="mt-2">
-                        <MudCheckBox T="bool" @bind-Value="mData.RestrictedUserMustBeSub" />
-                        <label for="uiRestrictedUserMustBeSub">Viewer must be subscribed</label>
+                        <MudCheckBox T="bool" @bind-Value="mData.RestrictedUserMustBeSub" Label="Viewer must be subscribed" />
                      </div>
                   }
                </MudExpansionPanel>
@@ -185,9 +182,7 @@
             {
                <div class="p-2">
                   <div class="form-group form-check">
-                     <label class="form-check-label">
-                        <MudCheckBox T="bool" @bind-Value="mData.IsMirrored" /> Mirroring: This animation should be flipped horizontally.
-                     </label>
+                     <MudCheckBox T="bool" @bind-Value="mData.IsMirrored" Label="Mirroring: This animation should be flipped horizontally." />
                   </div>
                </div>
             }
@@ -212,9 +207,7 @@
                         <div class="p-2">
                            <MudExpansionPanel Text="Cheer Requirements" Expanded="true">
                               <div class="form-group form-check">
-                                 <label class="form-check-label">
-                                    <MudCheckBox T="bool" @bind-Value="mData.IsBitAlert" /> Trigger when someone cheers bits
-                                 </label>
+                                 <MudCheckBox T="bool" @bind-Value="mData.IsBitAlert" Label="Trigger when someone cheers bits" />
                               </div>
                               @if (mData.IsBitAlert)
                               {
@@ -234,17 +227,13 @@
 </MudRadioGroup>
                                  </div>
                                  <div class="form-group form-check">
-                                    <label class="form-check-label">
-                                       <MudCheckBox T="bool" @bind-Value="mData.BitsMustBePairedWithCommand" /> Cheering must be paired with the command. (Allows users to target a specific animation when there are multiple with the same cheer amount. Example: !commandname cheer25)
-                                    </label>
+                                    <MudCheckBox T="bool" @bind-Value="mData.BitsMustBePairedWithCommand" Label="Cheering must be paired with the command. (Allows users to target a specific animation when there are multiple with the same cheer amount. Example: !commandname cheer25)" />
                                  </div>
                               }
                            </MudExpansionPanel>
                            <MudExpansionPanel Text="Raid Alerts" Expanded="true">
                               <div class="form-group form-check">
-                                 <label class="form-check-label">
-                                    <MudCheckBox T="bool" @bind-Value="mData.IsRaidAlert" /> Trigger when someone raids the channel
-                                 </label>
+                                 <MudCheckBox T="bool" @bind-Value="mData.IsRaidAlert" Label="Trigger when someone raids the channel" />
                               </div>
                               @if (mData.IsRaidAlert)
                               {
@@ -257,9 +246,7 @@
                            </MudExpansionPanel>
                            <MudExpansionPanel Text="Subscriber Alerts" Expanded="true">
                               <div class="form-group form-check">
-                                 <label class="form-check-label">
-                                    <MudCheckBox T="bool" @bind-Value="mData.IsSubAlertTrigger" /> Trigger when someone subscribes/resubscribes
-                                 </label>
+                                 <MudCheckBox T="bool" @bind-Value="mData.IsSubAlertTrigger" Label="Trigger when someone subscribes/resubscribes" />
                               </div>
                               @if (mData.IsSubAlertTrigger)
                               {
@@ -283,9 +270,7 @@
                            </MudExpansionPanel>
                            <MudExpansionPanel Text="Gift Sub Bomb Alerts" Expanded="true">
                               <div class="form-group form-check">
-                                 <label class="form-check-label">
-                                    <MudCheckBox T="bool" @bind-Value="mData.IsGiftSubAlertTrigger" /> Trigger when someone gifts subscriptions
-                                 </label>
+                                 <MudCheckBox T="bool" @bind-Value="mData.IsGiftSubAlertTrigger" Label="Trigger when someone gifts subscriptions" />
                               </div>
                               @if (mData.IsGiftSubAlertTrigger)
                               {
@@ -299,7 +284,7 @@
                            @*<MudExpansionPanel Text="Hype Train Leveling" Expanded="true">
                            <div class="form-group form-check">
                            <label class="form-check-label">
-                           <MudCheckBox T="bool" @bind-Value="mData.IsHypeTrainTrigger" /> Trigger when a new hype train level has been reached
+                           <MudCheckBox T="bool" @bind-Value="mData.IsHypeTrainTrigger" Label="Trigger when a new hype train level has been reached" />
                            </label>
                            </div>
                            @if (mData.IsHypeTrainTrigger)
@@ -361,9 +346,7 @@
                         <div class="p-2">
                            <MudExpansionPanel Text="Tip Requirement" Expanded="true">
                               <div class="form-group form-check">
-                                 <label class="form-check-label">
-                                    <MudCheckBox T="bool" @bind-Value="mData.IsStreamlabsTipTrigger" /> Trigger when tips are made through Streamlabs or StreamElements
-                                 </label>
+                                 <MudCheckBox T="bool" @bind-Value="mData.IsStreamlabsTipTrigger" Label="Trigger when tips are made through Streamlabs or StreamElements" />
                               </div>
                               @if (mData.IsStreamlabsTipTrigger)
                               {
@@ -389,9 +372,7 @@
                         <div class="p-2">
                            <MudExpansionPanel Text="Tip Requirement" Expanded="true">
                               <div class="form-group form-check">
-                                 <label class="form-check-label">
-                                    <MudCheckBox T="bool" @bind-Value="mData.IsTiltifyTrigger" /> Trigger when donations are made through Tiltify
-                                 </label>
+                                 <MudCheckBox T="bool" @bind-Value="mData.IsTiltifyTrigger" Label="Trigger when donations are made through Tiltify" />
                               </div>
                               @if (mData.IsTiltifyTrigger)
                               {
@@ -437,8 +418,7 @@
                <div class="form-group mt-2">
                   <label for="uiPlayAllVariantsBeforeRepeat"><b>Variations Repeat Behavior:</b></label>
                   <small id="uiPlayAllVariantsBeforeRepeat" class="form-text text-white-50">Would you like all variations to be played before they can repeat? If enabled, all variations in the grid below will have to play at least once before they can be played again. Otherwise, they stand a chance of being repeated with multiple command executions.</small>
-                  <MudCheckBox T="bool" @bind-Value="mData.PlayAllVariantsBeforeRepeat" />
-                  <label for="uiPlayAllVariantsBeforeRepeat">Play all variants before repeating</label>
+                  <MudCheckBox T="bool" @bind-Value="mData.PlayAllVariantsBeforeRepeat" Label="Play all variants before repeating" />
                </div>
                <div class="form-group">
                   <label for="uiVariationsGrid"><b>Variations:</b></label>
@@ -553,11 +533,9 @@
                   AnimationLibrary.GetFileTypeOfAnimation(mVariantVisual) == AnimationEnums.FileType.Video)
                   {
                      <div class="p-2">
-                        <div class="form-group form-check">
-                           <label class="form-check-label">
-                              <MudCheckBox T="bool" @bind-Value="mVariantMirrored" /> Mirroring: This animation should be flipped horizontally.
-                           </label>
-                        </div>
+                     <div class="form-group form-check">
+                        <MudCheckBox T="bool" @bind-Value="mVariantMirrored" Label="Mirroring: This animation should be flipped horizontally." />
+                     </div>
                      </div>
                   }
                   <div class="d-flex justify-end pa-3">
@@ -641,8 +619,7 @@
                <div class="form-group mt-2">
                   <label for="uiCaptionIsBold"><b>Font Weight:</b></label>
                   <small id="uiCaptionIsBold" class="form-text text-white-50">Would you like the font to be bold?</small>
-                  <MudCheckBox T="bool" @bind-Value="mData.Caption.IsBold" />
-                  <label for="uiCaptionIsBold">Bolded Text</label>
+                  <MudCheckBox T="bool" @bind-Value="mData.Caption.IsBold" Label="Bolded Text" />
                </div>
                <div class="form-group mt-2">
                   <label for="uiCaptionLocation"><b>Caption Location:</b></label>

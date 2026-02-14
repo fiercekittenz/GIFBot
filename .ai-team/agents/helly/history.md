@@ -91,3 +91,4 @@
 
 ## Learnings
 - Added MudBlazor page header + content panel framing on the remaining test/error pages for consistent layout polish.
+- Standardized MudCheckBox labels with inline Label usage and added inline-flex styling to keep labels aligned.

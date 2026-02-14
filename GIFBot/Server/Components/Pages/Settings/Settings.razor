@@ -126,33 +126,25 @@
 
                      <MudExpansionPanel Expanded="true">
 <MudText>Flags</MudText>
-<div class="form-group form-check">
-                              <label class="form-check-label">
-                                 <MudCheckBox T="bool" @bind-Value="mBotSettings.AnnounceAnimationCooldown" /> Announce Animation Cooldown
-                                 <small id="uiAnnounceCooldowns" class="form-text text-white-50">When enabled, the bot will let chat know if it is in cooldown mode.</small>
-                              </label>
+                           <div class="form-group form-check">
+                              <MudCheckBox T="bool" @bind-Value="mBotSettings.AnnounceAnimationCooldown" Label="Announce Animation Cooldown" />
+                              <small id="uiAnnounceCooldowns" class="form-text text-white-50">When enabled, the bot will let chat know if it is in cooldown mode.</small>
                            </div>
                            <div class="form-group form-check">
-                              <label class="form-check-label">
-                                 <MudCheckBox T="bool" @bind-Value="mBotSettings.AnimationRouletteChatEnabled" /> Can Execute !animationroulette from Chat
-                                 <small id="uiCanExecuteRoulette" class="form-text text-white-50">When enabled, viewers can execute !animationroulette from chat. Disable this if you want it to be a channel point-exclusive feature.</small>
-                              </label>
+                              <MudCheckBox T="bool" @bind-Value="mBotSettings.AnimationRouletteChatEnabled" Label="Can Execute !animationroulette from Chat" />
+                              <small id="uiCanExecuteRoulette" class="form-text text-white-50">When enabled, viewers can execute !animationroulette from chat. Disable this if you want it to be a channel point-exclusive feature.</small>
                            </div>
                            <div class="form-group form-check">
-                              <label class="form-check-label">
-                                 <MudCheckBox T="bool" @bind-Value="mBotSettings.CanTriggerAnimationsByWhisper" /> Allow Commands via Whisper
-                                 <small id="uiAllowWhispers" class="form-text text-white-50">When enabled, the bot will accept commands from the channel account (e.g. your account) via whisper.</small>
-                              </label>
+                              <MudCheckBox T="bool" @bind-Value="mBotSettings.CanTriggerAnimationsByWhisper" Label="Allow Commands via Whisper" />
+                              <small id="uiAllowWhispers" class="form-text text-white-50">When enabled, the bot will accept commands from the channel account (e.g. your account) via whisper.</small>
                            </div>
 </MudExpansionPanel>
 
                      <MudExpansionPanel Expanded="true">
 <MudText>Animation Command</MudText>
-<div class="form-group form-check">
-                              <label class="form-check-label">
-                                 <MudCheckBox T="bool" @bind-Value="mBotSettings.AnimationCommandEnabled" /> Animation Command Enabled
-                                 <small id="uiAnimationCommandEnabled" class="form-text text-white-50">When enabled, the animation command allows viewers to see a list of your available animations. The list will ONLY include animations that are able to be triggered by users via the command in chat. The list will not include any that behave as alerts for events such as cheering. The command will spit out a list of them to chat as a result.</small>
-                              </label>
+                           <div class="form-group form-check">
+                              <MudCheckBox T="bool" @bind-Value="mBotSettings.AnimationCommandEnabled" Label="Animation Command Enabled" />
+                              <small id="uiAnimationCommandEnabled" class="form-text text-white-50">When enabled, the animation command allows viewers to see a list of your available animations. The list will ONLY include animations that are able to be triggered by users via the command in chat. The list will not include any that behave as alerts for events such as cheering. The command will spit out a list of them to chat as a result.</small>
                            </div>
                            <div class="form-group">
                               <label for="uiAnimationCommandCooldown"><b>Animation Command:</b></label>
@@ -177,10 +169,8 @@
                         regardless of their individual placement settings, will be placed according to the settings below:
                      </p>
                      <div class="form-group form-check">
-                        <label class="form-check-label">
-                           <MudCheckBox T="bool" @bind-Value="mBotSettings.UseGlobalPositioning" /> Use Global Positioning
-                           <small id="uiUseGlobalPositioning" class="form-text text-white-50">When enabled, all animations will use the same positioning data as set below.</small>
-                        </label>
+                        <MudCheckBox T="bool" @bind-Value="mBotSettings.UseGlobalPositioning" Label="Use Global Positioning" />
+                        <small id="uiUseGlobalPositioning" class="form-text text-white-50">When enabled, all animations will use the same positioning data as set below.</small>
                      </div>
                      <PlacementComponent Width="@mBotSettings.GlobalPlacement.Width"
                                          Height="@mBotSettings.GlobalPlacement.Height"
@@ -264,9 +254,7 @@
  Value="@mSelectedTiltifyCampaignName" ValueChanged="@(args => OnTiltifyCampaignSelected(args))" />
                            </div>
                            <div class="form-group form-check">
-                              <label class="form-check-label">
-                                 <MudCheckBox T="bool" @bind-Value="mBotSettings.TiltifyDonationAlertChat" /> Announce the donation in chat <i>after</i> the alert has played
-                              </label>
+                              <MudCheckBox T="bool" @bind-Value="mBotSettings.TiltifyDonationAlertChat" Label="Announce the donation in chat after the alert has played" />
                            </div>
                         </div>
                      </div>

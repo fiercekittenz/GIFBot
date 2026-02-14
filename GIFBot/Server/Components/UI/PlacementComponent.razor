@@ -47,18 +47,14 @@
                                  </div>
                               </div>
                               <div class="form-group form-check">
-                                 <label class="form-check-label">
-                                    <MudCheckBox T="bool" @bind-Value="mUseUniformScale" /> Use Uniform Scale
-                                 </label>
+                                 <MudCheckBox T="bool" @bind-Value="mUseUniformScale" Label="Use Uniform Scale" />
                               </div>
                            </div>
                         </div>
                         <div class="row">
                            <div class="col">
                               <div class="form-group form-check">
-                                 <label class="form-check-label">
-                                    <MudCheckBox T="bool" @bind-Value="IsOutOfBounds" /> Drag Outside of the Container Bounds (warning: can get funky)
-                                 </label>
+                                 <MudCheckBox T="bool" @bind-Value="IsOutOfBounds" Label="Drag Outside of the Container Bounds (warning: can get funky)" />
                               </div>
                            </div>
                         </div>
@@ -71,9 +67,7 @@
                      </div>
                   }
                   <div class="form-group form-check">
-                     <label class="form-check-label">
-                        <MudCheckBox T="bool" @bind-Value="IsDisplayTestMode" /> Show Visual in Overlay
-                     </label>
+                     <MudCheckBox T="bool" @bind-Value="IsDisplayTestMode" Label="Show Visual in Overlay" />
                   </div>
                </div>
             </div>

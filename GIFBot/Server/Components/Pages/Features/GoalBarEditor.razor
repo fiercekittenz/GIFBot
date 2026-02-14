@@ -44,18 +44,14 @@
                <div class="text-left p-3 rounded gifbot-section-panel">
 
                   <div class="form-group form-check">
-                     <label class="form-check-label">
-                        <MudCheckBox T="bool" @bind-Value="mGoalBarData.Settings.Enabled" /> Feature Enabled
-                        <small id="uiEnabled" class="form-text text-muted">When enabled, Twitch events will be computed and have their values applied to the goal.</small>
-                     </label>
+                     <MudCheckBox T="bool" @bind-Value="mGoalBarData.Settings.Enabled" Label="Feature Enabled" />
+                     <small id="uiEnabled" class="form-text text-muted">When enabled, Twitch events will be computed and have their values applied to the goal.</small>
                   </div>
 
                   <MudExpansionPanel Text="Goal Triggers" Expanded="true">
                      <div class="form-group form-check">
-                        <label class="form-check-label">
-                           <MudCheckBox T="bool" @bind-Value="mGoalBarData.Settings.IncludeCheers" /> Include Cheers
-                           <small id="uiIncludeCheers" class="form-text text-muted">When enabled, cheering will count toward the goal.</small>
-                        </label>
+                        <MudCheckBox T="bool" @bind-Value="mGoalBarData.Settings.IncludeCheers" Label="Include Cheers" />
+                        <small id="uiIncludeCheers" class="form-text text-muted">When enabled, cheering will count toward the goal.</small>
                      </div>
 
                      @if (mGoalBarData.Settings.IncludeCheers)
@@ -70,10 +66,8 @@
                      }
 
                      <div class="form-group form-check">
-                        <label class="form-check-label">
-                           <MudCheckBox T="bool" @bind-Value="mGoalBarData.Settings.IncludeTips" /> Include Streamlabs Tips
-                           <small id="uiIncludeTips" class="form-text text-muted">When enabled, tipping via Streamlabs will count toward the goal (must authenticate with Streamlabs).</small>
-                        </label>
+                        <MudCheckBox T="bool" @bind-Value="mGoalBarData.Settings.IncludeTips" Label="Include Streamlabs Tips" />
+                        <small id="uiIncludeTips" class="form-text text-muted">When enabled, tipping via Streamlabs will count toward the goal (must authenticate with Streamlabs).</small>
                      </div>
 
                      @if (mGoalBarData.Settings.IncludeTips)
@@ -88,10 +82,8 @@
                      }
 
                      <div class="form-group form-check">
-                        <label class="form-check-label">
-                           <MudCheckBox T="bool" @bind-Value="mGoalBarData.Settings.IncludeSubs" /> Include Subscriptions
-                           <small id="uiIncludeSubs" class="form-text text-muted">When enabled, subscriptions, resubscriptions, and gift subscriptions count toward the goal.</small>
-                        </label>
+                        <MudCheckBox T="bool" @bind-Value="mGoalBarData.Settings.IncludeSubs" Label="Include Subscriptions" />
+                        <small id="uiIncludeSubs" class="form-text text-muted">When enabled, subscriptions, resubscriptions, and gift subscriptions count toward the goal.</small>
                      </div>
 
                      @if (mGoalBarData.Settings.IncludeSubs)
@@ -128,16 +120,12 @@
          <div class="p-0 m-0 rounded gifbot-section-panel">
             <div class="p-2">
                <div class="form-group form-check">
-                  <label class="form-check-label">
-                     <MudCheckBox T="bool" @bind-Value="mGoalBarData.Settings.HideGoalText" /> Hide Goal Text
-                     <small id="uiHideGoalText" class="form-text text-muted">When enabled, the text for the goal will not be visible on the bar overlay.</small>
-                  </label>
+                  <MudCheckBox T="bool" @bind-Value="mGoalBarData.Settings.HideGoalText" Label="Hide Goal Text" />
+                  <small id="uiHideGoalText" class="form-text text-muted">When enabled, the text for the goal will not be visible on the bar overlay.</small>
                </div>
                <div class="form-group form-check">
-                  <label class="form-check-label">
-                     <MudCheckBox T="bool" @bind-Value="mGoalBarData.Settings.ShowAmountAsPercentage" /> Show Current Amount as Percentage
-                     <small id="uiPercentage" class="form-text text-muted">When enabled, the current amount on the bar will be shown as a percentage value.</small>
-                  </label>
+                  <MudCheckBox T="bool" @bind-Value="mGoalBarData.Settings.ShowAmountAsPercentage" Label="Show Current Amount as Percentage" />
+                  <small id="uiPercentage" class="form-text text-muted">When enabled, the current amount on the bar will be shown as a percentage value.</small>
                </div>
                @if (!mGoalBarData.Settings.ShowAmountAsPercentage)
                {
@@ -211,12 +199,11 @@
                      <MudSelectItem T="int" Value="24">VT323</MudSelectItem>
                   </MudSelect>
                </div>
-               <div class="form-group mt-2">
-                  <label for="uiIsBold"><b>Font Weight:</b></label>
-                  <small id="uiIsBold" class="form-text text-white-50">Would you like the font to be bold?</small>
-                  <MudCheckBox T="bool" @bind-Value="mGoalBarData.Settings.Caption.IsBold" />
-                  <label for="uiIsBold">Bolded Text</label>
-               </div>
+                <div class="form-group mt-2">
+                   <label for="uiIsBold"><b>Font Weight:</b></label>
+                   <small id="uiIsBold" class="form-text text-white-50">Would you like the font to be bold?</small>
+                   <MudCheckBox T="bool" @bind-Value="mGoalBarData.Settings.Caption.IsBold" Label="Bolded Text" />
+                </div>
                <div class="mt-2">
                   <label for="uiPreview"><b>Text Preview:</b></label>
                   <center>

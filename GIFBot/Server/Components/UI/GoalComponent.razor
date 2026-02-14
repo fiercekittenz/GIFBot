@@ -34,10 +34,8 @@
       <MudNumericField T="double" Min="0" Max="1000000" @bind-Value="mGoal.CurrentAmount" />
    </div>
    <div class="form-group form-check">
-      <label class="form-check-label">
-         <MudCheckBox T="bool" @bind-Value="mGoal.ResetWhenComplete" /> Reset the goal when completed.
-         <small id="uiResetWhenComplete" class="form-text text-muted">When enabled, the goal will reset back to 0 after the goal amount is reached. Note that doing this means that any additional goals in the chain after this one will not be activated.</small>
-      </label>
+      <MudCheckBox T="bool" @bind-Value="mGoal.ResetWhenComplete" Label="Reset the goal when completed." />
+      <small id="uiResetWhenComplete" class="form-text text-muted">When enabled, the goal will reset back to 0 after the goal amount is reached. Note that doing this means that any additional goals in the chain after this one will not be activated.</small>
    </div>
 
    <MudExpansionPanel Text="Milestones" Expanded="true">
