@@ -147,57 +147,75 @@
    </DialogActions>
 </MudDialog>
 
-<MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
+<!-- Confirm Delete Action Window -->
+<MudDialog @bind-Visible="@mIsDeleteActionDialogVisible">
+   <TitleContent>
+      <MudText Typo="Typo.h6">Confirm Delete</MudText>
+   </TitleContent>
+   <DialogContent>
+      <MudText>Are you sure you want to delete the action <b>@mPendingDeleteAction?.Name</b>?</MudText>
+   </DialogContent>
+   <DialogActions>
+      <MudButton OnClick="@(() => mIsDeleteActionDialogVisible = false)">Cancel</MudButton>
+      <MudButton Color="Color.Error" OnClick="@HandleConfirmDeleteAction">Delete</MudButton>
+   </DialogActions>
+</MudDialog>
+
+<div style="width: 100%">
+   <div class="text-left p-3 rounded gifbot-form-panel" style="width: 100%">
+      <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
    <MudTabPanel Text="General">
-      <div class="p-2 mb-2 rounded gifbot-content-panel">
-         <div class="text-left" style="width: 100%">
-            <MudButton Variant="Variant.Filled" Class="gifbot-action-btn p-1" Style="margin-left: auto; margin-right: 0" OnClick="@OnStartTimer">Start Timer</MudButton>
-            <MudButton Variant="Variant.Filled" Class="gifbot-action-btn p-1" Style="margin-left: auto; margin-right: 0" OnClick="@OnPauseTimer">Pause Timer</MudButton>
-            <MudButton Variant="Variant.Filled" Class="gifbot-action-btn p-1" Style="margin-left: auto; margin-right: 0" OnClick="@OnResetTimer">Reset Timer</MudButton>
-            <MudButton Variant="Variant.Filled" Class="gifbot-action-btn p-1" Style="margin-left: auto; margin-right: 0" OnClick="@OnHideTimer">Hide Timer</MudButton>
-         </div>
-      </div>
+      <div class="p-0 m-0 rounded gifbot-section-panel">
+         <div class="p-2">
+            <div class="p-2 mb-2 rounded gifbot-section-panel">
+               <div class="text-left" style="width: 100%">
+                  <MudButton Variant="Variant.Filled" Class="gifbot-action-btn p-1" Style="margin-left: auto; margin-right: 0" OnClick="@OnStartTimer">Start Timer</MudButton>
+                  <MudButton Variant="Variant.Filled" Class="gifbot-action-btn p-1" Style="margin-left: auto; margin-right: 0" OnClick="@OnPauseTimer">Pause Timer</MudButton>
+                  <MudButton Variant="Variant.Filled" Class="gifbot-action-btn p-1" Style="margin-left: auto; margin-right: 0" OnClick="@OnResetTimer">Reset Timer</MudButton>
+                  <MudButton Variant="Variant.Filled" Class="gifbot-action-btn p-1" Style="margin-left: auto; margin-right: 0" OnClick="@OnHideTimer">Hide Timer</MudButton>
+               </div>
+            </div>
 
-      <div class="p-2">
-         The countdown timer feature will allow you to have a timer on your broadcast software scene that the viewers may manipulate through actions. Actions are
-         optional, but chaotic fun!
-      </div>
+            <div class="p-2">
+               The countdown timer feature will allow you to have a timer on your broadcast software scene that the viewers may manipulate through actions. Actions are
+               optional, but chaotic fun!
+            </div>
 
-      <div class="p-2">
-         <div class="form-group form-check">
-            <MudCheckBox T="bool" @bind-Value="Data.Enabled" Label="Feature Enabled" />
-            <span id="uiEnabled" class="gifbot-field-desc">When enabled, this feature is active and available to your users!</span>
+            <div class="p-2">
+               <div class="form-group form-check">
+                  <MudCheckBox T="bool" @bind-Value="Data.Enabled" Label="Feature Enabled" />
+                  <span id="uiEnabled" class="gifbot-field-desc">When enabled, this feature is active and available to your users!</span>
+               </div>
+            </div>
+            <div class="form-group">
+               <label for="uiTimerValueInMinutes">Timer Start Value (in minutes):</label>
+               <span id="uiTimerValueInMinutes" class="gifbot-field-desc">The number of minutes you want this countdown timer to tick.</span>
+               <MudNumericField T="int" Min="1" Max="999999" @bind-Value="Data.TimerStartValueInMinutes" />
+            </div>
          </div>
       </div>
-      <div class="form-group">
-         <label for="uiTimerValueInMinutes">Timer Start Value (in minutes):</label>
-         <span id="uiTimerValueInMinutes" class="gifbot-field-desc">The number of minutes you want this countdown timer to tick.</span>
-         <MudNumericField T="int" Min="1" Max="999999" @bind-Value="Data.TimerStartValueInMinutes" />
-      </div>
-               <div class="d-flex justify-end pa-3 gap-4">
-            <MudButton Variant="Variant.Outlined" Color="Color.Default" OnClick="@OnCancel">Cancel</MudButton>
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@OnSaveChanges">Save Changes</MudButton>
-         </div>
    </MudTabPanel>
 
    <MudTabPanel Text="Timer Actions">
-      <div class="p-2">
-         <MudDataGrid T="CountdownTimerAction" Items="@Data.Actions" SortMode="SortMode.Single">
-            <ToolBarContent>
-               <MudTextField T="string" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
-               <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleAddRequest">Add Action</MudButton>
-            </ToolBarContent>
-            <Columns>
-               <PropertyColumn T="CountdownTimerAction" TProperty="string" Property="@(x => x.Name)" Title="Value" />
-               <TemplateColumn Title="">
+      <div class="p-0 m-0 rounded gifbot-section-panel">
+         <div class="p-2">
+            <MudDataGrid T="CountdownTimerAction" Items="@Data.Actions" SortMode="SortMode.Single">
+               <ToolBarContent>
+                  <MudTextField T="string" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
+                  <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleAddRequest">Add Action</MudButton>
+               </ToolBarContent>
+               <Columns>
+                  <PropertyColumn T="CountdownTimerAction" TProperty="string" Property="@(x => x.Name)" Title="Value" />
+                  <TemplateColumn Title="">
 <CellTemplate Context="data">
-                     <MudIconButton Icon="@Icons.Material.Filled.PlayCircle" Size="Size.Small" Class="gifbot-neutral-btn" OnClick="(() => HandlePlayActionRequest((data.Item)))" title="Play" />
-                     <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" Class="gifbot-neutral-btn" OnClick="(() => HandleEditRequest((data.Item)))" title="Edit" />
-                     <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Class="gifbot-neutral-btn" OnClick="(() => HandleDeleteRequest((data.Item)))" title="Delete" />
-                  </CellTemplate>
-               </TemplateColumn>
-            </Columns>
-         </MudDataGrid>
+                        <MudIconButton Icon="@Icons.Material.Filled.PlayCircle" Size="Size.Small" Class="gifbot-neutral-btn" OnClick="(() => HandlePlayActionRequest((data.Item)))" title="Play" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" Class="gifbot-neutral-btn" OnClick="(() => HandleEditRequest((data.Item)))" title="Edit" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Class="gifbot-neutral-btn" OnClick="(() => HandleDeleteRequest((data.Item)))" title="Delete" />
+                     </CellTemplate>
+                  </TemplateColumn>
+               </Columns>
+            </MudDataGrid>
+         </div>
       </div>
    </MudTabPanel>
 
@@ -227,7 +245,7 @@
             <div class="form-group mt-2">
                <label for="uiCaptionFont"><b>Font:</b></label>
                <span id="uiCaptionFont" class="gifbot-field-desc">What font should you use?</span>
-               <MudSelect T="int" @bind-Value="mCaptionFontSelection" Label="Font" Variant="Variant.Filled">
+               <MudSelect T="int" @bind-Value="mCaptionFontSelection" Label="Font">
                   <MudSelectItem T="int" Value="0">Arial</MudSelectItem>
                   <MudSelectItem T="int" Value="1">Comic Sans</MudSelectItem>
                   <MudSelectItem T="int" Value="2">Impact</MudSelectItem>
@@ -289,7 +307,7 @@
                         <MudTextField T="string" class="form-control" Style="width: 100%" ReadOnly="true" @bind-Value="WebPath" />
                      </td>
                      <td align="left">
-                        <MudButton Variant="Variant.Filled" Class="gifbot-action-btn p-1 ml-2" OnClick='(() => HandleCopyUrl("uiURL"))'>Copy to Clipboard</MudButton>
+                        <MudButton Variant="Variant.Filled" Class="gifbot-action-btn p-1 ml-2" OnClick="@(() => HandleCopyUrl(WebPath))">Copy to Clipboard</MudButton>
                      </td>
                   </tr>
                </table>
@@ -298,3 +316,9 @@
       </div>
    </MudTabPanel>
 </MudTabs>
+      <div class="d-flex justify-end pa-3 gap-4">
+         <MudButton Variant="Variant.Outlined" Color="Color.Default" OnClick="@OnCancel">Cancel</MudButton>
+         <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@OnSaveChanges">Save Changes</MudButton>
+      </div>
+   </div>
+</div>

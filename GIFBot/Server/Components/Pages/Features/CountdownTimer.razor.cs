@@ -171,18 +171,30 @@ namespace GIFBot.Server.Components.Pages.Features
       {
          if (action != null)
          {
-            bool result = await mHubConnection.InvokeAsync<bool>("DeleteCountdownTimerAction", action.Id);
+            mPendingDeleteAction = action;
+            mIsDeleteActionDialogVisible = true;
+            StateHasChanged();
+         }
+      }
+
+      private async Task HandleConfirmDeleteAction()
+      {
+         if (mPendingDeleteAction != null)
+         {
+            bool result = await mHubConnection.InvokeAsync<bool>("DeleteCountdownTimerAction", mPendingDeleteAction.Id);
             if (result)
             {
                await GetCountdownDataFromHub();
                Snackbar.Add("Delete Successful - The action has been deleted.", Severity.Success);
-               await InvokeAsync(() => { StateHasChanged(); });
             }
             else
             {
                Snackbar.Add("Delete Failed - The action was not deleted.", Severity.Error);
-               await InvokeAsync(() => { StateHasChanged(); });
             }
+
+            mIsDeleteActionDialogVisible = false;
+            mPendingDeleteAction = null;
+            await InvokeAsync(() => { StateHasChanged(); });
          }
       }
 
@@ -256,11 +268,17 @@ namespace GIFBot.Server.Components.Pages.Features
          await mHubConnection.InvokeAsync("HideTimer");
       }
 
-      private async Task HandleCopyUrl(string elementName)
+      private async Task HandleCopyUrl(string url)
       {
-         await JSRuntime.InvokeVoidAsync("CopyToClipboard", elementName);
-         Snackbar.Add("Success - The URL was copied to your clipboard!", Severity.Success);
-         await InvokeAsync(() => { StateHasChanged(); });
+         try
+         {
+            await JSRuntime.InvokeVoidAsync("navigator.clipboard.writeText", url);
+            Snackbar.Add("Success - The URL was copied to your clipboard!", Severity.Success);
+         }
+         catch (Exception)
+         {
+            Snackbar.Add("Error - Could not copy to clipboard.", Severity.Error);
+         }
       }
 
       #endregion
@@ -305,11 +323,15 @@ namespace GIFBot.Server.Components.Pages.Features
 
       private bool mIsEditDialogVisible = false;
 
+      private bool mIsDeleteActionDialogVisible = false;
+
       private int mCaptionFontSelection = 0;
 
       private HubConnection mHubConnection;
 
       private CountdownTimerAction mTempData = new CountdownTimerAction();
+
+      private CountdownTimerAction mPendingDeleteAction;
 
       #endregion
    }
