@@ -125,7 +125,10 @@
                      <td valign="top">
                         <MudTextField T="string" Disabled="true" @bind-Value="CurrentlyEditedSticker.Visual" />
                         @* TODO: Wire up file upload handler *@
-<InputFile accept="image/gif,image/jpeg,image/png" style="width: 100%; background-color: #16162e" />
+                        <MudButton HtmlTag="label" Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.UploadFile" Class="mt-2">
+                           Choose File
+                           <InputFile accept="image/gif,image/jpeg,image/png" style="display: none;" />
+                        </MudButton>
                         @if (mUploadStickerVisualProgress > 0)
                         {
                             <MudProgressLinear Value="@mUploadStickerVisualProgress" Style="margin-bottom: 20px; width: 100%" />
@@ -346,7 +349,10 @@
                               <td valign="top">
                                  <MudTextField T="string" Disabled="true" @bind-Value="mStickerData.Audio" />
                                  @* TODO: Wire up file upload handler *@
-<InputFile accept="audio/*" style="width: 100%; background-color: #16162e" />
+                                 <MudButton HtmlTag="label" Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.UploadFile" Class="mt-2">
+                                    Choose File
+                                    <InputFile accept="audio/*" style="display: none;" />
+                                 </MudButton>
                                  @if (mUploadAudioProgress > 0)
                                  {
                                      <MudProgressLinear Value="@mUploadAudioProgress" Style="margin-bottom: 20px; width: 100%" />
@@ -659,7 +665,10 @@
                                     <td valign="top">
                                        <MudTextField T="string" Disabled="true" @bind-Value="mTempStickerToAdd.Visual" />
                                        @* TODO: Wire up file upload handler *@
-<InputFile accept="image/gif,image/jpeg,image/png" style="width: 100%; background-color: #16162e" />
+                                       <MudButton HtmlTag="label" Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.UploadFile" Class="mt-2">
+                                          Choose File
+                                          <InputFile accept="image/gif,image/jpeg,image/png" style="display: none;" />
+                                       </MudButton>
                                        @if (mUploadStickerVisualProgress > 0)
                                        {
                                            <MudProgressLinear Value="@mUploadStickerVisualProgress" Style="margin-bottom: 20px; width: 100%" />
@@ -672,9 +681,9 @@
                                  </tr>
                               </table>
                            </div>
-                           <div class="d-flex justify-end pa-3">
-                              <MudButton Variant="Variant.Filled" Class="gifbot-action-btn gifbot-secondary-btn p-1" OnClick="@HandleCancelNewSticker">Cancel</MudButton>
-                              <MudButton Variant="Variant.Filled" Class="gifbot-action-btn gifbot-secondary-btn p-1" OnClick="@HandleAddNewSticker">Add New Sticker</MudButton>
+                           <div class="d-flex justify-end pa-3 gap-4">
+                              <MudButton Variant="Variant.Outlined" Color="Color.Default" OnClick="@HandleCancelNewSticker">Cancel</MudButton>
+                              <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@HandleAddNewSticker">Add New Sticker</MudButton>
                            </div>
                         </MudTabPanel>
                      }
