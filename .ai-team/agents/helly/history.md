@@ -88,3 +88,6 @@
 ---
 
 📌 **Editor icon mapping decision (2026-02-14):** Icon mapping for editor cleanup — map remaining open-iconic action icons to Material Design equivalents (`oi-x` → `Icons.Material.Filled.Close`, `oi-delete` → `Icons.Material.Filled.Delete`), continue existing edit/play mappings. — Scribe
+
+## Learnings
+- Added MudBlazor page header + content panel framing on the remaining test/error pages for consistent layout polish.

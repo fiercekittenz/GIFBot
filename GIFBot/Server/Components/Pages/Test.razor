@@ -1,13 +1,23 @@
 ﻿@page "/test"
-<MudDataGrid T="Employee" Items="@Data" Filterable="true" SortMode="SortMode.Single" Groupable="false">
-   <Columns>
-      <PropertyColumn T="Employee" TProperty="string" Property="@(x => x.Name)" Title="Name" />
-      <PropertyColumn T="Employee" TProperty="int" Property="@(x => x.Id)" Title="Id" />
-      <PropertyColumn T="Employee" TProperty="int?" Property="@(x => x.ParentId)" Title="ParentId" />
-      <PropertyColumn T="Employee" TProperty="string" Property="@(x => x.EmailAddress)" Title="EmailAddress" />
-      <PropertyColumn T="Employee" TProperty="DateTime" Property="@(x => x.HireDate)" Title="HireDate" />
-   </Columns>
-</MudDataGrid>
+
+<div class="pa-1 my-1 gifbot-page-header">
+   <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+      <MudIcon Icon="@Icons.Material.Filled.Science" />
+      <MudText Typo="Typo.h4">Test</MudText>
+   </MudStack>
+</div>
+
+<div class="p-2 mb-2 rounded gifbot-content-panel">
+   <MudDataGrid T="Employee" Items="@Data" Filterable="true" SortMode="SortMode.Single" Groupable="false">
+      <Columns>
+         <PropertyColumn T="Employee" TProperty="string" Property="@(x => x.Name)" Title="Name" />
+         <PropertyColumn T="Employee" TProperty="int" Property="@(x => x.Id)" Title="Id" />
+         <PropertyColumn T="Employee" TProperty="int?" Property="@(x => x.ParentId)" Title="ParentId" />
+         <PropertyColumn T="Employee" TProperty="string" Property="@(x => x.EmailAddress)" Title="EmailAddress" />
+         <PropertyColumn T="Employee" TProperty="DateTime" Property="@(x => x.HireDate)" Title="HireDate" />
+      </Columns>
+   </MudDataGrid>
+</div>
 
 @code {
    public List<Employee> Data { get; set; }

@@ -1,6 +1,15 @@
 @page "/error"
 
-<MudText Typo="Typo.h6">Error</MudText>
+<div class="pa-1 my-1 gifbot-page-header">
+   <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+      <MudIcon Icon="@Icons.Material.Filled.Error" />
+      <MudText Typo="Typo.h4">Error</MudText>
+   </MudStack>
+</div>
+
+<div class="p-2 mb-2 rounded gifbot-content-panel">
+   <MudText>An unexpected error occurred.</MudText>
+</div>
 
 @code {
 // TODO: Give the users a helpful error message.
