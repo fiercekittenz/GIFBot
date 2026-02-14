@@ -16,6 +16,34 @@
    </MudStack>
 </div>
 
+<!-- Delete Sticker/Category Confirmation Dialog -->
+<MudDialog @bind-Visible="@mIsDeleteStickerDialogVisible">
+   <TitleContent>
+      <MudText Typo="Typo.h6">Confirm Delete</MudText>
+   </TitleContent>
+   <DialogContent>
+      <MudText>Are you sure you want to delete <b>@(mPendingDeleteStickerItem?.Name ?? "this item")</b>?</MudText>
+   </DialogContent>
+   <DialogActions>
+      <MudButton OnClick="@(() => mIsDeleteStickerDialogVisible = false)">Cancel</MudButton>
+      <MudButton Color="Color.Error" OnClick="@HandleConfirmDeleteSticker">Delete</MudButton>
+   </DialogActions>
+</MudDialog>
+
+<!-- Delete Selected Stickers Confirmation Dialog -->
+<MudDialog @bind-Visible="@mIsDeleteSelectedDialogVisible">
+   <TitleContent>
+      <MudText Typo="Typo.h6">Confirm Delete</MudText>
+   </TitleContent>
+   <DialogContent>
+      <MudText>Are you sure you want to delete <b>@mSelectedTreeItems.Count(t => t.Type == StickerTreeListItem.ItemType.Entry)</b> selected sticker(s)?</MudText>
+   </DialogContent>
+   <DialogActions>
+      <MudButton OnClick="@(() => mIsDeleteSelectedDialogVisible = false)">Cancel</MudButton>
+      <MudButton Color="Color.Error" OnClick="@HandleConfirmDeleteSelected">Delete</MudButton>
+   </DialogActions>
+</MudDialog>
+
 <!-- Add New Category Window -->
 <MudDialog @bind-Visible="@mIsCreateCategoryDialogVisible">
    <TitleContent>
