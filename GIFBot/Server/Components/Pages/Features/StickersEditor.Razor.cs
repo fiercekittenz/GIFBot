@@ -123,11 +123,17 @@ namespace GIFBot.Server.Components.Pages.Features
          }
       }
 
-      private async Task HandleCopyUrl(string elementName)
+      private async Task HandleCopyUrl(string url)
       {
-         await JSRuntime.InvokeVoidAsync("CopyToClipboard", elementName);
-         Snackbar.Add("Success - The URL was copied to your clipboard!", Severity.Success);
-         await InvokeAsync(() => { StateHasChanged(); });
+         try
+         {
+            await JSRuntime.InvokeVoidAsync("navigator.clipboard.writeText", url);
+            Snackbar.Add("Success - The URL was copied to your clipboard!", Severity.Success);
+         }
+         catch (Exception)
+         {
+            Snackbar.Add("Error - Could not copy to clipboard.", Severity.Error);
+         }
       }
 
       private void OnImportAudioFileProgress(InputFileChangeEventArgs e)

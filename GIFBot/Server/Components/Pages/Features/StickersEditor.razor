@@ -247,22 +247,17 @@
    </DialogActions>
 </MudDialog>
 
-<nav class="navbar navbar-expand-sm gifbot-quick-actions">
-   <span class="navbar-text mr-3">
-      <b>Quick Actions:</b>
-   </span>
-   <ul class="navbar-nav">
-      <li class="nav-item">
-         <MudButton Variant="Variant.Filled" Class="gifbot-action-btn p-1 mr-3" OnClick="@ClearAllStickers">Clear All Stickers</MudButton>
-      </li>
-   </ul>
-</nav>
-
 <EditForm Model="@mStickerData" OnSubmit="@OnSaveChanges">
+   <div style="width: 100%">
+      <div class="text-left p-3 rounded gifbot-form-panel" style="width: 100%">
+         <div class="d-flex align-center gap-2 mb-3">
+            <MudText Typo="Typo.subtitle1"><b>Quick Actions:</b></MudText>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@ClearAllStickers">Clear All Stickers</MudButton>
+         </div>
    <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
       <MudTabPanel Text="Settings">
-         <div style="width: 100%">
-            <div class="text-left p-3 rounded gifbot-form-panel" style="width: 100%">
+            <div class="p-0 m-0 rounded gifbot-section-panel">
+               <div class="p-2">
                <p>
                   <b>Stickers</b> is a feature of GIFBot where you can have certain events place a sticker on the screen. Think of this as a
                   virtual way to torture yourself for your viewers' benefit. It's a great way to promote charitable events and to have viewers
@@ -435,9 +430,8 @@
       </MudTabPanel>
 
       <MudTabPanel Text="Randomized Stickers Behavior">
-         <div style="width: 100%">
-            <div class="text-left p-3 rounded gifbot-form-panel" style="width: 100%">
-               <div class="text-left p-3 rounded gifbot-section-panel">
+            <div class="p-0 m-0 rounded gifbot-section-panel">
+               <div class="p-2">
                   <p>
                      Stickers can be randomly placed or deliberately placed by name. For stickers with random placement enabled, you can have one of those stickers
                      appear when the following events happen (as long as they meet your thresholds!):
@@ -537,7 +531,6 @@
                   </div>
                </div>
             </div>
-         </div>
       </MudTabPanel>
 
       <MudTabPanel Text="Sticker Images">
@@ -560,10 +553,12 @@
                <div class="form-group">
                   <MudTabs @bind-ActivePanelIndex="@ActiveStickerTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
                      <MudTabPanel Text="Stickers">
+                        <div class="d-flex justify-end mb-2">
+                           <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@HandleAddCategoryRequest">Add Category</MudButton>
+                        </div>
                         <MudDataGrid T="StickerTreeListItem" Items="@mStickerTreeListData" Filterable="true" SortMode="SortMode.Single" Groupable="false">
                            <ToolBarContent>
                               <MudTextField T="string" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
-                              <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleAddCategoryRequest">Add Category</MudButton>
                               @if (mSelectedTreeItems.Where(t => t.Type == StickerTreeListItem.ItemType.Entry).Any())
                               {
                                  <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleMoveSelectedRequest">Move</MudButton>
@@ -690,40 +685,30 @@
       </MudTabPanel>
 
       <MudTabPanel Text="BrowserSource URL">
-         <div>
-            <div class="text-white-50 p-0">
-               <p>
+         <div class="p-0 m-0 rounded gifbot-section-panel">
+            <div class="p-2">
+               <p class="text-white-50">
                   To display the stickers in your broadcaster software, copy these URLs and use them as the input for new Browser Source elements.
                   Make sure that the size of your browser source matches the working canvas size that you specified in the sticker settings!
                </p>
-               <p>
+               <p class="text-white-50">
                   Note: If you set this browser source to refresh when you switch scenes, the stickers will flicker since it will rebuild as if you had refreshed in Chrome.
                </p>
+               <div class="mb-4">
+                  <label><b>Primary Stickers Layer:</b></label>
+                  <div class="d-flex align-center mt-1" style="max-width: 700px">
+                     <MudTextField T="string" Style="flex: 1" ReadOnly="true" @bind-Value="mURL" />
+                     <MudButton Variant="Variant.Filled" Class="gifbot-action-btn p-1 ml-3" OnClick="@(() => HandleCopyUrl(mURL))">Copy to Clipboard</MudButton>
+                  </div>
+               </div>
+               <div class="mb-4">
+                  <label><b>Secondary Stickers Layer:</b></label>
+                  <div class="d-flex align-center mt-1" style="max-width: 700px">
+                     <MudTextField T="string" Style="flex: 1" ReadOnly="true" @bind-Value="mSecondaryURL" />
+                     <MudButton Variant="Variant.Filled" Class="gifbot-action-btn p-1 ml-3" OnClick="@(() => HandleCopyUrl(mSecondaryURL))">Copy to Clipboard</MudButton>
+                  </div>
+               </div>
             </div>
-            <table width="100%">
-               <tr>
-                  <td><b>Primary Stickers Layer:</b></td>
-               </tr>
-               <tr>
-                  <td width="600">
-                     <MudTextField T="string" class="form-control" Style="width: 100%" ReadOnly="true" @bind-Value="mURL" />
-                  </td>
-                  <td align="left">
-                     <MudButton Variant="Variant.Filled" Class="gifbot-action-btn gifbot-secondary-btn p-1 ml-2" OnClick="@(() => HandleCopyUrl("uiURL"))">Copy to Clipboard</MudButton>
-                  </td>
-               </tr>
-               <tr>
-                  <td><b>Secondary Stickers Layer:</b></td>
-               </tr>
-               <tr>
-                  <td width="600">
-                     <MudTextField T="string" class="form-control" Style="width: 100%" ReadOnly="true" @bind-Value="mSecondaryURL" />
-                  </td>
-                  <td align="left">
-                     <MudButton Variant="Variant.Filled" Class="gifbot-action-btn gifbot-secondary-btn p-1 ml-2" OnClick="@(() => HandleCopyUrl("uiSecondaryURL"))">Copy to Clipboard</MudButton>
-                  </td>
-               </tr>
-            </table>
          </div>
       </MudTabPanel>
    </MudTabs>
@@ -732,4 +717,6 @@
          <MudButton Variant="Variant.Outlined" Color="Color.Default" OnClick="@OnCancel">Cancel</MudButton>
          <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit">Save Changes</MudButton>
       </div>
+      </div>
+   </div>
 </EditForm>
