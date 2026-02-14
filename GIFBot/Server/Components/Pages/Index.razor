@@ -144,7 +144,14 @@
 
          await InvokeAsync(StateHasChanged);
 
-         await InvokeAsync(async () => await JSRuntime.InvokeVoidAsync("UpdateScroll"));
+         try
+         {
+            await InvokeAsync(async () => await JSRuntime.InvokeVoidAsync("UpdateScroll"));
+         }
+         catch (TaskCanceledException)
+         {
+            // Circuit disconnected (e.g., DevTools opened or page navigated away)
+         }
       });
 
       // Handle an update to bonkers mode.
