@@ -1,5 +1,8 @@
 # Helly — History
 
+📌 Team update (2026-02-14): Page style audit methodology established; 16 pages audited against Settings/GiveawayEditor standard with 14 work items decomposed across 6 priority tiers — decided by Burt, Milchick
+
+
 ## Project Context
 - **Project:** GIFBot — Interactive Twitch bot
 - **Stack:** C#, .NET 8 (→.NET 10), Blazor WASM (→Blazor Server), SignalR, Telerik (→MudBlazor)
@@ -92,3 +95,7 @@
 ## Learnings
 - Added MudBlazor page header + content panel framing on the remaining test/error pages for consistent layout polish.
 - Standardized MudCheckBox labels with inline Label usage and added inline-flex styling to keep labels aligned.
+- Restyled GiveawayEditor.razor to match Settings.razor panel structure: wrapped MudTabs in `gifbot-form-panel`, all tab content sections in `gifbot-section-panel` > `p-2` divs, moved Cancel/Save buttons outside tabs but inside form panel. Pattern: outer `gifbot-form-panel` → `MudTabs` → each tab's content in `gifbot-section-panel`. This is the standard for all editor pages going forward.
+- **AnimationSelectorComponent GUID fix:** Added `Placeholder="None"` and `ToStringFunc` to MudSelect so `Guid.Empty` renders as "None" instead of `00000000-...`. Also added an explicit "None" `MudSelectItem` for clearing selection. Pattern: any MudSelect with a GUID type should use a `ToStringFunc` to resolve display names.
+- **Banned Users tab restyled to mirror User Groups tab:** Removed search bar from `ToolBarContent`, added description paragraph, wrapped DataGrid in `.gifbot-bordered-table`, set `Dense="true"`, delete button uses `Color="Color.Error"` instead of `.gifbot-neutral-btn`, "Add Banned User" button placed below grid in `d-flex justify-end` div. Added delete confirmation dialog (`mIsDeleteBannedUserDialogVisible` + `mPendingDeleteBannedUser`) matching the User Groups delete pattern. Add dialog now has `Immediate="true"` on the text field and `Disabled` validation preventing empty or duplicate entries.
+

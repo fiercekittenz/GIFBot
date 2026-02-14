@@ -1,9 +1,3 @@
-# Decisions
-
-This file is the shared brain for the GIFBot squad. All team decisions are recorded here.
-
----
-
 ### 2026-02-13: Migration Architecture Analysis & Risk Assessment
 **By:** Mark
 **What:** Architecture review of current GIFBot structure and risk analysis for the three planned migrations
@@ -430,3 +424,4 @@ Recommend creating `<PageHeader Icon="..." Title="..." />` component for consist
 - Users may be confused about which to click
 - Standard web convention is bottom-right for form actions
 - Top area reserved for feature-specific actions (e.g., "Take Down Backdrop") if needed
+
