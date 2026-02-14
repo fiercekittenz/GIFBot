@@ -13,7 +13,10 @@
 @if (mBotSettings != null && mBotSettings.CurrentSetupStep == SetupStep.Welcome)
 {
    <div class="pa-1 my-1 gifbot-page-header">
-      <MudText Typo="Typo.h4"><span class="oi oi-cog" aria-hidden="true"></span> Bot Setup (Step 1 of 4): Welcome!</MudText>
+      <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+         <MudIcon Icon="@Icons.Material.Filled.Settings" />
+         <MudText Typo="Typo.h4">Bot Setup (Step 1 of 4): Welcome!</MudText>
+      </MudStack>
    </div>
 
    <div class="d-flex justify-center">
@@ -36,7 +39,10 @@
 else if (mBotSettings != null && mBotSettings.CurrentSetupStep == SetupStep.BotOauth)
 {
    <div class="pa-1 my-1 gifbot-page-header">
-      <MudText Typo="Typo.h4"><span class="oi oi-cog" aria-hidden="true"></span> Bot Setup (Step 2 of 4): Bot Account Authentication!</MudText>
+      <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+         <MudIcon Icon="@Icons.Material.Filled.Settings" />
+         <MudText Typo="Typo.h4">Bot Setup (Step 2 of 4): Bot Account Authentication!</MudText>
+      </MudStack>
    </div>
 
    <div class="d-flex justify-center">
@@ -66,7 +72,10 @@ else if (mBotSettings != null && mBotSettings.CurrentSetupStep == SetupStep.BotO
 else if (mBotSettings != null && mBotSettings.CurrentSetupStep == SetupStep.StreamerOauth)
 {
    <div class="pa-1 my-1 gifbot-page-header">
-      <MudText Typo="Typo.h4"><span class="oi oi-cog" aria-hidden="true"></span> Bot Setup (Step 3 of 4): Streamer Account Authentication</MudText>
+      <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+         <MudIcon Icon="@Icons.Material.Filled.Settings" />
+         <MudText Typo="Typo.h4">Bot Setup (Step 3 of 4): Streamer Account Authentication</MudText>
+      </MudStack>
    </div>
 
    <div class="d-flex justify-center">
@@ -92,7 +101,10 @@ else if (mBotSettings != null && mBotSettings.CurrentSetupStep == SetupStep.Stre
 else if (mBotSettings != null && mBotSettings.CurrentSetupStep == SetupStep.Finished)
 {
    <div class="pa-1 my-1 gifbot-page-header">
-      <MudText Typo="Typo.h4"><span class="oi oi-cog" aria-hidden="true"></span> Bot Setup (Step 4 of 4): Complete!</MudText>
+      <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+         <MudIcon Icon="@Icons.Material.Filled.Settings" />
+         <MudText Typo="Typo.h4">Bot Setup (Step 4 of 4): Complete!</MudText>
+      </MudStack>
    </div>
 
    <div class="d-flex justify-center">
@@ -119,7 +131,10 @@ else if (mBotSettings != null && mBotSettings.CurrentSetupStep == SetupStep.Fini
 else
 {
    <div class="pa-1 my-1 gifbot-page-header">
-      <MudText Typo="Typo.h4"><span class="oi oi-cog" aria-hidden="true"></span> Bot Setup: Error</MudText>
+      <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+         <MudIcon Icon="@Icons.Material.Filled.Settings" />
+         <MudText Typo="Typo.h4">Bot Setup: Error</MudText>
+      </MudStack>
    </div>
 
    <div class="d-flex justify-center">
