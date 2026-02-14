@@ -21,7 +21,8 @@
       <MudTextField T="string" @bind-Value="mNewGoalTitle" Placeholder="Enter goal title..." />
    </DialogContent>
    <DialogActions>
-      <MudButton OnClick="@HandleAddNewGoal">Add</MudButton>
+      <MudButton OnClick="@HandleCancelAddGoal">Cancel</MudButton>
+      <MudButton Color="Color.Primary" OnClick="@HandleAddNewGoal">Add</MudButton>
    </DialogActions>
 </MudDialog>
 
@@ -133,11 +134,11 @@
          <div class="p-0 m-0 rounded gifbot-section-panel">
             <div class="p-2">
                <div class="form-group form-check">
-                  <MudCheckBox T="bool" @bind-Value="mGoalBarData.Settings.HideGoalText" Label="Hide Goal Text" />
+                  <MudCheckBox T="bool" Value="mGoalBarData.Settings.HideGoalText" ValueChanged="@(v => { mGoalBarData.Settings.HideGoalText = v; UpdateCaptionPreview(null); })" Label="Hide Goal Text" />
                   <span id="uiHideGoalText" class="gifbot-field-desc">When enabled, the text for the goal will not be visible on the bar overlay.</span>
                </div>
                <div class="form-group form-check">
-                  <MudCheckBox T="bool" @bind-Value="mGoalBarData.Settings.ShowAmountAsPercentage" Label="Show Current Amount as Percentage" />
+                  <MudCheckBox T="bool" Value="mGoalBarData.Settings.ShowAmountAsPercentage" ValueChanged="@(v => { mGoalBarData.Settings.ShowAmountAsPercentage = v; UpdateCaptionPreview(null); })" Label="Show Current Amount as Percentage" />
                   <span id="uiPercentage" class="gifbot-field-desc">When enabled, the current amount on the bar will be shown as a percentage value.</span>
                </div>
                @if (!mGoalBarData.Settings.ShowAmountAsPercentage)
@@ -155,37 +156,37 @@
                <div class="form-group mt-2">
                   <label for="uiBarForeColorLabel"><b>Bar Forecolor:</b></label>
                   <span id="uiBarForeColorLabel" class="gifbot-field-desc">The forecolor for the bar.</span>
-                  <input type="color" id="uiBarForeColor" @bind="@mGoalBarData.Settings.BarForecolor" />
+                  <input type="color" id="uiBarForeColor" value="@mGoalBarData.Settings.BarForecolor" @onchange="@(e => { mGoalBarData.Settings.BarForecolor = e.Value?.ToString(); UpdateCaptionPreview(null); })" />
                </div>
                <div class="form-group mt-2">
                   <label for="uiBarBackColorLabel"><b>Bar Backcolor:</b></label>
                   <span id="uiBarBackColorLabel" class="gifbot-field-desc">The backcolor for the bar.</span>
-                  <input type="color" id="uiBarBackColor" @bind="@mGoalBarData.Settings.BarBackcolor" />
+                  <input type="color" id="uiBarBackColor" value="@mGoalBarData.Settings.BarBackcolor" @onchange="@(e => { mGoalBarData.Settings.BarBackcolor = e.Value?.ToString(); UpdateCaptionPreview(null); })" />
                </div>
                <div class="form-group mt-2">
                   <label for="uiFontSize"><b>Font Size:</b></label>
                   <span id="uiFontSize" class="gifbot-field-desc">The size of the font used (bigger = better).</span>
-                  <MudNumericField T="int" Min="18" Max="100" @bind-Value="mGoalBarData.Settings.Caption.FontSize" />
+                  <MudNumericField T="int" Min="18" Max="100" Value="mGoalBarData.Settings.Caption.FontSize" ValueChanged="@(v => { mGoalBarData.Settings.Caption.FontSize = v; UpdateCaptionPreview(null); })" />
                </div>
                <div class="form-group mt-2">
                   <label for="uiFontColor"><b>Font Color:</b></label>
                   <span id="uiFontColor" class="gifbot-field-desc">The forecolor for the caption text.</span>
-                  <input type="color" id="uiFontColor" @bind="@mGoalBarData.Settings.Caption.FontColor" />
+                  <input type="color" id="uiFontColor" value="@mGoalBarData.Settings.Caption.FontColor" @onchange="@(e => { mGoalBarData.Settings.Caption.FontColor = e.Value?.ToString(); UpdateCaptionPreview(null); })" />
                </div>
                <div class="form-group mt-2">
                   <label for="uiStrokeThickness"><b>Stroke Thickness:</b></label>
                   <span id="uiStrokeThickness" class="gifbot-field-desc">The width of the stroke (outline) on the caption text.</span>
-                  <MudNumericField T="int" Min="0" Max="5" @bind-Value="mGoalBarData.Settings.Caption.StrokeThickness" />
+                  <MudNumericField T="int" Min="0" Max="5" Value="mGoalBarData.Settings.Caption.StrokeThickness" ValueChanged="@(v => { mGoalBarData.Settings.Caption.StrokeThickness = v; UpdateCaptionPreview(null); })" />
                </div>
                <div class="form-group mt-2">
                   <label for="uiFontStrokeColor"><b>Stroke Color:</b></label>
                   <span id="uiFontStrokeColor" class="gifbot-field-desc">The stroke or outline color for the caption text.</span>
-                  <input type="color" id="uiFontStrokeColor" @bind="@mGoalBarData.Settings.Caption.FontStrokeColor" />
+                  <input type="color" id="uiFontStrokeColor" value="@mGoalBarData.Settings.Caption.FontStrokeColor" @onchange="@(e => { mGoalBarData.Settings.Caption.FontStrokeColor = e.Value?.ToString(); UpdateCaptionPreview(null); })" />
                </div>
                <div class="form-group mt-2">
                   <label for="uiFont"><b>Font:</b></label>
                   <span id="uiFont" class="gifbot-field-desc">What font should you use?</span>
-                  <MudSelect T="int" @bind-Value="mCaptionFontSelection" Label="Font">
+                  <MudSelect T="int" Value="mCaptionFontSelection" ValueChanged="@OnCaptionFontChange" Label="Font">
                      <MudSelectItem T="int" Value="0">Arial</MudSelectItem>
                      <MudSelectItem T="int" Value="1">Comic Sans</MudSelectItem>
                      <MudSelectItem T="int" Value="2">Impact</MudSelectItem>
@@ -215,13 +216,13 @@
                 <div class="form-group mt-2">
                    <label for="uiIsBold"><b>Font Weight:</b></label>
                    <span id="uiIsBold" class="gifbot-field-desc">Would you like the font to be bold?</span>
-                   <MudCheckBox T="bool" @bind-Value="mGoalBarData.Settings.Caption.IsBold" Label="Bolded Text" />
+                   <MudCheckBox T="bool" Value="mGoalBarData.Settings.Caption.IsBold" ValueChanged="@(v => { mGoalBarData.Settings.Caption.IsBold = v; UpdateCaptionPreview(null); })" Label="Bolded Text" />
                 </div>
                <div class="mt-2">
                   <label for="uiPreview"><b>Text Preview:</b></label>
-                  <center>
+                  <div class="d-flex justify-center">
                      <ProgressBarComponent Width="@mGoalBarData.Settings.Width" TitleCaptionData="@mGoalBarData.Settings.Caption" PercentageCaptionData="@mPercentageCaptionData" TotalCaptionData="@mTotalCaptionData" CurrentPercentage="35" BackColor="@mGoalBarData.Settings.BarBackcolor" ProgressColor="@mGoalBarData.Settings.BarForecolor" />
-                  </center>
+                  </div>
                </div>
             </div>
          </div>
@@ -251,8 +252,8 @@
                   </div>
                }
 
-               <div>
-                  <p align="right"><MudButton Variant="Variant.Filled" Class="gifbot-action-btn nav-item p-1 mr-3" OnClick="@ShowAddNewGoalWindow">Add New Goal</MudButton></p>
+               <div class="d-flex justify-end mb-2">
+                  <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@ShowAddNewGoalWindow">Add New Goal</MudButton>
                </div>
                <MudTabs ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
                   @for (int i = 0; i < mGoalBarData.Goals.Count; ++i)
@@ -352,14 +353,11 @@
    /// <summary>
    /// Handle a caption font change.
    /// </summary>
-   private void OnCaptionFontChange(int? value)
+   private void OnCaptionFontChange(int value)
    {
-      if (value.HasValue)
-      {
-         mCaptionFontSelection = value.Value;
-         mGoalBarData.Settings.Caption.FontFamily = (global::GIFBot.Shared.Models.Visualization.FontFamily)value.Value;
-         UpdateCaptionPreview(null);
-      }
+      mCaptionFontSelection = value;
+      mGoalBarData.Settings.Caption.FontFamily = (global::GIFBot.Shared.Models.Visualization.FontFamily)value;
+      UpdateCaptionPreview(null);
    }
 
    /// <summary>
@@ -392,12 +390,26 @@
 
    private void ShowAddNewGoalWindow()
    {
+      mNewGoalTitle = string.Empty;
       mIsNewGoalPromptVisible = true;
+      StateHasChanged();
+   }
+
+   private void HandleCancelAddGoal()
+   {
+      mIsNewGoalPromptVisible = false;
+      mNewGoalTitle = string.Empty;
       StateHasChanged();
    }
 
    private async Task HandleAddNewGoal()
    {
+      if (string.IsNullOrWhiteSpace(mNewGoalTitle))
+      {
+         Snackbar.Add("Error - Please enter a goal title.", Severity.Error);
+         return;
+      }
+
       mIsNewGoalPromptVisible = false;
 
       bool result = await mHubConnection.InvokeAsync<bool>("AddGoal", mNewGoalTitle);
