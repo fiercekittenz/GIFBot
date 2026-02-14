@@ -118,15 +118,12 @@
 </MudDialog>
 
 <!-- Main Layout for the Animations Editor -->
-<div class="p-3">
-
-    @* MudBlazor: Use MudTooltip wrapping individual elements instead *@
-
-    <div class="p-0 m-0 rounded gifbot-section-panel">
-        <div class="p-2">
-            <div class="form-group">
-                <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
-                    <MudTabPanel Text="Animations">
+<div style="width: 100%">
+    <div class="text-left p-3 rounded gifbot-form-panel" style="width: 100%">
+        <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
+            <MudTabPanel Text="Animations">
+                <div class="p-0 m-0 rounded gifbot-section-panel">
+                    <div class="p-2">
                         <MudDataGrid T="AnimationTreeItem" Items="@mAnimationTreeData" Filterable="true" SortMode="SortMode.Single" Groupable="false"
                                          @ref="@AnimationTreeListRef">
                             <ToolBarContent>
@@ -171,7 +168,7 @@
                                         }
                                         @if (item.Tier == AnimationTreeTier.Animation)
                                         {
-                                            <center>@output</center>
+                                            @output
                                         }
                                     </CellTemplate>
                                 </TemplateColumn>
@@ -196,9 +193,9 @@
                                 </TemplateColumn>
                             </Columns>
                         </MudDataGrid>
-                    </MudTabPanel>
-                </MudTabs>
-            </div>
-        </div>
+                    </div>
+                </div>
+            </MudTabPanel>
+        </MudTabs>
     </div>
 </div>

@@ -10,23 +10,25 @@
    <MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Folder" Size="Size.Small" /> Add New Category</MudText>
 </div>
 
-<center>
-   <div class="p-0 m-0 text-left gifbot-section-panel" style="width: 600px">
-      <div class="p-2">
-         <EditForm Model="@Model" OnSubmit="@HandleSave">
-            <div class="form-group">
-               <label for="uiValue"><b>Category Name:</b></label>
-               <span id="uiValue" class="gifbot-field-desc">Pretty self-explanatory, right?</span>
-               <MudTextField T="string" class="form-control" @bind-Value="Model.Name" />
-            </div>
-                           <div class="d-flex justify-end pa-3">
-                  <MudButton Variant="Variant.Filled" Class="p-2 gifbot-secondary-btn" ButtonType="ButtonType.Reset" OnClick="@OnCancel">Cancel</MudButton>
-                  <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="p-2" ButtonType="ButtonType.Submit">OK</MudButton>
+<div style="width: 100%">
+   <div class="text-left p-3 rounded gifbot-form-panel" style="width: 100%">
+      <div class="p-0 m-0 rounded gifbot-section-panel">
+         <div class="p-2">
+            <EditForm Model="@Model" OnSubmit="@HandleSave">
+               <div class="form-group">
+                  <label for="uiValue"><b>Category Name:</b></label>
+                  <span id="uiValue" class="gifbot-field-desc">Pretty self-explanatory, right?</span>
+                  <MudTextField T="string" class="form-control" @bind-Value="Model.Name" />
                </div>
-         </EditForm>
+               <div class="d-flex justify-end pa-3 gap-4">
+                  <MudButton Variant="Variant.Outlined" Color="Color.Default" OnClick="@OnCancel">Cancel</MudButton>
+                  <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit">OK</MudButton>
+               </div>
+            </EditForm>
+         </div>
       </div>
    </div>
-</center>
+</div>
 
 @code {
 

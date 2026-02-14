@@ -30,12 +30,12 @@
    </DialogActions>
 </MudDialog>
 
-<div class="p-3">
-   @if (mSelectedAnimation != null)
-   {
-      <div class="p-1 mb-2 gifbot-page-header"><b>Editing Animation: @mSelectedAnimation?.Command</b></div>
-
-      <AnimationComponent Data="@mSelectedAnimation" UserGroupNames="@mUserGroupNames" AnimUserGroup="@mSelectedAnimationUserGroupName" IsDisplayTestMode="@mIsDisplayTestMode"
+<div style="width: 100%">
+   <div class="text-left p-3 rounded gifbot-form-panel" style="width: 100%">
+      @if (mSelectedAnimation != null)
+      {
+         <MudText Typo="Typo.h6" Class="mb-2">Editing: @mSelectedAnimation?.Command</MudText>
+         <AnimationComponent Data="@mSelectedAnimation" UserGroupNames="@mUserGroupNames" AnimUserGroup="@mSelectedAnimationUserGroupName" IsDisplayTestMode="@mIsDisplayTestMode"
                           OnTestAnimation="@HandleTestAnimation"
                           OnDeleteAnimation="@HandleDeleteAnimation"
                           OnVisualFileChanged="@HandleVisualFileChanged"
@@ -51,5 +51,6 @@
                           OnDisplayTestModeChanged="@(args => HandleDisplayTestModeChanged(args))"
                           OnNotifyDimensionsChanged="@(args => HandleNotifyDimensionsChanged(args as Tuple<int, int>))"
                           OnSave="@(args => HandleSaveAnimation(args))" />
-   }
+      }
+   </div>
 </div>
