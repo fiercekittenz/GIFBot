@@ -355,39 +355,19 @@
                      <p class="text-white-50">
                         <u>Note:</u> If you are using XSplit, you will need to add these as Media sources, not Browser sources. These are files installed by GIFBot and not hosted on a web server.
                      </p>
-                     <div>
-                        <table width="100%">
-                           <tr>
-                              <td colspan="2">
-                                 <label for="uiAnimsUrl"><b>[<u>Required</u>] GIFBot Main (Animations):</b></label>
-                              </td>
-                           </tr>
-                           <tr>
-                              <td width="600">
-                                 <MudTextField T="string" class="form-control" Style="width: 100%" ReadOnly="true" @bind-Value="mPrimaryAnimationsURL" />
-                              </td>
-                              <td align="left">
-                                 <MudButton Variant="Variant.Filled" Class="gifbot-action-btn p-1 ml-2" OnClick='(() => HandleCopyUrl("uiAnimsUrl"))'>Copy to Clipboard</MudButton>
-                              </td>
-                           </tr>
-                        </table>
+                     <div class="mb-4">
+                        <label for="uiAnimsUrl"><b>[<u>Required</u>] GIFBot Main (Animations):</b></label>
+                        <div class="d-flex align-center mt-1">
+                           <MudTextField T="string" Variant="Variant.Outlined" Style="max-width: 600px" ReadOnly="true" @bind-Value="mPrimaryAnimationsURL" />
+                           <MudButton Variant="Variant.Filled" Class="gifbot-action-btn p-1 ml-3" OnClick='(() => HandleCopyUrl("uiAnimsUrl"))'>Copy to Clipboard</MudButton>
+                        </div>
                      </div>
-                     <div>
-                        <table width="100%">
-                           <tr>
-                              <td colspan="2">
-                                 <label for="uiGoalBarUrl"><b>Goal Bar:</b></label>
-                              </td>
-                           </tr>
-                           <tr>
-                              <td width="600">
-                                 <MudTextField T="string" class="form-control" Style="width: 100%" ReadOnly="true" @bind-Value="mGoalBarURL" />
-                              </td>
-                              <td align="left">
-                                 <MudButton Variant="Variant.Filled" Class="gifbot-action-btn p-1 ml-2" OnClick='(() => HandleCopyUrl("uiGoalBarUrl"))'>Copy to Clipboard</MudButton>
-                              </td>
-                           </tr>
-                        </table>
+                     <div class="mb-4">
+                        <label for="uiGoalBarUrl"><b>Goal Bar:</b></label>
+                        <div class="d-flex align-center mt-1">
+                           <MudTextField T="string" Variant="Variant.Outlined" Style="max-width: 600px" ReadOnly="true" @bind-Value="mGoalBarURL" />
+                           <MudButton Variant="Variant.Filled" Class="gifbot-action-btn p-1 ml-3" OnClick='(() => HandleCopyUrl("uiGoalBarUrl"))'>Copy to Clipboard</MudButton>
+                        </div>
                      </div>
                   </div>
                </div>
