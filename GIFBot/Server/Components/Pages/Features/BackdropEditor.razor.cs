@@ -156,22 +156,31 @@ namespace GIFBot.Server.Components.Pages.Features
          }
       }
 
-      private async Task HandleDeleteRequest(BackdropVideoEntryData backdrop)
+      private void HandleDeleteRequest(BackdropVideoEntryData backdrop)
       {
-         if (backdrop != null)
+         mPendingDeleteBackdrop = backdrop;
+         mIsDeleteDialogVisible = true;
+         StateHasChanged();
+      }
+
+      private async Task HandleConfirmDelete()
+      {
+         if (mPendingDeleteBackdrop != null)
          {
-            bool result = await mHubConnection.InvokeAsync<bool>("DeleteBackdrop", backdrop.Id);
+            bool result = await mHubConnection.InvokeAsync<bool>("DeleteBackdrop", mPendingDeleteBackdrop.Id);
             if (result)
             {
                await GetBackdropDataFromHub();
                Snackbar.Add("Delete Successful - The backdrop has been deleted.", Severity.Success);
-               await InvokeAsync(() => { StateHasChanged(); });
             }
             else
             {
                Snackbar.Add("Delete Failed - The backdrop was not deleted.", Severity.Error);
-               await InvokeAsync(() => { StateHasChanged(); });
             }
+
+            mIsDeleteDialogVisible = false;
+            mPendingDeleteBackdrop = null;
+            await InvokeAsync(() => { StateHasChanged(); });
          }
       }
 
@@ -192,11 +201,17 @@ namespace GIFBot.Server.Components.Pages.Features
          }
       }
 
-      private async Task HandleCopyUrl(string elementName)
+      private async Task HandleCopyUrl(string url)
       {
-         await JSRuntime.InvokeVoidAsync("CopyToClipboard", elementName);
-         Snackbar.Add("Success - The URL was copied to your clipboard!", Severity.Success);
-         await InvokeAsync(() => { StateHasChanged(); });
+         try
+         {
+            await JSRuntime.InvokeVoidAsync("navigator.clipboard.writeText", url);
+            Snackbar.Add("Success - The URL was copied to your clipboard!", Severity.Success);
+         }
+         catch (Exception)
+         {
+            Snackbar.Add("Error - Could not copy to clipboard.", Severity.Error);
+         }
       }
 
       #endregion
@@ -246,6 +261,10 @@ namespace GIFBot.Server.Components.Pages.Features
       private bool mIsAddDialogVisible = false;
 
       private bool mIsEditDialogVisible = false;
+
+      private bool mIsDeleteDialogVisible = false;
+
+      private BackdropVideoEntryData mPendingDeleteBackdrop;
 
       private string mUploadVisualErrorMessage = String.Empty;
 

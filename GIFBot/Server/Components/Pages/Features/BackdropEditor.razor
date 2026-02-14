@@ -75,100 +75,123 @@
    </DialogActions>
 </MudDialog>
 
-<MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
-   <MudTabPanel Text="General">
-               <div class="d-flex justify-end pa-3">
-            <MudButton Variant="Variant.Filled" Class="gifbot-action-btn gifbot-secondary-btn" OnClick="@OnTakeDownBackdrop">Take Down Active Backdrop</MudButton>
-         </div>
+<!-- Confirm Delete Backdrop Window -->
+<MudDialog @bind-Visible="@mIsDeleteDialogVisible">
+   <TitleContent>
+      <MudText Typo="Typo.h6">Confirm Delete</MudText>
+   </TitleContent>
+   <DialogContent>
+      <MudText>Are you sure you want to delete the backdrop <b>@(mPendingDeleteBackdrop?.Name)</b>?</MudText>
+   </DialogContent>
+   <DialogActions>
+      <MudButton OnClick="@(() => mIsDeleteDialogVisible = false)">Cancel</MudButton>
+      <MudButton Color="Color.Error" OnClick="@HandleConfirmDelete">Delete</MudButton>
+   </DialogActions>
+</MudDialog>
 
-      <div class="p-2">
-         The Backdrop allows your community to control what is behind you or ON you if you're leveraging chroma key features in your content. Provide a
-         variety of backdrops and give your community the tools to change your backdrop via tips, charitable donations, channel points, or cheers! Backdrops need
-         to be 1080p. If not, they will be stretched to that size. Default behavior is to randomly choose one of the backdrops on command execution. The command
-         usage may include the name of a backdrop to specifically choose that one!
-      </div>
+<div style="width: 100%">
+   <div class="text-left p-3 rounded gifbot-form-panel" style="width: 100%">
+      <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
+         <MudTabPanel Text="General">
+            <div class="p-0 m-0 rounded gifbot-section-panel">
+               <div class="p-2">
+                  <div class="d-flex justify-end pa-3">
+                     <MudButton Variant="Variant.Filled" Class="gifbot-action-btn gifbot-secondary-btn" OnClick="@OnTakeDownBackdrop">Take Down Active Backdrop</MudButton>
+                  </div>
 
-      <div class="p-2">
-      <div class="form-group form-check">
-         <MudCheckBox T="bool" @bind-Value="Data.Enabled" Label="Feature Enabled" />
-         <span id="uiEnabled" class="gifbot-field-desc">When enabled, this feature is active and available to your users!</span>
-      </div>
-      </div>
-      <div class="form-group">
-         <label for="uiCommandLbl"><b>Title (or Command if used in chat):</b></label>
-         <span id="uiCommandLbl" class="gifbot-field-desc">How should the bot look for this feature being activated? You can give it a title and mirror it in your channel points, or a ! command for chat!</span>
-         <MudTextField T="string" @bind-Value="Data.Command" />
-      </div>
-      <div class="form-group">
-         <label for="uiCommandRedemption">Redemption Type:</label>
-         <span id="uiCommandRedemption" class="gifbot-field-desc">Backdrops can be changed from a variety of methods. If using chat, you need to use the command otherwise the system won't recognize it as a deliberate backdrop change. Example chat usage: !backdrop cheer100</span>
-         <MudRadioGroup @bind-Value="@CurrentlyEditedRedemption" T="int">
-<MudRadio T="int" Value="@(0)">Cheer</MudRadio>
-               <MudRadio T="int" Value="@(1)">Channel Points</MudRadio>
-               <MudRadio T="int" Value="@(2)">Tiltify Donation</MudRadio>
-               <MudRadio T="int" Value="@(3)">Tip</MudRadio>
-</MudRadioGroup>
-      </div>
-      <div class="form-group">
-         <label for="uiCommandCostLbl">Cost:</label>
-         <span id="uiCommandCostLbl" class="gifbot-field-desc">The number of bits, channel points, etc. required to execute this command.</span>
-         <MudNumericField T="int" Min="1" Max="999999" @bind-Value="Data.Cost" />
-      </div>
-      <div class="form-group">
-         <label for="uiCommandMinMinutesLbl">Minimum Minutes Active:</label>
-         <span id="uiCommandMinMinutesLbl" class="gifbot-field-desc">The number of minutes that an active backdrop should remain visible even if there are queued backdrops. Ensures viewers get their "cost's" worth at the very least.</span>
-         <MudNumericField T="int" Min="1" Max="999999" @bind-Value="Data.MinimumMinutesActive" />
-      </div>
+                  <div class="p-2">
+                     The Backdrop allows your community to control what is behind you or ON you if you're leveraging chroma key features in your content. Provide a
+                     variety of backdrops and give your community the tools to change your backdrop via tips, charitable donations, channel points, or cheers! Backdrops need
+                     to be 1080p. If not, they will be stretched to that size. Default behavior is to randomly choose one of the backdrops on command execution. The command
+                     usage may include the name of a backdrop to specifically choose that one!
+                  </div>
 
-               <div class="d-flex justify-end pa-3 gap-4">
-            <MudButton Variant="Variant.Outlined" Color="Color.Default" OnClick="@OnCancel">Cancel</MudButton>
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@OnSaveChanges">Save Changes</MudButton>
-         </div>
-   </MudTabPanel>
-
-   <MudTabPanel Text="Backdrops">
-      <div class="p-2">
-         <MudDataGrid T="BackdropVideoEntryData" Items="@Data.Backdrops" SortMode="SortMode.Single">
-            <ToolBarContent>
-               <MudTextField T="string" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
-               <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleAddRequest">Add Backdrop</MudButton>
-            </ToolBarContent>
-            <Columns>
-               <PropertyColumn T="BackdropVideoEntryData" TProperty="string" Property="@(x => x.Name)" Title="Value" />
-               <TemplateColumn Title="">
-<CellTemplate Context="data">
-                     <MudIconButton Icon="@Icons.Material.Filled.PlayArrow" Size="Size.Small" Class="gifbot-neutral-btn" OnClick="@(() => HandleHangRequest((data.Item)))" Title="Play" />
-                     <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" Class="gifbot-neutral-btn" OnClick="@(() => HandleEditRequest((data.Item)))" Title="Edit" />
-                     <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Class="gifbot-neutral-btn" OnClick="@(() => HandleDeleteRequest((data.Item)))" Title="Delete" />
-                  </CellTemplate>
-               </TemplateColumn>
-            </Columns>
-         </MudDataGrid>
-      </div>
-   </MudTabPanel>
-
-   <MudTabPanel Text="Browsersource URL">
-      <div class="p-0 m-0 rounded gifbot-section-panel">
-         <div class="p-2">
-            <p class="text-white-50">
-               Below is the URL you will need to capture in your broadcaster software in order to see the Backdrops on your scenes.
-            </p>
-            <p class="text-white-50">
-               <u>Note:</u> If you are using XSplit, you will need to add these as Media sources, not Browser sources. These are files installed by GIFBot and not hosted on a web server.
-            </p>
-            <div>
-               <table width="100%">
-                  <tr>
-                     <td width="600">
-                        <MudTextField T="string" class="form-control" Style="width: 100%" ReadOnly="true" @bind-Value="WebPath" />
-                     </td>
-                     <td align="left">
-                        <MudButton Variant="Variant.Filled" Class="gifbot-action-btn gifbot-secondary-btn p-1 ml-2" OnClick="@(() => HandleCopyUrl("uiURL"))">Copy to Clipboard</MudButton>
-                     </td>
-                  </tr>
-               </table>
+                  <div class="p-2">
+                     <div class="form-group form-check">
+                        <MudCheckBox T="bool" @bind-Value="Data.Enabled" Label="Feature Enabled" />
+                        <span id="uiEnabled" class="gifbot-field-desc">When enabled, this feature is active and available to your users!</span>
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label for="uiCommandLbl"><b>Title (or Command if used in chat):</b></label>
+                     <span id="uiCommandLbl" class="gifbot-field-desc">How should the bot look for this feature being activated? You can give it a title and mirror it in your channel points, or a ! command for chat!</span>
+                     <MudTextField T="string" @bind-Value="Data.Command" />
+                  </div>
+                  <div class="form-group">
+                     <label for="uiCommandRedemption">Redemption Type:</label>
+                     <span id="uiCommandRedemption" class="gifbot-field-desc">Backdrops can be changed from a variety of methods. If using chat, you need to use the command otherwise the system won't recognize it as a deliberate backdrop change. Example chat usage: !backdrop cheer100</span>
+                     <MudRadioGroup @bind-Value="@CurrentlyEditedRedemption" T="int">
+                        <MudRadio T="int" Value="@(0)">Cheer</MudRadio>
+                        <MudRadio T="int" Value="@(1)">Channel Points</MudRadio>
+                        <MudRadio T="int" Value="@(2)">Tiltify Donation</MudRadio>
+                        <MudRadio T="int" Value="@(3)">Tip</MudRadio>
+                     </MudRadioGroup>
+                  </div>
+                  <div class="form-group">
+                     <label for="uiCommandCostLbl">Cost:</label>
+                     <span id="uiCommandCostLbl" class="gifbot-field-desc">The number of bits, channel points, etc. required to execute this command.</span>
+                     <MudNumericField T="int" Min="1" Max="999999" @bind-Value="Data.Cost" />
+                  </div>
+                  <div class="form-group">
+                     <label for="uiCommandMinMinutesLbl">Minimum Minutes Active:</label>
+                     <span id="uiCommandMinMinutesLbl" class="gifbot-field-desc">The number of minutes that an active backdrop should remain visible even if there are queued backdrops. Ensures viewers get their "cost's" worth at the very least.</span>
+                     <MudNumericField T="int" Min="1" Max="999999" @bind-Value="Data.MinimumMinutesActive" />
+                  </div>
+               </div>
             </div>
-         </div>
+         </MudTabPanel>
+
+         <MudTabPanel Text="Backdrops">
+            <div class="p-0 m-0 rounded gifbot-section-panel">
+               <div class="p-2">
+                  <MudDataGrid T="BackdropVideoEntryData" Items="@Data.Backdrops" SortMode="SortMode.Single">
+                     <ToolBarContent>
+                        <MudTextField T="string" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
+                        <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleAddRequest">Add Backdrop</MudButton>
+                     </ToolBarContent>
+                     <Columns>
+                        <PropertyColumn T="BackdropVideoEntryData" TProperty="string" Property="@(x => x.Name)" Title="Value" />
+                        <TemplateColumn Title="">
+                           <CellTemplate Context="data">
+                              <MudIconButton Icon="@Icons.Material.Filled.PlayArrow" Size="Size.Small" Class="gifbot-neutral-btn" OnClick="@(() => HandleHangRequest((data.Item)))" Title="Play" />
+                              <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" Class="gifbot-neutral-btn" OnClick="@(() => HandleEditRequest((data.Item)))" Title="Edit" />
+                              <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Class="gifbot-neutral-btn" OnClick="@(() => HandleDeleteRequest((data.Item)))" Title="Delete" />
+                           </CellTemplate>
+                        </TemplateColumn>
+                     </Columns>
+                  </MudDataGrid>
+               </div>
+            </div>
+         </MudTabPanel>
+
+         <MudTabPanel Text="Browsersource URL">
+            <div class="p-0 m-0 rounded gifbot-section-panel">
+               <div class="p-2">
+                  <p class="text-white-50">
+                     Below is the URL you will need to capture in your broadcaster software in order to see the Backdrops on your scenes.
+                  </p>
+                  <p class="text-white-50">
+                     <u>Note:</u> If you are using XSplit, you will need to add these as Media sources, not Browser sources. These are files installed by GIFBot and not hosted on a web server.
+                  </p>
+                  <div>
+                     <table width="100%">
+                        <tr>
+                           <td width="600">
+                              <MudTextField T="string" class="form-control" Style="width: 100%" ReadOnly="true" @bind-Value="WebPath" />
+                           </td>
+                           <td align="left">
+                              <MudButton Variant="Variant.Filled" Class="gifbot-action-btn gifbot-secondary-btn p-1 ml-2" OnClick="@(() => HandleCopyUrl(WebPath))">Copy to Clipboard</MudButton>
+                           </td>
+                        </tr>
+                     </table>
+                  </div>
+               </div>
+            </div>
+         </MudTabPanel>
+      </MudTabs>
+      <div class="d-flex justify-end pa-3 gap-4">
+         <MudButton Variant="Variant.Outlined" Color="Color.Default" OnClick="@OnCancel">Cancel</MudButton>
+         <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@OnSaveChanges">Save Changes</MudButton>
       </div>
-   </MudTabPanel>
-</MudTabs>
+   </div>
+</div>
