@@ -837,6 +837,7 @@ namespace GIFBot.Server.Components.Pages.Features
       private int mStickerPage = 1;
 
       // Sticker Placement Editing (popup)
+      private DialogOptions mEditStickerDialogOptions = new DialogOptions { MaxWidth = MaxWidth.Large, FullWidth = true };
       private bool mIsPlacementBeingEdited = false;
       private bool mIsDisplayTestMode = true;
       private int mWorkingCanvasWidth = 1920;
