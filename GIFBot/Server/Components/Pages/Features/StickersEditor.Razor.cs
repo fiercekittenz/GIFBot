@@ -640,6 +640,9 @@ namespace GIFBot.Server.Components.Pages.Features
          await HandleDisplayTestModeChanged(false, null);
          await UpdateStickerOnServer(CurrentlyEditedSticker);
          mIsPlacementBeingEdited = false;
+         await GetStickerDataFromHub();
+         ActiveTabIndex = 2;
+         ActiveStickerTabIndex = 0;
          StateHasChanged();
       }
 
