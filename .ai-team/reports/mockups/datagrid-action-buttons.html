@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIFBot Mockup: Icon Buttons in DataGrid</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+            background-color: #1a1a2e;
+            color: rgba(255, 255, 255, 0.87);
+            padding: 24px;
+            line-height: 1.5;
+        }
+        
+        .mockup-title {
+            color: #7e57c2;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .mockup-description {
+            color: rgba(255, 255, 255, 0.63);
+            margin-bottom: 32px;
+            max-width: 800px;
+        }
+        
+        .comparison {
+            display: flex;
+            gap: 32px;
+            flex-wrap: wrap;
+        }
+        
+        .panel {
+            flex: 1;
+            min-width: 450px;
+            max-width: 600px;
+        }
+        
+        .panel-header {
+            background-color: #2d2b52;
+            padding: 8px 16px;
+            border-radius: 4px 4px 0 0;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .panel-header.before {
+            border-left: 4px solid #ef5350;
+        }
+        
+        .panel-header.after {
+            border-left: 4px solid #66bb6a;
+        }
+        
+        .panel-content {
+            background-color: #22223a;
+            padding: 16px;
+            border-radius: 0 0 4px 4px;
+        }
+        
+        /* DataGrid simulation */
+        .data-grid {
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .data-grid-header {
+            background-color: #161630;
+            padding: 12px 16px;
+            display: grid;
+            grid-template-columns: 1fr 80px 120px;
+            gap: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.63);
+        }
+        
+        .data-grid-row {
+            padding: 10px 16px;
+            display: grid;
+            grid-template-columns: 1fr 80px 120px;
+            gap: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            align-items: center;
+        }
+        
+        .data-grid-row:hover {
+            background-color: rgba(126, 87, 194, 0.08);
+        }
+        
+        .data-grid-row a {
+            color: #b39ddb;
+            text-decoration: underline;
+        }
+        
+        /* BEFORE: Bootstrap buttons */
+        .btn-old {
+            background-color: #3a3a5c;
+            border: none;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        
+        .btn-old:hover {
+            background-color: #4a4a6c;
+        }
+        
+        /* open-iconic simulation */
+        .oi-icon {
+            font-family: serif;
+            font-style: italic;
+            font-size: 12px;
+        }
+        
+        /* AFTER: MudIconButton */
+        .mud-icon-button {
+            background-color: #3a3a5c;
+            border: none;
+            color: rgba(255, 255, 255, 0.87);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        
+        .mud-icon-button:hover {
+            background-color: #4a4a7c;
+            transform: scale(1.05);
+        }
+        
+        .mud-icon-button:focus {
+            outline: 2px solid #7e57c2;
+            outline-offset: 2px;
+        }
+        
+        .mud-icon-button svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+        
+        .mud-icon-button.edit:hover {
+            color: #b39ddb;
+        }
+        
+        .mud-icon-button.delete:hover {
+            color: #ef5350;
+        }
+        
+        .mud-icon-button.play:hover {
+            color: #66bb6a;
+        }
+        
+        .actions-cell {
+            display: flex;
+            gap: 4px;
+        }
+        
+        /* Annotations */
+        .annotation {
+            background-color: #161630;
+            border-left: 3px solid #7e57c2;
+            padding: 12px 16px;
+            margin-top: 16px;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .annotation-title {
+            color: #b39ddb;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        
+        .annotation-text {
+            color: rgba(255, 255, 255, 0.63);
+            font-size: 13px;
+        }
+        
+        .issue-list, .improvement-list {
+            margin-top: 8px;
+            padding-left: 20px;
+        }
+        
+        .issue-list li {
+            color: #ef5350;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+        
+        .improvement-list li {
+            color: #66bb6a;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+        
+        /* Code block */
+        .code-block {
+            background-color: #0e0e1e;
+            border-radius: 4px;
+            padding: 16px;
+            margin-top: 24px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            white-space: pre;
+        }
+        
+        .code-comment { color: #6a9955; }
+        .code-tag { color: #569cd6; }
+        .code-attr { color: #9cdcfe; }
+        .code-string { color: #ce9178; }
+    </style>
+</head>
+<body>
+    <h1 class="mockup-title">DataGrid Action Buttons: Before & After</h1>
+    <p class="mockup-description">
+        Action buttons in MudDataGrid cells currently use Bootstrap button classes with open-iconic icons.
+        This mockup shows the improved version using MudIconButton with Material Icons.
+    </p>
+    
+    <div class="comparison">
+        <!-- BEFORE -->
+        <div class="panel">
+            <div class="panel-header before">
+                ❌ BEFORE: Bootstrap + open-iconic
+            </div>
+            <div class="panel-content">
+                <div class="data-grid">
+                    <div class="data-grid-header">
+                        <span>Animation Name</span>
+                        <span>Enabled</span>
+                        <span>Actions</span>
+                    </div>
+                    <div class="data-grid-row">
+                        <a href="#">!cheer100</a>
+                        <span>Yes</span>
+                        <div class="actions-cell">
+                            <button class="btn-old" title="Edit"><span class="oi-icon">✎</span></button>
+                            <button class="btn-old" title="Delete"><span class="oi-icon">🗑</span></button>
+                            <button class="btn-old" title="Play"><span class="oi-icon">▶</span></button>
+                        </div>
+                    </div>
+                    <div class="data-grid-row">
+                        <a href="#">!raid</a>
+                        <span>Yes</span>
+                        <div class="actions-cell">
+                            <button class="btn-old" title="Edit"><span class="oi-icon">✎</span></button>
+                            <button class="btn-old" title="Delete"><span class="oi-icon">🗑</span></button>
+                            <button class="btn-old" title="Play"><span class="oi-icon">▶</span></button>
+                        </div>
+                    </div>
+                    <div class="data-grid-row">
+                        <a href="#">!dance</a>
+                        <span>No</span>
+                        <div class="actions-cell">
+                            <button class="btn-old" title="Edit"><span class="oi-icon">✎</span></button>
+                            <button class="btn-old" title="Delete"><span class="oi-icon">🗑</span></button>
+                            <button class="btn-old" title="Play"><span class="oi-icon">▶</span></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="annotation">
+                    <div class="annotation-title">Issues</div>
+                    <ul class="issue-list">
+                        <li>Square buttons feel dated (Bootstrap 4 style)</li>
+                        <li>open-iconic icons are low-res and inconsistent</li>
+                        <li>No hover color feedback on icons</li>
+                        <li>Missing aria-label for accessibility</li>
+                        <li>Inline style for width/height</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- AFTER -->
+        <div class="panel">
+            <div class="panel-header after">
+                ✅ AFTER: MudIconButton + Material Icons
+            </div>
+            <div class="panel-content">
+                <div class="data-grid">
+                    <div class="data-grid-header">
+                        <span>Animation Name</span>
+                        <span>Enabled</span>
+                        <span>Actions</span>
+                    </div>
+                    <div class="data-grid-row">
+                        <a href="#">!cheer100</a>
+                        <span>Yes</span>
+                        <div class="actions-cell">
+                            <button class="mud-icon-button edit" aria-label="Edit animation">
+                                <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                            </button>
+                            <button class="mud-icon-button delete" aria-label="Delete animation">
+                                <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                            </button>
+                            <button class="mud-icon-button play" aria-label="Play animation">
+                                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="data-grid-row">
+                        <a href="#">!raid</a>
+                        <span>Yes</span>
+                        <div class="actions-cell">
+                            <button class="mud-icon-button edit" aria-label="Edit animation">
+                                <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                            </button>
+                            <button class="mud-icon-button delete" aria-label="Delete animation">
+                                <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                            </button>
+                            <button class="mud-icon-button play" aria-label="Play animation">
+                                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="data-grid-row">
+                        <a href="#">!dance</a>
+                        <span>No</span>
+                        <div class="actions-cell">
+                            <button class="mud-icon-button edit" aria-label="Edit animation">
+                                <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                            </button>
+                            <button class="mud-icon-button delete" aria-label="Delete animation">
+                                <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                            </button>
+                            <button class="mud-icon-button play" aria-label="Play animation">
+                                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="annotation">
+                    <div class="annotation-title">Improvements</div>
+                    <ul class="improvement-list">
+                        <li>Circular buttons follow Material Design 3</li>
+                        <li>Crisp Material Icons at any size</li>
+                        <li>Color feedback on hover (edit=purple, delete=red, play=green)</li>
+                        <li>Built-in aria-label for screen readers</li>
+                        <li>Focus ring for keyboard navigation</li>
+                        <li>Subtle scale transform on hover</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="code-block"><span class="code-comment">&lt;!-- Recommended Razor implementation for TemplateColumn --&gt;</span>
+<span class="code-tag">&lt;TemplateColumn</span> <span class="code-attr">Title</span>=<span class="code-string">"Actions"</span><span class="code-tag">&gt;</span>
+    <span class="code-tag">&lt;CellTemplate</span> <span class="code-attr">Context</span>=<span class="code-string">"itemcontext"</span><span class="code-tag">&gt;</span>
+        <span class="code-tag">&lt;MudStack</span> <span class="code-attr">Row</span>=<span class="code-string">"true"</span> <span class="code-attr">Spacing</span>=<span class="code-string">"1"</span><span class="code-tag">&gt;</span>
+            <span class="code-tag">&lt;MudIconButton</span> <span class="code-attr">Icon</span>=<span class="code-string">"@Icons.Material.Filled.Edit"</span> 
+                           <span class="code-attr">Size</span>=<span class="code-string">"Size.Small"</span>
+                           <span class="code-attr">Title</span>=<span class="code-string">"Edit"</span>
+                           <span class="code-attr">aria-label</span>=<span class="code-string">"Edit animation"</span>
+                           <span class="code-attr">OnClick</span>=<span class="code-string">"@(() => HandleEdit(itemcontext.Item))"</span> <span class="code-tag">/&gt;</span>
+            <span class="code-tag">&lt;MudIconButton</span> <span class="code-attr">Icon</span>=<span class="code-string">"@Icons.Material.Filled.Delete"</span> 
+                           <span class="code-attr">Size</span>=<span class="code-string">"Size.Small"</span>
+                           <span class="code-attr">Color</span>=<span class="code-string">"Color.Error"</span>
+                           <span class="code-attr">Title</span>=<span class="code-string">"Delete"</span>
+                           <span class="code-attr">aria-label</span>=<span class="code-string">"Delete animation"</span>
+                           <span class="code-attr">OnClick</span>=<span class="code-string">"@(() => HandleDelete(itemcontext.Item))"</span> <span class="code-tag">/&gt;</span>
+            <span class="code-tag">&lt;MudIconButton</span> <span class="code-attr">Icon</span>=<span class="code-string">"@Icons.Material.Filled.PlayArrow"</span> 
+                           <span class="code-attr">Size</span>=<span class="code-string">"Size.Small"</span>
+                           <span class="code-attr">Color</span>=<span class="code-string">"Color.Success"</span>
+                           <span class="code-attr">Title</span>=<span class="code-string">"Play"</span>
+                           <span class="code-attr">aria-label</span>=<span class="code-string">"Play animation"</span>
+                           <span class="code-attr">OnClick</span>=<span class="code-string">"@(() => HandlePlay(itemcontext.Item))"</span> <span class="code-tag">/&gt;</span>
+        <span class="code-tag">&lt;/MudStack&gt;</span>
+    <span class="code-tag">&lt;/CellTemplate&gt;</span>
+<span class="code-tag">&lt;/TemplateColumn&gt;</span></div>
+</body>
+</html>

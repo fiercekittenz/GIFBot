@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIFBot Mockup: Font Selector Component</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+            background-color: #1a1a2e;
+            color: rgba(255, 255, 255, 0.87);
+            padding: 24px;
+            line-height: 1.5;
+        }
+        
+        .mockup-title {
+            color: #7e57c2;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .mockup-description {
+            color: rgba(255, 255, 255, 0.63);
+            margin-bottom: 32px;
+            max-width: 800px;
+        }
+        
+        .comparison {
+            display: flex;
+            gap: 32px;
+            flex-wrap: wrap;
+        }
+        
+        .panel {
+            flex: 1;
+            min-width: 320px;
+            max-width: 400px;
+        }
+        
+        .panel-header {
+            background-color: #2d2b52;
+            padding: 8px 16px;
+            border-radius: 4px 4px 0 0;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .panel-header.before {
+            border-left: 4px solid #ef5350;
+        }
+        
+        .panel-header.after {
+            border-left: 4px solid #66bb6a;
+        }
+        
+        .panel-content {
+            background-color: #22223a;
+            padding: 16px;
+            border-radius: 0 0 4px 4px;
+        }
+        
+        /* BEFORE: Radio button overload */
+        .radio-overload {
+            background-color: #161630;
+            border-radius: 4px;
+            padding: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 0;
+            color: rgba(255, 255, 255, 0.87);
+            font-size: 14px;
+        }
+        
+        .radio-item input[type="radio"] {
+            accent-color: #7e57c2;
+        }
+        
+        /* AFTER: MudSelect dropdown */
+        .mud-select {
+            background-color: #2a2a48;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            padding: 12px 16px;
+            color: rgba(255, 255, 255, 0.87);
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        
+        .mud-select:hover {
+            border-color: #7e57c2;
+        }
+        
+        .mud-select:focus-within {
+            border-color: #7e57c2;
+            box-shadow: 0 0 0 2px rgba(126, 87, 194, 0.3);
+        }
+        
+        .mud-select-label {
+            position: absolute;
+            top: -10px;
+            left: 12px;
+            background-color: #22223a;
+            padding: 0 4px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.63);
+        }
+        
+        .mud-select-wrapper {
+            position: relative;
+        }
+        
+        .mud-select svg {
+            width: 20px;
+            height: 20px;
+            fill: rgba(255, 255, 255, 0.63);
+        }
+        
+        .mud-select-dropdown {
+            background-color: #22223a;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            margin-top: 4px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            max-height: 240px;
+            overflow-y: auto;
+        }
+        
+        .mud-select-item {
+            padding: 10px 16px;
+            cursor: pointer;
+            transition: background-color 0.15s;
+        }
+        
+        .mud-select-item:hover {
+            background-color: rgba(126, 87, 194, 0.15);
+        }
+        
+        .mud-select-item.selected {
+            background-color: rgba(126, 87, 194, 0.25);
+            color: #b39ddb;
+        }
+        
+        /* Font preview */
+        .font-preview {
+            background-color: #1c1c34;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            padding: 16px;
+            margin-top: 16px;
+            text-align: center;
+        }
+        
+        .font-preview-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 8px;
+        }
+        
+        .font-preview-text {
+            font-size: 32px;
+            color: white;
+        }
+        
+        .font-preview-text.lobster { font-family: 'Lobster', cursive; }
+        .font-preview-text.impact { font-family: Impact, sans-serif; }
+        
+        /* Annotations */
+        .annotation {
+            background-color: #161630;
+            border-left: 3px solid #7e57c2;
+            padding: 12px 16px;
+            margin-top: 16px;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .annotation-title {
+            color: #b39ddb;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        
+        .issue-list, .improvement-list {
+            margin-top: 8px;
+            padding-left: 20px;
+        }
+        
+        .issue-list li {
+            color: #ef5350;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+        
+        .improvement-list li {
+            color: #66bb6a;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+        
+        /* Code block */
+        .code-block {
+            background-color: #0e0e1e;
+            border-radius: 4px;
+            padding: 16px;
+            margin-top: 24px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            white-space: pre;
+        }
+        
+        .code-comment { color: #6a9955; }
+        .code-tag { color: #569cd6; }
+        .code-attr { color: #9cdcfe; }
+        .code-string { color: #ce9178; }
+        .code-keyword { color: #c586c0; }
+    </style>
+</head>
+<body>
+    <h1 class="mockup-title">Font Selector: Before & After</h1>
+    <p class="mockup-description">
+        The Countdown Timer and Goal Bar pages use 24+ radio buttons to select fonts. This creates an overwhelming 
+        UI that's hard to scan. A dropdown select with live preview is much more user-friendly.
+    </p>
+    
+    <div class="comparison">
+        <!-- BEFORE -->
+        <div class="panel">
+            <div class="panel-header before">
+                ❌ BEFORE: 24 Radio Buttons
+            </div>
+            <div class="panel-content">
+                <label style="font-weight: 600; margin-bottom: 8px; display: block;">Font:</label>
+                <div class="radio-overload">
+                    <div class="radio-item"><input type="radio" name="font" checked> Arial</div>
+                    <div class="radio-item"><input type="radio" name="font"> Comic Sans</div>
+                    <div class="radio-item"><input type="radio" name="font"> Impact</div>
+                    <div class="radio-item"><input type="radio" name="font"> Monospace</div>
+                    <div class="radio-item"><input type="radio" name="font"> Aldrich</div>
+                    <div class="radio-item"><input type="radio" name="font"> Anton</div>
+                    <div class="radio-item"><input type="radio" name="font"> Barrio</div>
+                    <div class="radio-item"><input type="radio" name="font"> Creepster</div>
+                    <div class="radio-item"><input type="radio" name="font"> Eater</div>
+                    <div class="radio-item"><input type="radio" name="font"> Galada</div>
+                    <div class="radio-item"><input type="radio" name="font"> Ranchers</div>
+                    <div class="radio-item"><input type="radio" name="font"> Lobster</div>
+                    <div class="radio-item"><input type="radio" name="font"> Righteous</div>
+                    <div class="radio-item"><input type="radio" name="font"> BenchNine</div>
+                    <div class="radio-item"><input type="radio" name="font"> Oswald</div>
+                    <div class="radio-item"><input type="radio" name="font"> Ultra</div>
+                    <div class="radio-item"><input type="radio" name="font"> Frijole</div>
+                    <div class="radio-item"><input type="radio" name="font"> Viga</div>
+                    <div class="radio-item"><input type="radio" name="font"> Quantico</div>
+                    <div class="radio-item"><input type="radio" name="font"> Bungee</div>
+                    <div class="radio-item"><input type="radio" name="font"> Sriracha</div>
+                    <div class="radio-item"><input type="radio" name="font"> Arsenal</div>
+                    <div class="radio-item"><input type="radio" name="font"> Gaegu</div>
+                    <div class="radio-item"><input type="radio" name="font"> VT323</div>
+                </div>
+                
+                <div class="annotation">
+                    <div class="annotation-title">Issues</div>
+                    <ul class="issue-list">
+                        <li>Takes up excessive vertical space</li>
+                        <li>Hard to quickly scan all options</li>
+                        <li>No visual preview of what fonts look like</li>
+                        <li>Requires scrolling to see all options</li>
+                        <li>Not mobile-friendly</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- AFTER -->
+        <div class="panel">
+            <div class="panel-header after">
+                ✅ AFTER: Dropdown with Preview
+            </div>
+            <div class="panel-content">
+                <div class="mud-select-wrapper">
+                    <span class="mud-select-label">Font</span>
+                    <div class="mud-select" tabindex="0">
+                        <span>Lobster</span>
+                        <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                    </div>
+                </div>
+                
+                <div class="mud-select-dropdown">
+                    <div class="mud-select-item">Arial</div>
+                    <div class="mud-select-item">Comic Sans</div>
+                    <div class="mud-select-item">Impact</div>
+                    <div class="mud-select-item">Monospace</div>
+                    <div class="mud-select-item">Aldrich</div>
+                    <div class="mud-select-item selected">Lobster</div>
+                    <div class="mud-select-item">Righteous</div>
+                    <div class="mud-select-item">VT323</div>
+                </div>
+                
+                <div class="font-preview">
+                    <div class="font-preview-label">Preview</div>
+                    <div class="font-preview-text lobster">12:34:56</div>
+                </div>
+                
+                <div class="annotation">
+                    <div class="annotation-title">Improvements</div>
+                    <ul class="improvement-list">
+                        <li>Compact single-line input</li>
+                        <li>Searchable dropdown (MudSelect supports filtering)</li>
+                        <li>Live preview shows actual font</li>
+                        <li>Keyboard navigable (arrow keys, Enter)</li>
+                        <li>Familiar select pattern for users</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="code-block"><span class="code-comment">// FontSelectorComponent.razor - Reusable component for font selection</span>
+
+<span class="code-tag">&lt;MudStack</span> <span class="code-attr">Spacing</span>=<span class="code-string">"2"</span><span class="code-tag">&gt;</span>
+    <span class="code-tag">&lt;MudSelect</span> <span class="code-attr">T</span>=<span class="code-string">"FontFamily"</span> 
+               <span class="code-attr">Label</span>=<span class="code-string">"Font"</span> 
+               <span class="code-attr">Variant</span>=<span class="code-string">"Variant.Filled"</span>
+               <span class="code-attr">@bind-Value</span>=<span class="code-string">"SelectedFont"</span>
+               <span class="code-attr">ValueChanged</span>=<span class="code-string">"OnFontChanged"</span><span class="code-tag">&gt;</span>
+        <span class="code-keyword">@foreach</span> (var font <span class="code-keyword">in</span> FontOptions)
+        {
+            <span class="code-tag">&lt;MudSelectItem</span> <span class="code-attr">Value</span>=<span class="code-string">"@font"</span><span class="code-tag">&gt;</span>@font.DisplayName<span class="code-tag">&lt;/MudSelectItem&gt;</span>
+        }
+    <span class="code-tag">&lt;/MudSelect&gt;</span>
+    
+    <span class="code-tag">&lt;MudPaper</span> <span class="code-attr">Class</span>=<span class="code-string">"pa-4 text-center gifbot-form-panel"</span> <span class="code-attr">Elevation</span>=<span class="code-string">"0"</span><span class="code-tag">&gt;</span>
+        <span class="code-tag">&lt;MudText</span> <span class="code-attr">Typo</span>=<span class="code-string">"Typo.caption"</span> <span class="code-attr">Class</span>=<span class="code-string">"text-white-50"</span><span class="code-tag">&gt;</span>Preview<span class="code-tag">&lt;/MudText&gt;</span>
+        <span class="code-tag">&lt;div</span> <span class="code-attr">style</span>=<span class="code-string">"font-family: @SelectedFont.CssName; font-size: 32px; margin-top: 8px;"</span><span class="code-tag">&gt;</span>
+            @PreviewText
+        <span class="code-tag">&lt;/div&gt;</span>
+    <span class="code-tag">&lt;/MudPaper&gt;</span>
+<span class="code-tag">&lt;/MudStack&gt;</span>
+
+<span class="code-keyword">@code</span> {
+    [<span class="code-attr">Parameter</span>] <span class="code-keyword">public</span> FontFamily SelectedFont { <span class="code-keyword">get</span>; <span class="code-keyword">set</span>; }
+    [<span class="code-attr">Parameter</span>] <span class="code-keyword">public</span> EventCallback&lt;FontFamily&gt; SelectedFontChanged { <span class="code-keyword">get</span>; <span class="code-keyword">set</span>; }
+    [<span class="code-attr">Parameter</span>] <span class="code-keyword">public</span> <span class="code-keyword">string</span> PreviewText { <span class="code-keyword">get</span>; <span class="code-keyword">set</span>; } = <span class="code-string">"12:34:56"</span>;
+    
+    <span class="code-keyword">private</span> List&lt;FontFamily&gt; FontOptions = <span class="code-keyword">new</span>()
+    {
+        <span class="code-keyword">new</span>(<span class="code-string">"Arial"</span>, <span class="code-string">"Arial, sans-serif"</span>),
+        <span class="code-keyword">new</span>(<span class="code-string">"Comic Sans"</span>, <span class="code-string">"'Comic Sans MS', cursive"</span>),
+        <span class="code-keyword">new</span>(<span class="code-string">"Impact"</span>, <span class="code-string">"Impact, sans-serif"</span>),
+        <span class="code-comment">// ... etc</span>
+    };
+    
+    <span class="code-keyword">private async</span> Task OnFontChanged(FontFamily font)
+    {
+        SelectedFont = font;
+        <span class="code-keyword">await</span> SelectedFontChanged.InvokeAsync(font);
+    }
+}</div>
+</body>
+</html>

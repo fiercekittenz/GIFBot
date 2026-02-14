@@ -72,3 +72,7 @@
 ---
 
 📌 **Team update (2026-02-13):** Decisions merged from session log: User Groups tab redesigned with MudDialog popups for CRUD (Add/Delete with validation), replaced Bootstrap buttons with MudButton, HTML tables with MudGrid, fixed MudSelect population. Theme decision consolidated: custom MudTheme with #7e57c2 deep purple, dark surfaces; NoNavMenuLayout kept in sync with MainLayout theme (duplicated, future refactor candidate). — Scribe
+
+---
+
+📌 **Team update (2026-02-14):** UX audit completed by Burt. Three implementation decisions added: UI Component Migration Priority Order (Dashboard first, then DataGrid buttons, headers, font selectors, button bars), Page Header Icon Standard (use Material Icons instead of open-iconic, eliminate ~15KB CSS dependency), Button Bar Position Standard (Save/Cancel buttons at bottom-right only, not duplicated at top). These guide your Bootstrap cleanup work. — Scribe

@@ -19,5 +19,6 @@
 | Irving | Backend Dev | .ai-team/agents/irving/charter.md | ✅ Active |
 | Dylan | Tester | .ai-team/agents/dylan/charter.md | ✅ Active |
 | Milchick | TPM | .ai-team/agents/milchick/charter.md | ✅ Active |
+| Burt | UX Expert | .ai-team/agents/burt/charter.md | ✅ Active |
 | Scribe | Scribe | .ai-team/agents/scribe/charter.md | 📋 Silent |
 | Ralph | Work Monitor | — | 🔄 Monitor |

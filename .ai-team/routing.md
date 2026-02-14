@@ -7,4 +7,5 @@
 | .NET runtime, server consolidation, SignalR, backend services, data models | Irving | "Upgrade to .NET 10", "Merge WASM into Server project", "Fix SignalR hub" |
 | Tests, migration validation, regression, edge cases | Dylan | "Write tests for the migration", "Verify nothing broke" |
 | Task breakdown, work item planning, dependency mapping, progress tracking, migration sequencing | Milchick | "Break down the migration", "What's left to do?", "Plan the work items" |
+| UX audits, layout review, color/typography consistency, visual hierarchy, interaction design | Burt | "Review the page layout", "Is the color scheme consistent?", "Improve the user experience" |
 | Multi-domain, full-stack changes | Mark + relevant agents | "Modernize the login flow" (touches backend + frontend) |

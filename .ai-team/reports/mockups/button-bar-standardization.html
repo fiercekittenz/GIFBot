@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIFBot Mockup: Button Bar Standardization</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+            background-color: #1a1a2e;
+            color: rgba(255, 255, 255, 0.87);
+            padding: 24px;
+            line-height: 1.5;
+        }
+        
+        .mockup-title {
+            color: #7e57c2;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .mockup-description {
+            color: rgba(255, 255, 255, 0.63);
+            margin-bottom: 32px;
+            max-width: 800px;
+        }
+        
+        .section-title {
+            color: #b39ddb;
+            font-size: 18px;
+            font-weight: 600;
+            margin: 32px 0 16px 0;
+        }
+        
+        .panel {
+            max-width: 800px;
+            margin-bottom: 24px;
+        }
+        
+        .panel-header {
+            background-color: #2d2b52;
+            padding: 8px 16px;
+            border-radius: 4px 4px 0 0;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .panel-header.before {
+            border-left: 4px solid #ef5350;
+        }
+        
+        .panel-header.after {
+            border-left: 4px solid #66bb6a;
+        }
+        
+        .panel-content {
+            background-color: #22223a;
+            padding: 16px;
+            border-radius: 0 0 4px 4px;
+        }
+        
+        /* Form simulation */
+        .form-area {
+            background-color: #1c1c34;
+            border-radius: 4px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            margin-bottom: 4px;
+            display: block;
+        }
+        
+        .form-hint {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 8px;
+        }
+        
+        .form-input {
+            background-color: #2a2a48;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            padding: 10px 12px;
+            color: white;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        /* BEFORE: Mixed button styles */
+        .btn-old {
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            border: none;
+        }
+        
+        .btn-old.secondary {
+            background-color: #3a2d56;
+            color: white;
+        }
+        
+        .btn-old.primary {
+            background-color: #6b2fa0;
+            color: white;
+        }
+        
+        .button-bar-old {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0;
+            padding: 12px;
+        }
+        
+        /* AFTER: Standardized MudButton bar */
+        .button-bar-new {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 12px;
+        }
+        
+        .mud-button {
+            padding: 8px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            border: none;
+            transition: all 0.2s;
+        }
+        
+        .mud-button.outlined {
+            background-color: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.87);
+        }
+        
+        .mud-button.outlined:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .mud-button.filled {
+            background-color: #7e57c2;
+            color: white;
+        }
+        
+        .mud-button.filled:hover {
+            background-color: #9575cd;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .mud-button:focus {
+            outline: 2px solid #7e57c2;
+            outline-offset: 2px;
+        }
+        
+        /* Problems showcase */
+        .problems-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .problem-card {
+            background-color: #161630;
+            border-radius: 4px;
+            padding: 12px;
+            border-left: 3px solid #ef5350;
+        }
+        
+        .problem-card h4 {
+            color: #ef5350;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        
+        .problem-card p {
+            color: rgba(255, 255, 255, 0.63);
+            font-size: 13px;
+        }
+        
+        /* Solution card */
+        .solution-card {
+            background-color: #161630;
+            border-radius: 4px;
+            padding: 16px;
+            border-left: 3px solid #66bb6a;
+            margin-bottom: 24px;
+        }
+        
+        .solution-card h4 {
+            color: #66bb6a;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+        
+        /* Code block */
+        .code-block {
+            background-color: #0e0e1e;
+            border-radius: 4px;
+            padding: 16px;
+            margin-top: 24px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            white-space: pre;
+        }
+        
+        .code-comment { color: #6a9955; }
+        .code-tag { color: #569cd6; }
+        .code-attr { color: #9cdcfe; }
+        .code-string { color: #ce9178; }
+    </style>
+</head>
+<body>
+    <h1 class="mockup-title">Button Bar Standardization</h1>
+    <p class="mockup-description">
+        Save/Cancel buttons appear inconsistently across GIFBot pages. Some pages have buttons at the top, 
+        some at the bottom, some at both locations. Button styling varies between Bootstrap and MudBlazor. 
+        This mockup establishes a standard pattern.
+    </p>
+    
+    <h2 class="section-title">Current Problems</h2>
+    
+    <div class="problems-grid">
+        <div class="problem-card">
+            <h4>Problem 1: Duplicate Button Bars</h4>
+            <p>CountdownTimer.razor and BackdropEditor.razor have Save/Cancel buttons at BOTH the top and bottom of tabs. This is redundant and confusing.</p>
+        </div>
+        <div class="problem-card">
+            <h4>Problem 2: Bootstrap Buttons</h4>
+            <p>Most pages use <code>btn btn-secondary</code> and <code>btn btn-primary</code> instead of MudButton, creating visual inconsistency.</p>
+        </div>
+        <div class="problem-card">
+            <h4>Problem 3: No Spacing</h4>
+            <p>Bootstrap buttons touch each other with no gap, unlike MudBlazor's default spacing.</p>
+        </div>
+        <div class="problem-card">
+            <h4>Problem 4: Type Attribute Issues</h4>
+            <p>Mix of <code>type="reset"</code> and <code>type="submit"</code> on Cancel buttons causes unexpected form behavior.</p>
+        </div>
+    </div>
+    
+    <h2 class="section-title">Before: Current Implementation</h2>
+    
+    <div class="panel">
+        <div class="panel-header before">
+            ❌ BackdropEditor.razor - Buttons at TOP and BOTTOM
+        </div>
+        <div class="panel-content">
+            <div class="button-bar-old" style="margin-bottom: 16px;">
+                <button class="btn-old secondary">Take Down Active Backdrop</button>
+                <button class="btn-old secondary">Cancel</button>
+                <button class="btn-old primary">Save Changes</button>
+            </div>
+            
+            <div class="form-area">
+                <div class="form-label">Feature Enabled</div>
+                <div class="form-hint">When enabled, this feature is active and available to your users!</div>
+                <label><input type="checkbox" checked> Enabled</label>
+            </div>
+            
+            <div class="form-area">
+                <div class="form-label">Title (or Command)</div>
+                <div class="form-hint">How should the bot look for this feature being activated?</div>
+                <input type="text" class="form-input" value="!backdrop">
+            </div>
+            
+            <div class="button-bar-old">
+                <button class="btn-old secondary">Cancel</button>
+                <button class="btn-old primary">Save Changes</button>
+            </div>
+            
+            <p style="color: #ef5350; font-size: 13px; margin-top: 12px;">
+                ⚠️ Users see the same buttons twice. This wastes space and creates confusion about which to click.
+            </p>
+        </div>
+    </div>
+    
+    <h2 class="section-title">After: Standardized Pattern</h2>
+    
+    <div class="solution-card">
+        <h4>✅ Standard: Bottom-right, with proper spacing</h4>
+        <p>All form pages should have a single button bar at the <strong>bottom right</strong> of the form content. Cancel uses Outlined variant, Save uses Filled Primary. Gap of 12px between buttons.</p>
+    </div>
+    
+    <div class="panel">
+        <div class="panel-header after">
+            ✅ Recommended: Single button bar at bottom
+        </div>
+        <div class="panel-content">
+            <div class="form-area">
+                <div class="form-label">Feature Enabled</div>
+                <div class="form-hint">When enabled, this feature is active and available to your users!</div>
+                <label><input type="checkbox" checked> Enabled</label>
+            </div>
+            
+            <div class="form-area">
+                <div class="form-label">Title (or Command)</div>
+                <div class="form-hint">How should the bot look for this feature being activated?</div>
+                <input type="text" class="form-input" value="!backdrop">
+            </div>
+            
+            <div class="form-area">
+                <div class="form-label">Cost</div>
+                <div class="form-hint">The number of bits, channel points, etc. required to execute this command.</div>
+                <input type="number" class="form-input" value="100" style="max-width: 150px;">
+            </div>
+            
+            <div class="button-bar-new">
+                <button class="mud-button outlined">Cancel</button>
+                <button class="mud-button filled">Save Changes</button>
+            </div>
+        </div>
+    </div>
+    
+    <h2 class="section-title">Special Case: Feature-Specific Actions</h2>
+    
+    <div class="panel">
+        <div class="panel-header after">
+            ✅ Recommended: Feature actions separate from form actions
+        </div>
+        <div class="panel-content">
+            <p style="color: rgba(255, 255, 255, 0.63); margin-bottom: 16px;">
+                When a page has feature-specific actions (like "Take Down Backdrop"), place them in a separate 
+                toolbar at the top, clearly separated from the Save/Cancel form actions.
+            </p>
+            
+            <div style="background-color: #1e1e38; padding: 12px; border-radius: 4px; margin-bottom: 16px; display: flex; gap: 12px;">
+                <button class="mud-button outlined" style="border-color: #ef5350; color: #ef5350;">Take Down Active Backdrop</button>
+                <span style="color: rgba(255, 255, 255, 0.5); align-self: center; font-size: 13px;">Currently active: "Space Background"</span>
+            </div>
+            
+            <div class="form-area">
+                <div class="form-label">Feature Enabled</div>
+                <input type="checkbox" checked> Enabled
+            </div>
+            
+            <div class="form-area">
+                <div class="form-label">Title (or Command)</div>
+                <input type="text" class="form-input" value="!backdrop">
+            </div>
+            
+            <div class="button-bar-new">
+                <button class="mud-button outlined">Cancel</button>
+                <button class="mud-button filled">Save Changes</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="code-block"><span class="code-comment">&lt;!-- Standard button bar pattern for all form pages --&gt;</span>
+
+<span class="code-comment">&lt;!-- Before: Bootstrap buttons with no gap --&gt;</span>
+<span class="code-tag">&lt;div</span> <span class="code-attr">class</span>=<span class="code-string">"d-flex justify-end pa-3"</span><span class="code-tag">&gt;</span>
+    <span class="code-tag">&lt;button</span> <span class="code-attr">type</span>=<span class="code-string">"reset"</span> <span class="code-attr">class</span>=<span class="code-string">"btn btn-secondary p-2 gifbot-secondary-btn"</span><span class="code-tag">&gt;</span>Cancel<span class="code-tag">&lt;/button&gt;</span>
+    <span class="code-tag">&lt;button</span> <span class="code-attr">type</span>=<span class="code-string">"submit"</span> <span class="code-attr">class</span>=<span class="code-string">"btn btn-primary p-2 gifbot-primary-btn"</span><span class="code-tag">&gt;</span>Save Changes<span class="code-tag">&lt;/button&gt;</span>
+<span class="code-tag">&lt;/div&gt;</span>
+
+<span class="code-comment">&lt;!-- After: MudBlazor buttons with proper styling --&gt;</span>
+<span class="code-tag">&lt;div</span> <span class="code-attr">class</span>=<span class="code-string">"d-flex justify-end pa-3 gap-3"</span><span class="code-tag">&gt;</span>
+    <span class="code-tag">&lt;MudButton</span> <span class="code-attr">Variant</span>=<span class="code-string">"Variant.Outlined"</span> 
+               <span class="code-attr">Color</span>=<span class="code-string">"Color.Default"</span> 
+               <span class="code-attr">OnClick</span>=<span class="code-string">"@OnCancel"</span><span class="code-tag">&gt;</span>Cancel<span class="code-tag">&lt;/MudButton&gt;</span>
+    <span class="code-tag">&lt;MudButton</span> <span class="code-attr">Variant</span>=<span class="code-string">"Variant.Filled"</span> 
+               <span class="code-attr">Color</span>=<span class="code-string">"Color.Primary"</span> 
+               <span class="code-attr">OnClick</span>=<span class="code-string">"@OnSaveChanges"</span><span class="code-tag">&gt;</span>Save Changes<span class="code-tag">&lt;/MudButton&gt;</span>
+<span class="code-tag">&lt;/div&gt;</span>
+
+<span class="code-comment">&lt;!-- Alternative: Using MudStack for consistent spacing --&gt;</span>
+<span class="code-tag">&lt;MudStack</span> <span class="code-attr">Row</span>=<span class="code-string">"true"</span> <span class="code-attr">Justify</span>=<span class="code-string">"Justify.FlexEnd"</span> <span class="code-attr">Spacing</span>=<span class="code-string">"3"</span> <span class="code-attr">Class</span>=<span class="code-string">"pa-3"</span><span class="code-tag">&gt;</span>
+    <span class="code-tag">&lt;MudButton</span> <span class="code-attr">Variant</span>=<span class="code-string">"Variant.Outlined"</span> <span class="code-attr">OnClick</span>=<span class="code-string">"@OnCancel"</span><span class="code-tag">&gt;</span>Cancel<span class="code-tag">&lt;/MudButton&gt;</span>
+    <span class="code-tag">&lt;MudButton</span> <span class="code-attr">Variant</span>=<span class="code-string">"Variant.Filled"</span> <span class="code-attr">Color</span>=<span class="code-string">"Color.Primary"</span> <span class="code-attr">OnClick</span>=<span class="code-string">"@OnSaveChanges"</span><span class="code-tag">&gt;</span>Save Changes<span class="code-tag">&lt;/MudButton&gt;</span>
+<span class="code-tag">&lt;/MudStack&gt;</span></div>
+    
+    <h2 class="section-title">Files Requiring Changes</h2>
+    <table style="width: 100%; border-collapse: collapse; margin-top: 16px;">
+        <thead>
+            <tr style="background-color: #161630;">
+                <th style="padding: 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1);">Page</th>
+                <th style="padding: 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1);">Current Issue</th>
+                <th style="padding: 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1);">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05);">CountdownTimer.razor</td>
+                <td style="padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05);">Buttons at top AND bottom</td>
+                <td style="padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); color: #66bb6a;">Remove top buttons, standardize bottom</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05);">BackdropEditor.razor</td>
+                <td style="padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05);">Buttons at top AND bottom</td>
+                <td style="padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); color: #66bb6a;">Separate feature action, standardize form buttons</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05);">Regurgitator.razor</td>
+                <td style="padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05);">Bootstrap buttons</td>
+                <td style="padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); color: #66bb6a;">Replace with MudButton</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05);">GoalBarEditor.razor</td>
+                <td style="padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05);">Bootstrap buttons</td>
+                <td style="padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); color: #66bb6a;">Replace with MudButton</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05);">GiveawayEditor.razor</td>
+                <td style="padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05);">Bootstrap buttons</td>
+                <td style="padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); color: #66bb6a;">Replace with MudButton</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05);">Settings.razor</td>
+                <td style="padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05);">Already uses MudButton ✓</td>
+                <td style="padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); color: rgba(255,255,255,0.5);">No change needed</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

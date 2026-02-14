@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIFBot Mockup: Dashboard Quick Actions</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+            background-color: #1a1a2e;
+            color: rgba(255, 255, 255, 0.87);
+            padding: 24px;
+            line-height: 1.5;
+        }
+        
+        .mockup-title {
+            color: #7e57c2;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .mockup-description {
+            color: rgba(255, 255, 255, 0.63);
+            margin-bottom: 32px;
+            max-width: 800px;
+        }
+        
+        .comparison {
+            display: flex;
+            gap: 32px;
+            flex-wrap: wrap;
+        }
+        
+        .panel {
+            flex: 1;
+            min-width: 400px;
+            max-width: 600px;
+        }
+        
+        .panel-header {
+            background-color: #2d2b52;
+            padding: 8px 16px;
+            border-radius: 4px 4px 0 0;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .panel-header.before {
+            border-left: 4px solid #ef5350;
+        }
+        
+        .panel-header.after {
+            border-left: 4px solid #66bb6a;
+        }
+        
+        .panel-content {
+            background-color: #22223a;
+            padding: 16px;
+            border-radius: 0 0 4px 4px;
+        }
+        
+        /* BEFORE: Bootstrap navbar simulation */
+        .bootstrap-navbar {
+            background-color: #1e1e38;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-radius: 4px;
+        }
+        
+        .bootstrap-navbar .navbar-text {
+            color: rgba(255, 255, 255, 0.87);
+            font-weight: 600;
+            margin-right: 12px;
+        }
+        
+        .bootstrap-btn {
+            background-color: #3d3566;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .bootstrap-btn:hover {
+            background-color: #4d4576;
+        }
+        
+        /* AFTER: MudBlazor paper/stack simulation */
+        .mud-paper {
+            background-color: #1e1e38;
+            padding: 12px 16px;
+            border-radius: 4px;
+        }
+        
+        .mud-stack {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .mud-stack-label {
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.87);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .mud-button {
+            background-color: #3d3566;
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s, box-shadow 0.2s;
+        }
+        
+        .mud-button:hover {
+            background-color: #4d4576;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .mud-button:focus {
+            outline: 2px solid #7e57c2;
+            outline-offset: 2px;
+        }
+        
+        .mud-button svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+        
+        .mud-divider {
+            width: 1px;
+            height: 24px;
+            background-color: rgba(255, 255, 255, 0.12);
+        }
+        
+        /* Annotations */
+        .annotation {
+            background-color: #161630;
+            border-left: 3px solid #7e57c2;
+            padding: 12px 16px;
+            margin-top: 16px;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .annotation-title {
+            color: #b39ddb;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        
+        .annotation-text {
+            color: rgba(255, 255, 255, 0.63);
+            font-size: 13px;
+        }
+        
+        .issue-list {
+            margin-top: 8px;
+            padding-left: 20px;
+        }
+        
+        .issue-list li {
+            color: #ef5350;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+        
+        .improvement-list {
+            margin-top: 8px;
+            padding-left: 20px;
+        }
+        
+        .improvement-list li {
+            color: #66bb6a;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+        
+        /* Code sample */
+        .code-block {
+            background-color: #0e0e1e;
+            border-radius: 4px;
+            padding: 16px;
+            margin-top: 24px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            white-space: pre;
+        }
+        
+        .code-comment {
+            color: #6a9955;
+        }
+        
+        .code-tag {
+            color: #569cd6;
+        }
+        
+        .code-attr {
+            color: #9cdcfe;
+        }
+        
+        .code-string {
+            color: #ce9178;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="mockup-title">Dashboard Quick Actions: Before & After</h1>
+    <p class="mockup-description">
+        The Dashboard's Quick Actions bar currently uses Bootstrap's navbar component with btn-secondary buttons. 
+        This mockup shows how it should look using MudBlazor's MudPaper and MudButton components for consistency 
+        with the rest of the migrated UI.
+    </p>
+    
+    <div class="comparison">
+        <!-- BEFORE -->
+        <div class="panel">
+            <div class="panel-header before">
+                ❌ BEFORE: Bootstrap Navbar
+            </div>
+            <div class="panel-content">
+                <nav class="bootstrap-navbar">
+                    <span class="navbar-text"><b>Quick Actions:</b></span>
+                    <button class="bootstrap-btn">Enable Streamer-Only Mode</button>
+                    <button class="bootstrap-btn">Stop Animations</button>
+                    <button class="bootstrap-btn">Enable Bonkers Mode</button>
+                    <button class="bootstrap-btn">Clear All Stickers</button>
+                </nav>
+                
+                <div class="annotation">
+                    <div class="annotation-title">Issues with Current Implementation</div>
+                    <ul class="issue-list">
+                        <li>Uses Bootstrap &lt;nav&gt; element semantically incorrect for action buttons</li>
+                        <li>btn-secondary class requires Bootstrap CSS dependency</li>
+                        <li>No icon support without additional icon font</li>
+                        <li>Hover/focus states inconsistent with MudBlazor components</li>
+                        <li>Not keyboard-accessible by default</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- AFTER -->
+        <div class="panel">
+            <div class="panel-header after">
+                ✅ AFTER: MudBlazor Components
+            </div>
+            <div class="panel-content">
+                <div class="mud-paper">
+                    <div class="mud-stack">
+                        <span class="mud-stack-label">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="rgba(179, 157, 219, 1)">
+                                <path d="M13,3C9.25,3,6.2,5.94,6.02,9.64L4.1,12.2C3.85,12.53,4.09,13,4.5,13H6V16C6,17.1,6.9,18,8,18H9V21H16V16.31C18.37,15.19,20,12.8,20,10C20,6.14,16.88,3,13,3Z"/>
+                            </svg>
+                            <strong>Quick Actions</strong>
+                        </span>
+                        
+                        <div class="mud-divider"></div>
+                        
+                        <button class="mud-button">
+                            <svg viewBox="0 0 24 24"><path d="M12,17A2,2,0,0,0,14,15V13A2,2,0,0,0,10,13V15A2,2,0,0,0,12,17M18,8A2,2,0,0,1,20,10V20A2,2,0,0,1,18,22H6A2,2,0,0,1,4,20V10A2,2,0,0,1,6,8H7V6A5,5,0,0,1,17,6V8H18M12,3A3,3,0,0,0,9,6V8H15V6A3,3,0,0,0,12,3Z"/></svg>
+                            Enable Streamer-Only
+                        </button>
+                        
+                        <button class="mud-button">
+                            <svg viewBox="0 0 24 24"><path d="M12,2A10,10,0,0,0,2,12A10,10,0,0,0,12,22A10,10,0,0,0,22,12A10,10,0,0,0,12,2M9,9H15V15H9V9Z"/></svg>
+                            Stop Animations
+                        </button>
+                        
+                        <button class="mud-button">
+                            <svg viewBox="0 0 24 24"><path d="M11.5,22C11.64,22,11.77,22,11.9,21.96C12.55,21.82,13.09,21.38,13.34,20.78C13.44,20.54,13.5,20.27,13.5,20H9.5A2,2,0,0,0,11.5,22M18,10.5C18,7.43,15.86,4.86,13,4.18V3.5A1.5,1.5,0,0,0,10,3.5V4.18C7.13,4.86,5,7.43,5,10.5V16L3,18V19H20V18L18,16V10.5Z"/></svg>
+                            Enable Bonkers Mode
+                        </button>
+                        
+                        <button class="mud-button">
+                            <svg viewBox="0 0 24 24"><path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2,0,0,0,8,21H16A2,2,0,0,0,18,19V7H6V19Z"/></svg>
+                            Clear Stickers
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="annotation">
+                    <div class="annotation-title">Improvements</div>
+                    <ul class="improvement-list">
+                        <li>Uses MudPaper for consistent surface styling</li>
+                        <li>MudButton with StartIcon for visual clarity</li>
+                        <li>Built-in focus indicators and keyboard support</li>
+                        <li>Consistent hover/active states with rest of app</li>
+                        <li>Material Icons replace open-iconic dependency</li>
+                        <li>Divider separates label from actions</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="code-block"><span class="code-comment">&lt;!-- Recommended Razor implementation --&gt;</span>
+<span class="code-tag">&lt;MudPaper</span> <span class="code-attr">Class</span>=<span class="code-string">"pa-2 mb-3 gifbot-quick-actions"</span><span class="code-tag">&gt;</span>
+    <span class="code-tag">&lt;MudStack</span> <span class="code-attr">Row</span>=<span class="code-string">"true"</span> <span class="code-attr">Spacing</span>=<span class="code-string">"2"</span> <span class="code-attr">AlignItems</span>=<span class="code-string">"AlignItems.Center"</span><span class="code-tag">&gt;</span>
+        <span class="code-tag">&lt;MudIcon</span> <span class="code-attr">Icon</span>=<span class="code-string">"@Icons.Material.Filled.Bolt"</span> <span class="code-attr">Color</span>=<span class="code-string">"Color.Secondary"</span> <span class="code-tag">/&gt;</span>
+        <span class="code-tag">&lt;MudText</span> <span class="code-attr">Typo</span>=<span class="code-string">"Typo.subtitle2"</span><span class="code-tag">&gt;</span><span class="code-tag">&lt;strong&gt;</span>Quick Actions<span class="code-tag">&lt;/strong&gt;&lt;/MudText&gt;</span>
+        <span class="code-tag">&lt;MudDivider</span> <span class="code-attr">Vertical</span>=<span class="code-string">"true"</span> <span class="code-attr">FlexItem</span>=<span class="code-string">"true"</span> <span class="code-tag">/&gt;</span>
+        
+        <span class="code-tag">&lt;MudButton</span> <span class="code-attr">Variant</span>=<span class="code-string">"Variant.Filled"</span> <span class="code-attr">Class</span>=<span class="code-string">"gifbot-action-btn"</span>
+                   <span class="code-attr">StartIcon</span>=<span class="code-string">"@Icons.Material.Filled.Lock"</span>
+                   <span class="code-attr">OnClick</span>=<span class="code-string">"@ToggleStreamerOnlyMode"</span><span class="code-tag">&gt;</span>
+            @mStreamerOnlyModeState Streamer-Only
+        <span class="code-tag">&lt;/MudButton&gt;</span>
+        
+        <span class="code-tag">&lt;MudButton</span> <span class="code-attr">Variant</span>=<span class="code-string">"Variant.Filled"</span> <span class="code-attr">Class</span>=<span class="code-string">"gifbot-action-btn"</span>
+                   <span class="code-attr">StartIcon</span>=<span class="code-string">"@Icons.Material.Filled.Stop"</span>
+                   <span class="code-attr">OnClick</span>=<span class="code-string">"@StopAllAnimations"</span><span class="code-tag">&gt;</span>
+            Stop Animations
+        <span class="code-tag">&lt;/MudButton&gt;</span>
+        
+        <span class="code-tag">&lt;MudButton</span> <span class="code-attr">Variant</span>=<span class="code-string">"Variant.Filled"</span> <span class="code-attr">Class</span>=<span class="code-string">"gifbot-action-btn"</span>
+                   <span class="code-attr">StartIcon</span>=<span class="code-string">"@Icons.Material.Filled.NotificationsActive"</span>
+                   <span class="code-attr">OnClick</span>=<span class="code-string">"@ToggleBonkersMode"</span><span class="code-tag">&gt;</span>
+            @mBonkersModeState Bonkers Mode
+        <span class="code-tag">&lt;/MudButton&gt;</span>
+        
+        <span class="code-tag">&lt;MudButton</span> <span class="code-attr">Variant</span>=<span class="code-string">"Variant.Filled"</span> <span class="code-attr">Class</span>=<span class="code-string">"gifbot-action-btn"</span>
+                   <span class="code-attr">StartIcon</span>=<span class="code-string">"@Icons.Material.Filled.Delete"</span>
+                   <span class="code-attr">OnClick</span>=<span class="code-string">"@ClearAllStickers"</span><span class="code-tag">&gt;</span>
+            Clear Stickers
+        <span class="code-tag">&lt;/MudButton&gt;</span>
+    <span class="code-tag">&lt;/MudStack&gt;</span>
+<span class="code-tag">&lt;/MudPaper&gt;</span></div>
+</body>
+</html>

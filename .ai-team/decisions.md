@@ -381,3 +381,40 @@ All milestones are sequential. Within each milestone, tasks can be parallelized 
 **By:** Georgia Nelson (via Copilot)
 **What:** Remove StreamDeck plugin support in its entirety. The GIFBotStreamDeckPlugin project and any related code should be deleted, not deferred.
 **Why:** User request — captured for team memory
+
+---
+
+### 2026-02-13: UI Component Migration Priority Order
+**By:** Burt
+**What:** Established priority order for completing Bootstrap → MudBlazor migration based on UX audit findings.
+**Why:** The audit identified ~85 Bootstrap button instances across 12 pages. Rather than fixing randomly, this order maximizes impact:
+
+1. **Dashboard (Index.razor)** - Highest traffic page, Bootstrap navbar for Quick Actions is jarring
+2. **Icon-only buttons in DataGrids** - Universal pattern across all feature pages, can be fixed systematically
+3. **Page headers** - Remove open-iconic dependency by switching to Material Icons
+4. **Font selector pattern** - Extract to reusable component to fix CountdownTimer and GoalBar simultaneously
+5. **Button bars** - Standardize Save/Cancel positioning and styling
+
+---
+
+### 2026-02-13: Page Header Icon Standard
+**By:** Burt
+**What:** All page headers should use Material Icons via MudIcon instead of open-iconic spans.
+**Why:** 
+- NavMenu already uses Material Icons; headers should match
+- Eliminates open-iconic CSS dependency (~15KB)
+- Vector icons are crisper than bitmap open-iconic at all sizes
+- Enables secondary color tinting via `Color="Color.Secondary"`
+
+Recommend creating `<PageHeader Icon="..." Title="..." />` component for consistency.
+
+---
+
+### 2026-02-13: Button Bar Position Standard
+**By:** Burt
+**What:** Form Save/Cancel buttons should appear ONLY at bottom-right of form content, not duplicated at top.
+**Why:**
+- Duplicate buttons waste vertical space
+- Users may be confused about which to click
+- Standard web convention is bottom-right for form actions
+- Top area reserved for feature-specific actions (e.g., "Take Down Backdrop") if needed
