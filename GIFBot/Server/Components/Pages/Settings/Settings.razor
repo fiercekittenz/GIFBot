@@ -17,7 +17,10 @@
 @implements IAsyncDisposable
 
 <div class="pa-1 my-1 gifbot-page-header">
-   <MudText Typo="Typo.h4"><span class="oi oi-cog" aria-hidden="true"></span> Bot Settings</MudText>
+   <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+      <MudIcon Icon="@Icons.Material.Filled.Settings" />
+      <MudText Typo="Typo.h4">Bot Settings</MudText>
+   </MudStack>
 </div>
 
 <!-- Rename Group Dialog -->
@@ -98,7 +101,7 @@
                         <MudTextField T="string" @bind-Value="mBotSettings.ChannelName" />
                      </div>
                      <div class="d-flex justify-end pa-3">
-                        <button type="button" class="btn btn-secondary p-2 gifbot-secondary-btn" @onclick="@OnReauthorize">Reauthorize Bot</button>
+                        <MudButton Variant="Variant.Filled" Class="gifbot-action-btn" OnClick="@OnReauthorize">Reauthorize Bot</MudButton>
                      </div>
                   </div>
                </div>
@@ -376,7 +379,7 @@
                                  <MudTextField T="string" class="form-control" Style="width: 100%" ReadOnly="true" @bind-Value="mPrimaryAnimationsURL" />
                               </td>
                               <td align="left">
-                                 <button type="button" class="btn btn-secondary p-1 ml-2 gifbot-secondary-btn" @onclick='(() => HandleCopyUrl("uiAnimsUrl"))'>Copy to Clipboard</button>
+                                 <MudButton Variant="Variant.Filled" Class="gifbot-action-btn p-1 ml-2" OnClick='(() => HandleCopyUrl("uiAnimsUrl"))'>Copy to Clipboard</MudButton>
                               </td>
                            </tr>
                         </table>
@@ -393,7 +396,7 @@
                                  <MudTextField T="string" class="form-control" Style="width: 100%" ReadOnly="true" @bind-Value="mGoalBarURL" />
                               </td>
                               <td align="left">
-                                 <button type="button" class="btn btn-secondary p-1 ml-2 gifbot-secondary-btn" @onclick='(() => HandleCopyUrl("uiGoalBarUrl"))'>Copy to Clipboard</button>
+                                 <MudButton Variant="Variant.Filled" Class="gifbot-action-btn p-1 ml-2" OnClick='(() => HandleCopyUrl("uiGoalBarUrl"))'>Copy to Clipboard</MudButton>
                               </td>
                            </tr>
                         </table>

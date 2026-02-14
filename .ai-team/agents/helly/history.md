@@ -66,6 +66,12 @@
 
 - **Global MudDialog CSS styling:** Added rules in app.css targeting `.mud-dialog`, `.mud-dialog .mud-dialog-title`, `.mud-dialog .mud-dialog-content`, and `.mud-dialog .mud-dialog-actions`. Key properties: `min-width: 450px` (wider dialogs), `background-color: #1c1c34` (matches `.gifbot-form-panel`), title bar gets `background-color: #2d2b52` (matches `.gifbot-page-header`), `border: 1px solid #2d2b52`, `border-radius: 8px`. These are global — every MudDialog across the app benefits automatically.
 - **Dialog field title+description pattern:** Replaced `<label><b>Name:</b></label>` + `<small class="form-text">` with `<MudText Typo="Typo.subtitle1"><b>Title</b></MudText>` + `<MudText Typo="Typo.caption" Class="text-white-50 mb-2">description</MudText>` above each input field. Applied to 10 files: Settings (4 dialogs), AnimationsEditor (6 dialogs), EditAnimation (1), BackdropEditor (2), CountdownTimer (2), GiveawayEditor (1), GoalBarEditor (1), GreeterEditor (2), StickersEditor (4), Index (1). Confirmation dialogs get `<MudText Typo="Typo.subtitle1"><b>Confirm Deletion</b></MudText>` subtitle. Bootstrap `<button>` + `<center>` replaced with `<DialogActions>` + `<MudButton>` in dialog action areas.
+- Page headers standardized with `MudStack` + `MudIcon` + `MudText` to replace open-iconic icons.
+- Editor actions standardized with `MudIconButton` for row actions and bottom-right Save/Cancel bars using outlined Cancel + primary Save.
+- **Page header icon standard:** Wrap headers in `<MudStack>` with a `MudIcon` + `MudText` inside `.gifbot-page-header` for Material icon consistency.
+- **Dashboard quick actions pattern:** Use `<MudPaper>` + `<MudStack Row="true" Wrap="Wrap.Wrap">` with `MudButton Variant="Variant.Filled"` and `.gifbot-action-btn` for action bars.
+- **Font selector pattern:** Replace large font radio groups with `MudSelect` dropdowns for compact form layouts.
+- **Form action placement:** Standardize Save/Cancel actions in a bottom-right MudButton bar with outlined Cancel and filled Primary Save.
 
 — Helly
 
@@ -76,3 +82,7 @@
 ---
 
 📌 **Team update (2026-02-14):** UX audit completed by Burt. Three implementation decisions added: UI Component Migration Priority Order (Dashboard first, then DataGrid buttons, headers, font selectors, button bars), Page Header Icon Standard (use Material Icons instead of open-iconic, eliminate ~15KB CSS dependency), Button Bar Position Standard (Save/Cancel buttons at bottom-right only, not duplicated at top). These guide your Bootstrap cleanup work. — Scribe
+
+---
+
+📌 **Editor icon mapping decision (2026-02-14):** Icon mapping for editor cleanup — map remaining open-iconic action icons to Material Design equivalents (`oi-x` → `Icons.Material.Filled.Close`, `oi-delete` → `Icons.Material.Filled.Delete`), continue existing edit/play mappings. — Scribe

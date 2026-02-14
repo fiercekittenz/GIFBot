@@ -309,6 +309,18 @@ All milestones are sequential. Within each milestone, tasks can be parallelized 
 3. **No existing tests** — There are no unit or integration test projects. All validation must be manual or Dylan must create tests as part of the effort.
 4. **GIFBotHub is 2,238 lines** — The main SignalR hub is massive. The Blazor Server consolidation (M2) will significantly change how components interact with it. This is the highest-risk task.
 5. **Browser source pages** (animations.html, stickers.html, etc.) are standalone HTML files that connect as external SignalR clients. These must continue working after the Blazor Server migration.
+
+---
+
+### 2026-02-14: Helly Editors UX Decisions
+**By:** Helly  
+**What:** Icon mapping for editor cleanup — remaining open-iconic action icons should map to Material Design equivalents  
+**Why:** Standardizing icon usage across editor pages
+
+#### Icon Mappings
+- `oi-x` → `Icons.Material.Filled.Close`
+- `oi-delete` → `Icons.Material.Filled.Delete`
+- Continue existing edit/play mappings
 6. **StreamDeck plugin** is on netcoreapp3.1 and NOT in the solution. Recommend deferring to a separate initiative unless Georgia wants it included.
 7. **jQuery dependency** — Several JS files (ElementDrag.js, AnimationHelpers.js) and browser source pages may depend on jQuery. Must verify before removing in M4.
 

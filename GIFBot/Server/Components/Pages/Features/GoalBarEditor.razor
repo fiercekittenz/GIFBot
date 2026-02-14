@@ -26,7 +26,10 @@
 </MudDialog>
 
 <div class="pa-1 my-1 gifbot-page-header">
-   <MudText Typo="Typo.h4"><span class="oi oi-target" aria-hidden="true"></span> Goal Bar</MudText>
+   <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+      <MudIcon Icon="@Icons.Material.Filled.TrackChanges" />
+      <MudText Typo="Typo.h4">Goal Bar</MudText>
+   </MudStack>
 </div>
 
 <EditForm Model="@mGoalBarData" OnSubmit="@OnSaveChanges">
@@ -181,32 +184,32 @@
                <div class="form-group mt-2">
                   <label for="uiFont"><b>Font:</b></label>
                   <small id="uiFont" class="form-text text-white-50">What font should you use?</small>
-                  <MudRadioGroup @bind-Value="mCaptionFontSelection" T="int">
-<MudRadio T="int" Value="@(0)">Arial</MudRadio>
-                        <MudRadio T="int" Value="@(1)">Comic Sans</MudRadio>
-                        <MudRadio T="int" Value="@(2)">Impact</MudRadio>
-                        <MudRadio T="int" Value="@(3)">Monospace</MudRadio>
-                        <MudRadio T="int" Value="@(4)">Aldrich</MudRadio>
-                        <MudRadio T="int" Value="@(5)">Anton</MudRadio>
-                        <MudRadio T="int" Value="@(6)">Barrio</MudRadio>
-                        <MudRadio T="int" Value="@(7)">Creepster</MudRadio>
-                        <MudRadio T="int" Value="@(8)">Eater</MudRadio>
-                        <MudRadio T="int" Value="@(9)">Galada</MudRadio>
-                        <MudRadio T="int" Value="@(10)">Ranchers</MudRadio>
-                        <MudRadio T="int" Value="@(11)">Lobster</MudRadio>
-                        <MudRadio T="int" Value="@(12)">Righteous</MudRadio>
-                        <MudRadio T="int" Value="@(13)">BenchNine</MudRadio>
-                        <MudRadio T="int" Value="@(14)">Oswald</MudRadio>
-                        <MudRadio T="int" Value="@(15)">Ultra</MudRadio>
-                        <MudRadio T="int" Value="@(16)">Frijole</MudRadio>
-                        <MudRadio T="int" Value="@(17)">Viga</MudRadio>
-                        <MudRadio T="int" Value="@(18)">Quantico</MudRadio>
-                        <MudRadio T="int" Value="@(19)">Bungee</MudRadio>
-                        <MudRadio T="int" Value="@(21)">Sriracha</MudRadio>
-                        <MudRadio T="int" Value="@(22)">Arsenal</MudRadio>
-                        <MudRadio T="int" Value="@(23)">Gaegu</MudRadio>
-                        <MudRadio T="int" Value="@(24)">VT323</MudRadio>
-</MudRadioGroup>
+                  <MudSelect T="int" @bind-Value="mCaptionFontSelection" Label="Font" Variant="Variant.Filled">
+                     <MudSelectItem T="int" Value="0">Arial</MudSelectItem>
+                     <MudSelectItem T="int" Value="1">Comic Sans</MudSelectItem>
+                     <MudSelectItem T="int" Value="2">Impact</MudSelectItem>
+                     <MudSelectItem T="int" Value="3">Monospace</MudSelectItem>
+                     <MudSelectItem T="int" Value="4">Aldrich</MudSelectItem>
+                     <MudSelectItem T="int" Value="5">Anton</MudSelectItem>
+                     <MudSelectItem T="int" Value="6">Barrio</MudSelectItem>
+                     <MudSelectItem T="int" Value="7">Creepster</MudSelectItem>
+                     <MudSelectItem T="int" Value="8">Eater</MudSelectItem>
+                     <MudSelectItem T="int" Value="9">Galada</MudSelectItem>
+                     <MudSelectItem T="int" Value="10">Ranchers</MudSelectItem>
+                     <MudSelectItem T="int" Value="11">Lobster</MudSelectItem>
+                     <MudSelectItem T="int" Value="12">Righteous</MudSelectItem>
+                     <MudSelectItem T="int" Value="13">BenchNine</MudSelectItem>
+                     <MudSelectItem T="int" Value="14">Oswald</MudSelectItem>
+                     <MudSelectItem T="int" Value="15">Ultra</MudSelectItem>
+                     <MudSelectItem T="int" Value="16">Frijole</MudSelectItem>
+                     <MudSelectItem T="int" Value="17">Viga</MudSelectItem>
+                     <MudSelectItem T="int" Value="18">Quantico</MudSelectItem>
+                     <MudSelectItem T="int" Value="19">Bungee</MudSelectItem>
+                     <MudSelectItem T="int" Value="21">Sriracha</MudSelectItem>
+                     <MudSelectItem T="int" Value="22">Arsenal</MudSelectItem>
+                     <MudSelectItem T="int" Value="23">Gaegu</MudSelectItem>
+                     <MudSelectItem T="int" Value="24">VT323</MudSelectItem>
+                  </MudSelect>
                </div>
                <div class="form-group mt-2">
                   <label for="uiIsBold"><b>Font Weight:</b></label>
@@ -249,7 +252,7 @@
                }
 
                <div>
-                  <p align="right"><button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@ShowAddNewGoalWindow">Add New Goal</button></p>
+                  <p align="right"><MudButton Variant="Variant.Filled" Class="gifbot-action-btn nav-item p-1 mr-3" OnClick="@ShowAddNewGoalWindow">Add New Goal</MudButton></p>
                </div>
                <MudTabs ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
                   @for (int i = 0; i < mGoalBarData.Goals.Count; ++i)
@@ -284,7 +287,7 @@
                      <MudTextField T="string" class="form-control" Style="width: 100%" ReadOnly="true" @bind-Value="mURL" />
                   </td>
                   <td align="left">
-                     <button type="button" class="btn btn-secondary p-1 ml-2 gifbot-secondary-btn" @onclick='(() => HandleCopyUrl("uiURL"))'>Copy to Clipboard</button>
+                     <MudButton Variant="Variant.Filled" Class="gifbot-action-btn p-1 ml-2" OnClick='(() => HandleCopyUrl("uiURL"))'>Copy to Clipboard</MudButton>
                   </td>
                </tr>
             </table>
@@ -292,10 +295,10 @@
       </MudTabPanel>
    </MudTabs>
 
-         <div class="d-flex justify-end pa-3">
-         <button type="reset" class="btn btn-secondary p-2 gifbot-secondary-btn" @onclick="@OnCancel">Cancel</button>
-         <button type="submit" class="btn btn-primary p-2 gifbot-primary-btn">Save Changes</button>
-      </div>
+          <div class="d-flex justify-end pa-3 gap-4">
+          <MudButton Variant="Variant.Outlined" Color="Color.Default" OnClick="@OnCancel">Cancel</MudButton>
+          <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit">Save Changes</MudButton>
+       </div>
 </EditForm>
 
 @code {

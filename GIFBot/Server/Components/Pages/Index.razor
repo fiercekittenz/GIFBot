@@ -15,7 +15,10 @@
 @implements IAsyncDisposable
 
 <div class="pa-1 my-1 gifbot-page-header">
-   <MudText Typo="Typo.h4">Dashboard</MudText>
+   <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+      <MudIcon Icon="@Icons.Material.Filled.Dashboard" />
+      <MudText Typo="Typo.h4">Dashboard</MudText>
+   </MudStack>
 </div>
 
 @if (!IsConnected)
@@ -45,25 +48,15 @@
    }
 </style>
 
-<nav class="navbar navbar-expand-sm gifbot-quick-actions">
-   <span class="navbar-text mr-3">
-      <b>Quick Actions:</b>
-   </span>
-   <ul class="navbar-nav">
-      <li class="nav-item">
-         <button class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@ToggleStreamerOnlyMode">@mStreamerOnlyModeState Streamer-Only Mode</button>
-      </li>
-      <li class="nav-item">
-         <button class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@StopAllAnimations">Stop Animations</button>
-      </li>
-      <li class="nav-item">
-         <button class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@ToggleBonkersMode">@mBonkersModeState Bonkers Mode</button>
-      </li>
-      <li class="nav-item">
-         <button class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@ClearAllStickers">Clear All Stickers</button>
-      </li>
-   </ul>
-</nav>
+<MudPaper Class="pa-2 mb-3 gifbot-quick-actions" Elevation="0">
+   <MudStack Row="true" Spacing="2" AlignItems="AlignItems.Center" Wrap="Wrap.Wrap">
+      <MudText Typo="Typo.subtitle2"><strong>Quick Actions:</strong></MudText>
+      <MudButton Variant="Variant.Filled" Class="gifbot-action-btn" OnClick="@ToggleStreamerOnlyMode">@mStreamerOnlyModeState Streamer-Only Mode</MudButton>
+      <MudButton Variant="Variant.Filled" Class="gifbot-action-btn" OnClick="@StopAllAnimations">Stop Animations</MudButton>
+      <MudButton Variant="Variant.Filled" Class="gifbot-action-btn" OnClick="@ToggleBonkersMode">@mBonkersModeState Bonkers Mode</MudButton>
+      <MudButton Variant="Variant.Filled" Class="gifbot-action-btn" OnClick="@ClearAllStickers">Clear All Stickers</MudButton>
+   </MudStack>
+</MudPaper>
 
 <div class="pa-3">
    <MudGrid Spacing="3">
@@ -104,7 +97,7 @@
                                        <table>
                                           <tr>
                                              <td width="25" valign="middle" align="center">
-                                                <button type="button" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 25px; height: 25px" @onclick="@(() => HandlePlayAnimation(animation))"><span class="oi oi-media-play"></span></button>
+                                                <MudIconButton Icon="@Icons.Material.Filled.PlayArrow" Size="Size.Small" Class="gifbot-neutral-btn" OnClick="@(() => HandlePlayAnimation(animation))" title="Play" aria-label="Play" />
                                              </td>
                                              <td valign="middle" align="left">
                                                 <MudTreeViewItem Value="@animation" Text="@animation.Title" />

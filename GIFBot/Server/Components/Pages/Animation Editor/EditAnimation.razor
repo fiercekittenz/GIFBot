@@ -8,7 +8,10 @@
 @inject IJSRuntime JSRuntime
 
 <div class="pa-1 my-1 gifbot-page-header">
-   <MudText Typo="Typo.h4"><span class="oi oi-play-circle" aria-hidden="true"></span> <a href="animationseditor/">Animations</a> « Edit Animation</MudText>
+   <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+      <MudIcon Icon="@Icons.Material.Filled.Edit" />
+      <MudText Typo="Typo.h4"><a href="animationseditor/">Animations</a> « Edit Animation</MudText>
+   </MudStack>
 </div>
 
 <!-- Clone Animation Confirmation Window -->

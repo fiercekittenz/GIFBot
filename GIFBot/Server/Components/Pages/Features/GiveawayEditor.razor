@@ -11,7 +11,10 @@
 @inject HttpClient Http
 
 <div class="pa-1 my-1 gifbot-page-header">
-    <MudText Typo="Typo.h4"><span class="oi oi-box" aria-hidden="true"></span> Giveaway</MudText>
+    <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+        <MudIcon Icon="@Icons.Material.Filled.CardGiftcard" />
+        <MudText Typo="Typo.h4">Giveaway</MudText>
+    </MudStack>
 </div>
 
 <!-- Add New Banned User Window -->
@@ -36,18 +39,18 @@
             <div style="width: 100%">
                 @if (!Data.IsOpenForEntries)
                 {
-                    <button type="button" class="btn btn-secondary p-1 mr-5 gifbot-special-btn" style="margin-left: auto; margin-right: 0; width: 200px" @onclick="@OnStartGiveaway">Accept Entries</button>
+                    <MudButton Variant="Variant.Filled" Class="gifbot-action-btn gifbot-special-btn p-1 mr-5" Style="margin-left: auto; margin-right: 0; width: 200px" OnClick="@OnStartGiveaway">Accept Entries</MudButton>
 
                     @if (Data.Entrants.Any())
                     {
-                        <button type="button" class="btn btn-secondary p-1 mr-5 gifbot-secondary-btn" style="margin-left: auto; margin-right: 0; width: 200px" @onclick="@OnDrawWinner">Draw Winner</button>
+                        <MudButton Variant="Variant.Filled" Class="gifbot-action-btn gifbot-secondary-btn p-1 mr-5" Style="margin-left: auto; margin-right: 0; width: 200px" OnClick="@OnDrawWinner">Draw Winner</MudButton>
                     }
 
-                    <button type="button" class="btn btn-secondary p-1 mr-5 gifbot-danger-btn" style="margin-left: auto; margin-right: 0; width: 200px" @onclick="@OnResetGiveaway">Reset</button>
+                    <MudButton Variant="Variant.Filled" Class="gifbot-action-btn gifbot-danger-btn p-1 mr-5" Style="margin-left: auto; margin-right: 0; width: 200px" OnClick="@OnResetGiveaway">Reset</MudButton>
                 }
                 else
                 {
-                    <button type="button" class="btn btn-secondary p-1 mr-5 gifbot-secondary-btn" style="margin-left: auto; margin-right: 0; width: 200px" @onclick="@OnCloseGiveaway">Close Giveaway</button>
+                    <MudButton Variant="Variant.Filled" Class="gifbot-action-btn gifbot-secondary-btn p-1 mr-5" Style="margin-left: auto; margin-right: 0; width: 200px" OnClick="@OnCloseGiveaway">Close Giveaway</MudButton>
                 }
             </div>
         </div>
@@ -149,9 +152,9 @@
             <small id="uiWinnerAnimationLabel" class="form-text text-white-50">The animation that plays when the winner is announced.</small>
             <AnimationSelectorComponent Animations="@AnimationOptions" SelectedAnimation="Data.WinnerAnimation" OnSelectedAnimationChanged="@HandleWinnerAnimationSelectionChanged" />
         </div>
-                    <div class="d-flex justify-end pa-3">
-                <button type="reset" class="btn btn-secondary p-2 gifbot-secondary-btn" @onclick="@OnCancel">Cancel</button>
-                <button type="submit" class="btn btn-primary p-2 gifbot-primary-btn" @onclick="@OnSaveChanges">Save Changes</button>
+                    <div class="d-flex justify-end pa-3 gap-4">
+                <MudButton Variant="Variant.Outlined" Color="Color.Default" OnClick="@OnCancel">Cancel</MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@OnSaveChanges">Save Changes</MudButton>
             </div>
     </MudTabPanel>
 
@@ -170,7 +173,7 @@
                     </TemplateColumn>
                     <TemplateColumn>
 <CellTemplate Context="data">
-                            <button type="button" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 25px; height: 25px" @onclick="(() => HandleDeleteBannedUserRequest((string)data.Item))"><span class="oi oi-trash"></span></button>
+                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Class="gifbot-neutral-btn" OnClick="@(() => HandleDeleteBannedUserRequest((string)data.Item))" Title="Delete" />
                         </CellTemplate>
                     </TemplateColumn>
                 </Columns>

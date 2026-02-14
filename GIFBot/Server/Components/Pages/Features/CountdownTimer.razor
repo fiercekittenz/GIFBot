@@ -10,7 +10,10 @@
 @inject HttpClient Http
 
 <div class="pa-1 my-1 gifbot-page-header">
-   <MudText Typo="Typo.h4"><span class="oi oi-timer" aria-hidden="true"></span> Countdown</MudText>
+   <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+      <MudIcon Icon="@Icons.Material.Filled.Timer" />
+      <MudText Typo="Typo.h4">Countdown</MudText>
+   </MudStack>
 </div>
 
 <!-- Add New Action Window -->
@@ -148,17 +151,12 @@
 
 <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
    <MudTabPanel Text="General">
-               <div class="d-flex justify-end pa-3">
-            <button type="reset" class="btn btn-secondary p-2 gifbot-secondary-btn" @onclick="@OnCancel">Cancel</button>
-            <button type="submit" class="btn btn-primary p-2 gifbot-primary-btn" @onclick="@OnSaveChanges">Save Changes</button>
-         </div>
-
       <div class="p-2 mb-2 rounded gifbot-content-panel">
          <div class="text-left" style="width: 100%">
-            <button type="button" class="btn btn-secondary p-1 gifbot-special-btn" style="margin-left: auto; margin-right: 0" @onclick="@OnStartTimer">Start Timer</button>
-            <button type="button" class="btn btn-secondary p-1 gifbot-secondary-btn" style="margin-left: auto; margin-right: 0" @onclick="@OnPauseTimer">Pause Timer</button>
-            <button type="button" class="btn btn-secondary p-1 gifbot-secondary-btn" style="margin-left: auto; margin-right: 0" @onclick="@OnResetTimer">Reset Timer</button>
-            <button type="button" class="btn btn-secondary p-1 gifbot-secondary-btn" style="margin-left: auto; margin-right: 0" @onclick="@OnHideTimer">Hide Timer</button>
+            <MudButton Variant="Variant.Filled" Class="gifbot-action-btn p-1" Style="margin-left: auto; margin-right: 0" OnClick="@OnStartTimer">Start Timer</MudButton>
+            <MudButton Variant="Variant.Filled" Class="gifbot-action-btn p-1" Style="margin-left: auto; margin-right: 0" OnClick="@OnPauseTimer">Pause Timer</MudButton>
+            <MudButton Variant="Variant.Filled" Class="gifbot-action-btn p-1" Style="margin-left: auto; margin-right: 0" OnClick="@OnResetTimer">Reset Timer</MudButton>
+            <MudButton Variant="Variant.Filled" Class="gifbot-action-btn p-1" Style="margin-left: auto; margin-right: 0" OnClick="@OnHideTimer">Hide Timer</MudButton>
          </div>
       </div>
 
@@ -180,9 +178,9 @@
          <small id="uiTimerValueInMinutes" class="form-text text-muted">The number of minutes you want this countdown timer to tick.</small>
          <MudNumericField T="int" Min="1" Max="999999" @bind-Value="Data.TimerStartValueInMinutes" />
       </div>
-               <div class="d-flex justify-end pa-3">
-            <button type="reset" class="btn btn-secondary p-2 gifbot-secondary-btn" @onclick="@OnCancel">Cancel</button>
-            <button type="submit" class="btn btn-primary p-2 gifbot-primary-btn" @onclick="@OnSaveChanges">Save Changes</button>
+               <div class="d-flex justify-end pa-3 gap-4">
+            <MudButton Variant="Variant.Outlined" Color="Color.Default" OnClick="@OnCancel">Cancel</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@OnSaveChanges">Save Changes</MudButton>
          </div>
    </MudTabPanel>
 
@@ -197,9 +195,9 @@
                <PropertyColumn T="CountdownTimerAction" TProperty="string" Property="@(x => x.Name)" Title="Value" />
                <TemplateColumn Title="">
 <CellTemplate Context="data">
-                     <button type="button" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 25px; height: 25px" @onclick="(() => HandlePlayActionRequest((data.Item)))"><span class="oi oi-play-circle"></span></button>
-                     <button type="button" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 25px; height: 25px" @onclick="(() => HandleEditRequest((data.Item)))"><span class="oi oi-pencil"></span></button>
-                     <button type="button" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 25px; height: 25px" @onclick="(() => HandleDeleteRequest((data.Item)))"><span class="oi oi-trash"></span></button>
+                     <MudIconButton Icon="@Icons.Material.Filled.PlayCircle" Size="Size.Small" Class="gifbot-neutral-btn" OnClick="(() => HandlePlayActionRequest((data.Item)))" title="Play" />
+                     <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" Class="gifbot-neutral-btn" OnClick="(() => HandleEditRequest((data.Item)))" title="Edit" />
+                     <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Class="gifbot-neutral-btn" OnClick="(() => HandleDeleteRequest((data.Item)))" title="Delete" />
                   </CellTemplate>
                </TemplateColumn>
             </Columns>
@@ -233,32 +231,32 @@
             <div class="form-group mt-2">
                <label for="uiCaptionFont"><b>Font:</b></label>
                <small id="uiCaptionFont" class="form-text text-white-50">What font should you use?</small>
-               <MudRadioGroup @bind-Value="mCaptionFontSelection" T="int">
-<MudRadio T="int" Value="@(0)">Arial</MudRadio>
-                     <MudRadio T="int" Value="@(1)">Comic Sans</MudRadio>
-                     <MudRadio T="int" Value="@(2)">Impact</MudRadio>
-                     <MudRadio T="int" Value="@(3)">Monospace</MudRadio>
-                     <MudRadio T="int" Value="@(4)">Aldrich</MudRadio>
-                     <MudRadio T="int" Value="@(5)">Anton</MudRadio>
-                     <MudRadio T="int" Value="@(6)">Barrio</MudRadio>
-                     <MudRadio T="int" Value="@(7)">Creepster</MudRadio>
-                     <MudRadio T="int" Value="@(8)">Eater</MudRadio>
-                     <MudRadio T="int" Value="@(9)">Galada</MudRadio>
-                     <MudRadio T="int" Value="@(10)">Ranchers</MudRadio>
-                     <MudRadio T="int" Value="@(11)">Lobster</MudRadio>
-                     <MudRadio T="int" Value="@(12)">Righteous</MudRadio>
-                     <MudRadio T="int" Value="@(13)">BenchNine</MudRadio>
-                     <MudRadio T="int" Value="@(14)">Oswald</MudRadio>
-                     <MudRadio T="int" Value="@(15)">Ultra</MudRadio>
-                     <MudRadio T="int" Value="@(16)">Frijole</MudRadio>
-                     <MudRadio T="int" Value="@(17)">Viga</MudRadio>
-                     <MudRadio T="int" Value="@(18)">Quantico</MudRadio>
-                     <MudRadio T="int" Value="@(19)">Bungee</MudRadio>
-                     <MudRadio T="int" Value="@(21)">Sriracha</MudRadio>
-                     <MudRadio T="int" Value="@(22)">Arsenal</MudRadio>
-                     <MudRadio T="int" Value="@(23)">Gaegu</MudRadio>
-                     <MudRadio T="int" Value="@(24)">VT323</MudRadio>
-</MudRadioGroup>
+               <MudSelect T="int" @bind-Value="mCaptionFontSelection" Label="Font" Variant="Variant.Filled">
+                  <MudSelectItem T="int" Value="0">Arial</MudSelectItem>
+                  <MudSelectItem T="int" Value="1">Comic Sans</MudSelectItem>
+                  <MudSelectItem T="int" Value="2">Impact</MudSelectItem>
+                  <MudSelectItem T="int" Value="3">Monospace</MudSelectItem>
+                  <MudSelectItem T="int" Value="4">Aldrich</MudSelectItem>
+                  <MudSelectItem T="int" Value="5">Anton</MudSelectItem>
+                  <MudSelectItem T="int" Value="6">Barrio</MudSelectItem>
+                  <MudSelectItem T="int" Value="7">Creepster</MudSelectItem>
+                  <MudSelectItem T="int" Value="8">Eater</MudSelectItem>
+                  <MudSelectItem T="int" Value="9">Galada</MudSelectItem>
+                  <MudSelectItem T="int" Value="10">Ranchers</MudSelectItem>
+                  <MudSelectItem T="int" Value="11">Lobster</MudSelectItem>
+                  <MudSelectItem T="int" Value="12">Righteous</MudSelectItem>
+                  <MudSelectItem T="int" Value="13">BenchNine</MudSelectItem>
+                  <MudSelectItem T="int" Value="14">Oswald</MudSelectItem>
+                  <MudSelectItem T="int" Value="15">Ultra</MudSelectItem>
+                  <MudSelectItem T="int" Value="16">Frijole</MudSelectItem>
+                  <MudSelectItem T="int" Value="17">Viga</MudSelectItem>
+                  <MudSelectItem T="int" Value="18">Quantico</MudSelectItem>
+                  <MudSelectItem T="int" Value="19">Bungee</MudSelectItem>
+                  <MudSelectItem T="int" Value="21">Sriracha</MudSelectItem>
+                  <MudSelectItem T="int" Value="22">Arsenal</MudSelectItem>
+                  <MudSelectItem T="int" Value="23">Gaegu</MudSelectItem>
+                  <MudSelectItem T="int" Value="24">VT323</MudSelectItem>
+               </MudSelect>
             </div>
             <div class="form-group mt-2">
                <label for="uiCaptionIsBold"><b>Font Weight:</b></label>
@@ -296,7 +294,7 @@
                         <MudTextField T="string" class="form-control" Style="width: 100%" ReadOnly="true" @bind-Value="WebPath" />
                      </td>
                      <td align="left">
-                        <button type="button" class="btn btn-secondary p-1 ml-2 gifbot-secondary-btn" @onclick='(() => HandleCopyUrl("uiURL"))'>Copy to Clipboard</button>
+                        <MudButton Variant="Variant.Filled" Class="gifbot-action-btn p-1 ml-2" OnClick='(() => HandleCopyUrl("uiURL"))'>Copy to Clipboard</MudButton>
                      </td>
                   </tr>
                </table>

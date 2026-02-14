@@ -2,7 +2,10 @@
 @inject NavigationManager NavigationManager
 
 <div class="pa-1 my-1 gifbot-page-header">
-   <MudText Typo="Typo.h4"><span class="oi oi-tag" aria-hidden="true"></span> A Special Thanks...</MudText>
+   <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+      <MudIcon Icon="@Icons.Material.Filled.Favorite" />
+      <MudText Typo="Typo.h4">A Special Thanks...</MudText>
+   </MudStack>
 </div>
 
 <div class="p-2 mb-2 rounded gifbot-content-panel">

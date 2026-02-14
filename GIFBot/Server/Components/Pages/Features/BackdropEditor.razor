@@ -10,7 +10,10 @@
 @inject HttpClient Http
 
 <div class="pa-1 my-1 gifbot-page-header">
-   <MudText Typo="Typo.h4"><span class="oi oi-image" aria-hidden="true"></span> Backdrop</MudText>
+   <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+      <MudIcon Icon="@Icons.Material.Filled.Wallpaper" />
+      <MudText Typo="Typo.h4">Backdrop</MudText>
+   </MudStack>
 </div>
 
 <!-- Add New Backdrop Window -->
@@ -77,9 +80,7 @@
 <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
    <MudTabPanel Text="General">
                <div class="d-flex justify-end pa-3">
-            <button type="reset" class="btn btn-secondary p-2 gifbot-secondary-btn" @onclick="@OnTakeDownBackdrop">Take Down Active Backdrop</button>
-            <button type="reset" class="btn btn-secondary p-2 gifbot-secondary-btn" @onclick="@OnCancel">Cancel</button>
-            <button type="submit" class="btn btn-primary p-2 gifbot-primary-btn" @onclick="@OnSaveChanges">Save Changes</button>
+            <MudButton Variant="Variant.Filled" Class="gifbot-action-btn gifbot-secondary-btn" OnClick="@OnTakeDownBackdrop">Take Down Active Backdrop</MudButton>
          </div>
 
       <div class="p-2">
@@ -123,9 +124,9 @@
          <MudNumericField T="int" Min="1" Max="999999" @bind-Value="Data.MinimumMinutesActive" />
       </div>
 
-               <div class="d-flex justify-end pa-3">
-            <button type="reset" class="btn btn-secondary p-2 gifbot-secondary-btn" @onclick="@OnCancel">Cancel</button>
-            <button type="submit" class="btn btn-primary p-2 gifbot-primary-btn" @onclick="@OnSaveChanges">Save Changes</button>
+               <div class="d-flex justify-end pa-3 gap-4">
+            <MudButton Variant="Variant.Outlined" Color="Color.Default" OnClick="@OnCancel">Cancel</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@OnSaveChanges">Save Changes</MudButton>
          </div>
    </MudTabPanel>
 
@@ -140,9 +141,9 @@
                <PropertyColumn T="BackdropVideoEntryData" TProperty="string" Property="@(x => x.Name)" Title="Value" />
                <TemplateColumn Title="">
 <CellTemplate Context="data">
-                     <button type="button" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 25px; height: 25px" @onclick="(() => HandleHangRequest((data.Item)))"><span class="oi oi-play-circle"></span></button>
-                     <button type="button" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 25px; height: 25px" @onclick="(() => HandleEditRequest((data.Item)))"><span class="oi oi-pencil"></span></button>
-                     <button type="button" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 25px; height: 25px" @onclick="(() => HandleDeleteRequest((data.Item)))"><span class="oi oi-trash"></span></button>
+                     <MudIconButton Icon="@Icons.Material.Filled.PlayArrow" Size="Size.Small" Class="gifbot-neutral-btn" OnClick="@(() => HandleHangRequest((data.Item)))" Title="Play" />
+                     <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" Class="gifbot-neutral-btn" OnClick="@(() => HandleEditRequest((data.Item)))" Title="Edit" />
+                     <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Class="gifbot-neutral-btn" OnClick="@(() => HandleDeleteRequest((data.Item)))" Title="Delete" />
                   </CellTemplate>
                </TemplateColumn>
             </Columns>
@@ -166,7 +167,7 @@
                         <MudTextField T="string" class="form-control" Style="width: 100%" ReadOnly="true" @bind-Value="WebPath" />
                      </td>
                      <td align="left">
-                        <button type="button" class="btn btn-secondary p-1 ml-2 gifbot-secondary-btn" @onclick='(() => HandleCopyUrl("uiURL"))'>Copy to Clipboard</button>
+                        <MudButton Variant="Variant.Filled" Class="gifbot-action-btn gifbot-secondary-btn p-1 ml-2" OnClick="@(() => HandleCopyUrl("uiURL"))">Copy to Clipboard</MudButton>
                      </td>
                   </tr>
                </table>

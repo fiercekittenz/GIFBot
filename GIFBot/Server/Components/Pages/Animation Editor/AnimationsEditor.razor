@@ -12,7 +12,10 @@
 @inject HttpClient Http
 
 <div class="pa-1 my-1 gifbot-page-header">
-    <MudText Typo="Typo.h4"><span class="oi oi-play-circle" aria-hidden="true"></span> Animations</MudText>
+    <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+        <MudIcon Icon="@Icons.Material.Filled.PlayCircle" />
+        <MudText Typo="Typo.h4">Animations</MudText>
+    </MudStack>
 </div>
 
 <!-- Delete Category Confirmation Window -->
@@ -128,9 +131,9 @@
                                          @ref="@AnimationTreeListRef">
                             <ToolBarContent>
                                 <MudTextField T="string" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
-                                <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleExpandAllRequest"></MudButton>
-                                <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleCollapseAllRequest"></MudButton>
-                                <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleAddCategoryRequest">Add Category</MudButton>
+                                <MudButton Variant="Variant.Text" Size="Size.Small" StartIcon="@Icons.Material.Filled.UnfoldMore" OnClick="@HandleExpandAllRequest">Expand All</MudButton>
+                                <MudButton Variant="Variant.Text" Size="Size.Small" StartIcon="@Icons.Material.Filled.UnfoldLess" OnClick="@HandleCollapseAllRequest">Collapse All</MudButton>
+                                <MudButton Variant="Variant.Text" Size="Size.Small" StartIcon="@Icons.Material.Filled.CreateNewFolder" OnClick="@HandleAddCategoryRequest">Add Category</MudButton>
                                 @if (mSelectedTreeItems.Where(t => t.Tier == AnimationTreeTier.Animation).Any())
                                 {
                                     <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleMoveSelectedRequest">Move</MudButton>
@@ -179,15 +182,15 @@
                                         }
                                         @if (item.Tier == AnimationTreeTier.Category)
                                         {
-                                            <button type="button" title="Add Animation to Category" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleAddAnimationRequest(item.Id))"><span class="oi oi-plus"></span></button>
-                                            <button type="button" title="Rename Category" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleEditCategoryRequest(item))"><span class="oi oi-pencil"></span></button>
-                                            <button type="button" title="Delete Category" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleDeleteCategory(item))"><span class="oi oi-trash"></span></button>
+                                            <MudIconButton Icon="@Icons.Material.Filled.Add" Size="Size.Small" Class="gifbot-neutral-btn" OnClick="@(() => HandleAddAnimationRequest(item.Id))" Title="Add Animation" />
+                                            <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" Class="gifbot-neutral-btn" OnClick="@(() => HandleEditCategoryRequest(item))" Title="Rename Category" />
+                                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Class="gifbot-neutral-btn" OnClick="@(() => HandleDeleteCategory(item))" Title="Delete Category" />
                                         }
                                         else
                                         {
-                                            <button type="button" title="Edit Animation" class="btn btn-secondary p-0 m-0 gifbot-neutral-btn" style="width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleEditAnimationRequest(item))"><span class="oi oi-pencil"></span></button>
-                                            <button type="button" title="Delete Animation" class="btn btn-secondary p-0 m-0 gifbot-neutral-btn" style="width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandleDeleteAnimation(item))"><span class="oi oi-trash"></span></button>
-                                            <button type="button" title="Play Animation" class="btn btn-secondary p-0 m-0 gifbot-neutral-btn" style="width: 30px; height: 30px" aria-describedby="position-tooltip" @onclick="@(() => HandlePlayAnimation(item))"><span class="oi oi-media-play"></span></button>
+                                            <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" Class="gifbot-neutral-btn" OnClick="@(() => HandleEditAnimationRequest(item))" Title="Edit Animation" />
+                                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Class="gifbot-neutral-btn" OnClick="@(() => HandleDeleteAnimation(item))" Title="Delete Animation" />
+                                            <MudIconButton Icon="@Icons.Material.Filled.PlayArrow" Size="Size.Small" Class="gifbot-neutral-btn" OnClick="@(() => HandlePlayAnimation(item))" Title="Play Animation" />
                                         }
                                     </CellTemplate>
                                 </TemplateColumn>

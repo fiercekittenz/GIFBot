@@ -10,7 +10,10 @@
 @inject HttpClient Http
 
 <div class="pa-1 my-1 gifbot-page-header">
-    <MudText Typo="Typo.h4"><span class="oi oi-thumb-up" aria-hidden="true"></span> Greeter</MudText>
+    <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+        <MudIcon Icon="@Icons.Material.Filled.WavingHand" />
+        <MudText Typo="Typo.h4">Greeter</MudText>
+    </MudStack>
 </div>
 
 <!-- Add New Entry Window -->
@@ -103,8 +106,8 @@
                     </TemplateColumn>
                     <TemplateColumn>
 <CellTemplate Context="data">
-                            <button type="button" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 25px; height: 25px" @onclick="(() => HandleEditRequest((data.Item)))"><span class="oi oi-pencil"></span></button>
-                            <button type="button" class="btn btn-secondary p-0 m-0 gifbot-secondary-btn" style="width: 25px; height: 25px" @onclick="(() => HandleDeleteRequest((data.Item)))"><span class="oi oi-trash"></span></button>
+                            <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" Class="gifbot-neutral-btn" OnClick="@(() => HandleEditRequest((data.Item)))" Title="Edit" />
+                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Class="gifbot-neutral-btn" OnClick="@(() => HandleDeleteRequest((data.Item)))" Title="Delete" />
                         </CellTemplate>
                     </TemplateColumn>
                 </Columns>
@@ -113,53 +116,3 @@
     </MudTabPanel>
 </MudTabs>
 
-<style>
-    .k-listview-header {
-        padding: 10px 20px;
-    }
-
-    .k-card {
-        padding: 10px 20px;
-        border-width: 0 0 1px 0;
-        border-radius: 0;
-        box-shadow: none;
-    }
-
-    .k-card-body {
-        padding: 0;
-    }
-
-    .k-card:last-child {
-        border-bottom: 0;
-    }
-
-    .k-card .k-card-title {
-        padding: 0;
-        font-size: 1.2em;
-        font-weight: bold;
-        line-height: normal;
-    }
-
-    .k-card-subtitle {
-        font-size: 1em;
-        margin-bottom: 0;
-    }
-
-    .product-name {
-        width: 50%;
-        min-width: 200px;
-        padding: 5px 0;
-    }
-
-    .product-price {
-        width: 50%;
-        min-width: 200px;
-        padding: 5px 0;
-    }
-
-    .editor-label {
-        margin: 0;
-        font-size: .875em;
-        display: block;
-    }
-</style>

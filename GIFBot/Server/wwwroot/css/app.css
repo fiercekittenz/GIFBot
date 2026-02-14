@@ -113,6 +113,27 @@ a, .btn-link {
     background-color: #3a3a5c !important;
 }
 
+/* MudBlazor custom button color overrides */
+.gifbot-action-btn.mud-button-filled {
+    background-color: #3d3566 !important;
+}
+.gifbot-secondary-btn.mud-button-filled {
+    background-color: #3a2d56 !important;
+}
+.gifbot-primary-btn.mud-button-filled {
+    background-color: #6b2fa0 !important;
+}
+.gifbot-danger-btn.mud-button-filled {
+    background-color: #4a2d3d !important;
+}
+.gifbot-special-btn.mud-button-filled {
+    background-color: #2d3566 !important;
+}
+.gifbot-neutral-btn.mud-button-filled,
+.gifbot-neutral-btn.mud-icon-button {
+    background-color: #3a3a5c !important;
+}
+
 .gifbot-layout-dark {
     background-color: #0e0e1e;
 }
