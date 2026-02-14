@@ -137,11 +137,21 @@ namespace GIFBot.Server.Components.Pages.Features
          }
       }
 
-      private async Task HandleDeleteRequest(GreeterEntry entry)
+      private void HandleDeleteRequest(GreeterEntry entry)
       {
          if (entry != null)
          {
-            bool result = await mHubConnection.InvokeAsync<bool>("DeleteGreeterEntry", entry.Id);
+            mPendingDeleteEntry = entry;
+            mIsDeleteDialogVisible = true;
+            StateHasChanged();
+         }
+      }
+
+      private async Task HandleConfirmDelete()
+      {
+         if (mPendingDeleteEntry != null)
+         {
+            bool result = await mHubConnection.InvokeAsync<bool>("DeleteGreeterEntry", mPendingDeleteEntry.Id);
             if (result)
             {
                await GetGreeterDataFromHub();
@@ -153,6 +163,8 @@ namespace GIFBot.Server.Components.Pages.Features
                Snackbar.Add("Delete Failed - The Greeter entry was not deleted.", Severity.Error);
                await InvokeAsync(() => { StateHasChanged(); });
             }
+            mIsDeleteDialogVisible = false;
+            mPendingDeleteEntry = null;
          }
       }
 
@@ -230,6 +242,10 @@ namespace GIFBot.Server.Components.Pages.Features
       private bool mIsAddDialogVisible = false;
 
       private bool mIsEditDialogVisible = false;
+
+      private bool mIsDeleteDialogVisible = false;
+
+      private GreeterEntry mPendingDeleteEntry = null;
 
       private int mUploadProgress = 0;
 

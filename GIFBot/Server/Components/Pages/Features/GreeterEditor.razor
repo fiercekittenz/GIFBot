@@ -87,30 +87,53 @@
     </DialogActions>
 </MudDialog>
 
-<MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
-    <MudTabPanel Text="Greeters">
-        <div class="p-2">
-            <MudDataGrid T="GreeterEntry" Items="@Data.Entries" SortMode="SortMode.Single">
-               <ToolBarContent>
-                  <MudTextField T="string" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
-                  <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleAddRequest">Add New Greeter</MudButton>
-               </ToolBarContent>
-                <Columns>
-                    <PropertyColumn T="GreeterEntry" TProperty="string" Property="@(x => x.Name)" Title="Greeter Name" />
-                    <TemplateColumn Title="Recipients">
+<!-- Delete Confirmation Dialog -->
+<MudDialog @bind-Visible="@mIsDeleteDialogVisible">
+    <TitleContent>
+        <MudText Typo="Typo.h6">Confirm Delete</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudText>Are you sure you want to delete the greeter entry <b>@mPendingDeleteEntry?.Name</b>?</MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@(() => mIsDeleteDialogVisible = false)">Cancel</MudButton>
+        <MudButton Color="Color.Error" OnClick="@HandleConfirmDelete">Delete</MudButton>
+    </DialogActions>
+</MudDialog>
+
+<div style="width: 100%">
+    <div class="text-left p-3 rounded gifbot-form-panel" style="width: 100%">
+        <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
+            <MudTabPanel Text="Greeters">
+                <div class="p-0 m-0 rounded gifbot-section-panel">
+                    <div class="p-2">
+                        <MudDataGrid T="GreeterEntry" Items="@Data.Entries" SortMode="SortMode.Single">
+                           <ToolBarContent>
+                              <MudTextField T="string" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
+                              <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@HandleAddRequest">Add New Greeter</MudButton>
+                           </ToolBarContent>
+                            <Columns>
+                                <PropertyColumn T="GreeterEntry" TProperty="string" Property="@(x => x.Name)" Title="Greeter Name" />
+                                <TemplateColumn Title="Recipients">
 <CellTemplate Context="data">
-                            @((data.Item).GetRecipientsDisplayList())
-                        </CellTemplate>
-                    </TemplateColumn>
-                    <TemplateColumn>
+                                        @((data.Item).GetRecipientsDisplayList())
+                                    </CellTemplate>
+                                </TemplateColumn>
+                                <TemplateColumn>
 <CellTemplate Context="data">
-                            <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" Class="gifbot-neutral-btn" OnClick="@(() => HandleEditRequest((data.Item)))" Title="Edit" />
-                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Class="gifbot-neutral-btn" OnClick="@(() => HandleDeleteRequest((data.Item)))" Title="Delete" />
-                        </CellTemplate>
-                    </TemplateColumn>
-                </Columns>
-            </MudDataGrid>
+                                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" Class="gifbot-neutral-btn" OnClick="@(() => HandleEditRequest((data.Item)))" Title="Edit" />
+                                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Class="gifbot-neutral-btn" OnClick="@(() => HandleDeleteRequest((data.Item)))" Title="Delete" />
+                                    </CellTemplate>
+                                </TemplateColumn>
+                            </Columns>
+                        </MudDataGrid>
+                    </div>
+                </div>
+            </MudTabPanel>
+        </MudTabs>
+        <div class="d-flex justify-end pa-3 gap-4">
+            <MudButton Variant="Variant.Outlined" Color="Color.Default" OnClick="@OnCancel">Cancel</MudButton>
         </div>
-    </MudTabPanel>
-</MudTabs>
+    </div>
+</div>
 
