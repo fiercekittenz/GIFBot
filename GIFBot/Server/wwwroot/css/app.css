@@ -122,6 +122,27 @@ a, .btn-link {
     border-radius: 4px;
 }
 
+/* GIFBot dialog styling — proper window appearance */
+.mud-dialog {
+    border: 1px solid #2d2b52;
+    border-radius: 8px;
+    min-width: 450px;
+    background-color: #1c1c34;
+}
+
+.mud-dialog .mud-dialog-title {
+    background-color: #2d2b52;
+    padding: 12px 24px;
+}
+
+.mud-dialog .mud-dialog-content {
+    padding: 20px 24px;
+}
+
+.mud-dialog .mud-dialog-actions {
+    padding: 12px 24px;
+}
+
 .animationCanvas {
    width: 768px;
    height: 432px;

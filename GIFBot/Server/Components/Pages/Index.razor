@@ -28,21 +28,13 @@
 <!-- Bot Reauthentication Warning Dialog -->
 <MudDialog @bind-Visible="@mIsReauthWarningVisible">
    <TitleContent>
-      <strong>Reauthentication Required</strong>
+      <MudText Typo="Typo.h6">Reauthentication Required</MudText>
    </TitleContent>
    <DialogContent>
-      <div class="p-2">
-         There are scope changes with the Twitch API that require you to reauthenticate to gain access
-         to new features!
-      </div>
-      <div class="p-2">
-         <p>
-            <center>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@NavigateToReauthenticate">
-                  Go Reauthenticate
-               </button>
-            </center>
-         </p>
+      <MudText Typo="Typo.subtitle1"><b>Action Needed</b></MudText>
+      <MudText Class="mt-2">There are scope changes with the Twitch API that require you to reauthenticate to gain access to new features!</MudText>
+      <div class="d-flex justify-center mt-4">
+         <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@NavigateToReauthenticate">Go Reauthenticate</MudButton>
       </div>
    </DialogContent>
 </MudDialog>

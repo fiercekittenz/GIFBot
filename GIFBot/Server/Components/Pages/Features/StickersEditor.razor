@@ -16,98 +16,63 @@
 <!-- Add New Category Window -->
 <MudDialog @bind-Visible="@mIsCreateCategoryDialogVisible">
    <TitleContent>
-      <strong>Add New Category</strong>
+      <MudText Typo="Typo.h6">Add New Category</MudText>
    </TitleContent>
    <DialogContent>
-      <div class="form-group">
-         <MudText>What is the name of the sticker category you would like to create?</MudText>
-      </div>
-      <div class="form-group">
-         <label for="uiCategoryName"><b>Name:</b></label>
-         <MudTextField T="string" @bind-Value="mTempCategory.Name" />
-      </div>
-      <div class="p-2">
-         <p>
-            <center>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleCancelAddCategory">
-                  Cancel
-               </button>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleConfirmAddCategory">
-                  Add!
-               </button>
-            </center>
-         </p>
-      </div>
+      <MudText Typo="Typo.subtitle1"><b>Category Name</b></MudText>
+      <MudText Typo="Typo.caption" Class="text-white-50 mb-2">Enter a unique name for the new sticker category.</MudText>
+      <MudTextField T="string" @bind-Value="mTempCategory.Name" Placeholder="Enter category name..." />
    </DialogContent>
+   <DialogActions>
+      <MudButton OnClick="@HandleCancelAddCategory">Cancel</MudButton>
+      <MudButton Color="Color.Primary" OnClick="@HandleConfirmAddCategory">Add</MudButton>
+   </DialogActions>
 </MudDialog>
 
 <!-- Edit Category Window -->
 <MudDialog @bind-Visible="@mIsEditCategoryDialogVisible">
    <TitleContent>
-      <strong>Edit Category</strong>
+      <MudText Typo="Typo.h6">Edit Category</MudText>
    </TitleContent>
    <DialogContent>
-      <div class="form-group">
-         <MudText>You can rename the category below. Please note that if you have any channel point rewards that use this category directly, you'll need to change that too!</MudText>
-      </div>
-      <div class="form-group">
-         <label for="uiCategoryName"><b>Name:</b></label>
-         <MudTextField T="string" @bind-Value="mTempCategory.Name" />
-      </div>
-      <div class="p-2">
-         <p>
-            <center>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleCancelEditCategory">
-                  Cancel
-               </button>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleConfirmEditCategory">
-                  Update!
-               </button>
-            </center>
-         </p>
-      </div>
+      <MudText Typo="Typo.subtitle1"><b>Category Name</b></MudText>
+      <MudText Typo="Typo.caption" Class="text-white-50 mb-2">Update the name of this sticker category. If channel point rewards use this category, update those too.</MudText>
+      <MudTextField T="string" @bind-Value="mTempCategory.Name" Placeholder="Enter category name..." />
    </DialogContent>
+   <DialogActions>
+      <MudButton OnClick="@HandleCancelEditCategory">Cancel</MudButton>
+      <MudButton Color="Color.Primary" OnClick="@HandleConfirmEditCategory">Update</MudButton>
+   </DialogActions>
 </MudDialog>
 
 <!-- Move Sticker Categories Window -->
 <MudDialog @bind-Visible="@mIsMoveCategoryDialogVisible">
    <TitleContent>
-      <strong>Change Category</strong>
+      <MudText Typo="Typo.h6">Change Category</MudText>
    </TitleContent>
    <DialogContent>
-      <div class="form-group">
-         <MudText>Choose the new category for the selected stickers from the list below:</MudText>
-      </div>
-      <div class="form-group">
-         <MudSelect T="Guid" Placeholder="Select Category..." @bind-Value="@mTempStickerCategoryId">
-             @if (mStickerData?.Categories != null)
-             {
-                 @foreach (var cat in mStickerData.Categories)
-                 {
-                     <MudSelectItem T="Guid" Value="@cat.Id">@cat.Name</MudSelectItem>
-                 }
-             }
-         </MudSelect>
-      </div>
-      <div class="p-2">
-         <p>
-            <center>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleCancelMoveCategory">
-                  Cancel
-               </button>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleConfirmMoveCategory">
-                  Update!
-               </button>
-            </center>
-         </p>
-      </div>
+      <MudText Typo="Typo.subtitle1"><b>Target Category</b></MudText>
+      <MudText Typo="Typo.caption" Class="text-white-50 mb-2">Choose the new category for the selected stickers.</MudText>
+      <MudSelect T="Guid" Placeholder="Select Category..." @bind-Value="@mTempStickerCategoryId">
+          @if (mStickerData?.Categories != null)
+          {
+              @foreach (var cat in mStickerData.Categories)
+              {
+                  <MudSelectItem T="Guid" Value="@cat.Id">@cat.Name</MudSelectItem>
+              }
+          }
+      </MudSelect>
    </DialogContent>
+   <DialogActions>
+      <MudButton OnClick="@HandleCancelMoveCategory">Cancel</MudButton>
+      <MudButton Color="Color.Primary" OnClick="@HandleConfirmMoveCategory">Update</MudButton>
+   </DialogActions>
 </MudDialog>
 
 <!-- Edit Placement Window (placement editing window) -->
 <MudDialog @bind-Visible="@mIsPlacementBeingEdited">
    <TitleContent>
-      <strong>Edit Sticker</strong>
+      <MudText Typo="Typo.h6">Edit Sticker</MudText>
    </TitleContent>
    <DialogContent>
       <nav class="navbar navbar-expand-sm gifbot-quick-actions">
@@ -127,8 +92,8 @@
       <MudTabs ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
          <MudTabPanel Text="Required Data">
             <div class="form-group">
-               <label for="uiTempStickerName"><b>Name (optional):</b></label>
-               <small id="uiTempStickerName" class="form-text text-white-50">The name of this sticker. If you enable the chat command, it can be specifically requested. Also required for channel point redemptions to target specific stickers OR you can even use the same name to target multiple stickers and a random one will be picked (i.e. "!sticker costume" to choose from a pool of costumes).</small>
+               <MudText Typo="Typo.subtitle1"><b>Name (optional)</b></MudText>
+               <MudText Typo="Typo.caption" Class="text-white-50 mb-2">The name of this sticker. If you enable the chat command, it can be specifically requested. Also required for channel point redemptions to target specific stickers OR you can even use the same name to target multiple stickers and a random one will be picked (i.e. "!sticker costume" to choose from a pool of costumes).</MudText>
                <MudTextField T="string" @bind-Value="CurrentlyEditedSticker.Name" />
             </div>
             <div class="form-group form-check">
@@ -138,8 +103,8 @@
                </label>
             </div>
             <div class="form-group">
-               <label for="uiStickerVisual"><b>Sticker Visual:</b></label>
-               <small id="uiStickerVisual" class="form-text text-white-50">The visual file displayed with this sticker.</small>
+               <MudText Typo="Typo.subtitle1"><b>Sticker Visual</b></MudText>
+               <MudText Typo="Typo.caption" Class="text-white-50 mb-2">The visual file displayed with this sticker.</MudText>
                <table>
                   <tr>
                      <td valign="top">

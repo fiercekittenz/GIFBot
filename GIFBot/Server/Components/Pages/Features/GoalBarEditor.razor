@@ -13,24 +13,16 @@
 
 <MudDialog @bind-Visible="@mIsNewGoalPromptVisible">
    <TitleContent>
-      <strong>Add New Goal</strong>
+      <MudText Typo="Typo.h6">Add New Goal</MudText>
    </TitleContent>
    <DialogContent>
-      <div class="form-group">
-         <label for="uiTitleLabel">Please provide the title for your new goal:</label>
-         <small id="uiTitleLabel" class="form-text text-muted">The purpose of your goal (ex: "New Camera" or "Sweet Mic").</small>
-         <MudTextField T="string" @bind-Value="mNewGoalTitle" />
-      </div>
-      <div class="p-2">
-         <p>
-            <center>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleAddNewGoal">
-                  Add
-               </button>
-            </center>
-         </p>
-      </div>
+      <MudText Typo="Typo.subtitle1"><b>Goal Title</b></MudText>
+      <MudText Typo="Typo.caption" Class="text-white-50 mb-2">The purpose of your goal (e.g. "New Camera" or "Sweet Mic").</MudText>
+      <MudTextField T="string" @bind-Value="mNewGoalTitle" Placeholder="Enter goal title..." />
    </DialogContent>
+   <DialogActions>
+      <MudButton OnClick="@HandleAddNewGoal">Add</MudButton>
+   </DialogActions>
 </MudDialog>
 
 <div class="pa-1 my-1 gifbot-page-header">

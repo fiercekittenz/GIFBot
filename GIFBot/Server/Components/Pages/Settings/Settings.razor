@@ -24,7 +24,9 @@
 <MudDialog @bind-Visible="@mIsRenameGroupDialogVisible">
    <TitleContent><MudText Typo="Typo.h6">Rename User Group</MudText></TitleContent>
    <DialogContent>
-      <MudTextField T="string" @bind-Value="@mRenamedUserGroupValue" Label="New Group Name" Immediate="true" />
+      <MudText Typo="Typo.subtitle1"><b>New Group Name</b></MudText>
+      <MudText Typo="Typo.caption" Class="text-white-50 mb-2">Enter the new name for this user group.</MudText>
+      <MudTextField T="string" @bind-Value="@mRenamedUserGroupValue" Placeholder="Enter group name..." Immediate="true" />
    </DialogContent>
    <DialogActions>
       <MudButton OnClick="@HandleCancelRenameUserGroup">Cancel</MudButton>
@@ -36,7 +38,9 @@
 <MudDialog @bind-Visible="@mIsAddGroupDialogVisible">
    <TitleContent><MudText Typo="Typo.h6">Add New Group</MudText></TitleContent>
    <DialogContent>
-      <MudTextField T="string" @bind-Value="@mNewGroupValue" Label="Group Name" Immediate="true" />
+      <MudText Typo="Typo.subtitle1"><b>Group Name</b></MudText>
+      <MudText Typo="Typo.caption" Class="text-white-50 mb-2">Choose a unique name for the new user group. Names are case-insensitive.</MudText>
+      <MudTextField T="string" @bind-Value="@mNewGroupValue" Placeholder="Enter group name..." Immediate="true" />
    </DialogContent>
    <DialogActions>
       <MudButton OnClick="@(() => mIsAddGroupDialogVisible = false)">Cancel</MudButton>
@@ -48,7 +52,9 @@
 <MudDialog @bind-Visible="@mIsAddUserDialogVisible">
    <TitleContent><MudText Typo="Typo.h6">Add User to Group</MudText></TitleContent>
    <DialogContent>
-      <MudTextField T="string" @bind-Value="@uiNewUserValue" Label="Viewer Name" Immediate="true" />
+      <MudText Typo="Typo.subtitle1"><b>Viewer Name</b></MudText>
+      <MudText Typo="Typo.caption" Class="text-white-50 mb-2">Enter the Twitch username of the viewer you want to add to this group.</MudText>
+      <MudTextField T="string" @bind-Value="@uiNewUserValue" Placeholder="Enter viewer name..." Immediate="true" />
    </DialogContent>
    <DialogActions>
       <MudButton OnClick="@(() => mIsAddUserDialogVisible = false)">Cancel</MudButton>
@@ -60,7 +66,8 @@
 <MudDialog @bind-Visible="@mIsDeleteGroupDialogVisible">
    <TitleContent><MudText Typo="Typo.h6">Delete Group</MudText></TitleContent>
    <DialogContent>
-      <MudText>Are you sure you want to delete the group '@(mSelectedUserGroup?.Name)'?</MudText>
+      <MudText Typo="Typo.subtitle1"><b>Confirm Deletion</b></MudText>
+      <MudText Class="mt-2">Are you sure you want to delete the group '<b>@(mSelectedUserGroup?.Name)</b>'? This action cannot be undone.</MudText>
    </DialogContent>
    <DialogActions>
       <MudButton OnClick="@(() => mIsDeleteGroupDialogVisible = false)">Cancel</MudButton>

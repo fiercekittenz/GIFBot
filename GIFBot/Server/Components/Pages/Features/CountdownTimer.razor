@@ -16,35 +16,23 @@
 <!-- Add New Action Window -->
 <MudDialog @bind-Visible="@mIsAddDialogVisible">
    <TitleContent>
-      <strong>Add New Action</strong>
+      <MudText Typo="Typo.h6">Add New Action</MudText>
    </TitleContent>
    <DialogContent>
-      <div class="form-group">
-         <MudText>What is the name of the action?</MudText>
-      </div>
-      <div class="form-group">
-         <label for="uiName"><b>Name:</b></label>
-         <MudTextField T="string" @bind-Value="mTempData.Name" />
-      </div>
-      <div class="p-2">
-         <p>
-            <center>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleCancelAddCommand">
-                  Cancel
-               </button>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleConfirmAddCommand">
-                  Add!
-               </button>
-            </center>
-         </p>
-      </div>
+      <MudText Typo="Typo.subtitle1"><b>Action Name</b></MudText>
+      <MudText Typo="Typo.caption" Class="text-white-50 mb-2">Enter a name for the new countdown timer action.</MudText>
+      <MudTextField T="string" @bind-Value="mTempData.Name" Placeholder="Enter action name..." />
    </DialogContent>
+   <DialogActions>
+      <MudButton OnClick="@HandleCancelAddCommand">Cancel</MudButton>
+      <MudButton Color="Color.Primary" OnClick="@HandleConfirmAddCommand">Add</MudButton>
+   </DialogActions>
 </MudDialog>
 
 <!-- Edit Window -->
 <MudDialog @bind-Visible="@mIsEditDialogVisible">
    <TitleContent>
-      <strong>Edit Action: @mTempData.Name</strong>
+      <MudText Typo="Typo.h6">Edit Action: @mTempData.Name</MudText>
    </TitleContent>
    <DialogContent>
       <div class="form-group form-check">
@@ -54,13 +42,13 @@
          </label>
       </div>
       <div class="form-group">
-         <label for="uiTempCommand"><b>Name:</b></label>
-         <small id="uiTempCommandLabel" class="form-text text-white-50">The name to identify this action.</small>
+         <MudText Typo="Typo.subtitle1"><b>Name</b></MudText>
+         <MudText Typo="Typo.caption" Class="text-white-50 mb-2">The name to identify this action.</MudText>
          <MudTextField T="string" @bind-Value="mTempData.Name" />
       </div>
       <div class="form-group">
-         <label for="uiTempAnimationLbl"><b>Animation to Play:</b></label>
-         <small id="uiTempAnimationLbl" class="form-text text-white-50">The animation command to play along with this action.</small>
+         <MudText Typo="Typo.subtitle1"><b>Animation to Play</b></MudText>
+         <MudText Typo="Typo.caption" Class="text-white-50 mb-2">The animation command to play along with this action.</MudText>
          <MudTextField T="string" @bind-Value="mTempData.Animation" />
       </div>
       <div class="form-group">
@@ -78,8 +66,8 @@
       @if (mTempData.RedemptionType == global::GIFBot.Shared.Utility.Enumerations.CostRedemptionType.Subscription)
       {
          <div class="form-group">
-            <label for="uiSubTier"><b>Subscription Tier:</b></label>
-            <small id="uiSubTier" class="form-text text-white-50">What sub tier is this action for?</small>
+            <MudText Typo="Typo.subtitle1"><b>Subscription Tier</b></MudText>
+            <MudText Typo="Typo.caption" Class="text-white-50 mb-2">What sub tier is this action for?</MudText>
             <MudRadioGroup @bind-Value="SubTierSelection" T="int">
 <MudRadio T="int" Value="@(0)">All</MudRadio>
                   <MudRadio T="int" Value="@(1)">Prime</MudRadio>
@@ -92,15 +80,15 @@
       else
       {
          <div class="form-group">
-            <label for="uiCommandCostLbl">Cost:</label>
-            <small id="uiCommandCostLbl" class="form-text text-muted">The number of bits, channel points, etc. required to trigger this action. Must be an exact value!</small>
+            <MudText Typo="Typo.subtitle1"><b>Cost</b></MudText>
+            <MudText Typo="Typo.caption" Class="text-white-50 mb-2">The number of bits, channel points, etc. required to trigger this action. Must be an exact value!</MudText>
             <MudNumericField T="double" Min="0.01" Max="999999" @bind-Value="@mTempData.Cost" />
          </div>
       }
 
       <div class="form-group">
-         <label for="uiBehaviorType">Action Behavior:</label>
-         <small id="uiBehaviorType" class="form-text text-muted">How does this action behave? Does it need a spanking? Kappa.</small>
+         <MudText Typo="Typo.subtitle1"><b>Action Behavior</b></MudText>
+         <MudText Typo="Typo.caption" Class="text-white-50 mb-2">How does this action behave?</MudText>
          <MudRadioGroup @bind-Value="@CurrentlyEditedBehavior" T="int">
 <MudRadio T="int" Value="@(0)">Remove Time</MudRadio>
                <MudRadio T="int" Value="@(1)">Add Time</MudRadio>
@@ -112,24 +100,24 @@
       @if (mTempData.Behavior == CountdownTimerActionBehavior.AddTime || mTempData.Behavior == CountdownTimerActionBehavior.RemoveTime)
       {
          <div class="form-group">
-            <label for="uiActionValueLbl">Adjustment Value:</label>
-            <small id="uiActionValueLbl" class="form-text text-muted">The number of seconds by which the time is adjusted on Add and Remove time behaviors.</small>
+            <MudText Typo="Typo.subtitle1"><b>Adjustment Value</b></MudText>
+            <MudText Typo="Typo.caption" Class="text-white-50 mb-2">The number of seconds by which the time is adjusted on Add and Remove time behaviors.</MudText>
             <MudNumericField T="int" Min="1" Max="999999" @bind-Value="@mTempData.SecondsValue" />
          </div>
       }
       else if (mTempData.Behavior == CountdownTimerActionBehavior.PauseTime)
       {
          <div class="form-group">
-            <label for="uiActionValueLbl">Pause Time:</label>
-            <small id="uiActionValueLbl" class="form-text text-muted">The number of seconds to pause the countdown timer.</small>
+            <MudText Typo="Typo.subtitle1"><b>Pause Time</b></MudText>
+            <MudText Typo="Typo.caption" Class="text-white-50 mb-2">The number of seconds to pause the countdown timer.</MudText>
             <MudNumericField T="int" Min="1" Max="999999" @bind-Value="@mTempData.SecondsValue" />
          </div>
       }
       else if (mTempData.Behavior == CountdownTimerActionBehavior.SlowTime || mTempData.Behavior == CountdownTimerActionBehavior.SpeedUpTime)
       {
          <div class="form-group">
-            <label for="uiSpeedType">Speed Modification Preset:</label>
-            <small id="uiSpeedType" class="form-text text-muted">How fast or slow do you want the timer to tick?</small>
+            <MudText Typo="Typo.subtitle1"><b>Speed Modification Preset</b></MudText>
+            <MudText Typo="Typo.caption" Class="text-white-50 mb-2">How fast or slow do you want the timer to tick?</MudText>
             <MudRadioGroup @bind-Value="@CurrentlyEditedSpeedPreset" T="int">
 @if (mTempData.Behavior == CountdownTimerActionBehavior.SlowTime)
                   {
@@ -146,24 +134,16 @@
 </MudRadioGroup>
          </div>
          <div class="form-group">
-            <label for="uiActionValueLbl">Number of Seconds To Modify :</label>
-            <small id="uiActionValueLbl" class="form-text text-muted">The number of seconds by which the speed at which the time ticks down will be modified.</small>
+            <MudText Typo="Typo.subtitle1"><b>Number of Seconds to Modify</b></MudText>
+            <MudText Typo="Typo.caption" Class="text-white-50 mb-2">The number of seconds by which the speed at which the time ticks down will be modified.</MudText>
             <MudNumericField T="int" Min="1" Max="999999" @bind-Value="@mTempData.SecondsValue" />
          </div>
       }
-      <div class="p-2">
-         <p>
-            <center>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleCancelEditCommand">
-                  Cancel
-               </button>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleConfirmEditCommand">
-                  Save!
-               </button>
-            </center>
-         </p>
-      </div>
    </DialogContent>
+   <DialogActions>
+      <MudButton OnClick="@HandleCancelEditCommand">Cancel</MudButton>
+      <MudButton Color="Color.Primary" OnClick="@HandleConfirmEditCommand">Save</MudButton>
+   </DialogActions>
 </MudDialog>
 
 <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">

@@ -14,27 +14,17 @@
 <!-- Clone Animation Confirmation Window -->
 <MudDialog @bind-Visible="@mIsCloneDialogVisible">
    <TitleContent>
-      <strong>Clone Animation?</strong>
+      <MudText Typo="Typo.h6">Clone Animation</MudText>
    </TitleContent>
    <DialogContent>
-      <div class="form-group">
-         <label for="uiTitleLabel">Let's clone this animation! What is the command for the new animation?</label>
-         <small id="uiTitleLabel" class="form-text text-muted">The command that must be entered to activate this animation.</small>
-         <MudTextField T="string" @bind-Value="@mTempAnimationCommand" />
-      </div>
-      <div class="p-2">
-         <p>
-            <center>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleCancelClone">
-                  Cancel
-               </button>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleConfirmClone">
-                  Yes, Clone!
-               </button>
-            </center>
-         </p>
-      </div>
+      <MudText Typo="Typo.subtitle1"><b>New Command</b></MudText>
+      <MudText Typo="Typo.caption" Class="text-white-50 mb-2">Enter the command for the cloned animation.</MudText>
+      <MudTextField T="string" @bind-Value="@mTempAnimationCommand" Placeholder="Enter command..." />
    </DialogContent>
+   <DialogActions>
+      <MudButton OnClick="@HandleCancelClone">Cancel</MudButton>
+      <MudButton Color="Color.Primary" OnClick="@HandleConfirmClone">Clone</MudButton>
+   </DialogActions>
 </MudDialog>
 
 <div class="p-3">

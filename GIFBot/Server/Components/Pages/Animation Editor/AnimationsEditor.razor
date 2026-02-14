@@ -18,167 +18,100 @@
 <!-- Delete Category Confirmation Window -->
 <MudDialog @bind-Visible="@mIsDeleteCategoryConfirmationVisible">
     <TitleContent>
-        <strong>Delete Category?</strong>
+        <MudText Typo="Typo.h6">Delete Category</MudText>
     </TitleContent>
     <DialogContent>
-        <div class="form-group">
-            <MudText>Are you sure you want to delete the [@(mTempCategory?.Title)] category? If you have any animations in it, it will not succeed.</MudText>
-        </div>
-        <div class="p-2">
-            <p>
-                <center>
-                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleCancelCategoryDeletion">
-                        Cancel
-                    </button>
-                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleConfirmCategoryDeletion">
-                        Yes, Delete!
-                    </button>
-                </center>
-            </p>
-        </div>
+        <MudText Typo="Typo.subtitle1"><b>Confirm Deletion</b></MudText>
+        <MudText Class="mt-2">Are you sure you want to delete the '<b>@(mTempCategory?.Title)</b>' category? If you have any animations in it, it will not succeed.</MudText>
     </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@HandleCancelCategoryDeletion">Cancel</MudButton>
+        <MudButton Color="Color.Error" OnClick="@HandleConfirmCategoryDeletion">Delete</MudButton>
+    </DialogActions>
 </MudDialog>
 
 <!-- Delete Animation(s) Confirmation Window -->
 <MudDialog @bind-Visible="@mIsDeleteConfirmationVisible">
     <TitleContent>
-        <strong>Delete Animation?</strong>
+        <MudText Typo="Typo.h6">Delete Animation</MudText>
     </TitleContent>
     <DialogContent>
-        <div class="form-group">
-            <MudText>Are you sure you want to delete the selected animation(s)?</MudText>
-        </div>
-        <div class="p-2">
-            <p>
-                <center>
-                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleCancelDeletion">
-                        Cancel
-                    </button>
-                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleConfirmDeletion">
-                        Yes, Delete!
-                    </button>
-                </center>
-            </p>
-        </div>
+        <MudText Typo="Typo.subtitle1"><b>Confirm Deletion</b></MudText>
+        <MudText Class="mt-2">Are you sure you want to delete the selected animation(s)? This action cannot be undone.</MudText>
     </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@HandleCancelDeletion">Cancel</MudButton>
+        <MudButton Color="Color.Error" OnClick="@HandleConfirmDeletion">Delete</MudButton>
+    </DialogActions>
 </MudDialog>
 
 <!-- Move Categories Window -->
 <MudDialog @bind-Visible="@mIsMoveCategoryDialogVisible">
     <TitleContent>
-        <strong>Move Animations</strong>
+        <MudText Typo="Typo.h6">Move Animations</MudText>
     </TitleContent>
     <DialogContent>
-        <div class="form-group">
-            <MudText>Which category would you like to move the selected animation(s) into?</MudText>
-        </div>
-        <div class="form-group">
-            <label for="uiTitleLabel">Select the new category from the list below:</label>
-            <small id="uiTitleLabel" class="form-text text-muted">Once moved, the animation's data will be immediately saved.</small>
-            <MudSelect T="string" Placeholder="Select Category..." @bind-Value="@mSelectedMoveCategory">
-                @foreach (var cat in mAnimationTreeData.Where(a => a.Tier == AnimationTreeTier.Category))
-                {
-                    <MudSelectItem T="string" Value="@cat.Id.ToString()">@cat.Title</MudSelectItem>
-                }
-            </MudSelect>
-        </div>
-        <div class="p-2">
-            <p>
-                <center>
-                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleCancelMove">
-                        Cancel
-                    </button>
-                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleConfirmMove">
-                        Move!
-                    </button>
-                </center>
-            </p>
-        </div>
+        <MudText Typo="Typo.subtitle1"><b>Target Category</b></MudText>
+        <MudText Typo="Typo.caption" Class="text-white-50 mb-2">Select the category to move the selected animation(s) into. Data will be saved immediately.</MudText>
+        <MudSelect T="string" Placeholder="Select Category..." @bind-Value="@mSelectedMoveCategory">
+            @foreach (var cat in mAnimationTreeData.Where(a => a.Tier == AnimationTreeTier.Category))
+            {
+                <MudSelectItem T="string" Value="@cat.Id.ToString()">@cat.Title</MudSelectItem>
+            }
+        </MudSelect>
     </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@HandleCancelMove">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="@HandleConfirmMove">Move</MudButton>
+    </DialogActions>
 </MudDialog>
 
 <!-- Add New Category Window -->
 <MudDialog @bind-Visible="@mIsCreateCategoryDialogVisible">
     <TitleContent>
-        <strong>Add New Category</strong>
+        <MudText Typo="Typo.h6">Add New Category</MudText>
     </TitleContent>
     <DialogContent>
-        <div class="form-group">
-            <MudText>What is the name of the animation category you would like to create?</MudText>
-        </div>
-        <div class="form-group">
-            <label for="uiCategoryName"><b>Name:</b></label>
-            <MudTextField T="string" @bind-Value="mTempCategory.Title" />
-        </div>
-        <div class="p-2">
-            <p>
-                <center>
-                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleCancelAddCategory">
-                        Cancel
-                    </button>
-                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleConfirmAddCategory">
-                        Add!
-                    </button>
-                </center>
-            </p>
-        </div>
+        <MudText Typo="Typo.subtitle1"><b>Category Name</b></MudText>
+        <MudText Typo="Typo.caption" Class="text-white-50 mb-2">Enter a unique name for the new animation category.</MudText>
+        <MudTextField T="string" @bind-Value="mTempCategory.Title" Placeholder="Enter category name..." />
     </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@HandleCancelAddCategory">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="@HandleConfirmAddCategory">Add</MudButton>
+    </DialogActions>
 </MudDialog>
 
 <!-- Edit Category Window -->
 <MudDialog @bind-Visible="@mIsEditCategoryDialogVisible">
     <TitleContent>
-        <strong>Edit Category</strong>
+        <MudText Typo="Typo.h6">Edit Category</MudText>
     </TitleContent>
     <DialogContent>
-        <div class="form-group">
-            <MudText>You can rename the category below.</MudText>
-        </div>
-        <div class="form-group">
-            <label for="uiCategoryName"><b>Name:</b></label>
-            <MudTextField T="string" @bind-Value="mTempCategory.Title" />
-        </div>
-        <div class="p-2">
-            <p>
-                <center>
-                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleCancelEditCategory">
-                        Cancel
-                    </button>
-                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleConfirmEditCategory">
-                        Update!
-                    </button>
-                </center>
-            </p>
-        </div>
+        <MudText Typo="Typo.subtitle1"><b>Category Name</b></MudText>
+        <MudText Typo="Typo.caption" Class="text-white-50 mb-2">Update the name of this animation category.</MudText>
+        <MudTextField T="string" @bind-Value="mTempCategory.Title" Placeholder="Enter category name..." />
     </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@HandleCancelEditCategory">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="@HandleConfirmEditCategory">Update</MudButton>
+    </DialogActions>
 </MudDialog>
 
 <!-- Add New Animation to Category Window -->
 <MudDialog @bind-Visible="@mIsAddAnimationToCategoryDialogVisible">
     <TitleContent>
-        <strong>Add New Animation to Category</strong>
+        <MudText Typo="Typo.h6">Add New Animation</MudText>
     </TitleContent>
     <DialogContent>
-        <div class="form-group">
-            <MudText>What is the name of the animation you would like to create? If you want this to be a command, make sure to include "!" in front of it.</MudText>
-        </div>
-        <div class="form-group">
-            <label for="uiName"><b>Name or Command Value:</b></label>
-            <MudTextField T="string" @bind-Value="mTempAnimationCommand" />
-        </div>
-        <div class="p-2">
-            <p>
-                <center>
-                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleCancelAddAnimationToCategory">
-                        Cancel
-                    </button>
-                    <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleConfirmAddAnimationToCategory">
-                        Add!
-                    </button>
-                </center>
-            </p>
-        </div>
+        <MudText Typo="Typo.subtitle1"><b>Name or Command</b></MudText>
+        <MudText Typo="Typo.caption" Class="text-white-50 mb-2">Enter the name or command for the new animation. Include '!' for chat commands.</MudText>
+        <MudTextField T="string" @bind-Value="mTempAnimationCommand" Placeholder="Enter animation name or !command..." />
     </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@HandleCancelAddAnimationToCategory">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="@HandleConfirmAddAnimationToCategory">Add</MudButton>
+    </DialogActions>
 </MudDialog>
 
 <!-- Main Layout for the Animations Editor -->

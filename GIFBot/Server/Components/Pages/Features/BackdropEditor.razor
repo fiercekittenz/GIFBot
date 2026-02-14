@@ -16,35 +16,23 @@
 <!-- Add New Backdrop Window -->
 <MudDialog @bind-Visible="@mIsAddDialogVisible">
    <TitleContent>
-      <strong>Add New Backdrop</strong>
+      <MudText Typo="Typo.h6">Add New Backdrop</MudText>
    </TitleContent>
    <DialogContent>
-      <div class="form-group">
-         <MudText>What is the name of the backdrop?</MudText>
-      </div>
-      <div class="form-group">
-         <label for="uiName"><b>Name:</b></label>
-         <MudTextField T="string" @bind-Value="mTempData.Name" />
-      </div>
-      <div class="p-2">
-         <p>
-            <center>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleCancelAddCommand">
-                  Cancel
-               </button>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleConfirmAddCommand">
-                  Add!
-               </button>
-            </center>
-         </p>
-      </div>
+      <MudText Typo="Typo.subtitle1"><b>Backdrop Name</b></MudText>
+      <MudText Typo="Typo.caption" Class="text-white-50 mb-2">Enter a name for the new backdrop.</MudText>
+      <MudTextField T="string" @bind-Value="mTempData.Name" Placeholder="Enter backdrop name..." />
    </DialogContent>
+   <DialogActions>
+      <MudButton OnClick="@HandleCancelAddCommand">Cancel</MudButton>
+      <MudButton Color="Color.Primary" OnClick="@HandleConfirmAddCommand">Add</MudButton>
+   </DialogActions>
 </MudDialog>
 
 <!-- Edit Window -->
 <MudDialog @bind-Visible="@mIsEditDialogVisible">
    <TitleContent>
-      <strong>Edit Backdrop: @mTempData.Name</strong>
+      <MudText Typo="Typo.h6">Edit Backdrop: @mTempData.Name</MudText>
    </TitleContent>
    <DialogContent>
       <div class="form-group form-check">
@@ -54,13 +42,13 @@
          </label>
       </div>
       <div class="form-group">
-         <label for="uiTempCommand"><b>Name:</b></label>
-         <small id="uiTempCommandLabel" class="form-text text-white-50">The name to identify this backdrop. When executed in chat, users must cheer. If this is in a channel point reward, the backdrop name and Backdrop feature command needs to be in the title of the reward. </small>
+         <MudText Typo="Typo.subtitle1"><b>Name</b></MudText>
+         <MudText Typo="Typo.caption" Class="text-white-50 mb-2">The name to identify this backdrop. When executed in chat, users must cheer. If this is in a channel point reward, the backdrop name and Backdrop feature command needs to be in the title of the reward.</MudText>
          <MudTextField T="string" @bind-Value="mTempData.Name" />
       </div>
       <div class="form-group">
-         <label for="uiVisual"><b>Backdrop Visual:</b></label>
-         <small id="uiVisual" class="form-text text-white-50">The visual file displayed with this backdrop. Note the backdrop will take the full 1080p resolution. If it isn't that size, it will be stretched to fit!</small>
+         <MudText Typo="Typo.subtitle1"><b>Backdrop Visual</b></MudText>
+         <MudText Typo="Typo.caption" Class="text-white-50 mb-2">The visual file displayed with this backdrop. Note the backdrop will take the full 1080p resolution. If it isn't that size, it will be stretched to fit!</MudText>
          <table>
             <tr>
                <td valign="top">
@@ -79,19 +67,11 @@
             </tr>
          </table>
       </div>
-      <div class="p-2">
-         <p>
-            <center>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleCancelEditCommand">
-                  Cancel
-               </button>
-               <button type="button" class="btn btn-secondary nav-item p-1 mr-3 gifbot-action-btn" @onclick="@HandleConfirmEditCommand">
-                  Save!
-               </button>
-            </center>
-         </p>
-      </div>
    </DialogContent>
+   <DialogActions>
+      <MudButton OnClick="@HandleCancelEditCommand">Cancel</MudButton>
+      <MudButton Color="Color.Primary" OnClick="@HandleConfirmEditCommand">Save</MudButton>
+   </DialogActions>
 </MudDialog>
 
 <MudTabs @bind-ActivePanelIndex="@ActiveTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
