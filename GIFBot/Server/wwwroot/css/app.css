@@ -62,7 +62,7 @@ a, .btn-link {
 }
 
 .gifbot-section-panel {
-    background-color: #161630;
+    background-color: #161630 !important;
 }
 
 .gifbot-form-panel {

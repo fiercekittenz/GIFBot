@@ -542,18 +542,20 @@
       <MudTabPanel Text="Sticker Images">
          @* MudBlazor: Use MudTooltip wrapping individual elements instead *@
 
+         <div class="p-2 mb-3 rounded gifbot-section-panel">
+            <p>
+               There are two kinds of stickers - those that are placed randomly by the system based on events you configured in the Behavior tab or those stickers which have very specific, individual requirements. The stickers with trigger requirements are largely used
+               for fun things like costumes or stickers you only want to show up for very SPECIFIC requirements. Some examples:
+            </p>
+            <ul>
+               <li>Channel point reward to put a wizard hat over your head.</li>
+               <li>Charitable donation to cover your face with a pug mask.</li>
+               <li>Bits to give you a mustache.</li>
+               <li>etc, etc, etc</li>
+            </ul>
+         </div>
          <div class="p-0 m-0 rounded gifbot-section-panel">
             <div class="p-2">
-               <p>
-                  There are two kinds of stickers - those that are placed randomly by the system based on events you configured in the Behavior tab or those stickers which have very specific, individual requirements. The stickers with trigger requirements are largely used
-                  for fun things like costumes or stickers you only want to show up for very SPECIFIC requirements. Some examples:
-               </p>
-               <ul class="mb-3">
-                  <li>Channel point reward to put a wizard hat over your head.</li>
-                  <li>Charitable donation to cover your face with a pug mask.</li>
-                  <li>Bits to give you a mustache.</li>
-                  <li>etc, etc, etc</li>
-               </ul>
                <div class="form-group">
                   <MudTabs @bind-ActivePanelIndex="@ActiveStickerTabIndex" ApplyEffectsToContainer="true" Elevation="0" Rounded="true" PanelClass="pa-3">
                      <MudTabPanel Text="Stickers">
