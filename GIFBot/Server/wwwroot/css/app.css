@@ -65,6 +65,11 @@ a, .btn-link {
     background-color: #161630 !important;
 }
 
+/* Prevent MudTabs ApplyEffectsToContainer from overriding section panel background */
+.gifbot-section-panel .mud-tabs-panels {
+    background-color: inherit !important;
+}
+
 .gifbot-form-panel {
     background-color: #1c1c34;
 }
