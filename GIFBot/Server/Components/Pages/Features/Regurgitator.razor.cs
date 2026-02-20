@@ -145,12 +145,42 @@ namespace GIFBot.Server.Components.Pages.Features
          }
       }
 
+      private async Task OnPackageSelected(Guid packageId)
+      {
+         CurrentPackage = packageId;
+         mLastKnownArgs = null;
+         if (packageId != Guid.Empty)
+         {
+            await FetchRegurgitatorSettings(packageId);
+            await ReadEntries();
+         }
+         StateHasChanged();
+      }
+
+      private string GetPackageName(Guid id)
+      {
+         if (id == Guid.Empty) return string.Empty;
+         var pkg = AvailablePackages?.FirstOrDefault(p => p.Id == id);
+         return pkg?.Name ?? string.Empty;
+      }
+
       private async Task AddNewPackage()
       {
-         string packageName = await Task.FromResult("New Package"); // TODO: Replace with MudBlazor dialog prompt
-         // was: await Task.FromResult("New"); // TODO: Replace with MudBlazor IDialogService prompt
+         HandleOpenAddPackageDialog();
+      }
 
-         // was: await Task.FromResult("New") /* TODO: MudBlazor dialog prompt was: Dialogs.PromptAsync("Package Name:", "Add New Package") */;
+      private void HandleOpenAddPackageDialog()
+      {
+         mNewPackageName = string.Empty;
+         mIsAddPackageDialogVisible = true;
+      }
+
+      private async Task HandleConfirmAddPackage()
+      {
+         mIsAddPackageDialogVisible = false;
+         string packageName = mNewPackageName?.Trim();
+         mNewPackageName = string.Empty;
+
          if (!string.IsNullOrEmpty(packageName))
          {
             Guid createdPackageId = await mHubConnection.InvokeAsync<Guid>("AddRegurgitatorPackage", packageName);
@@ -158,7 +188,8 @@ namespace GIFBot.Server.Components.Pages.Features
             {
                await FetchRegurgitatorPackages();
                CurrentPackage = createdPackageId;
-               await PackageSelectionChanged(createdPackageId);
+               await FetchRegurgitatorSettings(createdPackageId);
+               await ReadEntries();
                StateHasChanged();
             }
          }
@@ -361,5 +392,10 @@ namespace GIFBot.Server.Components.Pages.Features
       private bool mIsDeletePackageDialogVisible = false;
       private string mPendingDeletePackageName = string.Empty;
       private bool mIsClearListDialogVisible = false;
+      private bool mIsAddPackageDialogVisible = false;
+      private string mNewPackageName = string.Empty;
+
+      private bool IsAddPackageDisabled => string.IsNullOrWhiteSpace(mNewPackageName) ||
+         AvailablePackages.Any(p => p.Name.Equals(mNewPackageName.Trim(), StringComparison.OrdinalIgnoreCase));
    }
 }

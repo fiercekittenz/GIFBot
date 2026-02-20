@@ -21,7 +21,7 @@
 <MudPaper Class="pa-2 mb-2" Elevation="0" Style="background-color: #1c1c34">
     <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
         <MudText Typo="Typo.subtitle1" Class="mr-2"><b>Package:</b></MudText>
-        <MudSelect T="Guid" Placeholder="Select Package to Edit..." @bind-Value="@CurrentPackage">
+        <MudSelect T="Guid" Placeholder="Select Package to Edit..." Value="@CurrentPackage" ValueChanged="@OnPackageSelected" ToStringFunc="@GetPackageName">
             @if (AvailablePackages != null)
             {
                 @foreach (var pkg in AvailablePackages)
@@ -30,8 +30,7 @@
                 }
             }
         </MudSelect>
-        <MudButton Variant="Variant.Filled" Class="gifbot-action-btn" Style="width:100px" OnClick="@AddNewPackage">Add</MudButton>
-        <MudButton Variant="Variant.Filled" Class="gifbot-action-btn" Style="width:100px" OnClick="@DeletePackage">Delete</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" Style="width:150px" OnClick="@HandleOpenAddPackageDialog">Add</MudButton>
     </MudStack>
 </MudPaper>
 
@@ -230,9 +229,12 @@
                 </div>
             </MudTabPanel>
                 </MudTabs>
-                <div class="d-flex justify-end pa-3 gap-4">
-                    <MudButton Variant="Variant.Outlined" Color="Color.Default" OnClick="@OnCancel">Cancel</MudButton>
-                    <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit">Save Changes</MudButton>
+                <div class="d-flex justify-space-between pa-3">
+                    <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@DeletePackage">Delete Package</MudButton>
+                    <div class="d-flex gap-4">
+                        <MudButton Variant="Variant.Outlined" Color="Color.Default" OnClick="@OnCancel">Cancel</MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit">Save Changes</MudButton>
+                    </div>
                 </div>
             </div>
         </div>
@@ -264,5 +266,19 @@
     <DialogActions>
         <MudButton OnClick="@(() => mIsClearListDialogVisible = false)">Cancel</MudButton>
         <MudButton Color="Color.Error" OnClick="@HandleConfirmClearList">Clear List</MudButton>
+    </DialogActions>
+</MudDialog>
+
+<!-- Add New Package Dialog -->
+<MudDialog @bind-Visible="@mIsAddPackageDialogVisible">
+    <TitleContent><MudText Typo="Typo.h6">Add New Package</MudText></TitleContent>
+    <DialogContent>
+        <MudText Typo="Typo.subtitle1"><b>Package Name</b></MudText>
+        <MudText Typo="Typo.caption" Class="text-white-50 mb-2">Enter a name for the new regurgitator package.</MudText>
+        <MudTextField T="string" @bind-Value="@mNewPackageName" Placeholder="Enter package name..." Immediate="true" />
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@(() => { mIsAddPackageDialogVisible = false; mNewPackageName = string.Empty; })">Cancel</MudButton>
+        <MudButton Color="Color.Primary" Disabled="@IsAddPackageDisabled" OnClick="@HandleConfirmAddPackage">Add New Package</MudButton>
     </DialogActions>
 </MudDialog>
