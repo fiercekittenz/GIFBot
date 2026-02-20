@@ -244,10 +244,11 @@ namespace GIFBot.Server.Components.Pages.Features
       {
          if (CurrentPackage != Guid.Empty)
          {
-            List<RegurgitatorEntry> dataSourceResult = await mHubConnection.InvokeAsync<List<RegurgitatorEntry>>("GetRegurgitatorEntries", CurrentPackage, "");
+            var request = new PagedRequest { Page = 1, PageSize = 1000 };
+            var envelope = await mHubConnection.InvokeAsync<DataEnvelope<RegurgitatorEntry>>("GetRegurgitatorEntries", CurrentPackage, request);
 
-            CurrentEntries = dataSourceResult;
-            TotalEntries = dataSourceResult.Count;
+            CurrentEntries = envelope.CurrentPageData;
+            TotalEntries = envelope.TotalItemCount;
 
             Console.WriteLine($"ReadEntries(): TotalEntries = {TotalEntries}");
 
