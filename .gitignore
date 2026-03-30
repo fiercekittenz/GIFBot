@@ -371,3 +371,9 @@ GIFBot/Client/wwwroot/media/
 # Installers Output Folder
 GIFBot/Installer/Output/
 /dist
+.squad/
+/.copilot/
+/.github/
+/GIFBot/Server/wwwroot/media/
+/.gitattributes/
+/.ai-team/
